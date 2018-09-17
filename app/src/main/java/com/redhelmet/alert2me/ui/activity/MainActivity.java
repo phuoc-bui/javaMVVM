@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
 
         InitializeControl();
-
+        getUserId();
     }
     public void InitializeControl(){
         apiURL=getApplicationContext().getString(R.string.api_url)+"device";
@@ -106,19 +106,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         //if user accept terms and condition get the User id from the server
 
         Map<String, String> mParams = new HashMap<String, String>();
-        mParams.put("uuid", deviceUtil.getDeviceId());
         mParams.put("platform",getString(R.string.platform));
         mParams.put("deviceToken",FirebaseInstanceId.getInstance().getToken());
-        mParams.put("name","android");
-        mParams.put("appName",getString(R.string.appName));
-        mParams.put("appVersion",getString(R.string.appVersion));
+        mParams.put("deviceName","android");
+        mParams.put("version",getString(R.string.appVersion));
         mParams.put("systemName",Build.VERSION_CODES.class.getFields()[Build.VERSION.SDK_INT].getName());
         mParams.put("systemVersion",deviceUtil.getOsVersion());
         mParams.put("model",deviceUtil.getDeviceName());
-        mParams.put("isTablet","false");
+        mParams.put("tablet","false");
 
-        Log.d("valuesUSrs", mParams.toString());
-      RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+//        Log.d("valuesUSrs", mParams.toString());
+      RequestQueue queue = Volley.newRequestQueue(this);
 
 
 
@@ -130,9 +128,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     public void onResponse(JSONObject response) {
                         pBar.setVisibility(View.INVISIBLE);
                         try {
+                            Log.d("response", response.toString());
 
                             if(Boolean.valueOf(response.getString("success"))){
-                                JSONObject user=response.getJSONObject("user");
+                                JSONObject user=response.getJSONObject("device");
 
                                 if(user!=null ){
                                     PreferenceUtils.saveToPrefs(getApplicationContext(),getString(R.string.pref_user_id),user.getString("id"));
@@ -145,6 +144,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.d("response", e.toString());
                         }
                         VolleyLog.d("EA", "E");
                     }
@@ -165,20 +165,37 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 pBar.setVisibility(View.INVISIBLE);
             }
         }) {
+//
+//            /**
+//             * Passing some request headers
+//             * */
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                HashMap<String, String> headers = new HashMap<String, String>();
+//                headers.put("Content-Type", "application/json; charset=utf-8");
+//                headers.put("User-agent", System.getProperty("http.agent"));
+//                return headers;
+//
+//            }
+            @Override
+            public String getBodyContentType()
+            {
+                return "application/json; charset=utf-8";
+            }
 
-            /**
-             * Passing some request headers
-             * */
+
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
+
+               // headers.put("Authorization", webApiToken);
                 return headers;
             }
 
 
-
         };
+
+
         jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));

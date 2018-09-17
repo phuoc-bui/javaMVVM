@@ -50,7 +50,7 @@ public class CoreFunctions {
         String platform=_context.getString(R.string.platform);
         String appName=_context.getString(R.string.appName);
 
-        return url+"config/"+ platform + "?appName="+appName;
+        return url+"config/ios" ; //+ platform ;//+ "?appName="+appName;
 
 
     }

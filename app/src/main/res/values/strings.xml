@@ -1,7 +1,8 @@
 <resources>
     <string name="appVersion">v1.0.3.2</string>
     <string name="app_name">Alert2Me</string>
-    <string name="api_url">http://egau-tmp-ws.redhelmet.tech/1/</string>
+    <string name="api_url">https://a2me-api.redhelmet.tech/\</string>
+    <!--http://egau-tmp-ws.redhelmet.tech/1/-->
     <string name="platform">android</string>
     <string name="appName">EA</string>
     <string name="termsAndCondition">Agree to Terms and Conditions and let\'s get started!</string>
