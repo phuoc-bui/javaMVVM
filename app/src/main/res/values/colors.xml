@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="navigationnarHeaderColor">#F5F5F7</color>
+    <color name="navigationnarTextTintColor">#3d3d3d</color>
+    <color name="navigationnarStatusColor">#c4c4c5</color>
+    <color name="appRedTintColor">#ee2749</color>
+
+    <color name="textColorGrey">#434343</color>
+    <color name="colorBlack">#000</color>
+    <color name="colorWhite">#fff</color>
+    <color name="colorRed">#ee2749</color>
+    <color name="colorGreen">#009900</color>
+    <color name="colorDarkRed">#ff0d00</color>
+
+    <color name="colorGrey">#FF666666</color>
+    <!-- dots inactive colors -->
+    <color name="dot_dark_screen1">#d1395c</color>
+    <color name="dot_dark_screen2">#14a895</color>
+    <color name="dot_dark_screen3">#2278d4</color>
+    <color name="dot_dark_screen4">#a854d4</color>
+
+    <!-- dots active colors -->
+    <color name="dot_light_screen1">#f98da5</color>
+    <color name="dot_light_screen2">#8cf9eb</color>
+    <color name="dot_light_screen3">#93c6fd</color>
+    <color name="dot_light_screen4">#e4b5fc</color>
+    <color name="default_text">#212121</color>
+    <color name="default_hint_text">#757575</color>
+
+    <array name="array_dot_active">
+        <item>@color/dot_light_screen1</item>
+        <item>@color/dot_light_screen2</item>
+        <item>@color/dot_light_screen3</item>
+        <item>@color/dot_light_screen4</item>
+
+    </array>
+
+    <array name="array_dot_inactive">
+    <item>@color/dot_dark_screen1</item>
+    <item>@color/dot_dark_screen2</item>
+    <item>@color/dot_dark_screen3</item>
+    <item>@color/dot_dark_screen4</item>
+</array>
+
+    <color name="swipeoption_green">#36CF8E</color>
+    <color name="swipeoption_blue">#3693D0</color>
+    <color name="swipeoption_purple">#ff1744</color>
+    <color name="statusBarColor">#002C41</color>
+
+    <color name="toolBarColor">#003F5E</color>
+    <color name="watchHintTextColor">#073F5E</color>
+    <color name="notificationIconColor">#073F5E</color>
+    <color name="backgroundColor">#f0eff5</color>
+
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="background">#e5e5e5</color>
+    <color name="half_black">#808080</color>
+    <color name="white">#fafafa</color>
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="pink">#e91e63</color>
+    <color name="pink_pressed">#ec407a</color>
+    <color name="blue_semi_transparent">#805677fc</color>
+    <color name="blue_semi_transparent_pressed">#80738ffe</color>
+    <color name="light_gray">#D3D3D3</color>
+
+</resources>

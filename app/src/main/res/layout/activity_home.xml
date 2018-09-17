@@ -1,0 +1,68 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.PopupOverlay"
+        app:elevation="0dp"
+        android:id="@+id/appBarLayout">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+
+            android:minHeight="40dp"
+            android:background="@color/navigationnarHeaderColor"
+            app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+        <!-- Color is Brown 500 -->
+        <ProgressBar
+            android:id="@+id/toolbar_progress_bar"
+            android:layout_width="60px"
+            android:layout_height="60px"
+            android:indeterminateTint="@color/navigationnarTextTintColor"
+            android:indeterminateTintMode="src_in"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            />
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@drawable/tab_black_top_border"
+
+         app:tabSelectedTextColor="@color/colorRed"
+        android:includeFontPadding="false"
+        app:tabTextColor="#666666"
+        app:tabTextAppearance="@style/CustomTabText"
+        app:tabGravity="fill"
+        app:tabIndicatorHeight="0dp"
+        app:tabPaddingBottom="0dp"
+        app:tabPaddingEnd="0dp"
+        app:tabPaddingStart="0dp"
+        app:tabPaddingTop="0dp"
+        app:tabMaxWidth="0dp"
+        android:tabStripEnabled="false"
+
+        android:layout_alignParentBottom="true"
+        app:tabMode="fixed" />
+
+    <com.redhelmet.alert2me.adapters.CustomViewPager
+        android:id="@+id/viewpager"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/appBarLayout"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_above="@+id/tabs" />
+</RelativeLayout>
+    <!--android:background="#2E2E2E"-->

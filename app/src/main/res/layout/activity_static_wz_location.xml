@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.PopupOverlay"
+        android:layout_marginRight="0dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="0dp"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="0dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:id="@+id/appBarLayout">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <fragment
+        android:id="@+id/locationMap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/search_layout"
+        android:layout_above="@+id/radius_layout"
+        class="com.google.android.gms.maps.SupportMapFragment"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:id="@+id/radius_layout"
+
+        android:layout_above="@+id/location_controls"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:id="@+id/txtRadius"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="@dimen/text_size"
+            android:text="Radius (km)" />
+
+        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+            android:id="@+id/radius_seek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dsb_indicatorColor="@color/colorDarkRed"
+            app:dsb_indicatorElevation="0dp"
+            app:dsb_max="100"
+            app:dsb_min="1"
+            app:dsb_value="5"
+            app:dsb_progressColor="@color/colorDarkRed" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:background="@drawable/location_instruction_message"
+        android:alpha="0.7"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        android:id="@+id/wz_loc_inst_layout"
+        android:layout_below="@+id/search_layout"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/wz_loc_inst"
+            android:layout_width="match_parent"
+
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_height="wrap_content"
+            android:text="@string/watchzone_location_inst_circle"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_size" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+
+        android:layout_below="@+id/appBarLayout"
+
+        android:background="@color/colorWhite"
+        android:orientation="horizontal"
+        android:visibility="visible">
+
+
+        <com.redhelmet.alert2me.autocomplete.AutoCompleteLocation
+            android:id="@+id/autocomplete_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/location_controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:background="@drawable/button_red_bottom_border"
+            android:textColor="@color/navigationnarTextTintColor"
+            android:id="@+id/circleBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size"
+            android:text="@string/lbl_circle" />
+
+        <Button
+            android:background="@drawable/border_shadow"
+            android:textColor="@color/navigationnarTextTintColor"
+            android:id="@+id/polygonBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size"
+            android:text="@string/lbl_polygon" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "689816386596",
+    "firebase_url": "https://emergencyaus-83fba.firebaseio.com",
+    "project_id": "emergencyaus-83fba",
+    "storage_bucket": "emergencyaus-83fba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689816386596:android:3d59ee5a884d9b4f",
+        "android_client_info": {
+          "package_name": "com.redhelmet.alert2me"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "689816386596-qa2dmfehpqc0j1l58o9brllll635oovv.apps.googleusercontent.com",
+          "clibent_type": 1,
+          "android_info": {
+            "package_name": "com.redhelmet.alert2me",
+            "certificate_hash": "27b8c2528fae02fdedf6157a9d63bda3bc05760c"
+          }
+        },
+        {
+          "client_id": "689816386596-0v9fhqq49m3vumk6tdd6bmo0rpi820la.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9XThgyZNhqjn9UV88vBCgWPcpvFwOsuc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "689816386596-0v9fhqq49m3vumk6tdd6bmo0rpi820la.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,203 @@
+<resources>
+    <string name="appVersion">v1.0.3.2</string>
+    <string name="app_name">Alert2Me</string>
+    <string name="api_url">http://egau-tmp-ws.redhelmet.tech/1/</string>
+    <string name="platform">android</string>
+    <string name="appName">EA</string>
+    <string name="termsAndCondition">Agree to Terms and Conditions and let\'s get started!</string>
+    <string name="replay_hints">Replay Hints</string>
+    <string name="terms_and_conditions">Terms and Conditions</string>
+    <string name="option_notification_label_text">Send Test Notification</string>
+    <string name="option_notification_button_text">Test</string>
+
+    <string name="noInternet">No Internet Connection</string>
+    <string name="timeOut">Unable to connect to the server.</string>
+    <string name="failedToGetData">Unable to connect to the server. Please try again later</string>
+    <string name="pref_help_support_url">helpSupportUrl</string>
+    <string name="pref_help_support_email">helpSupportEmail</string>
+    <string name="pref_terms_and_condition_url">termsAndConditionUrl</string>
+    <string name="pref_about_url">aboutUrl</string>
+    <string name="pref_initialLaunch">pref_initialLaunch</string>
+    <string name="pref_accepted">pref_accepted</string>
+    <string name="pref_custom_wz_types">pref_custom_wz_types</string>
+    <string name="pref_custom_wz_status">pref_custom_wz_status</string>
+    <string name="pref_device_id">deviceId</string>
+
+    <string name="wzScreenMessage_1">Add a new Static Watch Zone or turn on your Mobile Watch Zone  to recieve notifications.</string>
+    <string name="wzScreenMessage_2">Please add a new Watch Zone to recieve notifications.</string>
+    <string name="share">Add Watch Zone Code</string>
+    <string name="watch_zone_share_code">Watch Zone Share Code</string>
+    <string name="add">Add</string>
+    <string name="btn_save">Save</string>
+    <string name="next">Next</string>
+    <string name="watch_zone_name">Watch Zone name</string>
+    <string name="notification_sound">Watch Zone notification sound</string>
+    <string name="watchzone_location_inst_circle">Touch-hold map to place your Watch Zone</string>
+    <string name="watchzone_location_inst_polygon">Touch-hold map to draw at least three points.</string>
+    <string name="done">Done</string>
+    <string name="always_on">Always on</string>
+    <string name="custom_to_default_popup_display_title">Default Display</string>
+    <string name="custom_to_default_popup_notification_title">Default Notifications</string>
+    <string name="custom_to_default_popup_display">Using the defaul.t display settings will override your custom display settings.</string>
+    <string name="custom_to_default_popup_notification">Using the default notifications will override your custom notification settings.</string>
+
+    <string name="delete_circle_message">No Circle to delete. Long press to create circle over Map</string>
+    <string name="delete_polygon_message">No Point to delete. Long press to create point over Map</string>
+    <string name="default_hint_text">Search</string>
+    <string name="wz_change_heading_circle">Circle Area</string>
+    <string name="wz_change_heading_custom">Custom Area</string>
+    <string name="wz_change_text_custom">Customising your Watch Zone area will replace your circular Watch Zone.</string>
+    <string name="wz_change_text_circle">Using a Circular Watch Zone area will replace your custom Watch Zone area.</string>
+    <string name="delete_circle_heading">Delete Circle</string>
+    <string name="delete_poly_heading">Delete Polygon</string>
+    <string name="delete_poly_message">Do you want to delete the current polygon?</string>
+    <string name="delete_circle_text">Do you want to delete the current circle?</string>
+    <string name="pref_user_id">ea_id</string>
+    <string name="pref_user_token">user_token</string>
+    <string name="pref_wz_name">wz_name</string>
+    <string name="pref_ringtone_name">ringtone_name</string>
+    <string name="next_location_message">Please set your watch zone area</string>
+    <string name="share_wz_popup_head">Watch Zone Share Code</string>
+    <string name="share_wz_popup_text">Enter the code below into your other devices to add this Watch Zone to that device. Changes made to the Watch Zone will not he updated on other devices. You can share this code with as many people or devices you want.  The code will expire in 7 days.</string>
+    <string name="share_code_will_expire">The code will expire in 7 days.</string>
+    <string name="ok">Ok</string>
+    <string name="pref_tertiaryColor">pref_tertiaryColor</string>
+    <string name="edit_watch_zone_notification_settings">Edit Watch Zone Notification Settings</string>
+    <string name="edit_watch_zone_location">Edit Watch Zone Location</string>
+    <string name="edit_watch_zone_text">Select the shortcuts below to edit your Watch Zone</string>
+    <string name="circle_create_failed">Unable to re-create circle. Please try again later.</string>
+    <string name="share_empty_wz">Please add share watch zone code</string>
+    <string name="no_data_to_display">There are no known events to display \\n\\n Please be sure to check your display settings</string>
+    <string name="pref_hints">pref_hints</string>
+    <string name="pref_cluster_map_state">pref_cluster_map_state</string>
+    <string name="pref_map_isDefault">pref_map_isDefault</string>
+    <string name="pref_map_filter">pref_map_filter</string>
+    <string name="pref_basewms_url">pref_basewms_url</string>
+    <string name="help_online_help_heading">Online Help</string>
+    <string name="help_tagline">We would be happy to help you.</string>
+    <string name="help_online_help_info">Need help using the app? Follow the link below to our online help.</string>
+    <string name="help_email_support_info">Read the help and still lost? Click the link below to email our support desk at </string>
+    <string name="help_email_support_heading">Email support desk</string>
+    <string name="help_app_support_info">To assist us in supporting you, we may ask for the following information. This will be automatically attached to an email sent from the link above</string>
+    <string name="help_app_support_heading">APP SUPPORT CODE</string>
+    <string name="help_app_version_heading">APP VERSION NUMBER</string>
+    <string name="help_about_info">Want to know about us? Follow the link below to know more about us and our Terms and Conditions/ Privacy.</string>
+    <string name="help_terms_heading">Terms and Conditions / Privacy</string>
+    <string name="help_about_heading">About Us</string>
+    <string name="help_watch_intro_heading">Watch intro \'Hints\'</string>
+    <string name="pref_secondary_color">pref_secondary_color</string>
+    <string name="observation_heading">Each observation you submit contributes to keeping your community informed.</string>
+    <string name="observation_tagline">We need your help</string>
+    <string name="what">What are you sensing?</string>
+    <string name="when">When?</string>
+    <string name="where">Where?</string>
+    <string name="you_want_to_tell_us_something_else">You want to tell us something else?</string>
+    <string name="add_photos_videos">Add Photos / Videos</string>
+    <string name="rationale_photo_picker">We require this permission to select photo from gallery and camera.</string>
+
+
+    <!--Mobile WZ-->
+    <string name="msg_failedmobileWZ">Failed to update mobile watch zone!!!</string>
+    <string name="txtRadiusValue">Radius</string>
+    <string name="txtRadiusKM">km</string>
+
+    <string name="menuRefreshList">Refresh List</string>
+    <string name="menuFilterList">Filter List</string>
+    <string name="menuSortList">Sort List</string>
+    <string name="cancel">Cancel</string>
+    <string name="listSortOrder">List Sort Order</string>
+    <string name="listSortOrderDistance">Distance</string>
+    <string name="listSortOrderTime">Time</string>
+    <string name="listSortOrderStatus">Status</string>
+
+
+    <!--Cluster activity-->
+    <string name="msgUnableToGetEDetails">Unable to get event details</string>
+
+
+    <!--Event Fragment-->
+    <string name="lblEvent">Event</string>
+    <string name="lblMap">Map</string>
+    <string name="lblList">List</string>
+    <string name="msgUnableToGetEvent">Unable to get events</string>
+
+    <!--Filters activity-->
+    <string name="lblDefault">Default</string>
+    <string name="lblCustom">Custom</string>
+    <string name="lbl_mapLayersDefaultTitle">Default Display Options</string>
+    <string name="lbl_mapLayersDefaultSubTitle">A number of default display filter options are provided below. If you wish to customise your display options, tap the \"Custom\" option</string>
+    <string name="lbl_mapLayersCustomTitle">Custom Display Options</string>
+    <string name="lbl_mapLayersCustomSubTitle">These advanced options allow you to configure what displays on the map and list specifically to meet your needs.</string>
+    <string name="lbl_prefilterHeaderDefault">"Default Notification Options</string>
+    <string name="lbl_prefilterHeaderCustom">Custom Notification Options</string>
+    <string name="lbl_prefilterHeaderDefaultSubTitle">Select which notifications you would like to receive for your</string>
+    <string name="lbl_wzDisplayText">watch zone.</string>
+    <string name="lbl_mobileWzDisplayText">mobile watch zone.</string>
+    <string name="lbl_selectCustomNoti">Select individual notifications you would like to receive for this</string>
+
+
+    <!--WZ-->
+    <string name="lbl_mobileWZHeading">MOBILE WATCH ZONES</string>
+    <string name="lbl_mobileWZSubHeading">Receive notification for area around you while your on the move.</string>
+    <string name="lbl_staticWZTitleHeader">Create a Watch Zone by selecting the Plus icon at the bottom of the screen.</string>
+    <string name="lbl_staticWZHeading">STATIC WATCH ZONES</string>
+    <string name="lbl_staticWZSubHeading">Receive notification for your areas of interest.</string>
+    <string name="lbl_static">Static</string>
+    <string name="lbl_mobile">Mobile</string>
+    <string name="msg_savedMobileWZ">Any changes made to your Mobile Watch Zone have been saved.</string>
+    <string name="msg_failedToSavedMobileWZ">Unable to saved your Mobile Watch Zone setting.</string>
+    <string name="msg_makingChangeTtoMobileWZ">Making changes mobile watch zone...</string>
+    <string name="msg_deletingWZ">Deleting Watch Zone</string>
+    <string name="msg_enableWZ">Enabling Watch Zone</string>
+    <string name="msg_upatingWZ">Updating Watch Zone</string>
+    <string name="msg_disableWZ">Disabling Watch Zone</string>
+    <string name="msg_creatingWZ">Creating Watch Zone...</string>
+    <string name="msg_fetchWZ">Fetching Watch Zones...</string>
+    <string name="msg_unableFetchWZ">Unable to get Watch Zones...</string>
+    <string name="msg_unableDeleteWZ">Unable to delete the Watch Zone</string>
+    <string name="msg_unableUpdateWZ">Unable to update the Watch Zone</string>
+    <string name="msg_unableCreateWZ">Unable to create the Watch Zone</string>
+    <string name="msg_unableShareWZ">Unable to share the Watch Zone code</string>
+    <string name="msg_updatedWZ">Watch zone updated successfully</string>
+    <string name="msg_createdWZ">Watch zone created successfully</string>
+    <string name="msg_fechtedWZ">Watch zone fetched successfully</string>
+
+    <string name="msg_WZ">Watch Zone</string>
+    <string name="toolbar_WZ">Watch Zone</string>
+    <string name="msg_deleted">deleted!!!</string>
+    <string name="lbl_mobileWZ">Mobile  Notification</string>
+
+
+    <string name="lbl_addStaticWZ">Add Static Zone</string>
+    <string name="lbl_editStaticWZ">Edit Static Zone</string>
+    <string name="lbl_circle">Circle</string>
+    <string name="lbl_polygon">Polygon</string>
+    <string name="lbl_shareWZTitle">Enter a Watch Zone Share Code to add a copy of another Watch Zone to this device.</string>
+    <string name="lbl_addShareWZ">Add Watch Zone Code</string>
+    <string name="msg_addingShareWZ">Adding Watch Zone share code...</string>
+    <string name="msg_addedShareWZ">Watch zone share code added successfully</string>
+
+
+    <!--Help Fragment-->
+    <string name="msg_notificationSent">Notification Sent</string>
+    <string name="msg_failedNotificationSent">Failed to send test notification</string>
+    <string name="msg_sendNotification">Sending Test Notification</string>
+    <string name="lbl_sendNotification">Send Test Notification</string>
+    <string name="lbl_help">Help</string>
+    <string name="toolbar_help">App Help Options</string>
+    <string name="lbl_option">Option</string>
+    <string name="btn_test">Test</string>
+
+
+    <!--Tabbar-->
+    <string name="tab_events">Events</string>
+    <string name="tab_WZ">Watch Zones</string>
+    <string name="tab_help">Help / Options</string>
+
+    <!--Location service-->
+    <string name="title_enableGPS">Enable GPS</string>
+    <string name="msg_enableGPS">Location services are not enabled.\nTo re-enable, please go to Settings and turn on GPS Location Service.</string>
+    <string name="btn_enable">Enable</string>
+    <string name="btn_ignore">Ignore</string>
+
+</resources>
