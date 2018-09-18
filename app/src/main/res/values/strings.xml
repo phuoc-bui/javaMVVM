@@ -1,7 +1,7 @@
 <resources>
     <string name="appVersion">v1.0.3.2</string>
-    <string name="app_name">Alert2Me</string>
-    <string name="api_url">https://a2me-api.redhelmet.tech/\</string>
+    <!--<string name="app_name">Alert2Me</string>-->
+    <!--<string name="api_url">https://a2me-api.redhelmet.tech/\</string>-->
     <!--http://egau-tmp-ws.redhelmet.tech/1/-->
     <string name="platform">android</string>
     <string name="appName">EA</string>
@@ -25,7 +25,7 @@
     <string name="pref_device_id">deviceId</string>
 
     <string name="wzScreenMessage_1">Add a new Static Watch Zone or turn on your Mobile Watch Zone  to recieve notifications.</string>
-    <string name="wzScreenMessage_2">Please add a new Watch Zone to recieve notifications.</string>
+    <string name="wzScreenMessage_2">Please add a new Watch Zone to receive notifications.</string>
     <string name="share">Add Watch Zone Code</string>
     <string name="watch_zone_share_code">Watch Zone Share Code</string>
     <string name="add">Add</string>

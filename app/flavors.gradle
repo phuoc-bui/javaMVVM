@@ -1,0 +1,35 @@
+android {
+    defaultConfig {
+        buildConfigField("int", "DB_SCHEMA_VERSION", DB_SCHEMA_VERSION)
+        buildConfigField("String", "DB_FILE_NAME", "\"$DB_FILE_NAME\"")
+    }
+
+    flavorDimensions "environment"
+    productFlavors {
+        develop {
+            dimension "environment"
+            resValue "string", "app_name", "Alert2Me Dev"
+
+            buildConfigField "String",  "API_ENDPOINT",        "\"https://a2me-api.redhelmet.tech/\""
+        }
+        staging {
+            dimension "environment"
+            resValue "string", "app_name", "Alert2Me Stg"
+
+            buildConfigField "String",  "API_ENDPOINT",        "\"https://a2me-api.redhelmet.tech/\""
+        }
+        production {
+            dimension "environment"
+            resValue "string", "app_name", "Alert2Me"
+
+            buildConfigField "String",  "API_ENDPOINT",        "\"https://a2me-api.redhelmet.tech/\""
+        }
+    }
+
+    // Remove developRelease as it's not needed.
+    variantFilter { variant ->
+        if (variant.buildType.name.equals('release') && variant.flavors.get(0).name.equals('develop')) {
+            variant.ignore = true
+        }
+    }
+}
