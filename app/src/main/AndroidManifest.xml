@@ -114,9 +114,9 @@
         <!-- [END firebase_service] -->
         <!-- [START firebase_iid_service] -->
         <service android:name="com.redhelmet.alert2me.core.MyFirebaseInstanceIDService">
-            <intent-categoryFilter>
+            <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-categoryFilter>
+            </intent-filter>
         </service>
 
         <activity android:name="com.redhelmet.alert2me.ui.activity.ClusterEventList" />
