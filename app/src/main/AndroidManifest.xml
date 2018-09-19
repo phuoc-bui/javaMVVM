@@ -37,7 +37,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="com.redhelmet.alert2me.ui.splash.SplashScreen"
+            android:name="com.redhelmet.alert2me.ui.activity.SplashScreen"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
