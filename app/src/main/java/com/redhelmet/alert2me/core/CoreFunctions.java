@@ -11,6 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.Volley;
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.interfaces.ServerCallback;
 
 import org.apache.commons.io.IOUtils;
@@ -46,7 +47,7 @@ public class CoreFunctions {
 
 
     public static String ConfigUrl(){
-            String url=_context.getString(R.string.api_url);
+            String url= BuildConfig.API_ENDPOINT;
         String platform=_context.getString(R.string.platform);
         String appName=_context.getString(R.string.appName);
 

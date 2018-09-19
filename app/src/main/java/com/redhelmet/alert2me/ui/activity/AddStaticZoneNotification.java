@@ -28,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.adapters.CustomNotificationCategoryAdapter;
 import com.redhelmet.alert2me.adapters.DefaultNotificationAdapter;
 import com.redhelmet.alert2me.core.DBController;
@@ -95,8 +96,8 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
         dbController = new DBController(getApplicationContext());
         _dbCategories=new ArrayList<>();
         _dbCategories=dbController.getCategoriesNames();
-        apiURL = getString(R.string.api_url) + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones";
-        mobilewzApiURL = getString(R.string.api_url) + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity";
+        apiURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones";
+        mobilewzApiURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity";
         getWZData();
 
         Log.e("ONCreated", "activity created.....");

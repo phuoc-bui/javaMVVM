@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.core.Constants;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
@@ -78,7 +79,7 @@ private static int startProcessId;
         _context = getApplicationContext();
         if (_context != null) {
 
-            apiUrl = getString(R.string.api_url);
+            apiUrl = BuildConfig.API_ENDPOINT;
             userId = (String) PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "");
         }
 

@@ -55,6 +55,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.daimajia.swipe.util.Attributes;
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.adapters.WzListAdapter;
 import com.redhelmet.alert2me.core.DBController;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
@@ -169,7 +170,7 @@ public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.On
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        apiURL = getString(R.string.api_url) + "device/" + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity";
+        apiURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity";
 
         
 
@@ -251,9 +252,9 @@ public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.On
                 }
             }
         });
-        _watchzoneURL = _context.getString(R.string.api_url) + "device/" + PreferenceUtils.getFromPrefs(_context, _context.getString(R.string.pref_user_id), "0") + "/watchzones";
-        _deleteWzURL = _context.getString(R.string.api_url) + "device/" + PreferenceUtils.getFromPrefs(_context, _context.getString(R.string.pref_user_id), "0") + "/watchzones/";
-        _stateWzURL = _context.getString(R.string.api_url) + "device/" + PreferenceUtils.getFromPrefs(_context, _context.getString(R.string.pref_user_id), "0") + "/watchzones/";
+        _watchzoneURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(_context, _context.getString(R.string.pref_user_id), "0") + "/watchzones";
+        _deleteWzURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(_context, _context.getString(R.string.pref_user_id), "0") + "/watchzones/";
+        _stateWzURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(_context, _context.getString(R.string.pref_user_id), "0") + "/watchzones/";
         ringtonePickerBuilder = new RingtonePickerDialog.Builder(_context, getActivity().getSupportFragmentManager());
         ringtonePickerBuilder.addRingtoneType(RingtonePickerDialog.Builder.TYPE_NOTIFICATION);
         ringtonePickerBuilder.setPlaySampleWhileSelection(checkVibrationIsOn(_context));
@@ -1538,10 +1539,10 @@ public void  updateMobileWZRadius() {
         String strURL = "";
         if(enable)
         {
-            strURL = getString(R.string.api_url) + "device/" + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/enable";
+            strURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/enable";
         }
         else{
-            strURL = getString(R.string.api_url) + "device/" + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/disable";
+            strURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/disable";
         }
 
 
@@ -1648,7 +1649,7 @@ Log.d("url",strURL);
         }
 
         final AppPreferences appPreferences = new AppPreferences(_context);
-        String apiURL = getString(R.string.api_url) + "device/" + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/location";
+        String apiURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/location";
         Log.d("location", PreferenceUtils. getFromPrefs(_context, Constants.KEY_USERLATITUDE, " ").toString());
 
 

@@ -32,6 +32,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.adapters.CustomViewPager;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
@@ -340,7 +341,7 @@ public class HomeActivity extends AppCompatActivity implements GoogleApiClient.C
         return;
     }
         final AppPreferences appPreferences = new AppPreferences(getApplicationContext());
-        String apiURL = getString(R.string.api_url) + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/location";
+        String apiURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/location";
         Log.d("location", PreferenceUtils. getFromPrefs(getApplicationContext(), Constants.KEY_USERLATITUDE, " ").toString());
 
 

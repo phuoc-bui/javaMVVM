@@ -27,6 +27,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.core.CoreFunctions;
 import com.redhelmet.alert2me.core.RequestHandler;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
@@ -219,7 +220,7 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
             return;
         }
 
-        String apiUrl=getString(R.string.api_url) + "pns/send/test?device_id=" + (String)PreferenceUtils.getFromPrefs(_context,getString(R.string.pref_user_id),"") + "&appName=" + getString(R.string.appName);
+        String apiUrl= BuildConfig.API_ENDPOINT + "pns/send/test?device_id=" + (String)PreferenceUtils.getFromPrefs(_context,getString(R.string.pref_user_id),"") + "&appName=" + getString(R.string.appName);
         RequestQueue queue = RequestHandler.getInstance(_context).getRequestQueue(); //Obtain the instance
 
         JsonObjectRequest volleyRequest = new JsonObjectRequest(Request.Method.GET, apiUrl,

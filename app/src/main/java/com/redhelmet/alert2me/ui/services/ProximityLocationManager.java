@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.core.Constants;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.google.gson.Gson;
@@ -384,7 +385,7 @@ else  if (isGPSEnable){
         final Double latitude  =  Double.valueOf((String ) PreferenceUtils.getFromPrefs(getApplicationContext(), Constants.KEY_USERLATITUDE, "0"));
         final Double longitude  =  Double.valueOf((String ) PreferenceUtils.getFromPrefs(getApplicationContext(), Constants.KEY_USERLONGITUDE, "0"));
 
-        String apiURL = getString(R.string.api_url) + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/location";
+        String apiURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/location";
         Log.d("location", PreferenceUtils. getFromPrefs(getApplicationContext(), Constants.KEY_USERLATITUDE, " ").toString());
 
         HashMap<String, Object> mParams = new HashMap < String, Object> ();

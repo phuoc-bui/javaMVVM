@@ -17,6 +17,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.model.Event;
 import com.redhelmet.alert2me.model.PnsNotification;
 import com.redhelmet.alert2me.ui.activity.SplashScreen;
@@ -94,7 +95,7 @@ Boolean responseEnabled = false;
     }
 
     private void sendLocalNotification(String notification, String taskData,Boolean responseEnabled,Intent intent) throws JSONException {
-        String callbackURL =  getApplicationContext().getString(R.string.api_url).toString();
+        String callbackURL =  BuildConfig.API_ENDPOINT;
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setColor(Color.argb(0, 2, 145, 161));
@@ -127,7 +128,7 @@ Boolean responseEnabled = false;
             builder.setSound(sound);
             if(taskDetail.getInt("id") > 0)
             {
-                callbackURL = getApplicationContext().getString(R.string.api_url).toString()+"notification/"+taskDetail.getInt("id")+"/"+responseEnabled;
+                callbackURL = BuildConfig.API_ENDPOINT+"notification/"+taskDetail.getInt("id")+"/"+responseEnabled;
                 Log.e("10222333",callbackURL);
                 intent.putExtra("callbackURL",callbackURL);
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,

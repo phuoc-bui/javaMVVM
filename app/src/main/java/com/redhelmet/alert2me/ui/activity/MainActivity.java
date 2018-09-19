@@ -22,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.core.DeviceUtil;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
@@ -62,7 +63,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         getUserId();
     }
     public void InitializeControl(){
-        apiURL=getApplicationContext().getString(R.string.api_url)+"device";
+        apiURL= BuildConfig.API_ENDPOINT+"device";
         deviceUtil=new DeviceUtil(getApplicationContext());
         pBar=(ProgressBar)findViewById(R.id.progressBar2);
         acceptTerms=(Button) findViewById(R.id.termsAccept);

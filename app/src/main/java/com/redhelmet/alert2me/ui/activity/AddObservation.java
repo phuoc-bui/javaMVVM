@@ -43,6 +43,7 @@ import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.adapters.ObservationImageAdapter;
 import com.redhelmet.alert2me.core.Constants;
 import com.redhelmet.alert2me.core.DeviceUtil;
@@ -128,7 +129,7 @@ public class AddObservation extends BaseActivity implements OnMapReadyCallback, 
 
         setContentView(R.layout.activity_observation);
 
-        _observationUrl=getString(R.string.api_url)+client;
+        _observationUrl=BuildConfig.API_ENDPOINT+client;
 
         initializeToolbar();
         initializeControls();
@@ -598,7 +599,7 @@ public class AddObservation extends BaseActivity implements OnMapReadyCallback, 
 
         queue = RequestHandler.getInstance(getApplicationContext()).getRequestQueue(); //Obtain the instance
 
-        String url = getString(R.string.api_url)+"observations/full" ;
+        String url = BuildConfig.API_ENDPOINT+"observations/full" ;
         VolleyMultipartRequest multipartRequest = new VolleyMultipartRequest(Request.Method.POST, url, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {

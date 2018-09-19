@@ -26,11 +26,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.core.DBController;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
 import com.redhelmet.alert2me.model.CategoryFilter;
 import com.redhelmet.alert2me.model.CategoryTypeFilter;
+import com.redhelmet.alert2me.model.Config;
 import com.redhelmet.alert2me.model.EditWatchZones;
 import com.redhelmet.alert2me.model.WatchZoneGeom;
 import com.google.gson.Gson;
@@ -93,7 +95,7 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
         categoryNamesDB=dbController.getCategoriesNames();
 
         wzData = editWz.getEditWz();
-        editWzURL = getString(R.string.api_url) + "device/" + wzData.get(position).getWatchzoneDeviceId() + "/watchzones/" + wzData.get(position).getWatchzoneId();
+        editWzURL =BuildConfig.API_ENDPOINT + "device/" + wzData.get(position).getWatchzoneDeviceId() + "/watchzones/" + wzData.get(position).getWatchzoneId();
         ringtonePickerBuilder = new RingtonePickerDialog.Builder(EditWatchZone.this, getSupportFragmentManager());
         ringtonePickerBuilder.addRingtoneType(RingtonePickerDialog.Builder.TYPE_NOTIFICATION);
         ringtonePickerBuilder.setPlaySampleWhileSelection(AddStaticZone.checkVibrationIsOn(getApplicationContext()));

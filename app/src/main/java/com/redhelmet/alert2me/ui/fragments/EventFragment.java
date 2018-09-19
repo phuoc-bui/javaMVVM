@@ -35,6 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.adapters.EmptyListRecyclerAdapter;
 import com.redhelmet.alert2me.adapters.EventListRecyclerAdapter;
 import com.redhelmet.alert2me.adapters.RecyclerTouchListener;
@@ -650,7 +651,7 @@ private void getOfflineEvent()
             mProgress.setVisibility(View.VISIBLE);
             // Showing refresh animation before making http call
             mSwipeRefreshLayout.setRefreshing(true);
-            cf.ZipDownload(getString(R.string.api_url) + "events/full?zip=true", new ServerCallback() {
+            cf.ZipDownload(BuildConfig.API_ENDPOINT + "events/full?zip=true", new ServerCallback() {
                 @Override
                 public void onSuccess(boolean result) {
 

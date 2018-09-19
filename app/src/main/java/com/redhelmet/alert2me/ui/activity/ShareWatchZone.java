@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
 
@@ -56,7 +57,7 @@ public class ShareWatchZone extends BaseActivity {
     }
 
     private void initializeControls() {
-        shareWzUrl = getString(R.string.api_url) + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/watchzones";
+        shareWzUrl = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/watchzones";
         shareWzCode = (EditText) findViewById(R.id.watch_zone_share_edit);
     }
 
