@@ -17,7 +17,7 @@ import com.daimajia.swipe.util.Attributes;
 import java.util.ArrayList;
 
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.model.EditWatchZones;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.ui.fragments.WatchZoneFragment;
 
 /**

@@ -28,22 +28,22 @@ public class PreferenceUtils {
                         PreferenceManager.getDefaultSharedPreferences(contextWeakReference.get());
                 final SharedPreferences.Editor editor = prefs.edit();
                 if (value instanceof Integer) {
-                    editor.putInt(key, ((Integer) value).intValue());
+                    editor.putInt(key, (Integer) value);
                 } else if (value instanceof String) {
                     editor.putString(key, value.toString());
                 } else if (value instanceof Boolean) {
-                    editor.putBoolean(key, ((Boolean) value).booleanValue());
+                    editor.putBoolean(key, (Boolean) value);
                 } else if (value instanceof Long) {
-                    editor.putLong(key, ((Long) value).longValue());
+                    editor.putLong(key, (Long) value);
                 } else if (value instanceof Float) {
-                    editor.putFloat(key, ((Float) value).floatValue());
+                    editor.putFloat(key, (Float) value);
                 } else if (value instanceof Double) {
                     editor.putLong(key, Double.doubleToRawLongBits((double) value));
 
                 }
-                editor.commit();
+                editor.apply();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -66,13 +66,13 @@ public class PreferenceUtils {
                 if (defaultValue instanceof String) {
                     return sharedPrefs.getString(key, defaultValue.toString());
                 } else if (defaultValue instanceof Integer) {
-                    return sharedPrefs.getInt(key, ((Integer) defaultValue).intValue());
+                    return sharedPrefs.getInt(key, (Integer) defaultValue);
                 } else if (defaultValue instanceof Boolean) {
-                    return sharedPrefs.getBoolean(key, ((Boolean) defaultValue).booleanValue());
+                    return sharedPrefs.getBoolean(key, (Boolean) defaultValue);
                 } else if (defaultValue instanceof Long) {
-                    return sharedPrefs.getLong(key, ((Long) defaultValue).longValue());
+                    return sharedPrefs.getLong(key, (Long) defaultValue);
                 } else if (defaultValue instanceof Float) {
-                    return sharedPrefs.getFloat(key, ((Float) defaultValue).floatValue());
+                    return sharedPrefs.getFloat(key, (Float) defaultValue);
                 } else if (defaultValue instanceof Double) {
                     return Double.longBitsToDouble(sharedPrefs.getLong(key, Double.doubleToLongBits((double) defaultValue)));
                 }

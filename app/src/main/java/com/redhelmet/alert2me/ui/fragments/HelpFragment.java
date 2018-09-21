@@ -38,7 +38,7 @@ import org.json.JSONObject;
 
 import com.redhelmet.alert2me.R;
 
-import com.redhelmet.alert2me.ui.activity.HintsActivity;
+import com.redhelmet.alert2me.ui.hint.HintsActivity;
 
 
 public class HelpFragment extends Fragment implements View.OnClickListener {

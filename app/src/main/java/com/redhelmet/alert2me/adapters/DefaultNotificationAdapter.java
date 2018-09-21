@@ -13,7 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.model.EventGroup;
+import com.redhelmet.alert2me.data.model.EventGroup;
 
 
 public class DefaultNotificationAdapter extends BaseExpandableListAdapter {

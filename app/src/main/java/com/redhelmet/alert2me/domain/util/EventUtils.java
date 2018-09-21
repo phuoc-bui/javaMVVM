@@ -17,8 +17,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import com.redhelmet.alert2me.model.Area;
-import com.redhelmet.alert2me.model.Event;
+import com.redhelmet.alert2me.data.model.Area;
+import com.redhelmet.alert2me.data.model.Event;
 
 
 public class EventUtils {

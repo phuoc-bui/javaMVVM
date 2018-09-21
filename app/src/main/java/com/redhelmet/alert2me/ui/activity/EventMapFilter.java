@@ -22,14 +22,14 @@ import android.widget.ViewSwitcher;
 
 import com.redhelmet.alert2me.adapters.CustomNotificationCategoryAdapter;
 import com.redhelmet.alert2me.adapters.DefaultNotificationAdapter;
-import com.redhelmet.alert2me.core.DBController;
+import com.redhelmet.alert2me.data.local.database.DBController;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
-import com.redhelmet.alert2me.model.Category;
-import com.redhelmet.alert2me.model.CategoryFilter;
-import com.redhelmet.alert2me.model.CategoryStatus;
-import com.redhelmet.alert2me.model.CategoryType;
-import com.redhelmet.alert2me.model.CategoryTypeFilter;
-import com.redhelmet.alert2me.model.EventGroup;
+import com.redhelmet.alert2me.data.model.Category;
+import com.redhelmet.alert2me.data.model.CategoryFilter;
+import com.redhelmet.alert2me.data.model.CategoryStatus;
+import com.redhelmet.alert2me.data.model.CategoryType;
+import com.redhelmet.alert2me.data.model.CategoryTypeFilter;
+import com.redhelmet.alert2me.data.model.EventGroup;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

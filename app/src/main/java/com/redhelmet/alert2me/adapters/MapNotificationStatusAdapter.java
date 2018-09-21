@@ -17,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.model.Category;
-import com.redhelmet.alert2me.model.CategoryStatus;
-import com.redhelmet.alert2me.model.CategoryType;
+import com.redhelmet.alert2me.data.model.Category;
+import com.redhelmet.alert2me.data.model.CategoryStatus;
+import com.redhelmet.alert2me.data.model.CategoryType;
 
 import static android.graphics.Color.GRAY;
 

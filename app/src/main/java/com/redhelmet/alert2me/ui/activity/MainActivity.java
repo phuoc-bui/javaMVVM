@@ -35,6 +35,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.ui.base.BaseActivity;
+import com.redhelmet.alert2me.ui.base.BaseViewModel;
+import com.redhelmet.alert2me.ui.hint.HintsActivity;
 
 /**
  * Created by inbox on 13/11/17.
@@ -51,13 +54,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     DeviceUtil deviceUtil;
     String apiURL=null;
     ProgressBar pBar;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected BaseViewModel obtainViewModel() {
+        return null;
+    }
+
+    @Override
+    protected void configWindow() {
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_main);
 
         InitializeControl();
         getUserId();

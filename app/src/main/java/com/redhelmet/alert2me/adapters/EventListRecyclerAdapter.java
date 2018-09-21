@@ -18,8 +18,8 @@ import java.util.List;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.domain.util.EventUtils;
 import com.redhelmet.alert2me.domain.util.IconUtils;
-import com.redhelmet.alert2me.model.Area;
-import com.redhelmet.alert2me.model.Event;
+import com.redhelmet.alert2me.data.model.Area;
+import com.redhelmet.alert2me.data.model.Event;
 
 
 public class EventListRecyclerAdapter extends RecyclerView.Adapter<EventListRecyclerAdapter.EventsViewHolder> {

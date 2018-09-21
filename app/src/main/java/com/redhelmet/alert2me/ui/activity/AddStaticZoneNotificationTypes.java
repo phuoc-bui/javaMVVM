@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.redhelmet.alert2me.adapters.CustomNotificationTypeAdapter;
-import com.redhelmet.alert2me.model.Category;
+import com.redhelmet.alert2me.data.model.Category;
 
 import com.redhelmet.alert2me.R;
 

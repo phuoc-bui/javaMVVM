@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.redhelmet.alert2me.adapters.EmptyListRecyclerAdapter;
 import com.redhelmet.alert2me.adapters.EventListRecyclerAdapter;
 import com.redhelmet.alert2me.adapters.RecyclerTouchListener;
-import com.redhelmet.alert2me.model.Event;
+import com.redhelmet.alert2me.data.model.Event;
 
 import java.util.List;
 

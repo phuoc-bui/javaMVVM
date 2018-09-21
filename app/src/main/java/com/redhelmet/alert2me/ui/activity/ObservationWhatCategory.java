@@ -17,9 +17,9 @@ import android.widget.TextView;
 
 import com.redhelmet.alert2me.core.Constants;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
-import com.redhelmet.alert2me.model.ObservationGroups;
-import com.redhelmet.alert2me.model.ObservationTopics;
-import com.redhelmet.alert2me.model.ObservationTypes;
+import com.redhelmet.alert2me.data.model.ObservationGroups;
+import com.redhelmet.alert2me.data.model.ObservationTopics;
+import com.redhelmet.alert2me.data.model.ObservationTypes;
 
 import java.util.ArrayList;
 import java.util.List;

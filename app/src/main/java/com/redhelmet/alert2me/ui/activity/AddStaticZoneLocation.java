@@ -24,10 +24,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.redhelmet.alert2me.autocomplete.AutoCompleteLocation;
+import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
-import com.redhelmet.alert2me.model.Config;
-import com.redhelmet.alert2me.model.EditWatchZones;
-import com.redhelmet.alert2me.model.WatchZoneGeom;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
+import com.redhelmet.alert2me.data.model.WatchZoneGeom;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdate;
@@ -95,7 +95,7 @@ public class AddStaticZoneLocation extends AppCompatActivity implements View.OnC
     ArrayList<EditWatchZones> wzData;
     int position=0;
     boolean editMode;
-    Config config;
+    AppConfig appConfig;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,10 +123,10 @@ public class AddStaticZoneLocation extends AppCompatActivity implements View.OnC
             //  fill_wz_color = (String) PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_tertiaryColor), "");
         }
 
-        config=config.getInstance();
+        appConfig = appConfig.getInstance();
 
-        if(config.getNavColor() != null ) {
-            fill_wz_color = config.getNavColor();
+        if(appConfig.getNavColor() != null ) {
+            fill_wz_color = appConfig.getNavColor();
         }
 
         initializeToolbar();

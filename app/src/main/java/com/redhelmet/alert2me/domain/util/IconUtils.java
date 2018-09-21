@@ -17,7 +17,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.model.Event;
+import com.redhelmet.alert2me.data.model.Event;
 
 
 public class IconUtils {

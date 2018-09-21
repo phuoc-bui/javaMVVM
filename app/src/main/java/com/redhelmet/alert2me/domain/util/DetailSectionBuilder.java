@@ -15,8 +15,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import com.redhelmet.alert2me.model.Entry;
-import com.redhelmet.alert2me.model.Section;
+import com.redhelmet.alert2me.data.model.Entry;
+import com.redhelmet.alert2me.data.model.Section;
 
 public class DetailSectionBuilder {
     private Context _context;

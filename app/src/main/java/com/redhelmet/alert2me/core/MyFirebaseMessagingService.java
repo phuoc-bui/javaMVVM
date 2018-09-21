@@ -18,8 +18,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.redhelmet.alert2me.BuildConfig;
-import com.redhelmet.alert2me.model.Event;
-import com.redhelmet.alert2me.model.PnsNotification;
+import com.redhelmet.alert2me.data.model.Event;
+import com.redhelmet.alert2me.data.model.PnsNotification;
 import com.redhelmet.alert2me.ui.activity.SplashScreen;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;

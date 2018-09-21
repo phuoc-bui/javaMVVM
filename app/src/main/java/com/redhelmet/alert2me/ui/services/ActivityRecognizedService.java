@@ -16,7 +16,7 @@ import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.core.Constants;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
-import com.redhelmet.alert2me.model.EditWatchZones;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.google.android.gms.location.ActivityRecognitionResult;
 import com.google.android.gms.location.DetectedActivity;
 import com.google.gson.Gson;

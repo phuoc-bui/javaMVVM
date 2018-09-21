@@ -5,8 +5,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 
-import com.redhelmet.alert2me.model.CustomMarker;
-import com.redhelmet.alert2me.model.Event;
+import com.redhelmet.alert2me.data.model.CustomMarker;
+import com.redhelmet.alert2me.data.model.Event;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;

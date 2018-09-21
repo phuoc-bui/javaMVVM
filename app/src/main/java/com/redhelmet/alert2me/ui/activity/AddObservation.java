@@ -51,7 +51,7 @@ import com.redhelmet.alert2me.core.RequestHandler;
 import com.redhelmet.alert2me.core.VolleyMultipartRequest;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
-import com.redhelmet.alert2me.model.ObservationTopics;
+import com.redhelmet.alert2me.data.model.ObservationTopics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -112,7 +112,7 @@ public class AddObservation extends BaseActivity implements OnMapReadyCallback, 
     RecyclerView recyclerView;
 
     GoogleMap mMapView;
-    String client="config/observation";
+    String client="appConfig/observation";
     String _observationUrl; //enable/disable url
     RequestQueue queue;
     JsonObjectRequest volleyRequest;
