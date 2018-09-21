@@ -650,7 +650,7 @@ private void getOfflineEvent()
             mProgress.setVisibility(View.VISIBLE);
             // Showing refresh animation before making http call
             mSwipeRefreshLayout.setRefreshing(true);
-            cf.ZipDownload(getString(R.string.api_url) + "events/full?zip=true", new ServerCallback() {
+            cf.ZipDownload(getString(R.string.api_url) + "events", new ServerCallback() {
                 @Override
                 public void onSuccess(boolean result) {
 
