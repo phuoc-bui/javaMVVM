@@ -7,6 +7,9 @@ import android.view.View;
  * Provides a method to show a Snackbar.
  */
 public class SnackbarUtils {
+    // prevent init Util class
+    private SnackbarUtils() {
+    }
 
     public static void showSnackbar(View v, String snackbarText) {
         if (v == null || snackbarText == null) {

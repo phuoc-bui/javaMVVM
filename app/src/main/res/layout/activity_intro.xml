@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="viewModel"
             type="com.redhelmet.alert2me.ui.hint.HintViewModel"/>
     </data>
-    
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent"/>
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-            <me.relex.circleindicator.CircleIndicator
-                android:id="@+id/indicator"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:layout_alignParentBottom="true"/>
-        </RelativeLayout>
-    </LinearLayout>
+        <com.pixelcan.inkpageindicator.InkPageIndicator
+            android:id="@+id/indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:ipi_dotDiameter="8dp"
+            app:ipi_dotGap="8dp"
+            app:ipi_animationDuration="320"
+            app:ipi_pageIndicatorColor="@android:color/darker_gray"
+            app:ipi_currentPageIndicatorColor="@android:color/white"/>
+    </android.support.constraint.ConstraintLayout>
 </layout>

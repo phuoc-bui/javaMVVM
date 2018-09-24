@@ -6,6 +6,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
@@ -54,7 +55,7 @@ import static com.redhelmet.alert2me.R.id.notification_sound_text;
 import static com.redhelmet.alert2me.R.id.select_ringtone;
 
 
-public class EditWatchZone extends BaseActivity implements View.OnClickListener {
+public class EditWatchZone extends AppCompatActivity implements View.OnClickListener {
 
 
     Toolbar toolbar;

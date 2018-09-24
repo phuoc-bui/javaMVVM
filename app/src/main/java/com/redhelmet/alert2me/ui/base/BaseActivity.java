@@ -2,9 +2,11 @@ package com.redhelmet.alert2me.ui.base;
 
 import android.annotation.TargetApi;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -17,7 +19,7 @@ import com.redhelmet.alert2me.ViewModelFactory;
  * Created by inbox on 27/11/17.
  */
 
-public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDataBinding> extends AppCompatActivity{
+public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDataBinding> extends AppCompatActivity {
 
     protected VM viewModel;
     protected VDB binder;
@@ -27,7 +29,8 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
 
     protected abstract Class<VM> obtainViewModel();
 
-    protected void configWindow(){}
+    protected void configWindow() {
+    }
 
     protected int getBindingVariable() {
         return BR.viewModel;
@@ -39,6 +42,28 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
         configWindow();
         binder = DataBindingUtil.setContentView(this, getLayoutId());
         viewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(obtainViewModel());
+        viewModel.navigationEvent.observe(this, event -> {
+            if (event != null) {
+                onNavigationEvent(event.getContentIfNotHandled());
+            }
+        });
+    }
+
+    /**
+     * Handle navigation event from viewModel, modified this function if any custom navigation
+     * such as add bundle, flag, animation, ...
+     *
+     * @param destination class of destination
+     */
+    protected void onNavigationEvent(Object destination) {
+        if (destination instanceof Class) {
+            Intent intent = new Intent(this, (Class<?>) destination);
+            startActivity(intent);
+        } else if (destination instanceof Uri) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, (Uri) destination);
+            startActivity(intent);
+        }
+
     }
 
     @Override
@@ -58,35 +83,4 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             requestPermissions(permissions, requestCode);
     }
-
-//    public void showSnack(View watchzoneLayout, String message){
-//
-//        snackbar = Snackbar.make(watchzoneLayout, message, Snackbar.LENGTH_INDEFINITE);
-//        snackbar.show();
-//    }
-
-//    public void dismisSnackbar(){
-//        Thread t = new Thread()
-//        {
-//            public void run()
-//            {
-//                try{
-//                    sleep(3000);
-//                }catch(InterruptedException ie)
-//                {
-//                    ie.printStackTrace();
-//                }finally
-//                {
-//                    if(snackbar.isShown() && snackbar!=null)
-//                        snackbar.dismiss();
-//                }
-//            }
-//        }; t.start();
-//
-//    }
-//
-//    public void changeText(String message){
-//        if(snackbar.isShown() && snackbar!=null)
-//            snackbar.setText(message);
-//    }
 }

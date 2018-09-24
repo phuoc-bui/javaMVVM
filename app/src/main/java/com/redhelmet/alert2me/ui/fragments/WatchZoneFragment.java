@@ -91,7 +91,7 @@ import java.util.Map;
 import com.redhelmet.alert2me.R;
 
 import com.redhelmet.alert2me.core.Constants;
-import com.redhelmet.alert2me.core.DeviceUtil;
+import com.redhelmet.alert2me.util.DeviceUtil;
 import com.redhelmet.alert2me.core.RequestHandler;
 import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.ui.activity.AddStaticZone;

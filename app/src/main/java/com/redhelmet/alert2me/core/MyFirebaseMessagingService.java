@@ -17,13 +17,14 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.redhelmet.alert2me.BuildConfig;
-import com.redhelmet.alert2me.data.model.Event;
-import com.redhelmet.alert2me.data.model.PnsNotification;
-import com.redhelmet.alert2me.ui.activity.SplashScreen;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
+import com.redhelmet.alert2me.BuildConfig;
+import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.data.model.Event;
+import com.redhelmet.alert2me.data.model.PnsNotification;
+import com.redhelmet.alert2me.ui.splash.SplashScreen;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,13 +33,27 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.redhelmet.alert2me.R;
-
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
     private Gson gson;
     private final static AtomicInteger c = new AtomicInteger(0);
+
+    /**
+     * Called if InstanceID token is updated. This may occur if the security of
+     * the previous token had been compromised. Note that this is called when the InstanceID token
+     * is initially generated so this is where you would retrieve the token.
+     */
+    @Override
+    public void onNewToken(String token) {
+        Log.d(TAG, "Refreshed token: " + token);
+
+        // If you want to send messages to this application instance or
+        // manage this apps subscriptions on the server side, send the
+        // Instance ID token to your app server.
+//        sendRegistrationToServer(token);
+    }
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // TODO(developer): Handle FCM messages here.

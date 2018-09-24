@@ -3,6 +3,7 @@ package com.redhelmet.alert2me.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
@@ -12,12 +13,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.CustomNotificationTypeAdapter;
 import com.redhelmet.alert2me.data.model.Category;
 
-import com.redhelmet.alert2me.R;
-
-public class AddStaticZoneNotificationTypes extends BaseActivity {
+public class AddStaticZoneNotificationTypes extends AppCompatActivity {
 
     Toolbar toolbar;
     Intent i;

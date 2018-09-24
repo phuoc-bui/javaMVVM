@@ -1,17 +1,16 @@
 package com.redhelmet.alert2me.data.local.pref;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.data.model.response.ConfigResponse;
+import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
+import com.redhelmet.alert2me.data.remote.response.RegisterResponse;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
-import com.redhelmet.alert2me.ui.splash.SplashScreen;
 
 public class AppPreferenceHelper implements PreferenceHelper {
     private final String CONFIG_KEY = "config";
+    private final String DEVICE_KEY = "device";
     private Context context;
     private Gson gson;
 
@@ -27,7 +26,7 @@ public class AppPreferenceHelper implements PreferenceHelper {
 
     @Override
     public void setInitialLaunch(boolean isInitial) {
-
+        PreferenceUtils.saveToPrefs(context, context.getString(R.string.pref_initialLaunch), true);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class AppPreferenceHelper implements PreferenceHelper {
 
     @Override
     public void setAccepted(boolean accepted) {
-
+        PreferenceUtils.saveToPrefs(context, context.getString(R.string.pref_accepted), true);
     }
 
     @Override
@@ -50,5 +49,11 @@ public class AppPreferenceHelper implements PreferenceHelper {
     public ConfigResponse getConfig() {
         String json = (String) PreferenceUtils.getFromPrefs(context, CONFIG_KEY, "");
         return gson.fromJson(json, ConfigResponse.class);
+    }
+
+    @Override
+    public void saveDeviceInfo(RegisterResponse.Device device) {
+        String json = gson.toJson(device);
+        PreferenceUtils.saveToPrefs(context, DEVICE_KEY, json);
     }
 }

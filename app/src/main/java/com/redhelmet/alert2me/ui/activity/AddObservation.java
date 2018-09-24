@@ -19,6 +19,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -46,7 +47,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.adapters.ObservationImageAdapter;
 import com.redhelmet.alert2me.core.Constants;
-import com.redhelmet.alert2me.core.DeviceUtil;
+import com.redhelmet.alert2me.util.DeviceUtil;
 import com.redhelmet.alert2me.core.RequestHandler;
 import com.redhelmet.alert2me.core.VolleyMultipartRequest;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
@@ -92,7 +93,7 @@ import static com.redhelmet.alert2me.R.id.observation_map;
  * Created by inbox on 5/2/18.
  */
 
-public class AddObservation extends BaseActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnMapClickListener,TimePickerDialog.OnTimeSetListener , EasyPermissions.PermissionCallbacks {
+public class AddObservation extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnMapClickListener,TimePickerDialog.OnTimeSetListener , EasyPermissions.PermissionCallbacks {
 
     LinearLayout whatLayout,
             whenLayout,

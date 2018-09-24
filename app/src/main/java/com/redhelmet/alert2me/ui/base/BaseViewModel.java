@@ -1,12 +1,12 @@
 package com.redhelmet.alert2me.ui.base;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.support.design.widget.Snackbar;
 
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.AddObservationModel;
-import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Observations;
+import com.redhelmet.alert2me.global.Event;
 
 import org.json.JSONArray;
 
@@ -18,18 +18,18 @@ public class BaseViewModel extends ViewModel {
 
     protected boolean isLoading = false;
     public JSONArray wz_notification_selection;
-    protected AppConfig appConfig;
-    Snackbar snackbar=null;
-    Observations observations;
-    AddObservationModel addObservation;
-    private DataManager dataManager;
+    protected Observations observations;
+    protected AddObservationModel addObservation;
+    protected DataManager dataManager;
+    protected MutableLiveData<Event<Object>> navigationEvent = new MutableLiveData<>();
 
-    protected BaseViewModel(DataManager dataManager) {
+    public BaseViewModel(DataManager dataManager) {
         this.dataManager = dataManager;
         wz_notification_selection=new JSONArray();
-        appConfig = AppConfig.getInstance();
         observations= Observations.getInstance();
         addObservation = AddObservationModel.getInstance();
+
+        //TODO: improve navigationEvent with custom event data (maybe an enum with type of Intent)
     }
 
     public boolean isLoading() {

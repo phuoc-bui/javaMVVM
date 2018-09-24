@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -28,21 +29,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
 import com.redhelmet.alert2me.BuildConfig;
+import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.CustomNotificationCategoryAdapter;
 import com.redhelmet.alert2me.adapters.DefaultNotificationAdapter;
+import com.redhelmet.alert2me.core.Constants;
 import com.redhelmet.alert2me.data.local.database.DBController;
-import com.redhelmet.alert2me.domain.util.PreferenceUtils;
-import com.redhelmet.alert2me.domain.util.Utility;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.CategoryFilter;
 import com.redhelmet.alert2me.data.model.CategoryStatus;
 import com.redhelmet.alert2me.data.model.CategoryType;
 import com.redhelmet.alert2me.data.model.CategoryTypeFilter;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.EventGroup;
 import com.redhelmet.alert2me.data.model.WatchZoneGeom;
-import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
+import com.redhelmet.alert2me.domain.util.PreferenceUtils;
+import com.redhelmet.alert2me.domain.util.Utility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,12 +57,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.redhelmet.alert2me.R;
-
-import com.redhelmet.alert2me.core.Constants;
-import com.redhelmet.alert2me.data.model.EditWatchZones;
-
-public class AddStaticZoneNotification extends BaseActivity implements View.OnClickListener {
+public class AddStaticZoneNotification extends AppCompatActivity implements View.OnClickListener {
 
     Toolbar toolbar;
     Intent i;

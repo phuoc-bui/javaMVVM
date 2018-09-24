@@ -1,6 +1,7 @@
 package com.redhelmet.alert2me.data.local.pref;
 
-import com.redhelmet.alert2me.data.model.response.ConfigResponse;
+import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
+import com.redhelmet.alert2me.data.remote.response.RegisterResponse;
 
 public interface PreferenceHelper {
     void saveConfig(ConfigResponse configResponse);
@@ -9,4 +10,5 @@ public interface PreferenceHelper {
     void setInitialLaunch(boolean isInitial);
     boolean isAccepted();
     void setAccepted(boolean accepted);
+    void saveDeviceInfo(RegisterResponse.Device device);
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
@@ -41,7 +42,7 @@ import java.util.List;
 
 import com.redhelmet.alert2me.R;
 
-public class EventMapFilter extends BaseActivity implements View.OnClickListener {
+public class EventMapFilter extends AppCompatActivity implements View.OnClickListener {
 
     Toolbar toolbar;
     Intent i;

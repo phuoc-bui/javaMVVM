@@ -2,11 +2,17 @@ package com.redhelmet.alert2me.data;
 
 import android.util.Log;
 
+import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.local.database.DBHelper;
 import com.redhelmet.alert2me.data.local.pref.PreferenceHelper;
-import com.redhelmet.alert2me.data.model.response.ConfigResponse;
+import com.redhelmet.alert2me.data.model.Hint;
+import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
 import com.redhelmet.alert2me.data.remote.ApiHelper;
+import com.redhelmet.alert2me.data.remote.response.RegisterResponse;
+import com.redhelmet.alert2me.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -46,6 +52,75 @@ public class AppDataManager implements DataManager {
     @Override
     public ConfigResponse getConfig() {
         return config;
+    }
+
+    @Override
+    public void setInitialLaunch(boolean isInitial) {
+        pref.setInitialLaunch(isInitial);
+    }
+
+    @Override
+    public boolean getInitialLaunch() {
+        return pref.isInitialLaunch();
+    }
+
+    @Override
+    public void setAccepted(boolean accepted) {
+        pref.setAccepted(accepted);
+    }
+
+    @Override
+    public boolean getAccepted() {
+        return pref.isAccepted();
+    }
+
+    @Override
+    public Observable<RegisterResponse> getUserId(String firebaseToken) {
+        return api.registerDevice(firebaseToken)
+                .doOnNext(registerResponse -> pref.saveDeviceInfo(registerResponse.device))
+                .doOnError(error -> {
+                    RegisterResponse.Device device = new RegisterResponse.Device();
+                    device.id = "0";
+                    device.apiToken = "";
+                    pref.saveDeviceInfo(device);
+                });
+    }
+
+    @Override
+    public List<Hint> getHintData() {
+        //TODO: need confirm use hints from server or local hints (should use local hints for performance when load big image)
+//        List<Hint> hints = config.appConfig.getHintsScreen();
+        List<Hint> hints = null;
+        if (hints == null || hints.isEmpty()) {
+            //setting up hard coded hints with desc and image
+            hints = new ArrayList<>();
+            Hint hint1 = new Hint();
+            hint1.setTitle("");
+            hint1.setDesc("EmergencyAUS keeps you<br>updated with current<br>emergency information and<br>alerts in Australia.");
+            hint1.setUrl(R.drawable.hint1);
+            hint1.setLast(true);
+
+            Hint hint2 = new Hint();
+            hint2.setTitle("Observation");
+            hint2.setDesc("Share what you know<br>share what you see, hear and feel.");
+            hint2.setUrl(R.drawable.hint1);
+
+            Hint hint3 = new Hint();
+            hint3.setTitle("Watch Zones");
+            hint3.setDesc("Monitor the risk all day<br>all night, all year");
+            hint3.setUrl(R.drawable.hint2);
+
+            Hint hint4 = new Hint();
+            hint4.setTitle("Warning & Incidents");
+            hint4.setDesc("Be aware of your environment<br>your risk, your safety");
+            hint4.setUrl(R.drawable.hint3);
+
+            hints.add(hint1);
+            hints.add(hint2);
+            hints.add(hint3);
+            hints.add(hint4);
+        }
+        return hints;
     }
 
     private void handleError(Throwable error) {

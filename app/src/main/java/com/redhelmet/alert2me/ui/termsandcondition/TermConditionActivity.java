@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.ui.activity;
+package com.redhelmet.alert2me.ui.termsandcondition;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -23,7 +23,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.redhelmet.alert2me.BuildConfig;
-import com.redhelmet.alert2me.core.DeviceUtil;
+import com.redhelmet.alert2me.util.DeviceUtil;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -35,15 +35,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.ui.activity.HomeActivity;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
-import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.hint.HintsActivity;
 
 /**
  * Created by inbox on 13/11/17.
  */
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class TermConditionActivity extends BaseActivity<TermsConditionViewModel, ActivityMainBinding> {
 
 
 
@@ -61,8 +61,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     @Override
-    protected BaseViewModel obtainViewModel() {
-        return null;
+    protected Class<TermsConditionViewModel> obtainViewModel() {
+        return TermsConditionViewModel.class;
     }
 
     @Override
@@ -75,43 +75,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        InitializeControl();
         getUserId();
-    }
-    public void InitializeControl(){
-        apiURL= BuildConfig.API_ENDPOINT+"device";
-        deviceUtil=new DeviceUtil(getApplicationContext());
-        pBar=(ProgressBar)findViewById(R.id.progressBar2);
-        acceptTerms=(Button) findViewById(R.id.termsAccept);
-        replayHint=(TextView) findViewById(R.id.replayHint);
-        termsCondition =(TextView) findViewById(R.id.termsCondition);
-
-        acceptTerms.setOnClickListener(this);
-        replayHint.setOnClickListener(this);
-        termsCondition.setOnClickListener(this);
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId())
-        {
-            case R.id.termsAccept:
-
-                pBar.setVisibility(View.VISIBLE);
-                getUserId();
-
-                break;
-            case R.id.termsCondition:
-                Uri webpage  = Uri.parse(config.getTermsAndConditionUrl());
-                Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-                startActivity(intent);
-                break;
-            case R.id.replayHint:
-                PreferenceUtils.removeFromPrefs(this,getString(R.string.pref_initialLaunch));
-                Intent o = new Intent(MainActivity.this, HintsActivity.class);
-                o.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(o);
-                break;
+    protected void onNavigationEvent(Object destination) {
+        if (destination instanceof Class && ((Class) destination).isAssignableFrom(HintsActivity.class)) {
+            Intent o = new Intent(TermConditionActivity.this, HintsActivity.class);
+            o.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(o);
+        } else {
+            super.onNavigationEvent(destination);
         }
     }
 
@@ -124,7 +98,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         Map<String, String> mParams = new HashMap<String, String>();
         mParams.put("platform",getString(R.string.platform));
-        mParams.put("deviceToken",FirebaseInstanceId.getInstance().getToken());
+        mParams.put("deviceToken",FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new ).getToken());
         mParams.put("deviceName","android");
         mParams.put("version",getString(R.string.appVersion));
         mParams.put("systemName",Build.VERSION_CODES.class.getFields()[Build.VERSION.SDK_INT].getName());
@@ -152,9 +126,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                                 if(user!=null ){
                                     PreferenceUtils.saveToPrefs(getApplicationContext(),getString(R.string.pref_user_id),user.getString("id"));
-                                    PreferenceUtils.saveToPrefs(MainActivity.this,getString(R.string.pref_accepted),true);
+                                    PreferenceUtils.saveToPrefs(TermConditionActivity.this,getString(R.string.pref_accepted),true);
                                     PreferenceUtils.saveToPrefs(getApplicationContext(),getString(R.string.pref_user_token),user.getString("apiToken"));
-                                    i=new Intent(MainActivity.this,HomeActivity.class);
+                                    i=new Intent(TermConditionActivity.this,HomeActivity.class);
                                     startActivity(i);
                                     finish();
                                 }
@@ -173,9 +147,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Toast.makeText(getApplicationContext(), getString(R.string.timeOut), Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 PreferenceUtils.saveToPrefs(getApplicationContext(),getString(R.string.pref_user_id),"0");
-                PreferenceUtils.saveToPrefs(MainActivity.this,getString(R.string.pref_accepted),true);
+                PreferenceUtils.saveToPrefs(TermConditionActivity.this,getString(R.string.pref_accepted),true);
                 PreferenceUtils.saveToPrefs(getApplicationContext(),getString(R.string.pref_user_token),"sdfsdfs");
-                i=new Intent(MainActivity.this,HomeActivity.class);
+                i=new Intent(TermConditionActivity.this,HomeActivity.class);
                 startActivity(i);
                 finish();
 

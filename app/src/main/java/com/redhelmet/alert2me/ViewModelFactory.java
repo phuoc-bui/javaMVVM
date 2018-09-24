@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.redhelmet.alert2me.data.DataManager;
+import com.redhelmet.alert2me.ui.hint.HintViewModel;
 import com.redhelmet.alert2me.ui.splash.SplashViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
@@ -12,8 +13,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     private DataManager dataManager;
 
     private ViewModelFactory() {
-        dataManager = ServiceLocator.get(DataManager.class);
-        
+        dataManager = AppModule.getInstance().provideDataManager();
     }
 
     public static ViewModelFactory getInstance() {
@@ -32,6 +32,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if(SplashViewModel.class.equals(modelClass)) {
             return (T) new SplashViewModel(dataManager);
+        } else if (SplashViewModel.class.equals(modelClass)) {
+            return (T) new HintViewModel(dataManager);
         }
         else {
             throw new Error("Invalid parameter");
