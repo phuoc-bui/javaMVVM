@@ -7,7 +7,6 @@ import android.view.WindowManager;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.databinding.ActivitySplashScreenBinding;
-import com.redhelmet.alert2me.domain.ExceptionHandler;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
 
 public class SplashScreen extends BaseActivity<SplashViewModel, ActivitySplashScreenBinding> {
@@ -31,6 +30,5 @@ public class SplashScreen extends BaseActivity<SplashViewModel, ActivitySplashSc
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
     }
 }

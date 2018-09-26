@@ -39,6 +39,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.ui.home.HomeActivity;
 
 
 public class EventDetailsActivity extends AppCompatActivity implements  GoogleMap.OnMapClickListener  ,GoogleMap.OnMarkerClickListener,  OnMapReadyCallback {

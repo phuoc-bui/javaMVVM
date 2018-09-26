@@ -11,4 +11,5 @@ public interface PreferenceHelper {
     boolean isAccepted();
     void setAccepted(boolean accepted);
     void saveDeviceInfo(RegisterResponse.Device device);
+    RegisterResponse.Device getDeviceInfo();
 }

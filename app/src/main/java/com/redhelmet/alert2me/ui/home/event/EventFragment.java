@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.ui.fragments;
+package com.redhelmet.alert2me.ui.home.event;
 
 import android.Manifest;
 import android.app.Activity;
@@ -105,13 +105,13 @@ import com.redhelmet.alert2me.ui.activity.AddObservation;
 import com.redhelmet.alert2me.ui.activity.ClusterEventList;
 import com.redhelmet.alert2me.ui.activity.EventDetailsActivity;
 import com.redhelmet.alert2me.ui.activity.EventMapFilter;
-import com.redhelmet.alert2me.ui.activity.HomeActivity;
+import com.redhelmet.alert2me.ui.base.BaseFragment;
+import com.redhelmet.alert2me.ui.home.HomeActivity;
 
 import static com.redhelmet.alert2me.R.id.map;
-//import static com.redhelmet.alert2me.R.id.match_global_nicknames;
 
 
-public class EventFragment extends Fragment implements OnMapReadyCallback,
+public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBinding> implements OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,SwipeRefreshLayout.OnRefreshListener,LocationListener,AutoCompleteLocation.AutoCompleteLocationListener {
@@ -164,19 +164,25 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
     private ImageButton mapType1;
     private ImageButton mapType2;
     private ImageButton mapType3;
-    public EventFragment() {
 
+    public EventFragment() {
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_event;
+    }
+
+    @Override
+    protected Class<EventViewModel> obtainViewModel() {
+        return EventViewModel.class;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
         setHasOptionsMenu(true);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true); //To set vector change resource
-
-
     }
 
     @Override
@@ -185,18 +191,6 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
         this._context = context;
 
         // Code here
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            // Code here
-            this._context = getActivity();
-
-        }
     }
 
     @Override

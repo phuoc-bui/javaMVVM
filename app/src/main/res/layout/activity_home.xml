@@ -1,68 +1,79 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.PopupOverlay"
-        app:elevation="0dp"
-        android:id="@+id/appBarLayout">
+<layout>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.redhelmet.alert2me.ui.home.HomeViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.PopupOverlay"
+            app:elevation="0dp"
+            app:layout_constraintTop_toTopOf="parent">
 
-            android:minHeight="40dp"
-            android:background="@color/navigationnarHeaderColor"
-            app:popupTheme="@style/AppTheme.PopupOverlay" >
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/navigationnarHeaderColor"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <!-- Color is Brown 500 -->
-        <ProgressBar
-            android:id="@+id/toolbar_progress_bar"
-            android:layout_width="60px"
-            android:layout_height="60px"
-            android:indeterminateTint="@color/navigationnarTextTintColor"
-            android:indeterminateTintMode="src_in"
-            android:layout_gravity="right"
-            android:layout_marginRight="10dp"
-            />
-        </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
 
-    </android.support.design.widget.AppBarLayout>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/tabs"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/tab_black_top_border"
+            android:includeFontPadding="false"
+            android:tabStripEnabled="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:tabGravity="fill"
+            app:tabIndicatorHeight="0dp"
+            app:tabMaxWidth="0dp"
+            app:tabMode="fixed"
+            app:tabPaddingBottom="0dp"
+            app:tabPaddingEnd="0dp"
+            app:tabPaddingStart="0dp"
+            app:tabPaddingTop="0dp"
+            app:tabSelectedTextColor="@color/colorRed"
+            app:tabTextAppearance="@style/CustomTabText"
+            app:tabTextColor="#666666">
 
-        android:background="@drawable/tab_black_top_border"
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_report_problem"
+                android:text="@string/tab_events" />
 
-         app:tabSelectedTextColor="@color/colorRed"
-        android:includeFontPadding="false"
-        app:tabTextColor="#666666"
-        app:tabTextAppearance="@style/CustomTabText"
-        app:tabGravity="fill"
-        app:tabIndicatorHeight="0dp"
-        app:tabPaddingBottom="0dp"
-        app:tabPaddingEnd="0dp"
-        app:tabPaddingStart="0dp"
-        app:tabPaddingTop="0dp"
-        app:tabMaxWidth="0dp"
-        android:tabStripEnabled="false"
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_watch_zone"
+                android:text="@string/tab_WZ" />
 
-        android:layout_alignParentBottom="true"
-        app:tabMode="fixed" />
-
-    <com.redhelmet.alert2me.adapters.CustomViewPager
-        android:id="@+id/viewpager"
-
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/appBarLayout"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_above="@+id/tabs" />
-</RelativeLayout>
-    <!--android:background="#2E2E2E"-->
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_help_white"
+                android:text="@string/tab_help" />
+        </android.support.design.widget.TabLayout>
+    </android.support.constraint.ConstraintLayout>
+</layout>

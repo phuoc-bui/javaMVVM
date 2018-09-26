@@ -1,11 +1,13 @@
 package com.redhelmet.alert2me.ui.splash;
 
+import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.global.Constant;
 import com.redhelmet.alert2me.global.Event;
-import com.redhelmet.alert2me.ui.activity.HomeActivity;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
+import com.redhelmet.alert2me.ui.base.NavigationType;
 import com.redhelmet.alert2me.ui.hint.HintsActivity;
+import com.redhelmet.alert2me.ui.home.HomeActivity;
 import com.redhelmet.alert2me.ui.termsandcondition.TermConditionActivity;
 
 import java.util.concurrent.TimeUnit;
@@ -14,22 +16,8 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class SplashViewModel extends BaseViewModel {
-
-    enum LaunchDestination {
-        HOME(HomeActivity.class),
-        TERMS_CONDITION(TermConditionActivity.class),
-        HINTS(HintsActivity.class);
-
-        Class clazz;
-
-        LaunchDestination(Class clazz) {
-            this.clazz = clazz;
-        }
-    }
-
     public SplashViewModel(DataManager dataManager) {
         super(dataManager);
-
         isLoading = true;
         disposeBag.add(dataManager.loadConfig()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -39,8 +27,9 @@ public class SplashViewModel extends BaseViewModel {
                 }, error -> {
                     isLoading = false;
                     startTimer();
-                    // TODO: show snack bar or Toast
-//                    SnackbarUtils.showSnackbar();
+                    navigationEvent.setValue(
+                            new Event<>(NavigationType.SHOW_TOAST.
+                                    setData(R.string.timeOut)));
                 }));
     }
 
@@ -48,18 +37,18 @@ public class SplashViewModel extends BaseViewModel {
         disposeBag.add(Observable.timer(Constant.SPLASH_DISPLAY_LENGTH, TimeUnit.MILLISECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(number -> {
-                    LaunchDestination dest;
+                    Class dest;
                     if (dataManager.getInitialLaunch()) {
                         if (dataManager.getAccepted()) {
-                            dest = LaunchDestination.HOME;
+                            dest = HomeActivity.class;
                         } else {
-                            dest = LaunchDestination.TERMS_CONDITION;
+                            dest = TermConditionActivity.class;
                         }
                     } else {
-                        dest = LaunchDestination.HINTS;
+                        dest = HintsActivity.class;
                     }
 
-                    navigationEvent.setValue(new Event<>(dest.clazz));
+                    navigationEvent.setValue(new Event<>(NavigationType.START_ACTIVITY_AND_FINISH.setData(dest)));
                 }));
     }
 }

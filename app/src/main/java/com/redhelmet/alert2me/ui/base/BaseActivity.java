@@ -2,11 +2,9 @@ package com.redhelmet.alert2me.ui.base;
 
 import android.annotation.TargetApi;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -14,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.redhelmet.alert2me.BR;
 import com.redhelmet.alert2me.ViewModelFactory;
+import com.redhelmet.alert2me.domain.ExceptionHandler;
 
 /**
  * Created by inbox on 27/11/17.
@@ -40,6 +39,7 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         configWindow();
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
         binder = DataBindingUtil.setContentView(this, getLayoutId());
         viewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(obtainViewModel());
         viewModel.navigationEvent.observe(this, event -> {
@@ -53,17 +53,10 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
      * Handle navigation event from viewModel, modified this function if any custom navigation
      * such as add bundle, flag, animation, ...
      *
-     * @param destination class of destination
+     * @param type type of navigation (with data from viewModel)
      */
-    protected void onNavigationEvent(Object destination) {
-        if (destination instanceof Class) {
-            Intent intent = new Intent(this, (Class<?>) destination);
-            startActivity(intent);
-        } else if (destination instanceof Uri) {
-            Intent intent = new Intent(Intent.ACTION_VIEW, (Uri) destination);
-            startActivity(intent);
-        }
-
+    protected void onNavigationEvent(NavigationType type) {
+        type.navigation(this);
     }
 
     @Override

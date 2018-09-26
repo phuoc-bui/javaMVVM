@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.ui.fragments;
+package com.redhelmet.alert2me.ui.home.help;
 
 import android.app.Activity;
 import android.content.Context;

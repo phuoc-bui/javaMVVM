@@ -56,4 +56,10 @@ public class AppPreferenceHelper implements PreferenceHelper {
         String json = gson.toJson(device);
         PreferenceUtils.saveToPrefs(context, DEVICE_KEY, json);
     }
+
+    @Override
+    public RegisterResponse.Device getDeviceInfo() {
+        String json = (String) PreferenceUtils.getFromPrefs(context, DEVICE_KEY, "");
+        return gson.fromJson(json, RegisterResponse.Device.class);
+    }
 }

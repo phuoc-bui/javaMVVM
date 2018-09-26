@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.redhelmet.alert2me.ui.home.event.EventViewModel"/>
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/eventView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--<in.srain.cube.views.ptr.PtrClassicFrameLayout-->
+
+        <!--android:id="@+id/pt_frame"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--cube_ptr:ptr_duration_to_close="200"-->
+        <!--cube_ptr:ptr_duration_to_close_header="1000"-->
+        <!--cube_ptr:ptr_keep_header_when_refresh="true"-->
+        <!--cube_ptr:ptr_pull_to_fresh="false"-->
+        <!--cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"-->
+        <!--cube_ptr:ptr_resistance="1.7">-->
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/swipe_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listEventIcon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+        <!--</in.srain.cube.views.ptr.PtrClassicFrameLayout>-->
+
+
+    </RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        app:srcCompat="@drawable/icon_observation"
+        android:layout_margin="16dp" />
+</layout>

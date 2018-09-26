@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.ui.fragments;
+package com.redhelmet.alert2me.ui.home.watchzone;
 
 import android.Manifest;
 import android.app.Activity;
@@ -97,7 +97,7 @@ import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.ui.activity.AddStaticZone;
 import com.redhelmet.alert2me.ui.activity.AddStaticZoneNotification;
 import com.redhelmet.alert2me.ui.activity.EditWatchZone;
-import com.redhelmet.alert2me.ui.activity.HomeActivity;
+import com.redhelmet.alert2me.ui.home.HomeActivity;
 import com.redhelmet.alert2me.ui.activity.ShareWatchZone;
 import com.redhelmet.alert2me.ui.services.BackgroundDetectedActivitiesService;
 

@@ -16,28 +16,18 @@ public class BaseViewModel extends ViewModel {
 
     protected CompositeDisposable disposeBag = new CompositeDisposable();
 
-    protected boolean isLoading = false;
+    public boolean isLoading = false;
     public JSONArray wz_notification_selection;
     protected Observations observations;
     protected AddObservationModel addObservation;
     protected DataManager dataManager;
-    protected MutableLiveData<Event<Object>> navigationEvent = new MutableLiveData<>();
+    protected MutableLiveData<Event<NavigationType>> navigationEvent = new MutableLiveData<>();
 
     public BaseViewModel(DataManager dataManager) {
         this.dataManager = dataManager;
         wz_notification_selection=new JSONArray();
         observations= Observations.getInstance();
         addObservation = AddObservationModel.getInstance();
-
-        //TODO: improve navigationEvent with custom event data (maybe an enum with type of Intent)
-    }
-
-    public boolean isLoading() {
-        return isLoading;
-    }
-
-    public void setLoading(boolean loading) {
-        isLoading = loading;
     }
 
     @Override

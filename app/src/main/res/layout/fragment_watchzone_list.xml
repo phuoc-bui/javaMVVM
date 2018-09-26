@@ -172,7 +172,7 @@
                 android:clickable="true"
                 app:backgroundTint="@color/colorRed"
                 app:fabSize="auto"
-                app:srcCompat="@drawable/fab_plus_icon" />
+                app:srcCompat="@drawable/ic_add_black_24dp" />
 
             <TextView
                 android:id="@+id/addWzPopup"

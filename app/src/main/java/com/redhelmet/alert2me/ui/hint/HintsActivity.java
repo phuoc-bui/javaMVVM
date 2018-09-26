@@ -15,7 +15,6 @@ import android.view.WindowManager;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Hint;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
-import com.redhelmet.alert2me.ui.fragments.HintFragment;
 import com.redhelmet.alert2me.ui.termsandcondition.TermConditionActivity;
 
 import java.util.List;

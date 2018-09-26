@@ -1,11 +1,13 @@
 package com.redhelmet.alert2me.ui.termsandcondition;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.global.Event;
-import com.redhelmet.alert2me.ui.activity.HomeActivity;
+import com.redhelmet.alert2me.ui.base.NavigationType;
+import com.redhelmet.alert2me.ui.home.HomeActivity;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.hint.HintsActivity;
 
@@ -13,7 +15,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class TermsConditionViewModel extends BaseViewModel {
 
-    protected TermsConditionViewModel(DataManager dataManager) {
+    public TermsConditionViewModel(DataManager dataManager) {
         super(dataManager);
     }
 
@@ -25,11 +27,11 @@ public class TermsConditionViewModel extends BaseViewModel {
                     .subscribe(registerResponse -> {
                         isLoading = false;
                         dataManager.setAccepted(true);
-                        navigationEvent.setValue(new Event<>(HomeActivity.class));
+                        navigationEvent.setValue(new Event<>(NavigationType.START_ACTIVITY_AND_FINISH.setData(HomeActivity.class)));
                     }, error -> {
                         isLoading = false;
                         dataManager.setAccepted(true);
-                        navigationEvent.setValue(new Event<>(HomeActivity.class));
+                        navigationEvent.setValue(new Event<>(NavigationType.START_ACTIVITY_AND_FINISH.setData(HomeActivity.class)));
                     }));
         });
         FirebaseInstanceId.getInstance().getInstanceId().addOnFailureListener(e -> {
@@ -39,11 +41,12 @@ public class TermsConditionViewModel extends BaseViewModel {
     }
 
     public void onShowTermsCondition() {
-        navigationEvent.setValue(new Event<>(dataManager.getConfig().appConfig.getTermsAndConditionUrl()));
+        String url = dataManager.getConfig().appConfig.getTermsAndConditionUrl();
+        navigationEvent.setValue(new Event<>(NavigationType.START_WEB_VIEW.setData(Uri.parse(url))));
     }
 
     public void onReplayHint() {
         dataManager.setInitialLaunch(false);
-        navigationEvent.setValue(new Event<>(HintsActivity.class));
+        navigationEvent.setValue(new Event<>(NavigationType.START_ACTIVITY_AND_FINISH.setData(HintsActivity.class)));
     }
 }

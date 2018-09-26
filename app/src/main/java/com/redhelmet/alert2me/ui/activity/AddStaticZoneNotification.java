@@ -47,6 +47,7 @@ import com.redhelmet.alert2me.data.model.EventGroup;
 import com.redhelmet.alert2me.data.model.WatchZoneGeom;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
+import com.redhelmet.alert2me.ui.home.HomeActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;

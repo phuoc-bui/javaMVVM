@@ -19,6 +19,7 @@ import com.redhelmet.alert2me.data.local.pref.PreferenceHelper;
 import com.redhelmet.alert2me.data.remote.ApiHelper;
 import com.redhelmet.alert2me.data.remote.ApiService;
 import com.redhelmet.alert2me.data.remote.AppApiHelper;
+import com.redhelmet.alert2me.data.remote.response.RegisterResponse;
 
 import java.io.File;
 import java.util.HashMap;
@@ -26,7 +27,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -79,6 +82,22 @@ public class AppModule {
         return instance;
     }
 
+    public Interceptor provideInterceptor(){
+        PreferenceHelper pref = providePreferenceHelper();
+        return chain -> {
+            Request originalRequest = chain.request();
+            Request.Builder builder = originalRequest.newBuilder();
+            builder.header("Content-Type", "application/json");
+            RegisterResponse.Device info = pref.getDeviceInfo();
+            if (info != null && info.apiToken != null && !info.apiToken.isEmpty()) {
+                builder.addHeader("Authorization", "Bearer " + info.apiToken);
+            }
+            Request newRequest = builder.build();
+            return chain.proceed(newRequest);
+        };
+    }
+
+    // need to add interceptor "application/json; charset=utf-8"
     public Retrofit provideRetrofit() {
         Retrofit instance = ServiceLocator.get(Retrofit.class);
         if (instance == null) {
@@ -155,6 +174,7 @@ public class AppModule {
 
     private OkHttpClient buildOkHttpClient() {
         return new OkHttpClient.Builder()
+                .addInterceptor(provideInterceptor())
                 .connectTimeout(10L, TimeUnit.SECONDS)
                 .writeTimeout(10L, TimeUnit.SECONDS)
                 .readTimeout(30L, TimeUnit.SECONDS)

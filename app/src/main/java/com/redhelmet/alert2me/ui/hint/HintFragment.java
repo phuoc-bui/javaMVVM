@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.ui.fragments;
+package com.redhelmet.alert2me.ui.hint;
 
 
 import android.os.Bundle;

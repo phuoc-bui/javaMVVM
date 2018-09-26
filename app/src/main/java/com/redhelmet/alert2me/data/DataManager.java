@@ -2,6 +2,7 @@ package com.redhelmet.alert2me.data;
 
 import com.redhelmet.alert2me.data.model.Hint;
 import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
+import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
 import com.redhelmet.alert2me.data.remote.response.RegisterResponse;
 
 import java.util.List;
@@ -18,4 +19,5 @@ public interface DataManager {
     void setAccepted(boolean accepted);
     boolean getAccepted();
     Observable<RegisterResponse> getUserId(String firebaseToken);
+    Observable<ProximityLocationResponse> putProximityLocation(double lat, double lng);
 }

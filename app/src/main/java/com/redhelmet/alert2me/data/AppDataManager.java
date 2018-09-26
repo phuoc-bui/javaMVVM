@@ -3,13 +3,16 @@ package com.redhelmet.alert2me.data;
 import android.util.Log;
 
 import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.core.Constants;
 import com.redhelmet.alert2me.data.local.database.DBHelper;
 import com.redhelmet.alert2me.data.local.pref.PreferenceHelper;
 import com.redhelmet.alert2me.data.model.Hint;
-import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
 import com.redhelmet.alert2me.data.remote.ApiHelper;
+import com.redhelmet.alert2me.data.remote.request.ProximityLocationRequest;
+import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
+import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
 import com.redhelmet.alert2me.data.remote.response.RegisterResponse;
-import com.redhelmet.alert2me.util.StringUtil;
+import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +86,22 @@ public class AppDataManager implements DataManager {
                     device.id = "0";
                     device.apiToken = "";
                     pref.saveDeviceInfo(device);
+                });
+    }
+
+    @Override
+    public Observable<ProximityLocationResponse> putProximityLocation(double lat, double lng) {
+        ProximityLocationRequest request = new ProximityLocationRequest(lat, lng);
+        String userId = pref.getDeviceInfo().id;
+        return api.putProximityLocation(userId, request)
+                .doOnNext(response -> {
+//                    PreferenceUtils.saveToPrefs(getApplicationContext(),
+//                            Constants.KEY_LASTUPDATEDUSERLATITUDE,
+//                            String.valueOf(
+//                                    Double.valueOf((String) PreferenceUtils.getFromPrefs(getApplicationContext(),
+//                                            Constants.KEY_USERLATITUDE, "0"))));
+//                    PreferenceUtils.saveToPrefs(getApplicationContext(),Constants.KEY_LASTUPDATEDUSERLONGITUDE,String.valueOf(Double.valueOf((String ) PreferenceUtils.getFromPrefs(getApplicationContext(), Constants.KEY_USERLONGITUDE, "0"))));
+//                    appPreferences.put(Constants.PROXIMITY_MOVEMENT, 3);
                 });
     }
 

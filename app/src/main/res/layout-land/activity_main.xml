@@ -36,7 +36,7 @@
             android:layout_marginBottom="15dp"
             android:text="@string/terms_and_conditions"
             android:textColor="@color/colorWhite"
-            android:onClick="@{viewModel.onShowTermsCondition()}"
+            android:onClick="@{() -> viewModel.onShowTermsCondition()}"
             android:textSize="18sp" />
 
         <Button
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/termsCondition"
             android:layout_centerHorizontal="true"
-            android:onClick="@{viewModel.onTermsAccept()}"
+            android:onClick="@{() -> viewModel.onTermsAccept()}"
             android:layout_marginBottom="10dp"
             android:text="@string/termsAndCondition" />
 
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:onClick="@{viewModel.onReplayHint()}"
+            android:onClick="@{() -> viewModel.onReplayHint()}"
             android:layout_marginBottom="15dp"
             android:text="@string/replay_hints"
             android:textColor="@color/colorWhite"
