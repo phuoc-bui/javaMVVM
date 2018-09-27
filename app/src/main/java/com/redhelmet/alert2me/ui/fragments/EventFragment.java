@@ -35,12 +35,20 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.redhelmet.alert2me.adapters.EmptyListRecyclerAdapter;
 import com.redhelmet.alert2me.adapters.EventListRecyclerAdapter;
 import com.redhelmet.alert2me.adapters.RecyclerTouchListener;
 import com.redhelmet.alert2me.autocomplete.AutoCompleteLocation;
 import com.redhelmet.alert2me.core.CoreFunctions;
 import com.redhelmet.alert2me.core.DBController;
+import com.redhelmet.alert2me.core.RequestHandler;
 import com.redhelmet.alert2me.core.TileProviderFactory;
 import com.redhelmet.alert2me.core.WmsTileProvider;
 import com.redhelmet.alert2me.domain.ExceptionHandler;
@@ -163,6 +171,10 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
     private ImageButton mapType1;
     private ImageButton mapType2;
     private ImageButton mapType3;
+
+    RequestQueue queue;
+    StringRequest volleyRequest;
+
     public EventFragment() {
 
     }
@@ -225,22 +237,45 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
         initializeListener();
         InitializeMapTypesListener();
         viewSwitch(true);
-        downloadFile();
+//        downloadFile();
+
+        getEvent();
 
         String str = "Bearer " + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_token), "");
         Log.d("Token", str);
         return view;
     }
-private void getOfflineEvent()
-{
-    if (checkFile()) {
-        GetEvents();
-        SetEventListDataSource();
+
+    private void getEvent() {
+        queue = RequestHandler.getInstance(_context.getApplicationContext()).getRequestQueue(); //Obtain the instance
+
+        volleyRequest = new StringRequest(Request.Method.GET, getString(R.string.api_url) + "events", // getting config url from COREFUNCTIONS
+                new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mProgress.setVisibility(View.INVISIBLE);
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (response != null) {
+                    GetEvents(response);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                mProgress.setVisibility(View.INVISIBLE);
+                // Stopping swipe refresh
+                mSwipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(_context, getString(R.string.msgUnableToGetEvent), Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+        //TODO: Change the retry policy
+        volleyRequest.setRetryPolicy(new DefaultRetryPolicy(5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        queue.add(volleyRequest);
     }
-    else {
-        _markerOptionsHashMap = new HashMap<>();
-    }
-}
 
     private void InitializeMapTypesListener() {
         selectedMapType = (ImageButton) view.findViewById(R.id.selected_map_type);
@@ -491,7 +526,7 @@ private void getOfflineEvent()
         if(mSwipeRefreshLayout != null){
             mSwipeRefreshLayout.setRefreshing(true);
         }
-        downloadFile();
+        getEvent();
     }
 
     @Override
@@ -639,59 +674,6 @@ private void getOfflineEvent()
         return false;
     }
 
-    public void downloadFile() {
-        if(!Utility.isInternetConnected(_context)) {
-            Toast.makeText(_context, getString(R.string.noInternet), Toast.LENGTH_LONG).show();
-
-            mSwipeRefreshLayout.setRefreshing(false);
-            getOfflineEvent();
-        }
-        else {
-            mProgress.setVisibility(View.VISIBLE);
-            // Showing refresh animation before making http call
-            mSwipeRefreshLayout.setRefreshing(true);
-            cf.ZipDownload(getString(R.string.api_url) + "events", new ServerCallback() {
-                @Override
-                public void onSuccess(boolean result) {
-
-                    if (result) {
-
-
-                        mProgress.setVisibility(View.INVISIBLE);
-                        // Stopping swipe refresh
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        if (checkFile()) {
-
-                            Log.d("Result","Downloaded new event file");
-                            GetEvents();
-                            SetEventListDataSource();
-                        }
-                        else {
-                            getOfflineEvent();
-                            Toast.makeText(_context, getString(R.string.msgUnableToGetEvent), Toast.LENGTH_LONG).show();
-                        }
-
-
-                    } else {
-                        mProgress.setVisibility(View.INVISIBLE);
-                        // Stopping swipe refresh
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        getOfflineEvent();
-                        Toast.makeText(_context, getString(R.string.msgUnableToGetEvent), Toast.LENGTH_LONG).show();
-                    }
-                }
-
-                @Override
-                public void onSuccess(JSONObject response) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            });
-        }
-
-
-
-    }
-
     private Event SetDistanceForEvents(Event event) {
 //        if (_events != null) {
 //            for (int i = 0; i < _events.size(); i++) {
@@ -779,14 +761,12 @@ private void getOfflineEvent()
         AlertDialog alert = builder.create();
         alert.show();
     }
-    public void GetEvents() {
+    public void GetEvents(String jsonFileContent) {
 
 
         ArrayList<Category> category_db = new ArrayList<Category>();
         _markerOptionsHashMap = new HashMap<>();
-        File jsonFile = new File(_context.getFilesDir(), "/Downloads/events_full.json");
-        String jsonFileContent = cf.readJsonFile(jsonFile);
-        Log.d("dsfs",jsonFileContent);
+
         if (jsonFileContent != null) {
 
             if (dbController != null) {
