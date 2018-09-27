@@ -198,8 +198,8 @@
 
 
                 JSONObject root = new JSONObject(response.toString());
-                JSONArray arr_cat = root.getJSONArray("categories");
-                JSONArray default_cat = root.getJSONArray("eventGroups");
+                JSONArray arr_cat = root.getJSONArray("category");
+                JSONArray default_cat = root.getJSONArray("eventGroup");
                 ArrayList<HashMap> default_categories = new ArrayList<HashMap>();
                 for (int i = 0; i < default_cat.length(); i++) {
                     JSONObject js_cat = default_cat.getJSONObject(i);

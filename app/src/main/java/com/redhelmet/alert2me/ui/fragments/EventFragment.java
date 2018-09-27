@@ -40,32 +40,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.redhelmet.alert2me.adapters.EmptyListRecyclerAdapter;
-import com.redhelmet.alert2me.adapters.EventListRecyclerAdapter;
-import com.redhelmet.alert2me.adapters.RecyclerTouchListener;
-import com.redhelmet.alert2me.autocomplete.AutoCompleteLocation;
-import com.redhelmet.alert2me.core.CoreFunctions;
-import com.redhelmet.alert2me.core.DBController;
-import com.redhelmet.alert2me.core.RequestHandler;
-import com.redhelmet.alert2me.core.TileProviderFactory;
-import com.redhelmet.alert2me.core.WmsTileProvider;
-import com.redhelmet.alert2me.domain.ExceptionHandler;
-import com.redhelmet.alert2me.domain.util.EventUtils;
-import com.redhelmet.alert2me.domain.util.IconUtils;
-import com.redhelmet.alert2me.domain.util.PreferenceUtils;
-import com.redhelmet.alert2me.domain.util.Utility;
-import com.redhelmet.alert2me.interfaces.ServerCallback;
-import com.redhelmet.alert2me.model.Area;
-import com.redhelmet.alert2me.model.Category;
-import com.redhelmet.alert2me.model.CategoryFilter;
-import com.redhelmet.alert2me.model.CategoryStatus;
-import com.redhelmet.alert2me.model.CategoryType;
-import com.redhelmet.alert2me.model.CategoryTypeFilter;
-import com.redhelmet.alert2me.model.Event;
-import com.redhelmet.alert2me.model.EventFeed;
-import com.redhelmet.alert2me.model.EventGroup;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.common.ConnectionResult;
@@ -90,29 +65,49 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
+import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.adapters.EmptyListRecyclerAdapter;
+import com.redhelmet.alert2me.adapters.EventListRecyclerAdapter;
+import com.redhelmet.alert2me.adapters.RecyclerTouchListener;
+import com.redhelmet.alert2me.autocomplete.AutoCompleteLocation;
+import com.redhelmet.alert2me.core.Constants;
+import com.redhelmet.alert2me.core.CoreFunctions;
+import com.redhelmet.alert2me.core.DBController;
+import com.redhelmet.alert2me.core.RequestHandler;
+import com.redhelmet.alert2me.core.TileProviderFactory;
+import com.redhelmet.alert2me.core.WmsTileProvider;
+import com.redhelmet.alert2me.domain.ExceptionHandler;
+import com.redhelmet.alert2me.domain.util.CustomClusterRenderer;
+import com.redhelmet.alert2me.domain.util.EventUtils;
+import com.redhelmet.alert2me.domain.util.IconUtils;
+import com.redhelmet.alert2me.domain.util.PreferenceUtils;
+import com.redhelmet.alert2me.domain.util.Utility;
+import com.redhelmet.alert2me.model.Area;
+import com.redhelmet.alert2me.model.Category;
+import com.redhelmet.alert2me.model.CategoryFilter;
+import com.redhelmet.alert2me.model.CategoryStatus;
+import com.redhelmet.alert2me.model.CategoryType;
+import com.redhelmet.alert2me.model.CategoryTypeFilter;
+import com.redhelmet.alert2me.model.CustomMarker;
+import com.redhelmet.alert2me.model.Event;
+import com.redhelmet.alert2me.model.EventFeed;
+import com.redhelmet.alert2me.model.EventGroup;
+import com.redhelmet.alert2me.ui.activity.AddObservation;
+import com.redhelmet.alert2me.ui.activity.ClusterEventList;
+import com.redhelmet.alert2me.ui.activity.EventDetailsActivity;
+import com.redhelmet.alert2me.ui.activity.EventMapFilter;
+import com.redhelmet.alert2me.ui.activity.HomeActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-
-import com.redhelmet.alert2me.R;
-
-import com.redhelmet.alert2me.core.Constants;
-import com.redhelmet.alert2me.domain.util.CustomClusterRenderer;
-import com.redhelmet.alert2me.model.CustomMarker;
-import com.redhelmet.alert2me.ui.activity.AddObservation;
-import com.redhelmet.alert2me.ui.activity.ClusterEventList;
-import com.redhelmet.alert2me.ui.activity.EventDetailsActivity;
-import com.redhelmet.alert2me.ui.activity.EventMapFilter;
-import com.redhelmet.alert2me.ui.activity.HomeActivity;
 
 import static com.redhelmet.alert2me.R.id.map;
 //import static com.redhelmet.alert2me.R.id.match_global_nicknames;
@@ -121,11 +116,11 @@ import static com.redhelmet.alert2me.R.id.map;
 public class EventFragment extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,SwipeRefreshLayout.OnRefreshListener,LocationListener,AutoCompleteLocation.AutoCompleteLocationListener {
+        GoogleApiClient.OnConnectionFailedListener, SwipeRefreshLayout.OnRefreshListener, LocationListener, AutoCompleteLocation.AutoCompleteLocationListener {
 
     SwipeRefreshLayout mSwipeRefreshLayout;
     FloatingActionMenu observation;
-    FloatingActionButton withImage,withoutImage;
+    FloatingActionButton withImage, withoutImage;
     private ViewSwitcher eventViewSwitch;
     private View view;
     private RelativeLayout mapView, eventView;
@@ -165,7 +160,7 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
     boolean selectedMapState = true;
     private String sortByList;
     private LocationManager locationManager;
-    AutoCompleteLocation autoCompleteLocation ;
+    AutoCompleteLocation autoCompleteLocation;
 
     private ImageButton selectedMapType;
     private ImageButton mapType1;
@@ -221,7 +216,7 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
         try {
             view = inflater.inflate(R.layout.fragment_event, container, false);
         } catch (InflateException e) {
-        /* map is already there, just return view as it is */
+            /* map is already there, just return view as it is */
         }
 
         if (PreferenceUtils.hasKey(_context, "detailLat")) {
@@ -233,11 +228,10 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
             PreferenceUtils.removeFromPrefs(_context, "detailLon");
         }
 
-         initializationControls();
+        initializationControls();
         initializeListener();
         InitializeMapTypesListener();
         viewSwitch(true);
-//        downloadFile();
 
         getEvent();
 
@@ -251,15 +245,15 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
 
         volleyRequest = new StringRequest(Request.Method.GET, getString(R.string.api_url) + "events", // getting config url from COREFUNCTIONS
                 new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                mProgress.setVisibility(View.INVISIBLE);
-                mSwipeRefreshLayout.setRefreshing(false);
-                if (response != null) {
-                    GetEvents(response);
-                }
-            }
-        }, new Response.ErrorListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        mProgress.setVisibility(View.INVISIBLE);
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        if (response != null) {
+                            GetEvents(response);
+                        }
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 mProgress.setVisibility(View.INVISIBLE);
@@ -330,23 +324,20 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
         });
 
 
-
     }
 
 
-    public  void setMapIcons() {
-        if(mapType1.isSelected()) {
+    public void setMapIcons() {
+        if (mapType1.isSelected()) {
 
             mapType1.setImageResource(R.drawable.ic_aerial_blue);
             mapType2.setImageResource(R.drawable.ic_road);
             mapType3.setImageResource(R.drawable.ic_hybrid);
-        }
-        else if (mapType2.isSelected()) {
+        } else if (mapType2.isSelected()) {
             mapType1.setImageResource(R.drawable.ic_aerial);
             mapType2.setImageResource(R.drawable.ic_road_blue);
             mapType3.setImageResource(R.drawable.ic_hybrid);
-        }
-        else {
+        } else {
             mapType1.setImageResource(R.drawable.ic_aerial);
             mapType2.setImageResource(R.drawable.ic_road);
             mapType3.setImageResource(R.drawable.ic_hybrid_blue);
@@ -368,6 +359,7 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
             }
         }
     }
+
     private void initializationControls() {
 
 
@@ -379,7 +371,7 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
         googleApiClient.connect();
         locationManager = (LocationManager) _context.getSystemService(Context.LOCATION_SERVICE);
 
-       autoCompleteLocation =
+        autoCompleteLocation =
                 (AutoCompleteLocation) view.findViewById(R.id.autocomplete_location);
         autoCompleteLocation.setAutoCompleteTextListener(this);
 
@@ -402,7 +394,6 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
         withImage.setImageResource(R.drawable.icon_camera_fab);
 
         observation.setIconAnimated(false);
-
 
 
         cf = new CoreFunctions(_context);
@@ -432,7 +423,7 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
                         intent.putExtra("event", event);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(_context,  getString(R.string.msgUnableToGetEDetails), Toast.LENGTH_LONG).show();
+                        Toast.makeText(_context, getString(R.string.msgUnableToGetEDetails), Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -446,10 +437,10 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
         if (!PreferenceUtils.hasKey(_context, getString(R.string.pref_map_isDefault))) {
             PreferenceUtils.saveToPrefs(_context, getString(R.string.pref_map_isDefault), true);
 
-            ArrayList <EventGroup> default_data = new ArrayList < EventGroup > ();
-            ArrayList<String> defValues= new ArrayList<String>();
+            ArrayList<EventGroup> default_data = new ArrayList<EventGroup>();
+            ArrayList<String> defValues = new ArrayList<String>();
             Gson gson = new Gson();
-            ArrayList<HashMap> defaultDataWz =   dbController.getDefaultMapFilter();
+            ArrayList<HashMap> defaultDataWz = dbController.getDefaultMapFilter();
             for (int i = 0; i < defaultDataWz.size(); i++) {
                 HashMap<String, String> data = defaultDataWz.get(i);
                 EventGroup defaultGroup = new EventGroup();
@@ -473,7 +464,7 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
             }
 
 
-            PreferenceUtils.saveToPrefs(_context,getString(R.string.pref_map_filter),gson.toJson(defValues));
+            PreferenceUtils.saveToPrefs(_context, getString(R.string.pref_map_filter), gson.toJson(defValues));
 
         }
 
@@ -523,7 +514,7 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
 
 
     public void refeshData() {
-        if(mSwipeRefreshLayout != null){
+        if (mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setRefreshing(true);
         }
         getEvent();
@@ -554,7 +545,6 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
     }
 
 
-
     @Override
     public void onLocationChanged(Location location) {
         if (location != null && googleApiClient != null && googleApiClient.isConnected()) {
@@ -563,6 +553,7 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
         }
     }
+
     public void initializeListener() {
 
 
@@ -663,49 +654,42 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
         }
 
 
-
-   updateOptionsMenu();
-    }
-
-    public boolean checkFile() {
-        File file = new File(_context.getFilesDir() + "/Downloads/events_full.json");
-        if (file.exists())
-            return true;
-        return false;
+        updateOptionsMenu();
     }
 
     private Event SetDistanceForEvents(Event event) {
 //        if (_events != null) {
 //            for (int i = 0; i < _events.size(); i++) {
 //                Event event = _events.get(i);
-                List<Area> areas = event.getArea();
+        List<Area> areas = event.getArea();
 
-                Area area = areas.get(0);
-                Location userLocation = new Location("User Location"); ;
-                    if(PreferenceUtils.hasKey(_context, Constants.KEY_USERLATITUDE) && (PreferenceUtils.hasKey(_context, Constants.KEY_USERLONGITUDE))) {
+        Area area = areas.get(0);
+        Location userLocation = new Location("User Location");
+        ;
+        if (PreferenceUtils.hasKey(_context, Constants.KEY_USERLATITUDE) && (PreferenceUtils.hasKey(_context, Constants.KEY_USERLONGITUDE))) {
 
-                        final Double latitude  =  Double.valueOf((String ) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLATITUDE, "0"));
-                        final Double longitude  =  Double.valueOf((String ) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLONGITUDE, "0"));
-                        userLocation = new Location("User Location");
-                        userLocation.setLatitude(latitude);
-                        userLocation.setLongitude(longitude);
-                    }
-                    Location eventLocation = new Location("EventLocation");
-                    eventLocation.setLatitude(area.getLatitude());
-                    eventLocation.setLongitude(area.getLongitude());
+            final Double latitude = Double.valueOf((String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLATITUDE, "0"));
+            final Double longitude = Double.valueOf((String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLONGITUDE, "0"));
+            userLocation = new Location("User Location");
+            userLocation.setLatitude(latitude);
+            userLocation.setLongitude(longitude);
+        }
+        Location eventLocation = new Location("EventLocation");
+        eventLocation.setLatitude(area.getLatitude());
+        eventLocation.setLongitude(area.getLongitude());
 
-                    if (userLocation.getLatitude() == 0 && userLocation.getLongitude() == 0) {
+        if (userLocation.getLatitude() == 0 && userLocation.getLongitude() == 0) {
 
-                        event.setDistanceTo((double) 0.0f);
-                    } else {
-                        double isdistance = userLocation.distanceTo(eventLocation);
-                        event.setDistanceTo(isdistance);
-                    }
+            event.setDistanceTo((double) 0.0f);
+        } else {
+            double isdistance = userLocation.distanceTo(eventLocation);
+            event.setDistanceTo(isdistance);
+        }
 //
 //                }
 //            }
-        return  event;
-        }
+        return event;
+    }
 
 
     private void setLocation() {
@@ -725,15 +709,13 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
             }
             googleApiClient.connect();
 
-            if(googleApiClient != null)
-            {
+            if (googleApiClient != null) {
                 if (googleApiClient.isConnected())
                     LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, mLocationRequest, this);
             }
 
 
-        }
-        else {
+        } else {
             showDialogGPS();
         }
     }
@@ -761,6 +743,7 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
         AlertDialog alert = builder.create();
         alert.show();
     }
+
     public void GetEvents(String jsonFileContent) {
 
 
@@ -779,7 +762,7 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
                 if (eventFeed != null) {
 
 
-                     List<Event> allEvents = new ArrayList<Event>();
+                    List<Event> allEvents = new ArrayList<Event>();
                     for (Event event : eventFeed.getEvents()) {
 
                         for (Category category : category_db) {
@@ -797,8 +780,8 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
                                                 List<Area> areas = event.getArea();
                                                 for (int k = 0; k < areas.size(); k++) {
 
-                                                    List<Area> singleAreas =  new ArrayList<>();
-                                                    singleAreas.add(areas.get(k ));
+                                                    List<Area> singleAreas = new ArrayList<>();
+                                                    singleAreas.add(areas.get(k));
                                                     event.setArea(singleAreas);
 
                                                     allEvents.add(SetDistanceForEvents(event));
@@ -818,12 +801,6 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
 
                     applyFilters();
 
-
-//                      _preferenceUtils.AddToPreferences(ConfigurationKeys.EVENT_PREFERENCE_KEY, eventFeed);
-//                    eventFeed.setEvents(ApplyFilters(eventFeed.getEvents(), isStateWideFilter, isMap));
-//                    eventFeed.setEvents(SortBySeverity(eventFeed.getEvents()));
-//                    _eventsView.onGetEvents(eventFeed, isClustered);
-
                     if (PreferenceUtils.hasKey(_context, getString(R.string.pref_cluster_map_state))) {
                         ProcessClusteredEvents(_events);
                         clusterBtn.setImageResource(R.drawable.ic_cluster_red);
@@ -836,13 +813,13 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
                     ProcessDetailEvent();
 
                 } else {
-                   // downloadFile();
+                    // downloadFile();
                 }
             } catch (Throwable t) {
                 t.printStackTrace();
             }
         } else {
-           // downloadFile();
+            // downloadFile();
         }
 //     applyFilters();
     }
@@ -935,7 +912,7 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
 
     private void SetEventListDataSource() {
 
-            SortList();
+        SortList();
 
         if (listEventIcon != null) {
             if (_events.size() > 0) {
@@ -960,11 +937,12 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
             mProgress.setVisibility(View.INVISIBLE);
         }
     }
+
     private void SortList() {
 
 
-        if (PreferenceUtils.hasKey(_context,Constants.SORT_PREFERENCE_KEY)) {
-            String sortBy = (String) PreferenceUtils.getFromPrefs(_context,Constants.SORT_PREFERENCE_KEY,"2");
+        if (PreferenceUtils.hasKey(_context, Constants.SORT_PREFERENCE_KEY)) {
+            String sortBy = (String) PreferenceUtils.getFromPrefs(_context, Constants.SORT_PREFERENCE_KEY, "2");
             switch (sortBy) {
                 case "0":
                     SortByDistance();
@@ -980,7 +958,7 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
                     break;
             }
         } else {
-            PreferenceUtils.saveToPrefs(_context,Constants.SORT_PREFERENCE_KEY,"2");
+            PreferenceUtils.saveToPrefs(_context, Constants.SORT_PREFERENCE_KEY, "2");
             SortByStatus();
 
         }
@@ -993,9 +971,9 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(_context, R.style.MaterialThemeDialog);
         int selectedSortItem = 2;
 
-        if (PreferenceUtils.hasKey(_context,Constants.SORT_PREFERENCE_KEY)) {
+        if (PreferenceUtils.hasKey(_context, Constants.SORT_PREFERENCE_KEY)) {
 
-            String selectedSort = (String)  PreferenceUtils.getFromPrefs(_context,Constants.SORT_PREFERENCE_KEY,"2");
+            String selectedSort = (String) PreferenceUtils.getFromPrefs(_context, Constants.SORT_PREFERENCE_KEY, "2");
             if (selectedSort != null && !selectedSort.equals(""))
                 selectedSortItem = Integer.parseInt(selectedSort);
         }
@@ -1018,7 +996,7 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
         dialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                PreferenceUtils.saveToPrefs(_context,Constants.SORT_PREFERENCE_KEY,sortByList);
+                PreferenceUtils.saveToPrefs(_context, Constants.SORT_PREFERENCE_KEY, sortByList);
                 SortList();
                 dialogInterface.dismiss();
 
@@ -1067,15 +1045,15 @@ public class EventFragment extends Fragment implements OnMapReadyCallback,
 
 
             }
-if(mMapView != null) {
+            if (mMapView != null) {
 
-    mMapView.clear();
-}
-if(_markerOptionsHashMap != null){
-    _markerOptionsHashMap.clear();
-}
+                mMapView.clear();
+            }
+            if (_markerOptionsHashMap != null) {
+                _markerOptionsHashMap.clear();
+            }
 
-        Boolean defaultfilter = true;
+            Boolean defaultfilter = true;
             if (PreferenceUtils.hasKey(_context, getString(R.string.pref_map_isDefault))) {
                 if ((boolean) PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_map_isDefault), false)) {
                     defaultfilter = true;
@@ -1089,7 +1067,7 @@ if(_markerOptionsHashMap != null){
                 try {
                     Event event = eventList.get(i);
 
-                    if(defaultfilter) {
+                    if (defaultfilter) {
                         if (event.isShowOn()) {
                             List<Area> areas = event.getArea();
                             for (int j = 0; j < areas.size(); j++) {
@@ -1101,13 +1079,12 @@ if(_markerOptionsHashMap != null){
                                 Marker marker = mMapView.addMarker(markerOptions);
                                 marker.setTag(event);
                                 String eventId = String.format("%s__%s__%s", event.getId(), event.getCategory(), event.getStatus());
-                                Log.e("DefaulMapPins:",eventId );
+                                Log.e("DefaulMapPins:", eventId);
                                 _markerOptionsHashMap.put(marker.getId(), eventId);
 
                             }
                         }
-                    }
-                    else {
+                    } else {
                         List<Area> areas = event.getArea();
                         for (int j = 0; j < areas.size(); j++) {
 
@@ -1135,11 +1112,11 @@ if(_markerOptionsHashMap != null){
         if (clusterManager != null) {
             clusterManager.clearItems();
 
-            if(_markerOptionsHashMap != null)
-            _markerOptionsHashMap.clear();
+            if (_markerOptionsHashMap != null)
+                _markerOptionsHashMap.clear();
 
-            if(mMapView != null)
-            mMapView.clear();
+            if (mMapView != null)
+                mMapView.clear();
 
             Boolean defaultfilter = true;
             if (PreferenceUtils.hasKey(_context, getString(R.string.pref_map_isDefault))) {
@@ -1154,7 +1131,7 @@ if(_markerOptionsHashMap != null){
 
             for (int i = 0; i < eventList.size(); i++) {
                 Event event = eventList.get(i);
-                if(defaultfilter) {
+                if (defaultfilter) {
                     if (event.isShowOn()) {
                         List<Area> areas = event.getArea();
                         for (int j = 0; j < areas.size(); j++) {
@@ -1162,13 +1139,12 @@ if(_markerOptionsHashMap != null){
                             clusterManager.addItem(customMarker);
                         }
                     }
-                }
-                else {
-                        List<Area> areas = event.getArea();
-                        for (int j = 0; j < areas.size(); j++) {
-                            CustomMarker customMarker = new CustomMarker(eventList.get(i), areas.get(j));
-                            clusterManager.addItem(customMarker);
-                        }
+                } else {
+                    List<Area> areas = event.getArea();
+                    for (int j = 0; j < areas.size(); j++) {
+                        CustomMarker customMarker = new CustomMarker(eventList.get(i), areas.get(j));
+                        clusterManager.addItem(customMarker);
+                    }
                 }
 
             }
@@ -1190,14 +1166,14 @@ if(_markerOptionsHashMap != null){
     public void onMapReady(GoogleMap googleMap) {
         mMapView = googleMap;
         ProcessDetailEvent();
-if(!mapType1.isSelected() && !mapType2.isSelected() && !mapType3.isSelected()) {
-    mMapView.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-    mapType1.setSelected(false);
-    mapType2.setSelected(true);
-    mapType3.setSelected(false);
-    setMapIcons();
+        if (!mapType1.isSelected() && !mapType2.isSelected() && !mapType3.isSelected()) {
+            mMapView.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            mapType1.setSelected(false);
+            mapType2.setSelected(true);
+            mapType3.setSelected(false);
+            setMapIcons();
 
-}
+        }
 
         clusterManager = new ClusterManager<CustomMarker>(_context, mMapView);
         mMapView.setOnMarkerClickListener(clusterManager);
@@ -1212,7 +1188,7 @@ if(!mapType1.isSelected() && !mapType2.isSelected() && !mapType3.isSelected()) {
             @Override
             public boolean onClusterItemClick(CustomMarker customMarker) {
 
-              // Toast.makeText(getActivity(), "Cluster specific item click!!!!", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getActivity(), "Cluster specific item click!!!!", Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
@@ -1222,27 +1198,23 @@ if(!mapType1.isSelected() && !mapType2.isSelected() && !mapType3.isSelected()) {
                 //Toast.makeText(getActivity(), "Cluster item click!!!!" + cluster.getSize(), Toast.LENGTH_SHORT).show();
 
 
-
                 if (cluster.getSize() > 0) {
 
                     List<Event> events = new ArrayList<>();
                     // for each loop
-                    for (CustomMarker item : cluster.getItems())
-                    {
-                        if (item.getEvent() != null)
-                        {
+                    for (CustomMarker item : cluster.getItems()) {
+                        if (item.getEvent() != null) {
                             events.add(item.getEvent());
                         }
                     }
-                    Bundle bundle=new Bundle();
-                    bundle.putSerializable("clusterEvents",(Serializable)events);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("clusterEvents", (Serializable) events);
                     Intent intent = new Intent(getActivity(), ClusterEventList.class);
                     intent.putExtra("bundle", bundle);
                     startActivity(intent);
                 } else {
                     Toast.makeText(getContext(), "Unable to get event details", Toast.LENGTH_LONG).show();
                 }
-
 
 
                 // if true, click handling stops here and do not show info view, do not move camera
@@ -1256,19 +1228,20 @@ if(!mapType1.isSelected() && !mapType2.isSelected() && !mapType3.isSelected()) {
 
     }
 
-void infoWindowClickedForMarkers(){
+    void infoWindowClickedForMarkers() {
 
 
-        if(mMapView != null) {
+        if (mMapView != null) {
 
             if (PreferenceUtils.hasKey(_context, getString(R.string.pref_cluster_map_state))) {
 
-                if(clusterManager != null) {
+                if (clusterManager != null) {
                     Log.d("dfsd", "Cluster value");
                     mMapView.setOnInfoWindowClickListener(clusterManager);
                     clusterManager.setOnClusterItemInfoWindowClickListener(
                             new ClusterManager.OnClusterItemInfoWindowClickListener<CustomMarker>() {
-                                @Override public void onClusterItemInfoWindowClick(CustomMarker customMarker) {
+                                @Override
+                                public void onClusterItemInfoWindowClick(CustomMarker customMarker) {
                                     Event event = (Event) customMarker.getEvent();
                                     if (event != null) {
                                         InitializeDetailsPage(event);
@@ -1283,9 +1256,9 @@ void infoWindowClickedForMarkers(){
             } else {
 
                 Log.d("dfsd", "map single value");
-                mMapView.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener()
-                {
-                    @Override public void onInfoWindowClick(Marker marker) {
+                mMapView.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
                         Event event = (Event) marker.getTag();
                         if (event != null) {
                             InitializeDetailsPage(event);
@@ -1300,7 +1273,8 @@ void infoWindowClickedForMarkers(){
             }
 
         }
-}
+    }
+
     private void InitializeDetailsPage(Event event) {
 
         if (event != null) {
@@ -1325,12 +1299,12 @@ void infoWindowClickedForMarkers(){
     }
 
 
-
     @Override
     public void onStart() {
         super.onStart();
         googleApiClient.connect();
     }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -1371,9 +1345,9 @@ void infoWindowClickedForMarkers(){
             ActivityCompat.requestPermissions((Activity) _context, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, GRANTED_FINE_LOCATION);
             return;
         }
-       Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        if(location!=null) {
-                  mMapView.setMyLocationEnabled(true);
+        Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+        if (location != null) {
+            mMapView.setMyLocationEnabled(true);
 
 
             mMapView.getUiSettings().setMyLocationButtonEnabled(false);
@@ -1383,7 +1357,7 @@ void infoWindowClickedForMarkers(){
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(new LatLng(location.getLatitude(), location.getLongitude()))      // Sets the center of the map to location user
                     .zoom(17)                   // Sets the zoom
-                     .build();                   // Creates a CameraPosition from the builder
+                    .build();                   // Creates a CameraPosition from the builder
             mMapView.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
     }
@@ -1393,9 +1367,7 @@ void infoWindowClickedForMarkers(){
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.event_map, menu);
         super.onCreateOptionsMenu(menu, inflater);
-        this.mOptionsMenu = menu ;
-
-
+        this.mOptionsMenu = menu;
 
 
     }
@@ -1409,34 +1381,37 @@ void infoWindowClickedForMarkers(){
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (menu.findItem(R.id.filter_map) != null )
-            if(selectedMapState) {
+        if (menu.findItem(R.id.filter_map) != null)
+            if (selectedMapState) {
                 menu.findItem(R.id.filter_map).setVisible(true);
                 menu.findItem(R.id.refresh_map).setVisible(true);
                 menu.findItem(R.id.listOptions).setVisible(false);
-            }
-        else {
+            } else {
                 menu.findItem(R.id.filter_map).setVisible(false);
                 menu.findItem(R.id.refresh_map).setVisible(false);
-                menu.findItem(R.id.listOptions).setVisible(true); }
+                menu.findItem(R.id.listOptions).setVisible(true);
+            }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.filter_map:  case R.id.menuFilterList:
-                intent=new Intent(getActivity(), EventMapFilter.class);
+            case R.id.filter_map:
+            case R.id.menuFilterList:
+                intent = new Intent(getActivity(), EventMapFilter.class);
                 startActivityForResult(intent, Activity_Filter_Result);
                 return true;
 
-            case R.id.refresh_map:   case R.id.menuRefreshList:
+            case R.id.refresh_map:
+            case R.id.menuRefreshList:
                 refeshData();
                 return true;
 
             case R.id.menuSortList:
 
                 ShowSortDialog();
-                Log.d("sdf","menuSortList clicked");
+                Log.d("sdf", "menuSortList clicked");
                 return true;
 
             default:
@@ -1448,8 +1423,8 @@ void infoWindowClickedForMarkers(){
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == Activity_Filter_Result) {
-            if(resultCode == Activity.RESULT_OK){
-               applyFilters();
+            if (resultCode == Activity.RESULT_OK) {
+                applyFilters();
             }
 
         }
@@ -1474,29 +1449,29 @@ void infoWindowClickedForMarkers(){
         }
 
 //        else{
-            if (PreferenceUtils.hasKey(_context, getString(R.string.pref_cluster_map_state))) {
-                ProcessClusteredEvents(_events);
-                clusterBtn.setImageResource(R.drawable.ic_cluster_red);
-            } else {
-                ProcessEvents(_events);
-                clusterBtn.setImageResource(R.drawable.ic_cluster);
+        if (PreferenceUtils.hasKey(_context, getString(R.string.pref_cluster_map_state))) {
+            ProcessClusteredEvents(_events);
+            clusterBtn.setImageResource(R.drawable.ic_cluster_red);
+        } else {
+            ProcessEvents(_events);
+            clusterBtn.setImageResource(R.drawable.ic_cluster);
 
-            }
+        }
 
         //}
     }
 
-    public void defaultFilter(ArrayList<HashMap> defaultDataWz){
-        mapOverlay=new ArrayList<>();
-        mapLayers=new ArrayList<>();
+    public void defaultFilter(ArrayList<HashMap> defaultDataWz) {
+        mapOverlay = new ArrayList<>();
+        mapLayers = new ArrayList<>();
 
-        _events=new ArrayList<>();
+        _events = new ArrayList<>();
 
-        Gson gson =new Gson();
+        Gson gson = new Gson();
 
-        if (PreferenceUtils.hasKey(_context, getString(R.string.pref_map_isDefault)) && (boolean) PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_map_isDefault), false) ) {
-        String values = (String) PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_map_filter), "");
-        ArrayList<String> defValues = gson.fromJson(values,ArrayList.class);
+        if (PreferenceUtils.hasKey(_context, getString(R.string.pref_map_isDefault)) && (boolean) PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_map_isDefault), false)) {
+            String values = (String) PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_map_filter), "");
+            ArrayList<String> defValues = gson.fromJson(values, ArrayList.class);
 
             try {
                 for (int i = 0; i < defaultDataWz.size(); i++) {
@@ -1525,17 +1500,17 @@ void infoWindowClickedForMarkers(){
         for (int i = 0; i < _tempEvents.size(); i++) {
             try {
                 Event event = _tempEvents.get(i);
-                for(int j=0;j<mapLayers.size();j++) {
-                    if (event.getGroup().toString().equalsIgnoreCase(mapLayers.get(j))){
+                for (int j = 0; j < mapLayers.size(); j++) {
+                    if (event.getGroup().toString().equalsIgnoreCase(mapLayers.get(j))) {
                         event.setShowOn(true);
                     }
 
                 }
-                if(event.isAlwaysOn()){
+                if (event.isAlwaysOn()) {
                     event.setShowOn(event.isAlwaysOn());
                 }
 
-                if(event.isShowOn()){
+                if (event.isShowOn()) {
                     _events.add(event);
                 }
 
@@ -1546,8 +1521,7 @@ void infoWindowClickedForMarkers(){
         if (PreferenceUtils.hasKey(_context, getString(R.string.pref_cluster_map_state))) {
             ProcessClusteredEvents(_events);
             clusterBtn.setImageResource(R.drawable.ic_cluster_red);
-        }
-        else {
+        } else {
             ProcessEvents(_events);
             clusterBtn.setImageResource(R.drawable.ic_cluster);
         }
@@ -1557,17 +1531,18 @@ void infoWindowClickedForMarkers(){
         wmsLayers();
     }
 
-    public void customFilter(ArrayList[] customFilter){
-        mapOverlay=new ArrayList<>();
-        mapLayers=new ArrayList<>();
-        _events=new ArrayList<>();
+    public void customFilter(ArrayList[] customFilter) {
+        mapOverlay = new ArrayList<>();
+        mapLayers = new ArrayList<>();
+        _events = new ArrayList<>();
 
 
         ArrayList<HashMap<String, CategoryFilter>> categoryFilters = new ArrayList<HashMap<String, CategoryFilter>>();
 
-        Gson gson =new Gson();
+        Gson gson = new Gson();
         String values = (String) PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_map_filter), "");
-        categoryFilters = new Gson().fromJson(values, new TypeToken<ArrayList<HashMap<String, CategoryFilter>>>() {}.getType());
+        categoryFilters = new Gson().fromJson(values, new TypeToken<ArrayList<HashMap<String, CategoryFilter>>>() {
+        }.getType());
 
         for (int j = 0; j < _tempEvents.size(); j++) {
             Event event = _tempEvents.get(j);
@@ -1592,22 +1567,22 @@ void infoWindowClickedForMarkers(){
                 }
             }
         }
-            if (PreferenceUtils.hasKey(_context, getString(R.string.pref_cluster_map_state))) {
-                ProcessClusteredEvents(_events);
-                clusterBtn.setImageResource(R.drawable.ic_cluster_red);
-            }
-            else {
-                ProcessEvents(_events);
-                clusterBtn.setImageResource(R.drawable.ic_cluster);
-            }
+        if (PreferenceUtils.hasKey(_context, getString(R.string.pref_cluster_map_state))) {
+            ProcessClusteredEvents(_events);
+            clusterBtn.setImageResource(R.drawable.ic_cluster_red);
+        } else {
+            ProcessEvents(_events);
+            clusterBtn.setImageResource(R.drawable.ic_cluster);
+        }
 
 
-            SetEventListDataSource();
+        SetEventListDataSource();
 
 
     }
-    public void wmsLayers(){
-        WmsTileProvider provider = tileProviderFactory.GetWmsTileProvider(baseWmsURL,mapOverlay);
+
+    public void wmsLayers() {
+        WmsTileProvider provider = tileProviderFactory.GetWmsTileProvider(baseWmsURL, mapOverlay);
         if (provider != null && mMapView != null)
             mMapView.addTileOverlay(new TileOverlayOptions().tileProvider(provider));
 
