@@ -1,8 +1,6 @@
 package com.redhelmet.alert2me.data.model;
 
-import java.io.Serializable;
-
-public class CategoryStatus implements Serializable {
+public class CategoryStatus implements Model {
     private String code;
     private String name;
     private String primaryColor;

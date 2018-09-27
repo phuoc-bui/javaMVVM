@@ -3,6 +3,7 @@ package com.redhelmet.alert2me.data.remote;
 import com.redhelmet.alert2me.data.remote.request.ProximityLocationRequest;
 import com.redhelmet.alert2me.data.remote.request.RegisterDeviceRequest;
 import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
+import com.redhelmet.alert2me.data.remote.response.EventListResponse;
 import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
 import com.redhelmet.alert2me.data.remote.response.RegisterResponse;
 
@@ -17,9 +18,12 @@ public interface ApiService {
     @GET("appConfig/android")
     Observable<ConfigResponse> getConfig();
 
-    @POST("device")
+    @POST("apiInfo")
     Observable<RegisterResponse> registerDevice(@Body RegisterDeviceRequest request);
 
-    @PUT("device/{userId}/watchzones/proximity/location")
+    @PUT("apiInfo/{userId}/watchzones/proximity/location")
     Observable<ProximityLocationResponse> putLocation(@Path("userId") String userId, @Body ProximityLocationRequest request);
+
+    @GET("events")
+    Observable<EventListResponse> getAllEvents();
 }

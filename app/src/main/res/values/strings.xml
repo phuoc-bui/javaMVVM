@@ -59,7 +59,7 @@
     <string name="pref_ringtone_name">ringtone_name</string>
     <string name="next_location_message">Please set your watch zone area</string>
     <string name="share_wz_popup_head">Watch Zone Share Code</string>
-    <string name="share_wz_popup_text">Enter the code below into your other devices to add this Watch Zone to that device. Changes made to the Watch Zone will not he updated on other devices. You can share this code with as many people or devices you want.  The code will expire in 7 days.</string>
+    <string name="share_wz_popup_text">Enter the code below into your other devices to add this Watch Zone to that apiInfo. Changes made to the Watch Zone will not he updated on other devices. You can share this code with as many people or devices you want.  The code will expire in 7 days.</string>
     <string name="share_code_will_expire">The code will expire in 7 days.</string>
     <string name="ok">Ok</string>
     <string name="pref_tertiaryColor">pref_tertiaryColor</string>
@@ -173,7 +173,7 @@
     <string name="lbl_editStaticWZ">Edit Static Zone</string>
     <string name="lbl_circle">Circle</string>
     <string name="lbl_polygon">Polygon</string>
-    <string name="lbl_shareWZTitle">Enter a Watch Zone Share Code to add a copy of another Watch Zone to this device.</string>
+    <string name="lbl_shareWZTitle">Enter a Watch Zone Share Code to add a copy of another Watch Zone to this apiInfo.</string>
     <string name="lbl_addShareWZ">Add Watch Zone Code</string>
     <string name="msg_addingShareWZ">Adding Watch Zone share code...</string>
     <string name="msg_addedShareWZ">Watch zone share code added successfully</string>

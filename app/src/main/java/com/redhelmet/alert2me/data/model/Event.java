@@ -1,9 +1,8 @@
 package com.redhelmet.alert2me.data.model;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class Event implements Serializable{
+public class Event implements Model {
 
     private long id;
     private long created;
@@ -251,17 +250,19 @@ public class Event implements Serializable{
         this.alwaysOn = alwaysOn;
     }
 
-    public void setName(String name){
-        this.name=name;
+    public void setName(String name) {
+        this.name = name;
     }
-    public String getName(){
+
+    public String getName() {
         return this.name;
     }
 
-    public void setShowOn(boolean show){
-        this.showOn=show;
+    public void setShowOn(boolean show) {
+        this.showOn = show;
     }
-    public boolean isShowOn(){
+
+    public boolean isShowOn() {
         return this.showOn;
     }
 }

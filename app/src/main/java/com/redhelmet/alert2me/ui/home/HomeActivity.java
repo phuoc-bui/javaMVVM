@@ -2,20 +2,16 @@ package com.redhelmet.alert2me.ui.home;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.app.ActionBar;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.adapters.AppViewPagerAdapter;
+import com.redhelmet.alert2me.databinding.ActivityHomeBinding;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
 import com.redhelmet.alert2me.ui.home.event.EventFragment;
 import com.redhelmet.alert2me.ui.home.help.HelpFragment;
 import com.redhelmet.alert2me.ui.home.watchzone.WatchZoneFragment;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by inbox on 13/11/17.
@@ -46,12 +42,12 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
         }
 
         setupViewPager();
-        binder.tabLayout.setupWithViewPager(binder.viewPager);
+        binder.tabs.setupWithViewPager(binder.viewpager);
         if (binder.toolbar != null) {
             setSupportActionBar(binder.toolbar);
         }
 
-        binder.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        binder.tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 //do stuff here
@@ -84,11 +80,11 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
     }
 
     private void setupViewPager() {
-        HomeViewPagerAdapter adapter = new HomeViewPagerAdapter(getSupportFragmentManager());
+        AppViewPagerAdapter adapter = new AppViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new EventFragment(), getString(R.string.tab_events));
         adapter.addFrag(new WatchZoneFragment(), getString(R.string.tab_WZ));
         adapter.addFrag(new HelpFragment(), getString(R.string.tab_help));
-        binder.viewPager.setAdapter(adapter);
+        binder.viewpager.setAdapter(adapter);
     }
 
     public void initializeToolbar(String heading) {
@@ -96,35 +92,6 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(false);
             supportActionBar.setTitle(heading);
-        }
-    }
-
-    public static class HomeViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public HomeViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFrag(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
         }
     }
 }

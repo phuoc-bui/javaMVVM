@@ -2,6 +2,7 @@ package com.redhelmet.alert2me;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
@@ -12,14 +13,14 @@ import com.google.gson.GsonBuilder;
 import com.redhelmet.alert2me.data.AppDataManager;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.local.database.AppDBHelper;
-import com.redhelmet.alert2me.data.local.database.DBController;
+import com.redhelmet.alert2me.data.local.database.AppDatabase;
 import com.redhelmet.alert2me.data.local.database.DBHelper;
 import com.redhelmet.alert2me.data.local.pref.AppPreferenceHelper;
 import com.redhelmet.alert2me.data.local.pref.PreferenceHelper;
+import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.remote.ApiHelper;
 import com.redhelmet.alert2me.data.remote.ApiService;
 import com.redhelmet.alert2me.data.remote.AppApiHelper;
-import com.redhelmet.alert2me.data.remote.response.RegisterResponse;
 
 import java.io.File;
 import java.util.HashMap;
@@ -82,15 +83,15 @@ public class AppModule {
         return instance;
     }
 
-    public Interceptor provideInterceptor(){
+    public Interceptor provideInterceptor() {
         PreferenceHelper pref = providePreferenceHelper();
         return chain -> {
             Request originalRequest = chain.request();
             Request.Builder builder = originalRequest.newBuilder();
             builder.header("Content-Type", "application/json");
-            RegisterResponse.Device info = pref.getDeviceInfo();
-            if (info != null && info.apiToken != null && !info.apiToken.isEmpty()) {
-                builder.addHeader("Authorization", "Bearer " + info.apiToken);
+            ApiInfo info = pref.getDeviceInfo();
+            if (info != null && info.getApiToken() != null && !info.getApiToken().isEmpty()) {
+                builder.addHeader("Authorization", "Bearer " + info.getApiToken());
             }
             Request newRequest = builder.build();
             return chain.proceed(newRequest);
@@ -139,13 +140,20 @@ public class AppModule {
     public DBHelper provideDBHelper() {
         DBHelper instance = ServiceLocator.get(DBHelper.class);
         if (instance == null) {
-            instance = new AppDBHelper(DBController.getInstance(provideApplication()));
+            instance = new AppDBHelper(provideAppDatabase());
             ServiceLocator.addService(instance);
         }
         return instance;
     }
 
-
+    public AppDatabase provideAppDatabase() {
+        AppDatabase instance = ServiceLocator.get(AppDatabase.class);
+        if (instance == null) {
+            instance = Room.databaseBuilder(application, AppDatabase.class, BuildConfig.DB_FILE_NAME).build();
+            ServiceLocator.addService(instance);
+        }
+        return instance;
+    }
 
     public ApiHelper provideApiHelper() {
         ApiHelper instance = ServiceLocator.get(ApiHelper.class);

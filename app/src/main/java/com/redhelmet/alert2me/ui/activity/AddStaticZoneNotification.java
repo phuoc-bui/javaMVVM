@@ -96,8 +96,8 @@ public class AddStaticZoneNotification extends AppCompatActivity implements View
         dbController = new DBController(getApplicationContext());
         _dbCategories=new ArrayList<>();
         _dbCategories=dbController.getCategoriesNames();
-        apiURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones";
-        mobilewzApiURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity";
+        apiURL = BuildConfig.API_ENDPOINT + "apiInfo/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones";
+        mobilewzApiURL = BuildConfig.API_ENDPOINT + "apiInfo/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity";
         getWZData();
 
         Log.e("ONCreated", "activity created.....");

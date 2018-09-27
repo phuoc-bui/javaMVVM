@@ -95,7 +95,7 @@ public class EditWatchZone extends AppCompatActivity implements View.OnClickList
         categoryNamesDB=dbController.getCategoriesNames();
 
         wzData = editWz.getEditWz();
-        editWzURL =BuildConfig.API_ENDPOINT + "device/" + wzData.get(position).getWatchzoneDeviceId() + "/watchzones/" + wzData.get(position).getWatchzoneId();
+        editWzURL =BuildConfig.API_ENDPOINT + "apiInfo/" + wzData.get(position).getWatchzoneDeviceId() + "/watchzones/" + wzData.get(position).getWatchzoneId();
         ringtonePickerBuilder = new RingtonePickerDialog.Builder(EditWatchZone.this, getSupportFragmentManager());
         ringtonePickerBuilder.addRingtoneType(RingtonePickerDialog.Builder.TYPE_NOTIFICATION);
         ringtonePickerBuilder.setPlaySampleWhileSelection(AddStaticZone.checkVibrationIsOn(getApplicationContext()));

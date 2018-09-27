@@ -1,7 +1,6 @@
 package com.redhelmet.alert2me.ui.hint;
 
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,8 +13,8 @@ import android.view.WindowManager;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Hint;
+import com.redhelmet.alert2me.databinding.ActivityIntroBinding;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
-import com.redhelmet.alert2me.ui.termsandcondition.TermConditionActivity;
 
 import java.util.List;
 
@@ -55,7 +54,7 @@ public class HintsActivity extends BaseActivity<HintViewModel, ActivityIntroBind
 
         binder.viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(), viewModel.getHints()));
         binder.indicator.setViewPager(binder.viewPager);
-        indicator.setViewPager(viewPager);
+        binder.indicator.setViewPager(binder.viewPager);
 
         binder.viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
     }
@@ -74,7 +73,7 @@ public class HintsActivity extends BaseActivity<HintViewModel, ActivityIntroBind
             if (position == 3 && positionOffset == 0 && !isLastPageSwiped) {
                 if (counterPageScroll != 0) {
                     isLastPageSwiped = true;
-                    viewModel.onLastPageScrolled();
+                    viewModel.onLastPageScrolled(help);
                 }
                 counterPageScroll++;
             } else {
@@ -114,17 +113,6 @@ public class HintsActivity extends BaseActivity<HintViewModel, ActivityIntroBind
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.TRANSPARENT);
-        }
-    }
-
-    @Override
-    protected void onNavigationEvent(Class destination) {
-        //preparing for the home launch
-        if (help) {
-            finish();
-        } else {
-            startActivity(new Intent(HintsActivity.this, TermConditionActivity.class));
-            finish();
         }
     }
 }

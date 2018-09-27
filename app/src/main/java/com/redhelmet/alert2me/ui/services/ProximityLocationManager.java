@@ -281,7 +281,7 @@ else  if (isGPSEnable){
             Bundle extras = intent.getExtras();
             distance =    extras.getInt("distance");
             timeMilliSecs = extras.getInt("timeMilliSecs");
-            Log.e(TAG, "device" + deviceId + "--" + apiUrl + "--" + distance + "--" + timeMilliSecs);
+            Log.e(TAG, "apiInfo" + deviceId + "--" + apiUrl + "--" + distance + "--" + timeMilliSecs);
 
             if (timer != null) {
                 timer.cancel();
@@ -385,7 +385,7 @@ else  if (isGPSEnable){
         final Double latitude  =  Double.valueOf((String ) PreferenceUtils.getFromPrefs(getApplicationContext(), Constants.KEY_USERLATITUDE, "0"));
         final Double longitude  =  Double.valueOf((String ) PreferenceUtils.getFromPrefs(getApplicationContext(), Constants.KEY_USERLONGITUDE, "0"));
 
-        String apiURL = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/location";
+        String apiURL = BuildConfig.API_ENDPOINT + "apiInfo/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/location";
         Log.d("location", PreferenceUtils. getFromPrefs(getApplicationContext(), Constants.KEY_USERLATITUDE, " ").toString());
 
         HashMap<String, Object> mParams = new HashMap < String, Object> ();

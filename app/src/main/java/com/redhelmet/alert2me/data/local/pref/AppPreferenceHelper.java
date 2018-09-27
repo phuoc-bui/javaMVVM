@@ -4,13 +4,13 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
-import com.redhelmet.alert2me.data.remote.response.RegisterResponse;
+import com.redhelmet.alert2me.data.model.ApiInfo;
+import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 
 public class AppPreferenceHelper implements PreferenceHelper {
     private final String CONFIG_KEY = "config";
-    private final String DEVICE_KEY = "device";
+    private final String DEVICE_KEY = "apiInfo";
     private Context context;
     private Gson gson;
 
@@ -40,26 +40,26 @@ public class AppPreferenceHelper implements PreferenceHelper {
     }
 
     @Override
-    public void saveConfig(ConfigResponse configResponse) {
-        String json = gson.toJson(configResponse);
+    public void saveAppConfig(AppConfig appConfig) {
+        String json = gson.toJson(appConfig);
         PreferenceUtils.saveToPrefs(context, CONFIG_KEY, json);
     }
 
     @Override
-    public ConfigResponse getConfig() {
+    public AppConfig getAppConfig() {
         String json = (String) PreferenceUtils.getFromPrefs(context, CONFIG_KEY, "");
-        return gson.fromJson(json, ConfigResponse.class);
+        return gson.fromJson(json, AppConfig.class);
     }
 
     @Override
-    public void saveDeviceInfo(RegisterResponse.Device device) {
-        String json = gson.toJson(device);
+    public void saveDeviceInfo(ApiInfo apiInfo) {
+        String json = gson.toJson(apiInfo);
         PreferenceUtils.saveToPrefs(context, DEVICE_KEY, json);
     }
 
     @Override
-    public RegisterResponse.Device getDeviceInfo() {
+    public ApiInfo getDeviceInfo() {
         String json = (String) PreferenceUtils.getFromPrefs(context, DEVICE_KEY, "");
-        return gson.fromJson(json, RegisterResponse.Device.class);
+        return gson.fromJson(json, ApiInfo.class);
     }
 }

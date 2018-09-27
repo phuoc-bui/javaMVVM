@@ -1,15 +1,20 @@
 package com.redhelmet.alert2me.data.local.pref;
 
+import com.redhelmet.alert2me.data.model.ApiInfo;
+import com.redhelmet.alert2me.data.model.AppConfig;
+import com.redhelmet.alert2me.data.model.Category;
+import com.redhelmet.alert2me.data.model.EventGroup;
 import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
-import com.redhelmet.alert2me.data.remote.response.RegisterResponse;
+
+import java.util.List;
 
 public interface PreferenceHelper {
-    void saveConfig(ConfigResponse configResponse);
-    ConfigResponse getConfig();
+    void saveAppConfig(AppConfig appConfig);
+    AppConfig getAppConfig();
     boolean isInitialLaunch();
     void setInitialLaunch(boolean isInitial);
     boolean isAccepted();
     void setAccepted(boolean accepted);
-    void saveDeviceInfo(RegisterResponse.Device device);
-    RegisterResponse.Device getDeviceInfo();
+    void saveDeviceInfo(ApiInfo apiInfo);
+    ApiInfo getDeviceInfo();
 }

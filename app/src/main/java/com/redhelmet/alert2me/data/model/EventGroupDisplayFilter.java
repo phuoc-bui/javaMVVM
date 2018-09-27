@@ -1,9 +1,8 @@
 package com.redhelmet.alert2me.data.model;
 
-public class EventGroupDisplayFilter {
+public class EventGroupDisplayFilter implements Model {
     private String[] layers;
     private String[] overlays;
-
 
     public String[] getLayers() {
         return layers;
@@ -21,5 +20,8 @@ public class EventGroupDisplayFilter {
         this.overlays = overlays;
     }
 
-
+    @Override
+    public long getId() {
+        return 0;
+    }
 }

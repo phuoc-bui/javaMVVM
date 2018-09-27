@@ -57,7 +57,7 @@ public class ShareWatchZone extends BaseActivity {
     }
 
     private void initializeControls() {
-        shareWzUrl = BuildConfig.API_ENDPOINT + "device/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/watchzones";
+        shareWzUrl = BuildConfig.API_ENDPOINT + "apiInfo/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/watchzones";
         shareWzCode = (EditText) findViewById(R.id.watch_zone_share_edit);
     }
 

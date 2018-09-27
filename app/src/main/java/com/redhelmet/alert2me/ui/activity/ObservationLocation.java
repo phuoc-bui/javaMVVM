@@ -242,14 +242,14 @@ public class ObservationLocation extends BaseActivity implements LocationListene
                 LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                 //Check if GPS is turned ON or OFF
                 if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    Log.e("About GPS", "GPS is Enabled in your device");
+                    Log.e("About GPS", "GPS is Enabled in your apiInfo");
 
                 } else {
                     //If GPS turned OFF show Location Dialog
                     new Handler().postDelayed(sendUpdatesToUI, 10);
                     // showSettingDialog();
 
-                    Log.e("About GPS", "GPS is Disabled in your device");
+                    Log.e("About GPS", "GPS is Disabled in your apiInfo");
                 }
 
             }

@@ -57,6 +57,7 @@ dependencies {
 
 // Android support
     api "com.android.support:design:$SUPPORT_PACKAGE_VERSION"
+    implementation "com.android.support:support-v4:$SUPPORT_PACKAGE_VERSION"
     implementation "com.android.support.constraint:constraint-layout:$CONSTRAIN_LAYOUT_VERSION"
     implementation "android.arch.lifecycle:extensions:$ARCH_LIFECYCLE_VERSION"
     annotationProcessor "android.arch.lifecycle:compiler:$ARCH_LIFECYCLE_VERSION"
@@ -79,7 +80,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:$GOOGLE_SERVICE_VERSION"
     implementation "com.google.android.gms:play-services-location:$GOOGLE_SERVICE_VERSION"
     implementation "com.google.android.gms:play-services-places:$GOOGLE_SERVICE_VERSION"
-    implementation "com.google.maps.android:android-maps-utils:0.3.4"
+    implementation "com.google.maps.android:android-maps-utils:0.5"
 
 // Reactive
     implementation "io.reactivex.rxjava2:rxandroid:$RX_ANDROID_VERSION"

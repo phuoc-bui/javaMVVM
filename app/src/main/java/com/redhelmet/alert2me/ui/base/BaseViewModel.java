@@ -10,9 +10,11 @@ import com.redhelmet.alert2me.global.Event;
 
 import org.json.JSONArray;
 
+import java.io.Serializable;
+
 import io.reactivex.disposables.CompositeDisposable;
 
-public class BaseViewModel extends ViewModel {
+public class BaseViewModel extends ViewModel implements Serializable{
 
     protected CompositeDisposable disposeBag = new CompositeDisposable();
 
@@ -20,7 +22,7 @@ public class BaseViewModel extends ViewModel {
     public JSONArray wz_notification_selection;
     protected Observations observations;
     protected AddObservationModel addObservation;
-    protected DataManager dataManager;
+    public DataManager dataManager;
     protected MutableLiveData<Event<NavigationType>> navigationEvent = new MutableLiveData<>();
 
     public BaseViewModel(DataManager dataManager) {

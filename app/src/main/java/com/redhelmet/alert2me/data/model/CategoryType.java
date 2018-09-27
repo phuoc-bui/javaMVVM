@@ -1,9 +1,8 @@
 package com.redhelmet.alert2me.data.model;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class CategoryType implements Serializable{
+public class CategoryType implements Model {
     private String code;
     private String name;
     private String nameLabel;

@@ -1,8 +1,14 @@
 package com.redhelmet.alert2me.data.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.util.List;
 
+@Entity(tableName = "Category")
 public class Category implements Model {
+    @PrimaryKey(autoGenerate = true)
+    private long id;
     private String category;
     private String nameLabel;
     private boolean displayOnly;
@@ -10,6 +16,11 @@ public class Category implements Model {
     private String filterOrder;
     private List<CategoryType> types;
     private List<CategoryStatus> statuses;
+
+    @Override
+    public long getId() {
+        return id;
+    }
 
     public String getCategory() {
         return category;

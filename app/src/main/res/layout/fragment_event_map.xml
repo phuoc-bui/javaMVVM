@@ -118,7 +118,7 @@
             app:srcCompat="@drawable/ic_aerial" />
 
         <android.support.constraint.Group
-            android:id="@+id/group"
+            android:id="@+id/group_map_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="visible"

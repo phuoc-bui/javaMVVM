@@ -5,6 +5,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.databinding.ActivityMainBinding;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
 
 /**

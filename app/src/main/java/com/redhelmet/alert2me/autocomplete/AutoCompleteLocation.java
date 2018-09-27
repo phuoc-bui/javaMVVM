@@ -31,12 +31,7 @@ public class AutoCompleteLocation extends android.support.v7.widget.AppCompatAut
     private AutoCompleteLocationListener mAutoCompleteLocationListener;
 
     public interface AutoCompleteLocationListener {
-        void OnMapReadyCallback();
-
-        void OnMapLoadedCallback();
-
         void onTextClear();
-
         void onItemSelected(Place selectedPlace);
     }
 

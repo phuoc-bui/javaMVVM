@@ -4,6 +4,7 @@ import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.Hint;
 import com.redhelmet.alert2me.global.Event;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
+import com.redhelmet.alert2me.ui.base.NavigationType;
 import com.redhelmet.alert2me.ui.termsandcondition.TermConditionActivity;
 
 import java.util.List;
@@ -19,8 +20,12 @@ public class HintViewModel extends BaseViewModel {
         return hints;
     }
 
-    public void onLastPageScrolled() {
+    public void onLastPageScrolled(boolean fromHelp) {
         dataManager.setInitialLaunch(true);
-        navigationEvent.setValue(new Event<>(TermConditionActivity.class));
+        if (fromHelp) {
+            navigationEvent.setValue(new Event<>(NavigationType.FINISH));
+        } else {
+            navigationEvent.setValue(new Event<>(NavigationType.START_ACTIVITY_AND_FINISH.setData(TermConditionActivity.class)));
+        }
     }
 }

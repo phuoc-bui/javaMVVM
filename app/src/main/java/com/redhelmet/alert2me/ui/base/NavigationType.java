@@ -41,6 +41,12 @@ public enum NavigationType {
             }
         }
     },
+    FINISH {
+        @Override
+        public void navigation(Activity context) {
+            context.finish();
+        }
+    },
     START_WEB_VIEW {
         @Override
         public void navigation(Activity context) {

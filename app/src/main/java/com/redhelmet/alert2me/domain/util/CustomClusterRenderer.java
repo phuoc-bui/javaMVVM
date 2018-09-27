@@ -5,32 +5,30 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 
-import com.redhelmet.alert2me.data.model.CustomMarker;
-import com.redhelmet.alert2me.data.model.Event;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
+import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.data.model.ClusterMarker;
+import com.redhelmet.alert2me.data.model.Event;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import com.redhelmet.alert2me.R;
 
-
-public class CustomClusterRenderer extends DefaultClusterRenderer<CustomMarker> {
+public class CustomClusterRenderer extends DefaultClusterRenderer<ClusterMarker> {
     private EventUtils eventUtils;
     private IconUtils iconUtils;
     private Context _context;
     private DisplayMetrics metrics;
     private ConfigUtils configUtils;
 
-    public CustomClusterRenderer(Activity context, GoogleMap map, ClusterManager<CustomMarker> clusterManager) {
+    public CustomClusterRenderer(Activity context, GoogleMap map, ClusterManager<ClusterMarker> clusterManager) {
         super(context, map, clusterManager);
         _context = context;
         eventUtils = new EventUtils();
@@ -41,7 +39,7 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<CustomMarker> 
 
 
     @Override
-    protected void onBeforeClusterItemRendered(CustomMarker item,
+    protected void onBeforeClusterItemRendered(ClusterMarker item,
                                                MarkerOptions markerOptions) {
         Event event = item.getEvent();
         if (event != null) {
@@ -52,26 +50,21 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<CustomMarker> 
     }
 
     @Override
-    protected void onBeforeClusterRendered(Cluster<CustomMarker> cluster, MarkerOptions markerOptions) {
-        Collection<CustomMarker> items = cluster.getItems();
-        List<CustomMarker> markers = new ArrayList<>(items);
+    protected void onBeforeClusterRendered(Cluster<ClusterMarker> cluster, MarkerOptions markerOptions) {
+        Collection<ClusterMarker> items = cluster.getItems();
+        List<ClusterMarker> markers = new ArrayList<>(items);
 
-        Collections.sort(markers, new Comparator<CustomMarker>() {
-            @Override
-            public int compare(CustomMarker customMarker, CustomMarker customMarker1) {
-                return customMarker.getEvent().getSeverity() < customMarker1.getEvent().getSeverity() ? 1 : (customMarker.getEvent().getSeverity() > customMarker1.getEvent().getSeverity() ? -1 : 0);
-            }
-        });
+        Collections.sort(markers, (customMarker, customMarker1) -> Integer.compare(customMarker1.getEvent().getSeverity(), customMarker.getEvent().getSeverity()));
          List<Event> events = new ArrayList<>();
         // for each loop
-        for (CustomMarker item : markers)
+        for (ClusterMarker item : markers)
         {
             if (item.getEvent() != null)
             {
                 events.add(item.getEvent());
             }
         }
-        CustomMarker customMarker = markers.get(0);
+        ClusterMarker customMarker = markers.get(0);
 
         Event event = customMarker.getEvent();
         if (event != null) {
@@ -87,7 +80,7 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<CustomMarker> 
         }
     }
     @Override
-    protected boolean shouldRenderAsCluster(Cluster<CustomMarker> cluster) {
+    protected boolean shouldRenderAsCluster(Cluster<ClusterMarker> cluster) {
         return cluster.getSize() > 1;
     }
 

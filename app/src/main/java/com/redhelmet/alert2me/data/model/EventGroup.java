@@ -1,8 +1,12 @@
 package com.redhelmet.alert2me.data.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.util.List;
 
-public class EventGroup {
+@Entity(tableName = "EventGroup")
+public class EventGroup implements Model {
     private String description;
     private List<EventGroupDisplayFilter> displayFilter;
     private boolean displayOn;
@@ -11,11 +15,12 @@ public class EventGroup {
     private List<String> eventCodes;
     private boolean filterOn;
     private boolean filterToggle;
-    private int id;
+    @PrimaryKey
+    private long id;
     private String name;
     private int order;
 
-    public int getId() {
+    public long getId() {
         return this.id;
     }
 

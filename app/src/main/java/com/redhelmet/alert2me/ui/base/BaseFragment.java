@@ -1,6 +1,7 @@
 package com.redhelmet.alert2me.ui.base;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +25,26 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
     @LayoutRes
     protected abstract int getLayoutId();
 
-    protected abstract Class<VM> obtainViewModel();
+    protected abstract Class<VM> getViewModelClass();
 
     protected int getBindingVariable() {
         return BR.viewModel;
     }
 
+    private BaseActivity activity;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof BaseActivity) {
+            activity = (BaseActivity) context;
+        }
     }
 
     @Nullable
@@ -45,8 +57,16 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(obtainViewModel());
+        viewModel = obtainViewModel();
         binder.setVariable(getBindingVariable(), viewModel);
         binder.executePendingBindings();
+    }
+
+    protected VM obtainViewModel() {
+        return ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(getViewModelClass());
+    }
+
+    public BaseActivity getBaseActivity() {
+        return activity;
     }
 }
