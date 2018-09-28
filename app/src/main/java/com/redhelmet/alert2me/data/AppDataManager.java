@@ -19,13 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class AppDataManager implements DataManager {
     private final String TAG = AppDataManager.class.getSimpleName();
-
-    private CompositeDisposable disposeBag = new CompositeDisposable();
 
     private PreferenceHelper pref;
     private ApiHelper api;
@@ -120,27 +117,77 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Observable<List<Event>> getEventsWithDefaultFilter() {
-        List<Event> result = new ArrayList<>();
-        disposeBag.add(Observable.combineLatest(getAllEvents().flatMap(Observable::fromIterable),
-                getEventGroups().flatMap(eventGroups -> Observable.fromIterable(eventGroups)
-                        .flatMap(eventGroup -> Observable.fromIterable(eventGroup.getDisplayFilter()))
-                        .flatMap(eventGroupDisplayFilter -> Observable.fromArray(eventGroupDisplayFilter.getLayers()))),
-                (event, s) -> {
-                    if (s.equals(event.getGroup())) return event;
-                    return null;
-                }).subscribe(event -> {
-            if (event != null) {
-                result.add(event);
-            }
-        }));
-
-        return Observable.just(result);
+    public Observable<List<Category>> getUserCustomFilters() {
+        List<Long> ids = pref.getUserCustomFilters();
+        return database.getCategoriesWithIds(ids);
     }
 
     @Override
-    public Observable<List<Event>> getEventsWithCustomFilter() {
-        return null;
+    public Observable<List<EventGroup>> getUserDefaultFilters() {
+        List<Long> ids = pref.getUserDefaultFilters();
+        return database.getEventGroupsWithIds(ids);
+    }
+
+    @Override
+    public void saveUserCustomFilters(List<Category> categories) {
+        pref.saveUserCustomFilters(categories);
+    }
+
+    @Override
+    public void saveUserDefaultFilters(List<EventGroup> eventGroups) {
+        pref.saveUserDefaultFilters(eventGroups);
+    }
+
+    @Override
+    public Observable<List<Event>> getEventsWithFilter(boolean isDefault) {
+        return getAllEvents()
+                .flatMap(Observable::fromIterable)
+                .flatMap(event -> {
+                    if (event.isAlwaysOn()) return Observable.just(event);
+                    return isDefault ? filterEventWithDefaultFilter(event) : filterEventWithCustomFilter(event);
+                }).toList().toObservable();
+    }
+
+    private Observable<Event> filterEventWithDefaultFilter(Event event) {
+        return Observable.combineLatest(Observable.just(event),
+                getUserDefaultFilters().flatMap(Observable::fromIterable)
+                        .flatMap(group -> Observable.fromIterable(group.getDisplayFilter()))
+                        .flatMap(display -> Observable.fromArray(display.getLayers())),
+                (e, layer) -> {
+                    if (layer.equalsIgnoreCase(event.getGroup())) {
+                        return event;
+                    }
+                    return null;
+                }).filter(ev -> ev != null);
+    }
+
+    private Observable<Event> filterEventWithCustomFilter(Event event) {
+
+        return getUserCustomFilters()
+                .flatMap(Observable::fromIterable)
+                .filter(category -> event.getCategory().equalsIgnoreCase(category.getCategory()))
+                .flatMap(category -> filterEventWithCategory(event, category));
+    }
+
+    private Observable<Event> filterEventWithCategory(Event event, Category category) {
+        return Observable.combineLatest(Observable.fromIterable(category.getTypes()),
+                Observable.fromIterable(category.getStatuses()),
+                (type, status) -> {
+                    if (event.getEventTypeCode().equals(type.getCode())
+                            && event.getStatusCode().equals(status.getCode()))
+                        return event;
+                    return null;
+                }).filter(e -> e != null);
+    }
+
+    @Override
+    public boolean isDefaultFilter() {
+        return pref.isDefaultFilter();
+    }
+
+    @Override
+    public void setDefaultFilter(boolean isDefault) {
+        pref.setDefaultFilter(isDefault);
     }
 
     @Override

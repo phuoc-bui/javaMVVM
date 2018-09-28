@@ -16,8 +16,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.domain.util.EventUtils;
-import com.redhelmet.alert2me.domain.util.IconUtils;
+import com.redhelmet.alert2me.util.EventUtils;
+import com.redhelmet.alert2me.util.IconUtils;
 import com.redhelmet.alert2me.data.model.Area;
 import com.redhelmet.alert2me.data.model.Event;
 

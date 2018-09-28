@@ -14,6 +14,8 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.ClusterMarker;
 import com.redhelmet.alert2me.data.model.Event;
+import com.redhelmet.alert2me.util.EventUtils;
+import com.redhelmet.alert2me.util.IconUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;

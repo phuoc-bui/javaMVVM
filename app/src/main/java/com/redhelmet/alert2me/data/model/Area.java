@@ -1,8 +1,6 @@
 package com.redhelmet.alert2me.data.model;
 
-import java.io.Serializable;
-
-public class Area implements Serializable{
+public class Area implements Model {
     private double latitude;
     private double longitude;
     private String state;
@@ -38,5 +36,10 @@ public class Area implements Serializable{
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    @Override
+    public long getId() {
+        return 0;
     }
 }

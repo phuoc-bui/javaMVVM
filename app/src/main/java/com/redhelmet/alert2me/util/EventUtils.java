@@ -1,15 +1,10 @@
-package com.redhelmet.alert2me.domain.util;
+package com.redhelmet.alert2me.util;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.redhelmet.alert2me.data.model.Area;
+import com.redhelmet.alert2me.data.model.Event;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,19 +12,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import com.redhelmet.alert2me.data.model.Area;
-import com.redhelmet.alert2me.data.model.Event;
-
 
 public class EventUtils {
 
-    public MarkerOptions eventToMarker(Event event, Area area) {
+    private EventUtils() {
+    }
 
+    public static MarkerOptions eventToMarker(Event event, Area area) {
         return new MarkerOptions().position(new LatLng(area.getLatitude(), area.getLongitude())).title(event.getType()).zIndex(event.getSeverity());
     }
 
-
-    public String getTimeAgo(Date eventDate) throws ParseException {
+    public static String getTimeAgo(Date eventDate) throws ParseException {
 
         Calendar calendar = Calendar.getInstance();
         Calendar current = Calendar.getInstance();
@@ -77,7 +70,7 @@ public class EventUtils {
         return String.format("%s %s %s", day, monthName, year);
     }
 
-    public String getDetailTimeAgo(Date eventDate) throws ParseException {
+    public static String getDetailTimeAgo(Date eventDate) throws ParseException {
 
         Calendar calendar = Calendar.getInstance();
         Calendar current = Calendar.getInstance();
@@ -129,42 +122,6 @@ public class EventUtils {
             return String.format("Updated %s %s at %s", day, monthName, localStringHour);
         }
         return String.format("Updated %s %s %s at %s", day, monthName, year, localStringHour);
-    }
-
-    public static String readJsonFile(File yourFile) {
-        BufferedReader streamReader = null;
-
-        if(yourFile.exists()) {
-            try {
-                streamReader = new BufferedReader(new InputStreamReader(new FileInputStream(yourFile), "UTF-8"));
-
-                StringBuilder responseStrBuilder = new StringBuilder();
-
-                String inputStr;
-                while ((inputStr = streamReader.readLine()) != null)
-                    responseStrBuilder.append(inputStr);
-                return responseStrBuilder.toString();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-                return "";
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                return "";
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "";
-            }
-        }else{
-            return "";
-        }
-    }
-
-
-    // colors CODING
-
-    public static String getPrimaryColor(){
-
-        return "";
     }
 }
 

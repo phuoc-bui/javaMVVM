@@ -2,14 +2,7 @@ package com.redhelmet.alert2me.data.local.database;
 
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.EventGroup;
-import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -39,5 +32,15 @@ public class AppDBHelper implements DBHelper {
     @Override
     public Observable<List<EventGroup>> getEventGroups() {
         return database.eventGroupDao().getEventGroups();
+    }
+
+    @Override
+    public Observable<List<Category>> getCategoriesWithIds(List<Long> ids) {
+        return database.categoryDao().getCategoriesWithIds(ids);
+    }
+
+    @Override
+    public Observable<List<EventGroup>> getEventGroupsWithIds(List<Long> ids) {
+        return database.eventGroupDao().getEventGroupWithIds(ids);
     }
 }

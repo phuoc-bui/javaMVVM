@@ -2,6 +2,7 @@ package com.redhelmet.alert2me.data.local.database.dao;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
 import com.redhelmet.alert2me.data.model.Category;
@@ -16,6 +17,9 @@ public interface CategoryDao {
     @Query("SELECT * FROM Category")
     Observable<List<Category>> getCategories();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void saveCategories(List<Category> categories);
+
+    @Query("SELECT * FROM Category WHERE id IN (:ids)")
+    Observable<List<Category>> getCategoriesWithIds(List<Long> ids);
 }

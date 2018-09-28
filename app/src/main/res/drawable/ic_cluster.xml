@@ -1,15 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="32dp"
-        android:height="32dp"
-        android:viewportWidth="32"
-        android:viewportHeight="32">
-
-        <path
-            android:fillColor="#000"
-            android:fillAlpha="0.25"
-            android:strokeAlpha="0.25"
-            android:strokeWidth="1"
-            android:pathData="M0 0h32v32h-32v-32z" />
-    <path android:fillColor="@color/colorWhite" android:pathData="M25.33,15.33l-7.6,9.87 1.73,2.13 9.33,-12 -9.33,-12 -1.73,2.13 7.6,9.87zM22,15.33l-7.6,-9.87 -1.73,-2.13 -9.33,12 9.33,12 1.73,-2.13 7.6,-9.87z"/>
-</vector>
+    <item android:drawable="@drawable/ic_cluster_red" android:state_selected="true" />
+    <item android:drawable="@drawable/ic_cluster_white" />
+</selector>

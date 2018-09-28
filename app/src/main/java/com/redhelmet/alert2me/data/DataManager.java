@@ -26,6 +26,11 @@ public interface DataManager {
     Observable<List<Event>> getAllEvents();
     Observable<List<Category>> getCategories();
     Observable<List<EventGroup>> getEventGroups();
-    Observable<List<Event>> getEventsWithDefaultFilter();
-    Observable<List<Event>> getEventsWithCustomFilter();
+    Observable<List<Category>> getUserCustomFilters();
+    Observable<List<EventGroup>> getUserDefaultFilters();
+    void saveUserCustomFilters(List<Category> categories);
+    void saveUserDefaultFilters(List<EventGroup> eventGroups);
+    Observable<List<Event>> getEventsWithFilter(boolean isDefault);
+    boolean isDefaultFilter();
+    void setDefaultFilter(boolean isDefault);
 }

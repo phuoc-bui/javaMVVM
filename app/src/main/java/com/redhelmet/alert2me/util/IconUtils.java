@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.domain.util;
+package com.redhelmet.alert2me.util;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,16 +22,7 @@ import com.redhelmet.alert2me.data.model.Event;
 
 public class IconUtils {
 
-    private Activity activity;
-    private Context context;
-
-    public IconUtils(Activity activity) {
-        this.activity = activity;
-    }
-
-    public IconUtils(Context context) {
-        this.context = context;
-    }
+    private IconUtils(){}
 
     public int getResourceByName(String resourceName, String definitionType) {
         Resources resources = activity.getResources();
@@ -41,7 +32,7 @@ public class IconUtils {
     }
 
 
-    public Bitmap createEventIcon(int resourceId, Event event, String backgroundColor, boolean isListIcon, boolean isClustered, String itemsCount) {
+    public static Bitmap createEventIcon(int resourceId, Event event, String backgroundColor, boolean isListIcon, boolean isClustered, String itemsCount) {
 
         LayoutInflater layoutInflater;
         String packageName;

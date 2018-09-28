@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -17,11 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.redhelmet.alert2me.domain.util.DetailSectionBuilder;
-import com.redhelmet.alert2me.domain.util.EventUtils;
-import com.redhelmet.alert2me.domain.util.IconUtils;
-import com.redhelmet.alert2me.data.model.Event;
-import com.redhelmet.alert2me.data.model.Section;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,6 +27,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.data.model.Event;
+import com.redhelmet.alert2me.data.model.Section;
+import com.redhelmet.alert2me.domain.util.DetailSectionBuilder;
+import com.redhelmet.alert2me.ui.home.HomeActivity;
+import com.redhelmet.alert2me.util.EventUtils;
+import com.redhelmet.alert2me.util.IconUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,22 +41,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.ui.home.HomeActivity;
 
+public class EventDetailsActivity extends AppCompatActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
 
-public class EventDetailsActivity extends AppCompatActivity implements  GoogleMap.OnMapClickListener  ,GoogleMap.OnMarkerClickListener,  OnMapReadyCallback {
-
+    private static final String EVENT_EXTRA = "event";
 
     Toolbar toolbar;
     Event event;
     TextView eventType, eventStatus, eventLocation, eventTime;
     ActionBar supportActionBar;
-    EventUtils eventUtils;
-    IconUtils iconUtils;
     DetailSectionBuilder detailSectionBuilder;
     GoogleMap mMap;
     private Marker marker;
+
+    public static Intent newInstance(Context context, Event event) {
+        Intent intent = new Intent(context, EventDetailsActivity.class);
+        intent.putExtra(EVENT_EXTRA, event);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +66,6 @@ public class EventDetailsActivity extends AppCompatActivity implements  GoogleMa
 
         setContentView(R.layout.activity_event_detail);
         Bundle extras = getIntent().getExtras();
-        eventUtils = new EventUtils();
-        iconUtils = new IconUtils(getApplicationContext());
         if (extras != null) { //edit mode
 
             event = (Event) extras.get("event");
@@ -111,14 +114,13 @@ public class EventDetailsActivity extends AppCompatActivity implements  GoogleMa
             ChangeToolBarColor(event.getPrimaryColor(), event.getSecondaryColor(), event.getTextColor());
 
 
-
             Date updatedTime = new Date(event.getUpdated());
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("H:mm a");
             simpleDateFormat.setTimeZone(calendar.getTimeZone());
 
             try {
-                eventTime.setText(eventUtils.getDetailTimeAgo(updatedTime));
+                eventTime.setText(EventUtils.getDetailTimeAgo(updatedTime));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -164,22 +166,24 @@ public class EventDetailsActivity extends AppCompatActivity implements  GoogleMa
                 return super.onOptionsItemSelected(item);
         }
     }
+
     @Override
     public void onMapClick(LatLng latLng) {
-        if(marker!=null){
+        if (marker != null) {
             LatLng position = marker.getPosition();
             Intent o = new Intent(EventDetailsActivity.this, HomeActivity.class);
-            o.putExtra("marker",position);
+            o.putExtra("marker", position);
             o.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(o);
         }
     }
+
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if(marker!=null){
+        if (marker != null) {
             LatLng position = marker.getPosition();
             Intent o = new Intent(EventDetailsActivity.this, HomeActivity.class);
-            o.putExtra("marker",position);
+            o.putExtra("marker", position);
             o.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(o);
         }
@@ -201,9 +205,9 @@ public class EventDetailsActivity extends AppCompatActivity implements  GoogleMa
 
 
     public void locationSetup() {
-        if (mMap != null && event !=null) {
-            MarkerOptions marker = eventUtils.eventToMarker(event, event.getArea().get(0));
-            Bitmap eventIcon = iconUtils.createEventIcon(R.layout.custom_list_layer_icon, event, event.getPrimaryColor(), true, false,"");
+        if (mMap != null && event != null) {
+            MarkerOptions marker = EventUtils.eventToMarker(event, event.getArea().get(0));
+            Bitmap eventIcon = IconUtils.createEventIcon(R.layout.custom_list_layer_icon, event, event.getPrimaryColor(), true, false, "");
             BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(eventIcon);
             marker.icon(bitmapDescriptor);
 

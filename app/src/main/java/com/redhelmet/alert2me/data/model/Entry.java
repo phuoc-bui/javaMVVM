@@ -1,12 +1,9 @@
 package com.redhelmet.alert2me.data.model;
 
-import java.io.Serializable;
-
-public class Entry implements Serializable
-{
-    private String title ;
-     private Object value ;
-    private String link ;
+public class Entry implements Model {
+    private String title;
+    private Object value;
+    private String link;
 
     public String getTitle() {
         return title;
@@ -30,5 +27,10 @@ public class Entry implements Serializable
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    @Override
+    public long getId() {
+        return 0;
     }
 }

@@ -1,9 +1,8 @@
 package com.redhelmet.alert2me.data.model;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class Section implements Serializable{
+public class Section implements Model {
 
     private String name;
     private String icon;
@@ -33,5 +32,8 @@ public class Section implements Serializable{
         this.entries = entries;
     }
 
-
+    @Override
+    public long getId() {
+        return 0;
+    }
 }

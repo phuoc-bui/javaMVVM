@@ -17,4 +17,10 @@ public interface PreferenceHelper {
     void setAccepted(boolean accepted);
     void saveDeviceInfo(ApiInfo apiInfo);
     ApiInfo getDeviceInfo();
+    void saveUserCustomFilters(List<Category> categories);
+    void saveUserDefaultFilters(List<EventGroup> eventGroups);
+    List<Long> getUserCustomFilters();
+    List<Long> getUserDefaultFilters();
+    void setDefaultFilter(boolean isDefault);
+    boolean isDefaultFilter();
 }
