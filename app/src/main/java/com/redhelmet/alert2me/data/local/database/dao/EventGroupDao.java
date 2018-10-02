@@ -18,6 +18,9 @@ public interface EventGroupDao {
     @Query("SELECT * FROM EventGroup")
     Observable<List<EventGroup>> getEventGroups();
 
+    @Query("SELECT * FROM EventGroup")
+    List<EventGroup> getEventGroupsSync();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void saveEventGroups(List<EventGroup> eventGroups);
 

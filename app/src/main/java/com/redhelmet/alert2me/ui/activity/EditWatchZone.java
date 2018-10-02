@@ -55,7 +55,7 @@ import static com.redhelmet.alert2me.R.id.notification_sound_text;
 import static com.redhelmet.alert2me.R.id.select_ringtone;
 
 
-public class EditWatchZone extends AppCompatActivity implements View.OnClickListener {
+public class EditWatchZone extends BaseActivity implements View.OnClickListener {
 
 
     Toolbar toolbar;

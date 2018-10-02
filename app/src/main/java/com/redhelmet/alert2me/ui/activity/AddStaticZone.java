@@ -28,7 +28,7 @@ import com.kevalpatel.ringtonepicker.RingtonePickerListener;
 import com.redhelmet.alert2me.R;
 
 
-public class AddStaticZone extends AppCompatActivity {
+public class AddStaticZone extends BaseActivity {
 
     Toolbar toolbar;
     Intent i;

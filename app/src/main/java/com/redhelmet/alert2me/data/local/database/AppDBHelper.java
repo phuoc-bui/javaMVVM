@@ -25,6 +25,11 @@ public class AppDBHelper implements DBHelper {
     }
 
     @Override
+    public List<Category> getCategoriesSync() {
+        return null;
+    }
+
+    @Override
     public void saveEventGroups(List<EventGroup> eventGroups) {
         database.eventGroupDao().saveEventGroups(eventGroups);
     }
@@ -32,6 +37,11 @@ public class AppDBHelper implements DBHelper {
     @Override
     public Observable<List<EventGroup>> getEventGroups() {
         return database.eventGroupDao().getEventGroups();
+    }
+
+    @Override
+    public List<EventGroup> getEventGroupsSync() {
+        return null;
     }
 
     @Override

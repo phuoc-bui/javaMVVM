@@ -108,7 +108,7 @@ public class DBController extends SQLiteOpenHelper {
 
     private static DBController INSTANCE;
 
-    private DBController(Context context) {
+    public DBController(Context context) {
         super(context.getApplicationContext(), DATABASE_NAME, null, DATABASE_VERSION);
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
     }

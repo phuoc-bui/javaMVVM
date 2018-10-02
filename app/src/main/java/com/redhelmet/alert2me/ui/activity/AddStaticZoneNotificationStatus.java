@@ -17,7 +17,7 @@ import com.redhelmet.alert2me.data.model.Category;
 
 import com.redhelmet.alert2me.R;
 
-public class AddStaticZoneNotificationStatus extends AppCompatActivity implements View.OnClickListener{
+public class AddStaticZoneNotificationStatus extends BaseActivity implements View.OnClickListener{
 
     Toolbar toolbar;
     Intent i;

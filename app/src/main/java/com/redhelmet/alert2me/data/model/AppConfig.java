@@ -110,4 +110,9 @@ public class AppConfig implements Model {
     public void setShowMobileWatchZone(boolean showMobileWatchZone) {
         this.showMobileWatchZone = showMobileWatchZone;
     }
+
+    @Override
+    public long getId() {
+        return 0;
+    }
 }

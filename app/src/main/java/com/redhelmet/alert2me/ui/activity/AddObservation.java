@@ -93,7 +93,7 @@ import static com.redhelmet.alert2me.R.id.observation_map;
  * Created by inbox on 5/2/18.
  */
 
-public class AddObservation extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnMapClickListener,TimePickerDialog.OnTimeSetListener , EasyPermissions.PermissionCallbacks {
+public class AddObservation extends BaseActivity implements OnMapReadyCallback, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnMapClickListener,TimePickerDialog.OnTimeSetListener , EasyPermissions.PermissionCallbacks {
 
     LinearLayout whatLayout,
             whenLayout,
@@ -458,7 +458,7 @@ public class AddObservation extends AppCompatActivity implements OnMapReadyCallb
     @Override
     protected void onDestroy() {
         googleApiClient.disconnect();
-        super.onStop();
+        super.onDestroy();
     }
 
     public void preferenceLocation(){
@@ -699,7 +699,7 @@ public class AddObservation extends AppCompatActivity implements OnMapReadyCallb
                 params.put("location", "West Melbourne");
                 params.put("state", "VIC");
                 params.put("text", "I hear thunder");//addObservation.getWhatText());
-                params.put("deviceName", new DeviceUtil(getApplicationContext()).getDeviceName());
+                params.put("deviceName", DeviceUtil.getDeviceName());
                 params.put("appVersion",getString(R.string.appVersion));
                 params.put("topic", "");
                 params.put("group", "Weather");//addObservation.getGroup());
@@ -708,7 +708,7 @@ public class AddObservation extends AppCompatActivity implements OnMapReadyCallb
                 params.put("category", "public_observation");
                 params.put("obsWhen", "");//temp empty
                 params.put("obsWhere", "");//temp empty
-                params.put("osVersion", new DeviceUtil(getApplicationContext()).getOsVersion());
+                params.put("osVersion", DeviceUtil.getOsVersion());
                 params.put("os", "Android");
                 params.put("geoPoint", "POINT(144.94509232244 -37.8067685896883)");
                 params.put("timeAgo", "2017-12-12 11:46:07+1100");

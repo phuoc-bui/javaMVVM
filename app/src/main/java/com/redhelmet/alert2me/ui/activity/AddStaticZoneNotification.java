@@ -58,7 +58,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AddStaticZoneNotification extends AppCompatActivity implements View.OnClickListener {
+public class AddStaticZoneNotification extends BaseActivity implements View.OnClickListener {
 
     Toolbar toolbar;
     Intent i;
@@ -396,7 +396,7 @@ public class AddStaticZoneNotification extends AppCompatActivity implements View
                 Log.d("DAta",groupData.toString() );
             }
 
-                ArrayList < Category > c = cat.getCategoryArray();
+//                ArrayList < Category > c = cat.getCategoryArray();
                 JSONArray categoryArray = new JSONArray();
                 JSONArray typeArray = new JSONArray();
                  int count=0;

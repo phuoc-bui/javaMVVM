@@ -23,7 +23,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.redhelmet.alert2me.AppModule;
 import com.redhelmet.alert2me.autocomplete.AutoCompleteLocation;
+import com.redhelmet.alert2me.data.AppDataManager;
+import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.data.model.EditWatchZones;
@@ -65,7 +68,7 @@ import java.util.Map;
 import com.redhelmet.alert2me.R;
 
 
-public class AddStaticZoneLocation extends AppCompatActivity implements View.OnClickListener, GoogleMap.OnMapLongClickListener  , AutoCompleteLocation.AutoCompleteLocationListener, OnMapReadyCallback {
+public class AddStaticZoneLocation extends BaseActivity implements View.OnClickListener, GoogleMap.OnMapLongClickListener  , AutoCompleteLocation.AutoCompleteLocationListener, OnMapReadyCallback {
 
     //default australia
     // location
@@ -123,7 +126,7 @@ public class AddStaticZoneLocation extends AppCompatActivity implements View.OnC
             //  fill_wz_color = (String) PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_tertiaryColor), "");
         }
 
-        appConfig = appConfig.getInstance();
+        appConfig = AppModule.getInstance().provideDataManager().getAppConfig();
 
         if(appConfig.getNavColor() != null ) {
             fill_wz_color = appConfig.getNavColor();
@@ -385,7 +388,7 @@ public class AddStaticZoneLocation extends AppCompatActivity implements View.OnC
         text.setPadding(10, 10, 10, 10);
         text.setTextColor(Color.WHITE);
         IconGenerator generator = new IconGenerator(context);
-        generator.setBackground(context.getResources().getDrawable(R.drawable.bubble_mask));
+//        generator.setBackground(context.getResources().getDrawable(R.drawable.bubble_mask));
         generator.setContentView(text);
         Bitmap icon = generator.makeIcon();
         titleMarker = _locationMap.addMarker(new MarkerOptions().position(center).icon(BitmapDescriptorFactory.fromBitmap(icon)));
@@ -414,16 +417,6 @@ public class AddStaticZoneLocation extends AppCompatActivity implements View.OnC
         LatLngBounds latLngBounds = new LatLngBounds(targetSouthWest, targetNorthEast);
 
         _locationMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 45));
-    }
-
-    @Override
-    public void OnMapReadyCallback() {
-
-    }
-
-    @Override
-    public void OnMapLoadedCallback() {
-
     }
 
     @Override

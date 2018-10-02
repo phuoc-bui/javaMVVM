@@ -17,6 +17,9 @@ public interface CategoryDao {
     @Query("SELECT * FROM Category")
     Observable<List<Category>> getCategories();
 
+    @Query("SELECT * FROM Category")
+    List<Category> getCategoriesSync();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void saveCategories(List<Category> categories);
 

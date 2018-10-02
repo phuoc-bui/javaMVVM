@@ -12,11 +12,15 @@ public interface DBHelper {
 
     Observable<List<Category>> getCategories();
 
+    List<Category> getCategoriesSync();
+
     Observable<List<Category>> getCategoriesWithIds(List<Long> ids);
 
     void saveEventGroups(List<EventGroup> eventGroups);
 
     Observable<List<EventGroup>> getEventGroups();
+
+    List<EventGroup> getEventGroupsSync();
 
     Observable<List<EventGroup>> getEventGroupsWithIds(List<Long> ids);
 }

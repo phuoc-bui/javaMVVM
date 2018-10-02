@@ -42,7 +42,7 @@ import java.util.List;
 
 import com.redhelmet.alert2me.R;
 
-public class EventMapFilter extends AppCompatActivity implements View.OnClickListener {
+public class EventMapFilter extends BaseActivity implements View.OnClickListener {
 
     Toolbar toolbar;
     Intent i;

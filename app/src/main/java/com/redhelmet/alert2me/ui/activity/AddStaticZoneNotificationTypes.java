@@ -17,7 +17,7 @@ import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.CustomNotificationTypeAdapter;
 import com.redhelmet.alert2me.data.model.Category;
 
-public class AddStaticZoneNotificationTypes extends AppCompatActivity {
+public class AddStaticZoneNotificationTypes extends BaseActivity {
 
     Toolbar toolbar;
     Intent i;

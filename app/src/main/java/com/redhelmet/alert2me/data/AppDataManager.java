@@ -6,6 +6,7 @@ import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.local.database.DBHelper;
 import com.redhelmet.alert2me.data.local.pref.PreferenceHelper;
 import com.redhelmet.alert2me.data.model.ApiInfo;
+import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
@@ -48,6 +49,11 @@ public class AppDataManager implements DataManager {
                 .doOnNext(this::saveConfig)
                 .doOnError(this::handleError)
                 .subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public AppConfig getAppConfig() {
+        return pref.getAppConfig();
     }
 
     @Override
@@ -112,8 +118,18 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
+    public List<Category> getCategoriesSync() {
+        return null;
+    }
+
+    @Override
     public Observable<List<EventGroup>> getEventGroups() {
         return database.getEventGroups().subscribeOn(Schedulers.computation());
+    }
+
+    @Override
+    public List<Category> getEventGroupsSync() {
+        return null;
     }
 
     @Override
