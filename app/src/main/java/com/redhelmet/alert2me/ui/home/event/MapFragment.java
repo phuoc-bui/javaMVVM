@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,16 +32,12 @@ import com.redhelmet.alert2me.autocomplete.AutoCompleteLocation;
 import com.redhelmet.alert2me.core.Constants;
 import com.redhelmet.alert2me.core.TileProviderFactory;
 import com.redhelmet.alert2me.data.model.Area;
-import com.redhelmet.alert2me.data.model.Category;
-import com.redhelmet.alert2me.data.model.CategoryStatus;
-import com.redhelmet.alert2me.data.model.CategoryType;
 import com.redhelmet.alert2me.data.model.ClusterMarker;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.databinding.FragmentEventMapBinding;
 import com.redhelmet.alert2me.domain.util.CustomClusterRenderer;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.global.Constant;
-import com.redhelmet.alert2me.ui.activity.ClusterEventList;
 import com.redhelmet.alert2me.ui.activity.EventDetailsActivity;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
 import com.redhelmet.alert2me.util.EventUtils;
@@ -76,15 +71,6 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
     private GoogleMap mMapView;
     private ClusterManager<ClusterMarker> clusterManager;
     LocationManager locationManager;
-    LatLng latlng = null;
-
-    public ArrayList<String> mapOverlay = new ArrayList<String>();
-    public ArrayList<String> mapLayers = new ArrayList<String>();
-
-    public ArrayList<Category> category_data = new ArrayList<Category>();
-    public ArrayList<CategoryType> types_data = new ArrayList<CategoryType>();
-    public ArrayList<CategoryStatus> statuses_data = new ArrayList<CategoryStatus>();
-
     TileProviderFactory tileProviderFactory;
 
     @Override
@@ -138,7 +124,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
 
         tileProviderFactory = new TileProviderFactory();
 
-        viewModel.events.observe(this, this::processMarker);
+        disposeBag.add(viewModel.events.asObservable().subscribe(this::processMarker));
     }
 
     @Override
@@ -155,7 +141,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
 
         infoWindowClickedForMarkers();
 
-        processMarker(viewModel.events.getValue());
+        processMarker(viewModel.events.get());
     }
 
     private void setupCluster() {
@@ -178,11 +164,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
                         events.add(item.getEvent());
                     }
                 }
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("clusterEvents", (Serializable) events);
-                Intent intent = new Intent(getActivity(), ClusterEventList.class);
-                intent.putExtra("bundle", bundle);
-                startActivity(intent);
+                startActivity(ClusterEventListActivity.newInstance(getBaseActivity(), (ArrayList<Event>) events));
             } else {
                 Toast.makeText(getContext(), "Unable to get event details", Toast.LENGTH_LONG).show();
             }
@@ -226,7 +208,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
             mMapView.setOnMyLocationClickListener(this);
             binder.locationMap.setOnClickListener(v -> onMyLocationButtonClick());
             binder.clusterEvents.setOnClickListener(v -> {
-                processMarker(viewModel.events.getValue());
+                processMarker(viewModel.events.get());
                 infoWindowClickedForMarkers();
                 v.setSelected(!v.isSelected());
             });
@@ -310,10 +292,6 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
                             markerOptions.icon(bitmapDescriptor);
                             Marker marker = mMapView.addMarker(markerOptions);
                             marker.setTag(event);
-                            String eventId = String.format("%s__%s__%s", event.getId(), event.getCategory(), event.getStatus());
-                            Log.e("DefaulMapPins:", eventId);
-//                            _markerOptionsHashMap.put(marker.getId(), eventId);
-
                         }
                     }
                 } else {
@@ -326,12 +304,8 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
                         markerOptions.icon(bitmapDescriptor);
                         Marker marker = mMapView.addMarker(markerOptions);
                         marker.setTag(event);
-                        String eventId = String.format("%s__%s__%s", event.getId(), event.getCategory(), event.getStatus());
-//                        _markerOptionsHashMap.put(marker.getId(), eventId);
                     }
                 }
-
-
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -381,17 +355,13 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
     @Override
     public void onItemSelected(Place selectedPlace) {
         LatLng latLng = new LatLng(selectedPlace.getLatLng().latitude, selectedPlace.getLatLng().longitude);
-        //mMapView.addMarker(new MarkerOptions().position(latLng));
         mMapView.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 55));
     }
 
     void infoWindowClickedForMarkers() {
         if (mMapView != null) {
-
             if (PreferenceUtils.hasKey(getBaseActivity(), getString(R.string.pref_cluster_map_state))) {
-
                 if (clusterManager != null) {
-                    Log.d("dfsd", "Cluster value");
                     mMapView.setOnInfoWindowClickListener(clusterManager);
                     clusterManager.setOnClusterItemInfoWindowClickListener(
                             customMarker -> {
@@ -403,11 +373,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
                                 }
                             });
                 }
-
-
             } else {
-
-                Log.d("dfsd", "map single value");
                 mMapView.setOnInfoWindowClickListener(marker -> {
                     Event event = (Event) marker.getTag();
                     if (event != null) {
@@ -434,7 +400,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EVENT_FILTER_REQUEST && resultCode == Activity.RESULT_OK) {
-
+            processMarker(viewModel.events.get());
         }
     }
 }

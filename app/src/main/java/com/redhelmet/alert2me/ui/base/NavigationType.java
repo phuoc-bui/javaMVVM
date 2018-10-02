@@ -3,6 +3,7 @@ package com.redhelmet.alert2me.ui.base;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.widget.Toast;
 
 /**
@@ -18,8 +19,12 @@ public enum NavigationType {
     START_ACTIVITY {
         @Override
         public void navigation(Activity context) {
-            if(data[0] instanceof Class) {
+            if (data.length >= 1 && data[0] instanceof Class) {
                 Intent intent = new Intent(context, (Class<?>) data[0]);
+                if (data.length >= 2 && data[1] instanceof Bundle) {
+                    Bundle bundle = (Bundle) data[1];
+                    intent.putExtra(BaseActivity.BUNDLE_EXTRA, bundle);
+                }
                 context.startActivity(intent);
             } else {
                 throw new Error("Wrong data");
@@ -32,13 +37,8 @@ public enum NavigationType {
     START_ACTIVITY_AND_FINISH {
         @Override
         public void navigation(Activity context) {
-            if(data[0] instanceof Class) {
-                Intent intent = new Intent(context, (Class<?>) data[0]);
-                context.startActivity(intent);
-                context.finish();
-            } else {
-                throw new Error(String.format(wrongDataError, context.getLocalClassName(), data[0].toString()));
-            }
+            START_ACTIVITY.navigation(context);
+            context.finish();
         }
     },
     FINISH {
@@ -50,7 +50,7 @@ public enum NavigationType {
     START_WEB_VIEW {
         @Override
         public void navigation(Activity context) {
-            if(data[0] instanceof Uri) {
+            if (data[0] instanceof Uri) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, (Uri) data[0]);
                 context.startActivity(intent);
             } else {
@@ -62,18 +62,18 @@ public enum NavigationType {
         @Override
         public void navigation(Activity context) {
             if (data[0] instanceof Integer) {
-                Toast.makeText(context, (int)data[0], Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, (int) data[0], Toast.LENGTH_SHORT).show();
             } else if (data[0] instanceof String) {
-                Toast.makeText(context, (String)data[0], Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, (String) data[0], Toast.LENGTH_SHORT).show();
             } else {
                 throw new Error(String.format(wrongDataError, context.getLocalClassName(), data[0].toString()));
             }
         }
-    }
-    ;
+    };
 
     Object[] data;
     final String wrongDataError = "Wrong data($2%s) when navigate from $1%s";
+
     public NavigationType setData(Object... data) {
         this.data = data;
         return this;

@@ -22,17 +22,14 @@ public class EventUtils {
         return new MarkerOptions().position(new LatLng(area.getLatitude(), area.getLongitude())).title(event.getType()).zIndex(event.getSeverity());
     }
 
-    public static String getTimeAgo(Date eventDate) throws ParseException {
+    public static String getTimeAgo(Date eventDate) {
 
         Calendar calendar = Calendar.getInstance();
         Calendar current = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd H:mm:ss");
-        //simpleDateFormat.setTimeZone(calendar.getTimeZone());
-        String localStringDate = simpleDateFormat.format(eventDate);
-        Date localDate = simpleDateFormat.parse(localStringDate);
-        calendar.setTime(localDate);
 
-        long diffInMilliSec = current.getTime().getTime() - localDate.getTime();
+        calendar.setTime(eventDate);
+
+        long diffInMilliSec = current.getTimeInMillis() - eventDate.getTime();
         long diffSeconds = TimeUnit.MILLISECONDS.toSeconds(diffInMilliSec);
         if (diffSeconds < 60) {
             return "now";

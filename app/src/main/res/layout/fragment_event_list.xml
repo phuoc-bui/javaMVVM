@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:binding="http://schemas.android.com/tools">
     <data>
         <variable
             name="viewModel"
@@ -15,14 +16,23 @@
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            binding:onRefresh="@{viewModel.onRefresh}">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/listEventIcon"
+                android:id="@+id/rv_events"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                binding:data="@{viewModel.eventItemViewModelList}"/>
         </android.support.v4.widget.SwipeRefreshLayout >
 
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="18sp"
+            android:visibility="@{viewModel.eventItemViewModelList.get().size() == 0}"
+            android:text="@string/no_data_to_display"/>
     </RelativeLayout>
 </layout>

@@ -1,6 +1,5 @@
 package com.redhelmet.alert2me.ui.base;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.PackageManager;
@@ -17,14 +16,22 @@ import com.redhelmet.alert2me.ViewModelFactory;
 import com.redhelmet.alert2me.domain.ExceptionHandler;
 import com.redhelmet.alert2me.util.PermissionUtils;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 /**
  * Created by inbox on 27/11/17.
  */
 
 public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDataBinding> extends AppCompatActivity {
 
+    public static final String BUNDLE_EXTRA = "BUNDLE_EXTRA";
+
     protected VM viewModel;
     protected VDB binder;
+
+    private Bundle bundle;
+
+    protected CompositeDisposable disposeBag = new CompositeDisposable();
 
     @LayoutRes
     protected abstract int getLayoutId();
@@ -50,6 +57,7 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
                 onNavigationEvent(event.getContentIfNotHandled());
             }
         });
+        bundle = getIntent().getBundleExtra(BUNDLE_EXTRA);
     }
 
     /**
@@ -60,6 +68,10 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
      */
     protected void onNavigationEvent(NavigationType type) {
         type.navigation(this);
+    }
+
+    protected Bundle getBundle() {
+        return bundle;
     }
 
     @Override
@@ -75,7 +87,7 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     }
 
     public boolean isPermissionGranted(String[] grantPermissions, int[] grantResults,
-                                String permission) {
+                                       String permission) {
         return PermissionUtils.isPermissionGranted(grantPermissions, grantResults, permission);
     }
 
@@ -83,5 +95,11 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     public void requestPermissionsSafe(String[] permissions, int requestCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             requestPermissions(permissions, requestCode);
+    }
+
+    @Override
+    protected void onDestroy() {
+        disposeBag.dispose();
+        super.onDestroy();
     }
 }

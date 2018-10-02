@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.MenuItem;
@@ -31,6 +30,7 @@ import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.Section;
 import com.redhelmet.alert2me.domain.util.DetailSectionBuilder;
+import com.redhelmet.alert2me.ui.base.BaseActivity;
 import com.redhelmet.alert2me.ui.home.HomeActivity;
 import com.redhelmet.alert2me.util.EventUtils;
 import com.redhelmet.alert2me.util.IconUtils;
@@ -42,9 +42,9 @@ import java.util.Date;
 import java.util.List;
 
 
-public class EventDetailsActivity extends AppCompatActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
+public class EventDetailsActivity extends BaseActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
 
-    private static final String EVENT_EXTRA = "event";
+    private static final String EVENT_EXTRA = "EVENT_EXTRA";
 
     Toolbar toolbar;
     Event event;
@@ -56,8 +56,25 @@ public class EventDetailsActivity extends AppCompatActivity implements GoogleMap
 
     public static Intent newInstance(Context context, Event event) {
         Intent intent = new Intent(context, EventDetailsActivity.class);
-        intent.putExtra(EVENT_EXTRA, event);
+        Bundle bundle = createDataBundle(event);
+        intent.putExtra(BUNDLE_EXTRA, bundle);
         return intent;
+    }
+
+    public static Bundle createDataBundle(Event event) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(EVENT_EXTRA, event);
+        return bundle;
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return 0;
+    }
+
+    @Override
+    protected Class obtainViewModel() {
+        return null;
     }
 
     @Override
@@ -65,10 +82,9 @@ public class EventDetailsActivity extends AppCompatActivity implements GoogleMap
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_event_detail);
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) { //edit mode
+        if (getBundle() != null) { //edit mode
 
-            event = (Event) extras.get("event");
+            event = (Event) getBundle().get("event");
         }
 
         initializeToolbar();

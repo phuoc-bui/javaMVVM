@@ -18,9 +18,13 @@ import com.redhelmet.alert2me.BR;
 import com.redhelmet.alert2me.ViewModelFactory;
 import com.redhelmet.alert2me.domain.ExceptionHandler;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDataBinding> extends Fragment{
     protected VM viewModel;
     protected VDB binder;
+
+    protected CompositeDisposable disposeBag = new CompositeDisposable();
 
     @LayoutRes
     protected abstract int getLayoutId();
@@ -68,5 +72,11 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
 
     public BaseActivity getBaseActivity() {
         return activity;
+    }
+
+    @Override
+    public void onDestroy() {
+        disposeBag.dispose();
+        super.onDestroy();
     }
 }
