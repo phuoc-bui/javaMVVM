@@ -34,6 +34,7 @@ public class Event implements Serializable{
     private String temporal;
     private boolean alwaysOn;
     private boolean showOn;
+    private Geometry geometry;
 
     public Double getDistanceTo() {
         return distanceTo;
@@ -263,5 +264,13 @@ public class Event implements Serializable{
     }
     public boolean isShowOn(){
         return this.showOn;
+    }
+
+    public Geometry getGeometry() {
+        return geometry;
+    }
+
+    public void setGeometry(Geometry geometry) {
+        this.geometry = geometry;
     }
 }
