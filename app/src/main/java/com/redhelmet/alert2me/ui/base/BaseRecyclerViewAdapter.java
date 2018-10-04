@@ -103,6 +103,7 @@ public abstract class BaseRecyclerViewAdapter<IVM> extends RecyclerView.Adapter<
 
         public ItemViewHolder(@NonNull ViewDataBinding binder) {
             super(binder.getRoot());
+            this.binder = binder;
         }
 
         public IVM getViewModel() {

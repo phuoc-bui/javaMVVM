@@ -37,9 +37,4 @@ public class Area implements Model {
     public void setLocation(String location) {
         this.location = location;
     }
-
-    @Override
-    public long getId() {
-        return 0;
-    }
 }

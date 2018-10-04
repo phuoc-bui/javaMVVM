@@ -17,9 +17,12 @@ public class Category implements Model {
     private List<CategoryType> types;
     private List<CategoryStatus> statuses;
 
-    @Override
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getCategory() {

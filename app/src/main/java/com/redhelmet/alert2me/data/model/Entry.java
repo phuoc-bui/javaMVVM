@@ -28,9 +28,4 @@ public class Entry implements Model {
     public void setLink(String link) {
         this.link = link;
     }
-
-    @Override
-    public long getId() {
-        return 0;
-    }
 }

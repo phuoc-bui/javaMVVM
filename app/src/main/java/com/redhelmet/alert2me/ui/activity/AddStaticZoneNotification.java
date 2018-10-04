@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -70,32 +69,34 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
     ListView exCustom;
     Button defaultBtn, customBtn;
     DBController dbController;
-    public ArrayList <Category> category_data = new ArrayList < Category > ();
-    public ArrayList <CategoryType> types_data = new ArrayList < CategoryType > ();
-    public ArrayList <CategoryStatus> statuses_data = new ArrayList < CategoryStatus > ();
-    public ArrayList <EventGroup> default_data = new ArrayList < EventGroup > ();
+    public ArrayList<Category> category_data = new ArrayList<Category>();
+    public ArrayList<CategoryType> types_data = new ArrayList<CategoryType>();
+    public ArrayList<CategoryStatus> statuses_data = new ArrayList<CategoryStatus>();
+    public ArrayList<EventGroup> default_data = new ArrayList<EventGroup>();
 
-    Category cat;
-    EventGroup defaultGroup;
-    public String apiURL,mobilewzApiURL;
+    public List<Category> originCategories;
+    public List<EventGroup> originEventGroups;
+
+    public String apiURL, mobilewzApiURL;
     public boolean editMode = false;
     EditWatchZones editWatchZones = null;
     EditWatchZones editMobileWatchZone = null;
-    ArrayList < EditWatchZones > wzData;
+    ArrayList<EditWatchZones> wzData;
     public int position = 0;
     public boolean mobile_wz = false;
     String _ringtoneURI = "";
     int sliderValue = 0;
     List<String> _dbCategories;
     TextView txtHeader, txtSubHeader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_static_wz_notification);
-        dbController = new DBController(getApplicationContext());
-        _dbCategories=new ArrayList<>();
-        _dbCategories=dbController.getCategoriesNames();
+//        dbController = DBController.getInstance(this);
+        _dbCategories = new ArrayList<>();
+        _dbCategories = dbController.getCategoriesNames();
         apiURL = BuildConfig.API_ENDPOINT + "apiInfo/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones";
         mobilewzApiURL = BuildConfig.API_ENDPOINT + "apiInfo/" + PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity";
         getWZData();
@@ -105,8 +106,6 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
 
 
         initializeControls();
-
-
 
 
     }
@@ -120,10 +119,10 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
 
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-            if(mobile_wz)
+            if (mobile_wz)
                 supportActionBar.setTitle(getString(R.string.lbl_mobileWZ));
-                else
-            supportActionBar.setTitle(getString(R.string.lbl_addStaticWZ));
+            else
+                supportActionBar.setTitle(getString(R.string.lbl_addStaticWZ));
         }
     }
 
@@ -138,15 +137,14 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
             editMode = extras.getBoolean("edit");
             sliderValue = extras.getInt("mobileRadius");
             _ringtoneURI = extras.getString("mobileSound");
-            if(mobile_wz) {
+            if (mobile_wz) {
 
                 editMobileWatchZone = (EditWatchZones) extras.getSerializable("mobileWZ");
                 extras.remove("mobileWZ");
                 if (editMobileWatchZone != null)
-                    Log.d("mobileWZ",editMobileWatchZone.toString());
-            }
-            else {
-                editWatchZones =  EditWatchZones.getInstance();
+                    Log.d("mobileWZ", editMobileWatchZone.toString());
+            } else {
+                editWatchZones = EditWatchZones.getInstance();
                 wzData = editWatchZones.getEditWz();
             }
         }
@@ -154,15 +152,14 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
 
     public void initializeControls() {
 
-        cat = Category.getInstance();
-        defaultGroup = EventGroup.getInstance();
+        originCategories = dataManager.getCategoriesSync();
 
         defaultBtn = (Button) findViewById(R.id.defaultBtn);
         customBtn = (Button) findViewById(R.id.customBtn);
         notificationView = (ViewSwitcher) findViewById(R.id.notification_switcher);
         customView = (RelativeLayout) findViewById(R.id.custom_view);
         defaultView = (RelativeLayout) findViewById(R.id.default_view);
-        addWz_layout=(RelativeLayout)findViewById(R.id.addWz_layout);
+        addWz_layout = (RelativeLayout) findViewById(R.id.addWz_layout);
         defaultBtn.setOnClickListener(this);
         customBtn.setOnClickListener(this);
         txtHeader = (TextView) findViewById(R.id.staticHeader);
@@ -173,56 +170,52 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
         SetdefaultView();
 
 
-        if(wzData != null) {
+        if (wzData != null) {
             Log.e("No tnull", "ITs not null");
-        }
-        else {
+        } else {
             Log.e("No tnull", "ITs  null");
 
             return;
         }
 
-    if (editMode) {
+        if (editMode) {
 
-        getWZData();
-        boolean isDefault = false;
-        List<Integer> filterId = new ArrayList<>();
-        if (mobile_wz) {
-            if (editMobileWatchZone.isWzDefault()) {
-                isDefault = true;
+            getWZData();
+            boolean isDefault = false;
+            List<Integer> filterId = new ArrayList<>();
+            if (mobile_wz) {
+                if (editMobileWatchZone.isWzDefault()) {
+                    isDefault = true;
+                }
+
+            } else {
+                if (wzData.get(position).isWzDefault()) {
+                    isDefault = true;
+
+                }
             }
-
+            if (isDefault) {
+                simplifyDefaultData(dbController.getDefaultDataWz(), false); //Edit mode
+            } else {
+                customView();
+            }
         } else {
-            if (wzData.get(position).isWzDefault()) {
-                isDefault = true;
-
-            }
+            simplifyDefaultData(dbController.getDefaultDataWz(), true); //Defaultvalue mode
         }
-        if(isDefault) {
-            simplifyDefaultData(dbController.getDefaultDataWz(),false); //Edit mode
-        }
-        else {
-            customView();
-        }
-    }
-    else {
-        simplifyDefaultData(dbController.getDefaultDataWz(),true); //Defaultvalue mode
-    }
 
-    adapter = new DefaultNotificationAdapter(AddStaticZoneNotification.this, default_data);
-    exDefault.setAdapter(adapter);
-    adapter.notifyDataSetChanged();
-    exCustom = (ListView) findViewById(R.id.customCatList);
+        adapter = new DefaultNotificationAdapter(AddStaticZoneNotification.this, default_data);
+        exDefault.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        exCustom = (ListView) findViewById(R.id.customCatList);
 
-    simplifyData(dbController.getCustomCatName(1));
-    mAdapter = new CustomNotificationCategoryAdapter(AddStaticZoneNotification.this, category_data);
-    exCustom.setAdapter(mAdapter);
-
+        simplifyData(dbController.getCustomCatName(1));
+        mAdapter = new CustomNotificationCategoryAdapter(AddStaticZoneNotification.this, category_data);
+        exCustom.setAdapter(mAdapter);
 
 
         exCustom.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView < ? > parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 i = new Intent(getApplicationContext(), AddStaticZoneNotificationTypes.class);
                 i.putExtra("catId", position);
@@ -232,30 +225,29 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
         });
     }
 
-    private void simplifyDefaultData(ArrayList < HashMap > defaultDataWz,boolean overrideCustomSetting) {
+    private void simplifyDefaultData(ArrayList<HashMap> defaultDataWz, boolean overrideCustomSetting) {
 
-        default_data = new ArrayList < EventGroup > ();
+        default_data = new ArrayList<EventGroup>();
 
-        if(overrideCustomSetting) {
+        if (overrideCustomSetting) {
             //Default mode
 
-                for (int i = 0; i < defaultDataWz.size(); i++) {
-                    HashMap < String, String > data = defaultDataWz.get(i);
-                    EventGroup defaultGroup = new EventGroup();
-                    defaultGroup.setId(Integer.parseInt(data.get(DBController.KEY_DEFAULT_CATEGORY_ID)));
-                    defaultGroup.setName(data.get(DBController.KEY_DEFAULT_CATEGORY_NAME));
-                    defaultGroup.setDescription(data.get(DBController.KEY_DEFAULT_CATEGORY_DESC));
-                    defaultGroup.setDisplayOn(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_DISPLAY_ON)));
-                    defaultGroup.setDisplayToggle(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_DISPLAY_TOGGLE)));
-                    defaultGroup.setDisplayOnly(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_DISPLAY_ONLY)));
-                    defaultGroup.setFilterOn(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_FILTER_ON)));
-                    defaultGroup.setFilterToggle(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_FILTER_TOGGLE)));
-                    default_data.add(defaultGroup);
-                }
+            for (int i = 0; i < defaultDataWz.size(); i++) {
+                HashMap<String, String> data = defaultDataWz.get(i);
+                EventGroup defaultGroup = new EventGroup();
+                defaultGroup.setId(Integer.parseInt(data.get(DBController.KEY_DEFAULT_CATEGORY_ID)));
+                defaultGroup.setName(data.get(DBController.KEY_DEFAULT_CATEGORY_NAME));
+                defaultGroup.setDescription(data.get(DBController.KEY_DEFAULT_CATEGORY_DESC));
+                defaultGroup.setDisplayOn(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_DISPLAY_ON)));
+                defaultGroup.setDisplayToggle(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_DISPLAY_TOGGLE)));
+                defaultGroup.setDisplayOnly(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_DISPLAY_ONLY)));
+                defaultGroup.setFilterOn(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_FILTER_ON)));
+                defaultGroup.setFilterToggle(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_FILTER_TOGGLE)));
+                default_data.add(defaultGroup);
+            }
 
 
-        }
-        else {
+        } else {
 
             //EDit  mode
 
@@ -270,56 +262,55 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                         filterId = wzData.get(position).getWatchzoneFilterGroupId();
                     }
                 }
-                    for (int i = 0; i < defaultDataWz.size(); i++) {
+                for (int i = 0; i < defaultDataWz.size(); i++) {
 
-                        HashMap<String, String> data = defaultDataWz.get(i);
-                        EventGroup defaultGroup = new EventGroup();
-                        defaultGroup.setId(Integer.parseInt(data.get(DBController.KEY_DEFAULT_CATEGORY_ID)));
-                        defaultGroup.setName(data.get(DBController.KEY_DEFAULT_CATEGORY_NAME));
-                        defaultGroup.setDescription(data.get(DBController.KEY_DEFAULT_CATEGORY_DESC));
-                        defaultGroup.setDisplayOn(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_DISPLAY_ON)));
-                        defaultGroup.setDisplayToggle(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_DISPLAY_TOGGLE)));
-                        defaultGroup.setDisplayOnly(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_DISPLAY_ONLY)));
-                        for (int f = 0; f < filterId.size(); f++) {
-                            if (filterId.get(f).toString().equalsIgnoreCase(data.get(DBController.KEY_DEFAULT_CATEGORY_ID).toString())) {
-                                defaultGroup.setFilterOn(true);
-                                break;
-                            } else {
-                                defaultGroup.setFilterOn(false);
-                            }
+                    HashMap<String, String> data = defaultDataWz.get(i);
+                    EventGroup defaultGroup = new EventGroup();
+                    defaultGroup.setId(Integer.parseInt(data.get(DBController.KEY_DEFAULT_CATEGORY_ID)));
+                    defaultGroup.setName(data.get(DBController.KEY_DEFAULT_CATEGORY_NAME));
+                    defaultGroup.setDescription(data.get(DBController.KEY_DEFAULT_CATEGORY_DESC));
+                    defaultGroup.setDisplayOn(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_DISPLAY_ON)));
+                    defaultGroup.setDisplayToggle(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_DISPLAY_TOGGLE)));
+                    defaultGroup.setDisplayOnly(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_DISPLAY_ONLY)));
+                    for (int f = 0; f < filterId.size(); f++) {
+                        if (filterId.get(f).toString().equalsIgnoreCase(data.get(DBController.KEY_DEFAULT_CATEGORY_ID).toString())) {
+                            defaultGroup.setFilterOn(true);
+                            break;
+                        } else {
+                            defaultGroup.setFilterOn(false);
                         }
-                        defaultGroup.setFilterToggle(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_FILTER_TOGGLE)));
-                        default_data.add(defaultGroup);
                     }
+                    defaultGroup.setFilterToggle(Boolean.valueOf(data.get(DBController.KEY_DEFAULT_CATEGORY_FILTER_TOGGLE)));
+                    default_data.add(defaultGroup);
                 }
             }
+        }
     }
 
     private void simplifyData(ArrayList[] data) {
 
-        ArrayList < HashMap > categories = new ArrayList < HashMap > ();
-        ArrayList < HashMap > types = new ArrayList < HashMap > ();
-        ArrayList < HashMap > statuses = new ArrayList < HashMap > ();
+        ArrayList<HashMap> categories = new ArrayList<HashMap>();
+        ArrayList<HashMap> types = new ArrayList<HashMap>();
+        ArrayList<HashMap> statuses = new ArrayList<HashMap>();
 
-        HashMap < String, String > hash_categories = new HashMap < > ();
-        HashMap < String, String > hash_types = new HashMap < > ();
-        HashMap < String, String > hash_status = new HashMap < > ();
+        HashMap<String, String> hash_categories = new HashMap<>();
+        HashMap<String, String> hash_types = new HashMap<>();
+        HashMap<String, String> hash_status = new HashMap<>();
 
-        categories = (ArrayList < HashMap > ) data[0];
-        types = (ArrayList < HashMap > ) data[1];
-        statuses = (ArrayList < HashMap > ) data[2];
+        categories = (ArrayList<HashMap>) data[0];
+        types = (ArrayList<HashMap>) data[1];
+        statuses = (ArrayList<HashMap>) data[2];
 
         if (editMode) {
-
 
 
             for (int i = 0; i < categories.size(); i++) {
                 Category category = new Category();
                 hash_categories = categories.get(i);
-                types_data = new ArrayList < CategoryType > ();
+                types_data = new ArrayList<CategoryType>();
 
                 for (int t = 0; t < types.size(); t++) {
-                    statuses_data = new ArrayList < CategoryStatus > ();
+                    statuses_data = new ArrayList<CategoryStatus>();
                     hash_types = types.get(t);
                     boolean typeValue = false;
 
@@ -381,61 +372,55 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
 
                 category_data.add(category);
             }
+            originCategories = category_data;
 
-            cat.setCategoryArray(category_data);
-
-
-
-                category_data = new ArrayList < Category > ();
+            category_data = new ArrayList<Category>();
             ArrayList<HashMap<String, CategoryFilter>> groupData;
-            if(mobile_wz) {
+            if (mobile_wz) {
                 groupData = editMobileWatchZone.getWatchzoneFilter();
-            }
-            else {
+            } else {
                 groupData = wzData.get(position).getWatchzoneFilter();
-                Log.d("DAta",groupData.toString() );
+                Log.d("DAta", groupData.toString());
             }
 
-//                ArrayList < Category > c = cat.getCategoryArray();
-                JSONArray categoryArray = new JSONArray();
-                JSONArray typeArray = new JSONArray();
-                 int count=0;
+            JSONArray categoryArray = new JSONArray();
+            JSONArray typeArray = new JSONArray();
+            int count = 0;
 
 
-                for (Category catData: cat.getCategoryArray()) {
-                    for (int j = 0; j < groupData.size(); j++) {
-                        HashMap<String, CategoryFilter> tempData = (HashMap<String, CategoryFilter>) groupData.get(j);
+            for (Category catData : originCategories) {
+                for (int j = 0; j < groupData.size(); j++) {
+                    HashMap<String, CategoryFilter> tempData = (HashMap<String, CategoryFilter>) groupData.get(j);
 
-                        if (tempData.keySet().toArray()[0].equals(catData.getCategory())) {
+                    if (tempData.keySet().toArray()[0].equals(catData.getCategory())) {
 
-                            CategoryFilter catFilter = tempData.get(catData.getCategory());
-                            for (CategoryType catType : catData.getTypes()) {
-                                count = 0;
-                                for (int ct = 0; ct < catFilter.getTypes().size(); ct++) {
+                        CategoryFilter catFilter = tempData.get(catData.getCategory());
+                        for (CategoryType catType : catData.getTypes()) {
+                            count = 0;
+                            for (int ct = 0; ct < catFilter.getTypes().size(); ct++) {
 
-                                    if (catType.getCode().equalsIgnoreCase(catFilter.getTypes().get(ct).getCode())) {
+                                if (catType.getCode().equalsIgnoreCase(catFilter.getTypes().get(ct).getCode())) {
 
 
-                                        for (CategoryStatus catStatus : catType.getStatuses()) {
-                                            for (int i = 0; i < catFilter.getTypes().get(ct).getStatus().size(); i++) {
-                                                if (catFilter.getTypes().get(ct).getStatus().get(i).toString().equalsIgnoreCase(catStatus.getCode())) {
-                                                    catStatus.setNotificationDefaultOn(true);
-                                                    count++;
-                                                }
+                                    for (CategoryStatus catStatus : catType.getStatuses()) {
+                                        for (int i = 0; i < catFilter.getTypes().get(ct).getStatus().size(); i++) {
+                                            if (catFilter.getTypes().get(ct).getStatus().get(i).toString().equalsIgnoreCase(catStatus.getCode())) {
+                                                catStatus.setNotificationDefaultOn(true);
+                                                count++;
                                             }
                                         }
-                                        if (count > 0)
-                                            catType.setNotificationDefaultOn(true);
-
                                     }
+                                    if (count > 0)
+                                        catType.setNotificationDefaultOn(true);
+
                                 }
                             }
                         }
                     }
-                    category_data.add(catData);
                 }
-
-            cat.setCategoryArray(category_data);
+                category_data.add(catData);
+            }
+            originCategories = category_data;
         } else {
 
             // normal
@@ -444,10 +429,10 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
             for (int i = 0; i < categories.size(); i++) {
                 Category category = new Category();
                 hash_categories = categories.get(i);
-                types_data = new ArrayList < CategoryType > ();
+                types_data = new ArrayList<CategoryType>();
 
                 for (int t = 0; t < types.size(); t++) {
-                    statuses_data = new ArrayList < CategoryStatus > ();
+                    statuses_data = new ArrayList<CategoryStatus>();
                     hash_types = types.get(t);
                     boolean typeValue = false;
 
@@ -505,16 +490,15 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
 
                 category_data.add(category);
             }
-
-            cat.setCategoryArray(category_data);
+            originCategories = category_data;
         }
 
 
     }
 
-    public static int getKeyFromValue(List < CategoryType > hm, String value) {
+    public static int getKeyFromValue(List<CategoryType> hm, String value) {
         int count = 0;
-        for (CategoryType ct: hm) {
+        for (CategoryType ct : hm) {
 
             if (ct.getCode().toString().equalsIgnoreCase(value.toString())) {
                 Log.e("CAT", ct.getCode() + " | " + count);
@@ -526,9 +510,9 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
         return -1;
     }
 
-    public static int getKeyFromValueStatus(List < CategoryStatus > hm, String value) {
+    public static int getKeyFromValueStatus(List<CategoryStatus> hm, String value) {
         int count = 0;
-        for (CategoryStatus ct: hm) {
+        for (CategoryStatus ct : hm) {
 
             if (ct.getCode().toString().equalsIgnoreCase(value.toString())) {
                 Log.e("1", ct.getCode() + " | " + count);
@@ -539,6 +523,7 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
         }
         return -1;
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -551,7 +536,7 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.done_btn:
-                if(editMode && !mobile_wz){
+                if (editMode && !mobile_wz) {
                     if (notificationView.getCurrentView() == defaultView) {
                         //default
                         editModeNotificationSave(true);
@@ -563,10 +548,9 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                     }
 
 
-                }
-                else if(editMode && mobile_wz){
+                } else if (editMode && mobile_wz) {
 
-                    showSnack(addWz_layout,getString(R.string.msg_upatingWZ));
+                    showSnack(addWz_layout, getString(R.string.msg_upatingWZ));
 
                     if (notificationView.getCurrentView() == defaultView) {
                         //default
@@ -576,9 +560,8 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                         //custom
                         sendProximity(false, true);
                     }
-                }
-                else {
-                    showSnack(addWz_layout,getString(R.string.msg_creatingWZ));
+                } else {
+                    showSnack(addWz_layout, getString(R.string.msg_creatingWZ));
 
                     if (notificationView.getCurrentView() == defaultView) {
                         //default
@@ -646,7 +629,7 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         defaultView();
-                        simplifyDefaultData(dbController.getDefaultDataWz(),true);
+                        simplifyDefaultData(dbController.getDefaultDataWz(), true);
                         adapter = new DefaultNotificationAdapter(AddStaticZoneNotification.this, default_data);
                         exDefault.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
@@ -662,16 +645,16 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                 .show();
     }
 
-    private void purifyWz(JSONObject response,boolean mobileWZ) {
+    private void purifyWz(JSONObject response, boolean mobileWZ) {
 
-        if(mobileWZ) {
-            ArrayList<EditWatchZones>  arryMobileWZ = new ArrayList<EditWatchZones>();
+        if (mobileWZ) {
+            ArrayList<EditWatchZones> arryMobileWZ = new ArrayList<EditWatchZones>();
 
             try {
-                JSONArray wz= response.getJSONArray("watchzones");
-                if(wz.length()>0){
+                JSONArray wz = response.getJSONArray("watchzones");
+                if (wz.length() > 0) {
 
-                    for(int i=0;i<wz.length();i++) {
+                    for (int i = 0; i < wz.length(); i++) {
                         JSONObject data = (JSONObject) wz.get(i);
 
 
@@ -692,17 +675,15 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                         //=== GROUP ID's FILTER
 
 
+                        List<Integer> wzFilterGroup = new ArrayList<>();
+                        JSONArray filterGroup = new JSONArray(data.get("filterGroupId").toString());
 
-                        List<Integer> wzFilterGroup=new ArrayList<>();
-                        JSONArray filterGroup =new JSONArray(data.get("filterGroupId").toString());
-
-                        for(int j=0;j<filterGroup.length();j++){
+                        for (int j = 0; j < filterGroup.length(); j++) {
                             wzFilterGroup.add(Integer.parseInt(filterGroup.get(j).toString()));
                         }
 
                         editModel.setWatchzoneFilterGroupId(wzFilterGroup);
                         //=======///
-
 
 
                         //==== FILTER
@@ -720,9 +701,9 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                         for (int j = 0; j < _dbCategories.size(); j++) {
                             for (int f = 0; f < filterObj.length(); f++) {
 
-                                if(filterObj.has(_dbCategories.get(j))) {
+                                if (filterObj.has(_dbCategories.get(j))) {
                                     JSONObject categoryObj = filterObj.getJSONObject(_dbCategories.get(j));
-                                    JSONArray catTypesArr=categoryObj.getJSONArray("types");
+                                    JSONArray catTypesArr = categoryObj.getJSONArray("types");
 
                                     HashMap<String, CategoryFilter> hash = new HashMap<String, CategoryFilter>();
                                     filterData = new ArrayList<CategoryTypeFilter>();
@@ -764,13 +745,13 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                         editModel.setWatchZoneShareCode(data.getString("shareCode"));
 
 
-                        JSONArray geo=new JSONArray();
+                        JSONArray geo = new JSONArray();
                         geo.put(data.get("geometry"));
-                        JSONObject g=  geo.getJSONObject(0);
+                        JSONObject g = geo.getJSONObject(0);
 
-                        JSONArray geoArr=new JSONArray(g.get("coordinates").toString());
+                        JSONArray geoArr = new JSONArray(g.get("coordinates").toString());
                         ArrayList<HashMap<String, Double>> cordinates = new ArrayList<HashMap<String, Double>>();
-                        if(g.get("type").toString().equals("Point")) {
+                        if (g.get("type").toString().equals("Point")) {
 
 
                             HashMap<String, Double> hashLoc = new HashMap<>();
@@ -779,11 +760,11 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                             cordinates.add(hashLoc);
 
 
-                        }else{
-                            JSONArray geoArrIn=geoArr.getJSONArray(0);
+                        } else {
+                            JSONArray geoArrIn = geoArr.getJSONArray(0);
                             for (int k = 0; k < geoArrIn.length(); k++) {
 
-                                JSONArray geoA=geoArrIn.getJSONArray(k);
+                                JSONArray geoA = geoArrIn.getJSONArray(k);
                                 HashMap<String, Double> hashLoc = new HashMap<>();
                                 hashLoc.put("latitude", Double.parseDouble(geoA.get(0).toString()));
                                 hashLoc.put("longitude", Double.parseDouble(geoA.get(1).toString()));
@@ -793,18 +774,18 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                         geomModel.setCordinate(cordinates);
                         geomModel.setType(g.get("type").toString());
 
-                            editModel.setWatchZoneGeoms(geomModel);
-                             arryMobileWZ.add(editModel);
+                        editModel.setWatchZoneGeoms(geomModel);
+                        arryMobileWZ.add(editModel);
 
-                            Gson gson = new Gson();
+                        Gson gson = new Gson();
 
 
-                            PreferenceUtils.saveToPrefs(getApplicationContext(), Constants.KEY_VALUE_PROXIMITY_DATA,gson.toJson(arryMobileWZ));
+                        PreferenceUtils.saveToPrefs(getApplicationContext(), Constants.KEY_VALUE_PROXIMITY_DATA, gson.toJson(arryMobileWZ));
 
 
                     }
 
-                    if(mobileWZ) {
+                    if (mobileWZ) {
                         changeText("Mobile Watch Zones updated successfully.");
                         //getMobileWZData();
                     }
@@ -819,9 +800,10 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
         }
 
     }
+
     public void sendProximity(boolean state, final boolean enable) {
 
-        if(!Utility.isInternetConnected(getApplicationContext())) {
+        if (!Utility.isInternetConnected(getApplicationContext())) {
             Toast.makeText(getApplicationContext(), getString(R.string.noInternet), Toast.LENGTH_LONG).show();
             return;
         }
@@ -838,53 +820,53 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
         mParams.put("latitude", (String) PreferenceUtils.getFromPrefs(getApplicationContext(), Constants.KEY_USERLATITUDE, " "));
         mParams.put("longitude", (String) PreferenceUtils.getFromPrefs(getApplicationContext(), Constants.KEY_USERLONGITUDE, " "));
 
-        ArrayList<String> defValues= new ArrayList<String>();
-try {
-        if (mobile_wz) {
-            if (state) // default
-            {
+        ArrayList<String> defValues = new ArrayList<String>();
+        try {
+            if (mobile_wz) {
+                if (state) // default
+                {
 
-                for (int i = 0; i < default_data.size(); i++) {
-                    EventGroup ev = new EventGroup();
-                    ev = default_data.get(i);
-                    if (ev.isFilterOn()) {
-                        defValues.add(String.valueOf(ev.getId()));
-                    }
-                }
-
-                mParams.put("filterGroupId", defValues);
-                mParams.put("filter", new ArrayList<String>());
-            } else {
-
-                //Custom
-                LinkedTreeMap<String, Object> categoryFilters = new LinkedTreeMap<>();
-                for (Category catData : cat.getCategoryArray()) {
-                    JSONObject category = new JSONObject();
-                    JSONArray typeArray = new JSONArray();
-
-                    for (CategoryType catType : catData.getTypes()) {
-                        JSONObject type = new JSONObject();
-                        JSONArray status = new JSONArray();
-
-                        for (CategoryStatus catStatus : catType.getStatuses()) {
-                            if (catStatus.isNotificationDefaultOn()) {
-                                status.put(catStatus.getCode());
-                            }
+                    for (int i = 0; i < default_data.size(); i++) {
+                        EventGroup ev = new EventGroup();
+                        ev = default_data.get(i);
+                        if (ev.isFilterOn()) {
+                            defValues.add(String.valueOf(ev.getId()));
                         }
-                        type.put("code", catType.getCode());
-                        type.put("status", status);
-                        typeArray.put(type);
                     }
-                    category.put("types", typeArray);
-                    categoryFilters.put(catData.getCategory(), category);
+
+                    mParams.put("filterGroupId", defValues);
+                    mParams.put("filter", new ArrayList<String>());
+                } else {
+
+                    //Custom
+                    LinkedTreeMap<String, Object> categoryFilters = new LinkedTreeMap<>();
+                    for (Category catData : originCategories) {
+                        JSONObject category = new JSONObject();
+                        JSONArray typeArray = new JSONArray();
+
+                        for (CategoryType catType : catData.getTypes()) {
+                            JSONObject type = new JSONObject();
+                            JSONArray status = new JSONArray();
+
+                            for (CategoryStatus catStatus : catType.getStatuses()) {
+                                if (catStatus.isNotificationDefaultOn()) {
+                                    status.put(catStatus.getCode());
+                                }
+                            }
+                            type.put("code", catType.getCode());
+                            type.put("status", status);
+                            typeArray.put(type);
+                        }
+                        category.put("types", typeArray);
+                        categoryFilters.put(catData.getCategory(), category);
+                    }
+                    mParams.put("filter", categoryFilters);
+                    mParams.put("filterGroupId", new ArrayList<String>());
+
                 }
-                mParams.put("filter", categoryFilters);
-                mParams.put("filterGroupId", new ArrayList<String>());
 
             }
-
-        }
-    }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -895,7 +877,7 @@ try {
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, mobilewzApiURL, new JSONObject(mParams),
-                new Response.Listener < JSONObject > () {
+                new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
@@ -906,7 +888,7 @@ try {
 
                                     Log.e("EA", response.toString());
                                     purifyWz(response, true);
-                                    PreferenceUtils.saveToPrefs(getApplicationContext(),Constants.KEY_VALUE_ENABLEPROXI,enable);
+                                    PreferenceUtils.saveToPrefs(getApplicationContext(), Constants.KEY_VALUE_ENABLEPROXI, enable);
 
                                     finish();
                                 }
@@ -942,11 +924,6 @@ try {
         };
 
 
-
-
-
-
-
         jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
@@ -956,20 +933,19 @@ try {
     }
 
 
-
     public void saveDataToserver(boolean state) {
-        if(!Utility.isInternetConnected(getApplicationContext())) {
+        if (!Utility.isInternetConnected(getApplicationContext())) {
             Toast.makeText(getApplicationContext(), getString(R.string.noInternet), Toast.LENGTH_LONG).show();
             return;
         }
 
 
-        HashMap<String, Object> mParams = new HashMap < String, Object> ();
+        HashMap<String, Object> mParams = new HashMap<String, Object>();
 
         Gson gson = new Gson();
         String json = (String) PreferenceUtils.getFromPrefs(getApplicationContext(), "wzLocation", " ");
         JSONObject obj = gson.fromJson(json, JSONObject.class);
-        ArrayList<String> defValues= new ArrayList<String>();
+        ArrayList<String> defValues = new ArrayList<String>();
 
         try {
             mParams.put("geom", obj.getString("geom"));
@@ -999,7 +975,7 @@ try {
             } else {
 
                 LinkedTreeMap<String, Object> categoryFilters = new LinkedTreeMap<>();
-                for (Category catData : cat.getCategoryArray()) {
+                for (Category catData : originCategories) {
                     JSONObject category = new JSONObject();
                     JSONArray typeArray = new JSONArray();
 
@@ -1022,30 +998,29 @@ try {
                 mParams.put("filter", categoryFilters);
                 mParams.put("filterGroupId", new ArrayList<String>());
 
-          }
+            }
 
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         // ===========SERVER CALL  http://192.168.0.10:4203/wz/index.php
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, apiURL, new JSONObject(mParams),
-                new Response.Listener < JSONObject > () {
+                new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
 
 
                         try {
-                            String msg =  " ";
+                            String msg = " ";
                             if (Boolean.valueOf(response.getString("success"))) {
 
-                                if(editMode && mobile_wz) {
+                                if (editMode && mobile_wz) {
 
                                     msg = getString(R.string.msg_updatedWZ);
-                                }
-                                else {
+                                } else {
                                     msg = getString(R.string.msg_createdWZ);
                                 }
 
@@ -1059,13 +1034,11 @@ try {
                                 startActivity(o);
 
 
-                            }
-                            else {
-                                if(editMode && mobile_wz) {
+                            } else {
+                                if (editMode && mobile_wz) {
 
-                                    msg = getString(R.string.msg_unableUpdateWZ );
-                                }
-                                else {
+                                    msg = getString(R.string.msg_unableUpdateWZ);
+                                } else {
                                     msg = getString(R.string.msg_unableCreateWZ);
                                 }
                                 changeText(msg);
@@ -1102,17 +1075,11 @@ try {
         };
 
 
-
-
-
-
-
         jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(5000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(jsonObjReq);
     }
-
 
 
     public void defaultView() {
@@ -1126,10 +1093,9 @@ try {
             txtHeader.setText(getText(R.string.lbl_mapLayersDefaultTitle));
             txtSubHeader.setText(getText(R.string.lbl_mapLayersDefaultSubTitle));
 
-            if(mobile_wz) {
+            if (mobile_wz) {
                 txtSubHeader.setText(getText(R.string.lbl_prefilterHeaderDefaultSubTitle) + " " + getText(R.string.lbl_mobileWzDisplayText));
-            }
-            else {
+            } else {
                 txtSubHeader.setText(getText(R.string.lbl_prefilterHeaderDefaultSubTitle) + " " + getText(R.string.lbl_wzDisplayText));
             }
         }
@@ -1157,10 +1123,9 @@ try {
 
         txtHeader.setText(getText(R.string.lbl_prefilterHeaderDefault));
 
-        if(mobile_wz) {
+        if (mobile_wz) {
             txtSubHeader.setText(getText(R.string.lbl_prefilterHeaderDefaultSubTitle) + " " + getText(R.string.lbl_mobileWzDisplayText));
-        }
-        else {
+        } else {
             txtSubHeader.setText(getText(R.string.lbl_prefilterHeaderDefaultSubTitle) + " " + getText(R.string.lbl_wzDisplayText));
         }
 
@@ -1170,8 +1135,8 @@ try {
 
     }
 
-    public void editModeNotificationSave(boolean state){
-        ArrayList<String> defValues= new ArrayList<String>();
+    public void editModeNotificationSave(boolean state) {
+        ArrayList<String> defValues = new ArrayList<String>();
         ArrayList<HashMap<String, CategoryFilter>> categoryFilters = new ArrayList<HashMap<String, CategoryFilter>>();
         if (state) // default
         {
@@ -1188,36 +1153,36 @@ try {
         } else {
 
 
-                ArrayList<CategoryTypeFilter> typeArray=new ArrayList<CategoryTypeFilter>();
-                for (Category catData : cat.getCategoryArray()) {
+            ArrayList<CategoryTypeFilter> typeArray = new ArrayList<CategoryTypeFilter>();
+            for (Category catData : originCategories) {
 
-                    HashMap<String, CategoryFilter> categoryHash=new HashMap<>();
-                    typeArray=new ArrayList<CategoryTypeFilter>();
+                HashMap<String, CategoryFilter> categoryHash = new HashMap<>();
+                typeArray = new ArrayList<CategoryTypeFilter>();
 
-                    for (CategoryType catType : catData.getTypes()) {
+                for (CategoryType catType : catData.getTypes()) {
 
 
-                        List<String> status=new ArrayList<>();
-                        CategoryTypeFilter type=new CategoryTypeFilter();
+                    List<String> status = new ArrayList<>();
+                    CategoryTypeFilter type = new CategoryTypeFilter();
 
-                        for (CategoryStatus catStatus : catType.getStatuses()) {
-                            if (catStatus.isNotificationDefaultOn()) {
-                                status.add(catStatus.getCode());
-                            }
+                    for (CategoryStatus catStatus : catType.getStatuses()) {
+                        if (catStatus.isNotificationDefaultOn()) {
+                            status.add(catStatus.getCode());
                         }
-                        type.setCode(catType.getCode());
-                        type.setStatus(status);
-                        typeArray.add(type);
                     }
-                    CategoryFilter catFilter=new CategoryFilter();
-                    catFilter.setTypes(typeArray);
-
-                    categoryHash.put(catData.getCategory(), catFilter);
-                    categoryFilters.add(categoryHash);
+                    type.setCode(catType.getCode());
+                    type.setStatus(status);
+                    typeArray.add(type);
                 }
+                CategoryFilter catFilter = new CategoryFilter();
+                catFilter.setTypes(typeArray);
 
-          //  editWatchZones.setWatchzoneFilter(categoryFilters);
-           // editWatchZones.setWatchzoneFilterGroupId(new ArrayList<Integer>());
+                categoryHash.put(catData.getCategory(), catFilter);
+                categoryFilters.add(categoryHash);
+            }
+
+            //  editWatchZones.setWatchzoneFilter(categoryFilters);
+            // editWatchZones.setWatchzoneFilterGroupId(new ArrayList<Integer>());
 
         }
 

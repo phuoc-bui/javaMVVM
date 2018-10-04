@@ -31,9 +31,4 @@ public class Section implements Model {
     public void setEntries(List<Entry> entries) {
         this.entries = entries;
     }
-
-    @Override
-    public long getId() {
-        return 0;
-    }
 }

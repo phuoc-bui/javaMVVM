@@ -5,7 +5,7 @@ import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.global.Constant;
 import com.redhelmet.alert2me.global.Event;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
-import com.redhelmet.alert2me.ui.base.NavigationType;
+import com.redhelmet.alert2me.ui.base.NavigationItem;
 import com.redhelmet.alert2me.ui.hint.HintsActivity;
 import com.redhelmet.alert2me.ui.home.HomeActivity;
 import com.redhelmet.alert2me.ui.termsandcondition.TermConditionActivity;
@@ -18,18 +18,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 public class SplashViewModel extends BaseViewModel {
     public SplashViewModel(DataManager dataManager) {
         super(dataManager);
-        isLoading = true;
+        isLoading.set(true);
         disposeBag.add(dataManager.loadConfig()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    isLoading = false;
+                    isLoading.set(false);
                     startTimer();
                 }, error -> {
-                    isLoading = false;
+                    isLoading.set(false);
                     startTimer();
                     navigationEvent.setValue(
-                            new Event<>(NavigationType.SHOW_TOAST.
-                                    setData(R.string.timeOut)));
+                            new Event<>(new NavigationItem(NavigationItem.SHOW_TOAST, R.string.timeOut)));
                 }));
     }
 
@@ -48,7 +47,7 @@ public class SplashViewModel extends BaseViewModel {
                         dest = HintsActivity.class;
                     }
 
-                    navigationEvent.setValue(new Event<>(NavigationType.START_ACTIVITY_AND_FINISH.setData(dest)));
+                    navigationEvent.postValue(new Event<>(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH,dest)));
                 }));
     }
 }

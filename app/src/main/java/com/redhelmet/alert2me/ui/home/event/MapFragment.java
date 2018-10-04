@@ -44,7 +44,6 @@ import com.redhelmet.alert2me.util.EventUtils;
 import com.redhelmet.alert2me.util.IconUtils;
 import com.redhelmet.alert2me.util.PermissionUtils;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +54,6 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
         GoogleMap.OnMyLocationClickListener,
         GoogleMap.OnMyLocationButtonClickListener,
         AutoCompleteLocation.AutoCompleteLocationListener {
-    private static final String VIEW_MODEL_KEY = "viewModel";
     private static final int EVENT_FILTER_REQUEST = 9;
 
     private static final int MAP_TYPE_1 = GoogleMap.MAP_TYPE_NORMAL;
@@ -68,6 +66,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
      */
     private boolean mPermissionDenied = false;
 
+    SupportMapFragment mapFragment;
     private GoogleMap mMapView;
     private ClusterManager<ClusterMarker> clusterManager;
     LocationManager locationManager;
@@ -83,26 +82,8 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
         return EventViewModel.class;
     }
 
-    @Override
-    protected EventViewModel obtainViewModel() {
-        if (getArguments() != null) {
-            Object data = getArguments().getSerializable(VIEW_MODEL_KEY);
-            if (data instanceof EventViewModel) {
-                return (EventViewModel) data;
-            } else {
-                throw new Error("viewModel must is not null");
-            }
-        } else {
-            throw new Error("viewModel must is not null");
-        }
-    }
-
-    public static EventListFragment newInstance(EventViewModel viewModel) {
-        EventListFragment fragment = new EventListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(VIEW_MODEL_KEY, viewModel);
-        fragment.setArguments(bundle);
-        return fragment;
+    public static MapFragment newInstance() {
+        return new MapFragment();
     }
 
     @Nullable
@@ -114,7 +95,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SupportMapFragment mapFragment =
+        mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -124,7 +105,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
 
         tileProviderFactory = new TileProviderFactory();
 
-        disposeBag.add(viewModel.events.asObservable().subscribe(this::processMarker));
+        viewModel.events.observe(this, this::processMarker);
     }
 
     @Override
@@ -140,8 +121,6 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
         setupCluster();
 
         infoWindowClickedForMarkers();
-
-        processMarker(viewModel.events.get());
     }
 
     private void setupCluster() {
@@ -203,14 +182,20 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
                 getBaseActivity().requestPermissionsSafe(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constant.LOCATION_PERMISSION_REQUEST_CODE);
         } else if (mMapView != null) {
             mMapView.setMyLocationEnabled(true);
-            mMapView.getUiSettings().setMyLocationButtonEnabled(false);
             mMapView.setOnMyLocationButtonClickListener(this);
             mMapView.setOnMyLocationClickListener(this);
-            binder.locationMap.setOnClickListener(v -> onMyLocationButtonClick());
+            // Extract My Location View from maps fragment
+            View locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+            // Change the visibility of my location button
+            if (locationButton != null) {
+                locationButton.setVisibility(View.GONE);
+                binder.locationMap.setOnClickListener(v -> locationButton.callOnClick());
+            }
+
             binder.clusterEvents.setOnClickListener(v -> {
-                processMarker(viewModel.events.get());
-                infoWindowClickedForMarkers();
                 v.setSelected(!v.isSelected());
+                processMarker(viewModel.events.getValue());
+                infoWindowClickedForMarkers();
             });
 
             binder.selectedMapType.setOnClickListener(v -> {
@@ -235,6 +220,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
+        Toast.makeText(getContext(), "onMyLocationClick", Toast.LENGTH_SHORT).show();
         PreferenceUtils.saveToPrefs(_context, Constants.KEY_USERLATITUDE, String.valueOf(location.getLatitude()));
         PreferenceUtils.saveToPrefs(_context, Constants.KEY_USERLONGITUDE, String.valueOf(location.getLongitude()));
     }
@@ -255,25 +241,16 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
 
         for (int i = 0; i < events.size(); i++) {
             Event event = events.get(i);
-            if (viewModel.isDefaultFilter()) {
-                if (event.isShowOn()) {
-                    List<Area> areas = event.getArea();
-                    for (int j = 0; j < areas.size(); j++) {
-                        ClusterMarker customMarker = new ClusterMarker(events.get(i), areas.get(j));
-                        clusterManager.addItem(customMarker);
-                    }
-                }
-            } else {
-                List<Area> areas = event.getArea();
-                for (int j = 0; j < areas.size(); j++) {
-                    ClusterMarker customMarker = new ClusterMarker(events.get(i), areas.get(j));
-                    clusterManager.addItem(customMarker);
-                }
+            //TODO: is need check isShowOn?
+            List<Area> areas = event.getArea();
+            for (int j = 0; j < areas.size(); j++) {
+                ClusterMarker customMarker = new ClusterMarker(events.get(i), areas.get(j));
+                clusterManager.addItem(customMarker);
             }
         }
-        float zoom = mMapView.getCameraPosition().zoom;
-        zoom = zoom + 0.1f;
-        mMapView.moveCamera(CameraUpdateFactory.zoomTo(zoom));
+//        float zoom = mMapView.getCameraPosition().zoom;
+//        zoom = zoom + 0.1f;
+//        mMapView.moveCamera(CameraUpdateFactory.zoomTo(zoom));
         clusterManager.cluster();
     }
 
@@ -281,30 +258,16 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
         for (int i = 0; i < events.size(); i++) {
             try {
                 Event event = events.get(i);
-                if (viewModel.isDefaultFilter()) {
-                    if (event.isShowOn()) {
-                        List<Area> areas = event.getArea();
-                        for (int j = 0; j < areas.size(); j++) {
+                //TODO: is need check isShowOn?
+                List<Area> areas = event.getArea();
+                for (int j = 0; j < areas.size(); j++) {
 
-                            MarkerOptions markerOptions = EventUtils.eventToMarker(event, areas.get(j));
+                    MarkerOptions markerOptions = EventUtils.eventToMarker(event, areas.get(j));
 
-                            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(IconUtils.createEventIcon(R.layout.custom_map_layer_icon, event, event.getPrimaryColor(), false, false, ""));
-                            markerOptions.icon(bitmapDescriptor);
-                            Marker marker = mMapView.addMarker(markerOptions);
-                            marker.setTag(event);
-                        }
-                    }
-                } else {
-                    List<Area> areas = event.getArea();
-                    for (int j = 0; j < areas.size(); j++) {
-
-                        MarkerOptions markerOptions = EventUtils.eventToMarker(event, areas.get(j));
-
-                        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(IconUtils.createEventIcon(R.layout.custom_map_layer_icon, event, event.getPrimaryColor(), false, false, ""));
-                        markerOptions.icon(bitmapDescriptor);
-                        Marker marker = mMapView.addMarker(markerOptions);
-                        marker.setTag(event);
-                    }
+                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(IconUtils.createEventIcon(getBaseActivity(), R.layout.custom_map_layer_icon, event, event.getPrimaryColor(), false, false, ""));
+                    markerOptions.icon(bitmapDescriptor);
+                    Marker marker = mMapView.addMarker(markerOptions);
+                    marker.setTag(event);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -400,7 +363,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EVENT_FILTER_REQUEST && resultCode == Activity.RESULT_OK) {
-            processMarker(viewModel.events.get());
+            processMarker(viewModel.events.getValue());
         }
     }
 }

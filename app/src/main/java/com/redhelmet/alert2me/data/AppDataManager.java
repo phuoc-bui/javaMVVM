@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.data;
 
+import android.location.Location;
 import android.util.Log;
 
 import com.redhelmet.alert2me.R;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
 public class AppDataManager implements DataManager {
@@ -37,7 +39,6 @@ public class AppDataManager implements DataManager {
 
     @Override
     public void saveConfig(ConfigResponse config) {
-
         pref.saveAppConfig(config.appConfig);
         database.saveCategories(config.categories);
         database.saveEventGroups(config.eventGroups);
@@ -91,6 +92,16 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
+    public Location getLastUserLocation() {
+        return pref.getLastUserLocation();
+    }
+
+    @Override
+    public void saveUserLocation(Location location) {
+        pref.saveCurrentUserLocation(location);
+    }
+
+    @Override
     public Observable<ProximityLocationResponse> putProximityLocation(double lat, double lng) {
         ProximityLocationRequest request = new ProximityLocationRequest(lat, lng);
         String userId = pref.getDeviceInfo().getUserId();
@@ -119,7 +130,7 @@ public class AppDataManager implements DataManager {
 
     @Override
     public List<Category> getCategoriesSync() {
-        return null;
+        return database.getCategoriesSync();
     }
 
     @Override
@@ -128,8 +139,8 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public List<Category> getEventGroupsSync() {
-        return null;
+    public List<EventGroup> getEventGroupsSync() {
+        return database.getEventGroupsSync();
     }
 
     @Override
@@ -156,44 +167,91 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<Event>> getEventsWithFilter(boolean isDefault) {
+        Log.e(TAG, "Start filter event");
         return getAllEvents()
                 .flatMap(Observable::fromIterable)
-                .flatMap(event -> {
-                    if (event.isAlwaysOn()) return Observable.just(event);
-                    return isDefault ? filterEventWithDefaultFilter(event) : filterEventWithCustomFilter(event);
-                }).toList().toObservable();
-    }
-
-    private Observable<Event> filterEventWithDefaultFilter(Event event) {
-        return Observable.combineLatest(Observable.just(event),
-                getUserDefaultFilters().flatMap(Observable::fromIterable)
-                        .flatMap(group -> Observable.fromIterable(group.getDisplayFilter()))
-                        .flatMap(display -> Observable.fromArray(display.getLayers())),
-                (e, layer) -> {
-                    if (layer.equalsIgnoreCase(event.getGroup())) {
-                        return event;
+                .filter(event -> {
+                    if (event.isAlwaysOn()) {
+                        return updateEventByCategory(event)
+                                .doOnSuccess(b -> Log.e(TAG, "updated is always event with category"))
+                                .blockingGet();
                     }
-                    return null;
-                }).filter(ev -> ev != null);
+
+                    return isDefault ? filterEventWithDefaultFilter(event)
+                            .map(b -> {
+                                if (b) return updateEventByCategory(event)
+                                        .doOnSuccess(a -> Log.e(TAG, "updated event with category"))
+                                        .blockingGet();
+                                return false;
+                            }).doOnSuccess(b -> Log.e(TAG, "default filter done"))
+                            .blockingGet()
+                            : filterEventWithCustomFilter(event)
+                            .doOnSuccess(a -> Log.e(TAG, "custom filter done"))
+                            .blockingGet();
+                })
+                .doOnNext(event -> Log.e(TAG, "filter success: " + event.getId()))
+                .toList()
+                .doOnSuccess(list -> Log.e(TAG, "Complete filter, return list " + list.size()))
+                .toObservable();
     }
 
-    private Observable<Event> filterEventWithCustomFilter(Event event) {
+    private Single<Boolean> filterEventWithDefaultFilter(Event event) {
+        return getUserDefaultFilters()
+                .flatMap(Observable::fromIterable)
+                .flatMap(group -> Observable.fromIterable(group.getDisplayFilter()))
+                .flatMap(display -> Observable.fromArray(display.getLayers()))
+                .any(layer -> layer.equalsIgnoreCase(event.getGroup()));
+    }
 
+    private Single<Boolean> filterEventWithCustomFilter(Event event) {
         return getUserCustomFilters()
                 .flatMap(Observable::fromIterable)
-                .filter(category -> event.getCategory().equalsIgnoreCase(category.getCategory()))
-                .flatMap(category -> filterEventWithCategory(event, category));
+                .any(category -> event.getCategory().equalsIgnoreCase(category.getCategory())
+                        && filterAndUpdateEventWithCategory(event, category).blockingGet());
     }
 
-    private Observable<Event> filterEventWithCategory(Event event, Category category) {
-        return Observable.combineLatest(Observable.fromIterable(category.getTypes()),
-                Observable.fromIterable(category.getStatuses()),
-                (type, status) -> {
-                    if (event.getEventTypeCode().equals(type.getCode())
-                            && event.getStatusCode().equals(status.getCode()))
-                        return event;
-                    return null;
-                }).filter(e -> e != null);
+    private Single<Boolean> filterAndUpdateEventWithCategory(Event event, Category category) {
+        return Observable.fromIterable(category.getTypes())
+                .filter(type -> (event.getEventTypeCode().equals(type.getCode())))
+                .flatMap(type -> Observable.fromIterable(category.getStatuses()))
+                .any(status -> {
+                    if (event.getStatusCode().equals(status.getCode())) {
+                        // update event by category
+                        event.setPrimaryColor(status.getPrimaryColor());
+                        event.setSecondaryColor(status.getSecondaryColor());
+                        event.setTextColor(status.getTextColor());
+                        event.setName(status.getName());
+                        return true;
+                    }
+                    return false;
+                });
+    }
+
+    private Single<Boolean> updateEventByCategory(Event event) {
+        return getCategories()
+                .flatMap(categories -> {
+                    Log.e(TAG, "start flat map");
+                    return Observable.fromIterable(categories);
+                })
+                .any(category -> {
+                    Log.e(TAG, "start find category of event");
+                    if (event.getCategory().equalsIgnoreCase(category.getCategory())) {
+                        // update event
+                        return Observable.fromIterable(category.getStatuses())
+                                .any(status -> {
+                                    Log.e(TAG, "start find status of event");
+                                    if (event.getStatusCode().equals(status.getCode())) {
+                                        event.setPrimaryColor(status.getPrimaryColor());
+                                        event.setSecondaryColor(status.getSecondaryColor());
+                                        event.setTextColor(status.getTextColor());
+                                        event.setName(status.getName());
+                                        return true;
+                                    }
+                                    return false;
+                                }).blockingGet();
+                    }
+                    return false;
+                });
     }
 
     @Override
@@ -213,23 +271,23 @@ public class AppDataManager implements DataManager {
         Hint hint1 = new Hint();
         hint1.setTitle("");
         hint1.setDesc("EmergencyAUS keeps you<br>updated with current<br>emergency information and<br>alerts in Australia.");
-        hint1.setUrl(R.drawable.hint1);
+        hint1.setResId(R.drawable.hint1);
         hint1.setLast(true);
 
         Hint hint2 = new Hint();
         hint2.setTitle("Observation");
         hint2.setDesc("Share what you know<br>share what you see, hear and feel.");
-        hint2.setUrl(R.drawable.hint1);
+        hint2.setResId(R.drawable.hint1);
 
         Hint hint3 = new Hint();
         hint3.setTitle("Watch Zones");
         hint3.setDesc("Monitor the risk all day<br>all night, all year");
-        hint3.setUrl(R.drawable.hint2);
+        hint3.setResId(R.drawable.hint2);
 
         Hint hint4 = new Hint();
         hint4.setTitle("Warning & Incidents");
         hint4.setDesc("Be aware of your environment<br>your risk, your safety");
-        hint4.setUrl(R.drawable.hint3);
+        hint4.setResId(R.drawable.hint3);
 
         hints.add(hint1);
         hints.add(hint2);

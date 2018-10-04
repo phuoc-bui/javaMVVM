@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import com.redhelmet.alert2me.BR;
@@ -64,10 +65,10 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
      * Handle navigation event from viewModel, modified this function if any custom navigation
      * such as add bundle, flag, animation, ...
      *
-     * @param type type of navigation (with data from viewModel)
+     * @param item type of navigation (with data from viewModel)
      */
-    protected void onNavigationEvent(NavigationType type) {
-        type.navigation(this);
+    protected void onNavigationEvent(NavigationItem item) {
+        item.navigation(this);
     }
 
     protected Bundle getBundle() {
@@ -79,6 +80,14 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
         super.onStart();
         binder.setVariable(getBindingVariable(), viewModel);
         binder.executePendingBindings();
+    }
+
+    public void updateToolbarTitle(String heading) {
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(false);
+            supportActionBar.setTitle(heading);
+        }
     }
 
     public boolean hasPermission(String permission) {

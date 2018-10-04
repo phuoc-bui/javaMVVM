@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.ui.hint.HintViewModel;
 import com.redhelmet.alert2me.ui.home.HomeViewModel;
+import com.redhelmet.alert2me.ui.home.event.ClusterEventsViewModel;
+import com.redhelmet.alert2me.ui.home.event.EventViewModel;
 import com.redhelmet.alert2me.ui.splash.SplashViewModel;
 import com.redhelmet.alert2me.ui.termsandcondition.TermsConditionViewModel;
 
@@ -43,7 +45,11 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new TermsConditionViewModel(dataManager);
         } else if (HomeViewModel.class.equals(modelClass)) {
             return (T) new HomeViewModel(dataManager);
-        } else {
+        } else if (EventViewModel.class.equals(modelClass)) {
+            return (T) new EventViewModel(dataManager);
+        } else if (ClusterEventsViewModel.class.equals(modelClass)) {
+            return (T) new ClusterEventsViewModel();
+        }else {
             throw new Error("Invalid parameter");
         }
     }

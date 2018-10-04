@@ -22,38 +22,28 @@ import com.redhelmet.alert2me.data.model.Event;
 
 public class IconUtils {
 
-    private IconUtils(){}
+    private IconUtils() {
+    }
 
-    public int getResourceByName(String resourceName, String definitionType) {
-        Resources resources = activity.getResources();
-        String packageName = activity.getPackageName();
+    public int getResourceByName(Context context, String resourceName, String definitionType) {
+        Resources resources = context.getResources();
+        String packageName = context.getPackageName();
         int resource = resources.getIdentifier(resourceName, definitionType, packageName);
         return (resource != 0) ? resource : R.drawable.icons_warning_empty;
     }
 
 
-    public static Bitmap createEventIcon(int resourceId, Event event, String backgroundColor, boolean isListIcon, boolean isClustered, String itemsCount) {
+    public static Bitmap createEventIcon(Activity context, int resourceId, Event event, String backgroundColor, boolean isListIcon, boolean isClustered, String itemsCount) {
 
         LayoutInflater layoutInflater;
         String packageName;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         Resources resources;
-        if (activity == null && context == null) {
-            return null;
-        }
 
-        if (activity != null) {
-            layoutInflater = activity.getLayoutInflater();
-            packageName = activity.getPackageName();
-            activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            resources = activity.getResources();
-        } else {
-            layoutInflater = LayoutInflater.from(context);
-            packageName = context.getPackageName();
-            resources = context.getResources();
-            displayMetrics = resources.getDisplayMetrics();
-
-        }
+        layoutInflater = LayoutInflater.from(context);
+        packageName = context.getPackageName();
+        context.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        resources = context.getResources();
 
 
         View layers = layoutInflater.inflate(resourceId, null);
@@ -131,6 +121,31 @@ public class IconUtils {
         }
     }
 
+    public static int getListShapeIdByEventType(Event event) {
+
+        switch (event.getCategory()) {
+            case "warning":
+                return R.drawable.ic_background_warning;
+            case "incident":
+                return R.drawable.ic_background_incident;
+            case "support_service":
+                return R.drawable.ic_background_support_service;
+            case "env_monitoring":
+                return R.drawable.ic_background_env_monitoring;
+            case "restriction":
+                return R.drawable.ic_background_restriction;
+            case "public_notice":
+                return R.drawable.ic_background_public_notice;
+            case "disruption":
+                return R.drawable.ic_background_disruption;
+            case "public_observation":
+                return R.drawable.ic_background_observation;
+            default:
+                return R.drawable.ic_background_warning;
+        }
+
+    }
+
     public static int getOutline(Event event) {
         if (event.getTemporal() == null)
             return getOutlineByEventType(event);
@@ -191,31 +206,6 @@ public class IconUtils {
             default:
                 return R.drawable.ic_icon_warning_planned;
         }
-    }
-
-    public static int getListShapeIdByEventType(Event event) {
-
-        switch (event.getCategory()) {
-            case "warning":
-                return R.drawable.ic_background_warning;
-            case "incident":
-                return R.drawable.ic_background_incident;
-            case "support_service":
-                return R.drawable.ic_background_support_service;
-            case "env_monitoring":
-                return R.drawable.ic_background_env_monitoring;
-            case "restriction":
-                return R.drawable.ic_background_restriction;
-            case "public_notice":
-                return R.drawable.ic_background_public_notice;
-            case "disruption":
-                return R.drawable.ic_background_disruption;
-            case "public_observation":
-                return R.drawable.ic_background_observation;
-            default:
-                return R.drawable.ic_background_warning;
-        }
-
     }
 
     public static int getIconResourceByName(Resources resources, String icon, String packageName, String category) {

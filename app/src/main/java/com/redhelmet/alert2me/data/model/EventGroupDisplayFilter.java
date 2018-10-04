@@ -19,9 +19,4 @@ public class EventGroupDisplayFilter implements Model {
     public void setOverlays(String[] overlays) {
         this.overlays = overlays;
     }
-
-    @Override
-    public long getId() {
-        return 0;
-    }
 }

@@ -9,13 +9,14 @@ import com.redhelmet.alert2me.data.model.Category;
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import io.reactivex.Flowable;
+import io.reactivex.Single;
 
 @Dao
 public interface CategoryDao {
 
     @Query("SELECT * FROM Category")
-    Observable<List<Category>> getCategories();
+    Single<List<Category>> getCategories();
 
     @Query("SELECT * FROM Category")
     List<Category> getCategoriesSync();
@@ -24,5 +25,5 @@ public interface CategoryDao {
     void saveCategories(List<Category> categories);
 
     @Query("SELECT * FROM Category WHERE id IN (:ids)")
-    Observable<List<Category>> getCategoriesWithIds(List<Long> ids);
+    Single<List<Category>> getCategoriesWithIds(List<Long> ids);
 }

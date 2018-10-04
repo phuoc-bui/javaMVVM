@@ -1,6 +1,7 @@
 package com.redhelmet.alert2me.data.local.pref;
 
 import android.content.Context;
+import android.location.Location;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -17,6 +18,7 @@ import java.util.List;
 public class AppPreferenceHelper implements PreferenceHelper {
     private final String CONFIG_KEY = "CONFIG_KEY";
     private final String DEVICE_KEY = "DEVICE_KEY";
+    private final String USER_LOCATION_KEY = "USER_LOCATION_KEY";
     private final String DEFAULT_FILTER_KEY = "DEFAULT_FILTER_KEY";
     private final String CUSTOM_FILTER_KEY = "CUSTOM_FILTER_KEY";
     private final String IS_DEFAULT_FILTER_KEY = "IS_DEFAULT_FILTER_KEY";
@@ -57,7 +59,9 @@ public class AppPreferenceHelper implements PreferenceHelper {
     @Override
     public AppConfig getAppConfig() {
         String json = (String) PreferenceUtils.getFromPrefs(context, CONFIG_KEY, "");
-        return gson.fromJson(json, AppConfig.class);
+        AppConfig config = gson.fromJson(json, AppConfig.class);
+        if (config == null) config = new AppConfig();
+        return config;
     }
 
     @Override
@@ -98,10 +102,13 @@ public class AppPreferenceHelper implements PreferenceHelper {
 
     @Override
     public void saveUserDefaultFilters(List<EventGroup> eventGroups) {
+        if (eventGroups == null || eventGroups.size() == 0) return;
         StringBuilder builder = new StringBuilder(String.valueOf(eventGroups.get(0).getId()));
-        for (EventGroup eventGroup : eventGroups) {
-            builder.append(",");
-            builder.append(eventGroup.getId());
+        if (eventGroups.size() > 1) {
+            for (int i = 1; i < eventGroups.size(); i++) {
+                builder.append(",");
+                builder.append(eventGroups.get(i).getId());
+            }
         }
 
         PreferenceUtils.saveToPrefs(context, DEFAULT_FILTER_KEY, builder.toString());
@@ -114,7 +121,7 @@ public class AppPreferenceHelper implements PreferenceHelper {
         if (!TextUtils.isEmpty(list)) {
             String[] arr = list.split(",");
             for (String number : arr) {
-                result.add(Long.getLong(number));
+                result.add(Long.parseLong(number));
             }
         }
         return result;
@@ -127,6 +134,27 @@ public class AppPreferenceHelper implements PreferenceHelper {
 
     @Override
     public boolean isDefaultFilter() {
-        return (boolean) PreferenceUtils.getFromPrefs(context, IS_DEFAULT_FILTER_KEY, false);
+        return (boolean) PreferenceUtils.getFromPrefs(context, IS_DEFAULT_FILTER_KEY, true);
+    }
+
+    @Override
+    public Location getLastUserLocation() {
+        String str = (String) PreferenceUtils.getFromPrefs(context, USER_LOCATION_KEY, "User Location,0,0");
+        String[] arr = str.split(",");
+        if (arr.length < 3) return null;
+        Location location = new Location(arr[0]);
+        location.setLatitude(Double.parseDouble(arr[1]));
+        location.setLongitude(Double.parseDouble(arr[2]));
+        return location;
+    }
+
+    @Override
+    public void saveCurrentUserLocation(Location location) {
+        if (location == null) return;
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+        String provider = location.getProvider();
+        String str = provider + "," + lat + "," + lng;
+        PreferenceUtils.saveToPrefs(context, USER_LOCATION_KEY, str);
     }
 }

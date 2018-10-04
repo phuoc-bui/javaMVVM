@@ -61,7 +61,7 @@ public class EventMapFilter extends BaseActivity implements View.OnClickListener
     ArrayList<HashMap<String, CategoryFilter>> categoryFilters = new ArrayList<HashMap<String, CategoryFilter>>();
     ArrayList<String> defValues= new ArrayList<String>();
 
-    Category cat;
+    List<Category> originCategories;
     EventGroup defaultGroup;
     public boolean editMode = false;
     public int position = 0;
@@ -72,7 +72,7 @@ public class EventMapFilter extends BaseActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_static_wz_notification);
-        dbController = new DBController(getApplicationContext());
+//        dbController = DBController.getInstance(this);
         Gson gson = new Gson();
         String values;
 
@@ -110,8 +110,7 @@ public class EventMapFilter extends BaseActivity implements View.OnClickListener
 
     public void initializeControls() {
 
-        cat = Category.getInstance();
-        defaultGroup = EventGroup.getInstance();
+        originCategories = dataManager.getCategoriesSync();
 
         defaultBtn = (Button) findViewById(R.id.defaultBtn);
         customBtn = (Button) findViewById(R.id.customBtn);
@@ -293,20 +292,18 @@ public class EventMapFilter extends BaseActivity implements View.OnClickListener
                 category_data.add(category);
             }
 
-            cat.setCategoryArray(category_data);
+            originCategories = category_data;
 
 
 
                 category_data = new ArrayList < Category > ();
 
-
-                ArrayList < Category > c = cat.getCategoryArray();
                 JSONArray categoryArray = new JSONArray();
                 JSONArray typeArray = new JSONArray();
                  int count=0;
 
 
-                for (Category catData: cat.getCategoryArray()) {
+                for (Category catData: originCategories) {
                     for (int j = 0; j < categoryFilters.size(); j++) {
                         HashMap<String,CategoryFilter> hashCategoryFilter=categoryFilters.get(j);
                         if(hashCategoryFilter.containsKey(catData.getCategory())){
@@ -338,7 +335,7 @@ public class EventMapFilter extends BaseActivity implements View.OnClickListener
                     category_data.add(catData);
                 }
 
-            cat.setCategoryArray(category_data);
+           originCategories = category_data;
         } else {
 
             // normal
@@ -409,7 +406,7 @@ public class EventMapFilter extends BaseActivity implements View.OnClickListener
                 category_data.add(category);
             }
 
-            cat.setCategoryArray(category_data);
+            originCategories = category_data;
        }
 
 
@@ -577,7 +574,7 @@ public class EventMapFilter extends BaseActivity implements View.OnClickListener
 
 //                LinkedTreeMap<String, Object> categoryFilters = new LinkedTreeMap<>();
 //                for (Category catData : cat.getCategoryArray()) {
-//                    JSONObject category = new JSONObject();
+//                    JSONObject categories = new JSONObject();
 //                    JSONArray typeArray = new JSONArray();
 //
 //                    for (CategoryType catType : catData.getTypes()) {
@@ -593,14 +590,14 @@ public class EventMapFilter extends BaseActivity implements View.OnClickListener
 //                        type.put("status", status);
 //                        typeArray.put(type);
 //                    }
-//                    category.put("types", typeArray);
-//                    categoryFilters.put(catData.getCategory(), category);
+//                    categories.put("types", typeArray);
+//                    categoryFilters.put(catData.getCategory(), categories);
 //                }
 
                 ArrayList<HashMap<String, CategoryFilter>> categoryFilters = new ArrayList<HashMap<String, CategoryFilter>>();
 
                 ArrayList<CategoryTypeFilter> typeArray=new ArrayList<CategoryTypeFilter>();
-                for (Category catData : cat.getCategoryArray()) {
+                for (Category catData : originCategories) {
 
                     HashMap<String, CategoryFilter> categoryHash=new HashMap<>();
                     typeArray=new ArrayList<CategoryTypeFilter>();
@@ -689,7 +686,7 @@ public class EventMapFilter extends BaseActivity implements View.OnClickListener
 
 
                 ArrayList<CategoryTypeFilter> typeArray=new ArrayList<CategoryTypeFilter>();
-                for (Category catData : cat.getCategoryArray()) {
+                for (Category catData : originCategories) {
 
                     HashMap<String, CategoryFilter> categoryHash=new HashMap<>();
                     typeArray=new ArrayList<CategoryTypeFilter>();

@@ -15,7 +15,7 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ApiService {
-    @GET("appConfig/android")
+    @GET("config/android")
     Observable<ConfigResponse> getConfig();
 
     @POST("apiInfo")

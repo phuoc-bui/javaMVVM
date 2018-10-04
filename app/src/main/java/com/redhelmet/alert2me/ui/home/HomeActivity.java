@@ -1,13 +1,14 @@
 package com.redhelmet.alert2me.ui.home;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.ActionBar;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.AppViewPagerAdapter;
 import com.redhelmet.alert2me.databinding.ActivityHomeBinding;
+import com.redhelmet.alert2me.databinding.CustomHomeTabBinding;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
 import com.redhelmet.alert2me.ui.home.event.EventFragment;
 import com.redhelmet.alert2me.ui.home.help.HelpFragment;
@@ -35,17 +36,18 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (binder.toolbar != null) {
+            setSupportActionBar(binder.toolbar);
+        }
         Bundle extras = getIntent().getExtras();
         if (extras != null) { //edit mode - detect if need to zoom on any specific location at start of activity
             latLng = (LatLng) extras.get("marker");
         }
 
         setupViewPager();
+
         binder.tabs.setupWithViewPager(binder.viewpager);
-        if (binder.toolbar != null) {
-            setSupportActionBar(binder.toolbar);
-        }
+        setupTabIcons();
 
         binder.tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -54,15 +56,15 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
                 positionTabSelected = tab.getPosition();
                 switch (positionTabSelected) {
                     case 0:
-                        initializeToolbar(getString(R.string.lblEvent) + " " + getString(R.string.lblMap));
+                        updateToolbarTitle(getString(R.string.lblEvent) + " " + getString(R.string.lblMap));
                         //startTracking();
                         break;
                     case 1:
-                        initializeToolbar(getString(R.string.toolbar_WZ));
+                        updateToolbarTitle(getString(R.string.toolbar_WZ));
                         // stopTracking();
                         break;
                     case 2:
-                        initializeToolbar(getString(R.string.toolbar_help));
+                        updateToolbarTitle(getString(R.string.toolbar_help));
                         break;
                 }
             }
@@ -87,11 +89,20 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
         binder.viewpager.setAdapter(adapter);
     }
 
-    public void initializeToolbar(String heading) {
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayHomeAsUpEnabled(false);
-            supportActionBar.setTitle(heading);
-        }
+    private void setupTabIcons() {
+        CustomHomeTabBinding reportBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.custom_home_tab, binder.tabs, false);
+        reportBinding.setIcon(R.drawable.ic_report_problem);
+        reportBinding.setTitle(getString(R.string.tab_events));
+        binder.tabs.getTabAt(0).setCustomView(reportBinding.getRoot());
+
+        CustomHomeTabBinding watchBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.custom_home_tab, binder.tabs, false);
+        watchBinding.setIcon(R.drawable.ic_watch_zone);
+        watchBinding.setTitle(getString(R.string.tab_WZ));
+        binder.tabs.getTabAt(1).setCustomView(watchBinding.getRoot());
+
+        CustomHomeTabBinding helpBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.custom_home_tab, binder.tabs, false);
+        helpBinding.setIcon(R.drawable.ic_help_white);
+        helpBinding.setTitle(getString(R.string.tab_help));
+        binder.tabs.getTabAt(2).setCustomView(helpBinding.getRoot());
     }
 }

@@ -55,23 +55,34 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.daimajia.swipe.util.Attributes;
-import com.redhelmet.alert2me.BuildConfig;
-import com.redhelmet.alert2me.adapters.WzListAdapter;
-import com.redhelmet.alert2me.data.local.database.DBController;
-import com.redhelmet.alert2me.domain.util.PreferenceUtils;
-import com.redhelmet.alert2me.domain.util.Utility;
-import com.redhelmet.alert2me.data.model.Category;
-import com.redhelmet.alert2me.data.model.CategoryFilter;
-import com.redhelmet.alert2me.data.model.CategoryStatus;
-import com.redhelmet.alert2me.data.model.CategoryType;
-import com.redhelmet.alert2me.data.model.CategoryTypeFilter;
-import com.redhelmet.alert2me.data.model.EventGroup;
-import com.redhelmet.alert2me.data.model.WatchZoneGeom;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.kevalpatel.ringtonepicker.RingtonePickerDialog;
 import com.kevalpatel.ringtonepicker.RingtonePickerListener;
+import com.redhelmet.alert2me.BuildConfig;
+import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.adapters.WzListAdapter;
+import com.redhelmet.alert2me.core.Constants;
+import com.redhelmet.alert2me.core.RequestHandler;
+import com.redhelmet.alert2me.data.local.database.DBController;
+import com.redhelmet.alert2me.data.model.Category;
+import com.redhelmet.alert2me.data.model.CategoryFilter;
+import com.redhelmet.alert2me.data.model.CategoryStatus;
+import com.redhelmet.alert2me.data.model.CategoryType;
+import com.redhelmet.alert2me.data.model.CategoryTypeFilter;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
+import com.redhelmet.alert2me.data.model.EventGroup;
+import com.redhelmet.alert2me.data.model.WatchZoneGeom;
+import com.redhelmet.alert2me.domain.util.PreferenceUtils;
+import com.redhelmet.alert2me.domain.util.Utility;
+import com.redhelmet.alert2me.ui.activity.AddStaticZone;
+import com.redhelmet.alert2me.ui.activity.AddStaticZoneNotification;
+import com.redhelmet.alert2me.ui.activity.EditWatchZone;
+import com.redhelmet.alert2me.ui.activity.ShareWatchZone;
+import com.redhelmet.alert2me.ui.home.HomeActivity;
+import com.redhelmet.alert2me.ui.services.BackgroundDetectedActivitiesService;
+import com.redhelmet.alert2me.util.DeviceUtil;
 
 import net.grandcentrix.tray.AppPreferences;
 
@@ -88,19 +99,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.redhelmet.alert2me.R;
-
-import com.redhelmet.alert2me.core.Constants;
-import com.redhelmet.alert2me.util.DeviceUtil;
-import com.redhelmet.alert2me.core.RequestHandler;
-import com.redhelmet.alert2me.data.model.EditWatchZones;
-import com.redhelmet.alert2me.ui.activity.AddStaticZone;
-import com.redhelmet.alert2me.ui.activity.AddStaticZoneNotification;
-import com.redhelmet.alert2me.ui.activity.EditWatchZone;
-import com.redhelmet.alert2me.ui.home.HomeActivity;
-import com.redhelmet.alert2me.ui.activity.ShareWatchZone;
-import com.redhelmet.alert2me.ui.services.BackgroundDetectedActivitiesService;
-
 import static com.redhelmet.alert2me.ui.activity.EditWatchZone.REQUEST_NOTIFICATION;
 
 public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
@@ -109,8 +107,8 @@ public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.On
     private Intent intent;
     private View rootView;
     private LinearLayout defaultLayout;
-    private LinearLayout watchzoneLayout,mobile_wz_sound_layout,mobile_wz_notification_layout;
-    private TextView addWzPopup,heading,subHeading,radiusValue,notificationSound;
+    private LinearLayout watchzoneLayout, mobile_wz_sound_layout, mobile_wz_notification_layout;
+    private TextView addWzPopup, heading, subHeading, radiusValue, notificationSound;
     private FloatingActionButton addWatchZoneBtn;
     RecyclerView _watchzoneList;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -120,7 +118,7 @@ public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.On
     ScrollView scrollMobileView;
     SwitchCompat mobileWzSwitch;
     DiscreteSeekBar mobileRadiusSeek;
-    String apiURL=null;
+    String apiURL = null;
     String _watchzoneURL;
     String _deleteWzURL;
     String _stateWzURL; //enable/disable url
@@ -131,10 +129,9 @@ public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.On
     ArrayList<EditWatchZones> arryMobileWZ;
     EditWatchZones _editWatchzone;
     EditWatchZones dictMobileWZ;
-    DeviceUtil _deviceuUtil;
     DBController _dbController;
     List<String> _dbCategories;
-    Snackbar snackbar=null;
+    Snackbar snackbar = null;
     RingtonePickerDialog.Builder ringtonePickerBuilder;
     Uri _ringtoneURI = null;
     String _ringtoneName = null;
@@ -144,10 +141,10 @@ public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.On
     boolean isBackButtonClicked = false;
     public GoogleApiClient mApiClient;
     private Menu mOptionsMenu;
-    public ArrayList <Category> category_data = new ArrayList < Category > ();
-    public ArrayList <CategoryType> types_data = new ArrayList < CategoryType > ();
-    public ArrayList <CategoryStatus> statuses_data = new ArrayList < CategoryStatus > ();
-    public ArrayList <EventGroup> default_data = new ArrayList < EventGroup > ();
+    public ArrayList<Category> category_data = new ArrayList<Category>();
+    public ArrayList<CategoryType> types_data = new ArrayList<CategoryType>();
+    public ArrayList<CategoryStatus> statuses_data = new ArrayList<CategoryStatus>();
+    public ArrayList<EventGroup> default_data = new ArrayList<EventGroup>();
 
     public WatchZoneFragment() {
 
@@ -172,7 +169,6 @@ public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.On
 
         apiURL = BuildConfig.API_ENDPOINT + "apiInfo/" + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity";
 
-        
 
 //
 //        mApiClient = new GoogleApiClient.Builder(_context)
@@ -191,11 +187,9 @@ public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     @Override
-    public void setUserVisibleHint(boolean visible)
-    {
+    public void setUserVisibleHint(boolean visible) {
         super.setUserVisibleHint(visible);
-        if (visible && isResumed())
-        {
+        if (visible && isResumed()) {
 
             onResume();
         }
@@ -211,13 +205,12 @@ public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.On
         }
     }
 
-    public void initializeVariables(){
-        _editWatchzone =EditWatchZones.getInstance();
-        _deviceuUtil=new DeviceUtil(_context);
-        _dbController = new DBController(_context);
-        _dbCategories=new ArrayList<>();
-        _dbCategories=_dbController.getCategoriesNames();
-        _watchzoneArray=new ArrayList<>();
+    public void initializeVariables() {
+        _editWatchzone = EditWatchZones.getInstance();
+        _dbController = DBController.getInstance(getContext());
+        _dbCategories = new ArrayList<>();
+        _dbCategories = _dbController.getCategoriesNames();
+        _watchzoneArray = new ArrayList<>();
 
 //        if(Utility.isProximityEnabled(_context)) {
 //            setLocation();
@@ -225,28 +218,22 @@ public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.On
 
         getMobileWZData();
 
-        mobileWzSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
+        mobileWzSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-            {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 setMobileWzStatus();
                 if (isChecked) {
                     Log.d("SWitch", "checked");
-                    if(dictMobileWZ != null)
-                    {
+                    if (dictMobileWZ != null) {
 
                         disableProximity(true);
-                    }
-                    else {
+                    } else {
                         setMobileWZFilters();
                     }
-                }
-                else {
+                } else {
                     Log.d("SWitch", "unchecked");
-                    if(dictMobileWZ != null)
-                    {
+                    if (dictMobileWZ != null) {
                         disableProximity(false);
                     }
                 }
@@ -263,7 +250,7 @@ public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.On
             public void OnRingtoneSelected(String ringtoneName, Uri ringtoneUri) {
                 _ringtoneName = ringtoneName;
                 _ringtoneURI = ringtoneUri;
-Log.d("ringtone",ringtoneUri.toString());
+                Log.d("ringtone", ringtoneUri.toString());
                 notificationSound.setText(ringtoneName);
             }
         });
@@ -272,107 +259,104 @@ Log.d("ringtone",ringtoneUri.toString());
         setMobileWZData();
     }
 
-public void getMobileWZData(){
+    public void getMobileWZData() {
 
-    if(Utility.isProximityEnabled(_context)) {
-        mobileWzSwitch.setChecked(true);
+        if (Utility.isProximityEnabled(_context)) {
+            mobileWzSwitch.setChecked(true);
 
-    }
-    else
-    {
-        mobileWzSwitch.setChecked(false);
-    }
-
-    arryMobileWZ = new ArrayList<EditWatchZones>();
-
-        if(PreferenceUtils.hasKey(_context, Constants.KEY_VALUE_PROXIMITY_DATA)) {
-
-        Gson gson = new Gson();
-
-        String mobileWZValues = (String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_VALUE_PROXIMITY_DATA,"");
-
-        EditWatchZones[] arryMobileWZmodel =  gson.fromJson(mobileWZValues,EditWatchZones[].class);
-
-        List<EditWatchZones> items  = Arrays.asList(arryMobileWZmodel);
-        arryMobileWZ = new ArrayList<EditWatchZones>(items);
-
-    }
-
-
-    Log.d("sdfsd", arryMobileWZ.toString());
-
-    if (arryMobileWZ != null) {
-
-        if (arryMobileWZ.size() > 0) {
-            dictMobileWZ = arryMobileWZ.get(0);
-        }
-    }
-
-}
-
-public void setMobileWZData() {
-    Ringtone ringtone;
-
-    if (_ringtoneURI == null) {
-        _ringtoneURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-    }
-    setupSliderValue();
-    if (arryMobileWZ != null) {
-
-        if(arryMobileWZ.size() > 0) {
-            dictMobileWZ = arryMobileWZ.get(0);
-            mobileRadiusSeek.setProgress(Integer.parseInt(dictMobileWZ.getWatchzoneRadius()));
-            sliderValue =  mobileRadiusSeek.getProgress();
-            setupSliderValue();
-            _ringtoneURI = Uri.parse(dictMobileWZ.getWatchzoneSound());
-
-//            setMobileWzStatus();
-        }
-    }
-    else {
-        mobileRadiusSeek.setProgress(Constants.DEFAULT_VALUE_RADIUS);
-        sliderValue =  mobileRadiusSeek.getProgress();
-        setupSliderValue();
-
-    }
-
-    //Get Notification Sound name
-    ringtone = RingtoneManager.getRingtone(_context, _ringtoneURI);
-    _ringtoneName = ringtone.getTitle(_context);
-    if (_ringtoneName == "") {
-        _ringtoneURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        ringtone = RingtoneManager.getRingtone(_context, _ringtoneURI);
-
-        _ringtoneName = ringtone.getTitle(_context);
-    }
-
-    ringtonePickerBuilder.setCurrentRingtoneUri(_ringtoneURI);
-    notificationSound.setText(_ringtoneName);
-}
-public void updateMobileWZDataOrNot() {
-    getMobileWZData();
-
-    if (dictMobileWZ != null) {
-
-        if ((sliderValue != Integer.parseInt(dictMobileWZ.getWatchzoneRadius())) || (!_ringtoneURI.toString().equalsIgnoreCase(Uri.parse(dictMobileWZ.getWatchzoneSound()).toString()))) {
-            isMobileWZValueChanged = true;
         } else {
-            if (isBackButtonClicked == true) {
-                isMobileWZValueChanged = false;
+            mobileWzSwitch.setChecked(false);
+        }
+
+        arryMobileWZ = new ArrayList<EditWatchZones>();
+
+        if (PreferenceUtils.hasKey(_context, Constants.KEY_VALUE_PROXIMITY_DATA)) {
+
+            Gson gson = new Gson();
+
+            String mobileWZValues = (String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_VALUE_PROXIMITY_DATA, "");
+
+            EditWatchZones[] arryMobileWZmodel = gson.fromJson(mobileWZValues, EditWatchZones[].class);
+
+            List<EditWatchZones> items = Arrays.asList(arryMobileWZmodel);
+            arryMobileWZ = new ArrayList<EditWatchZones>(items);
+
+        }
+
+
+        Log.d("sdfsd", arryMobileWZ.toString());
+
+        if (arryMobileWZ != null) {
+
+            if (arryMobileWZ.size() > 0) {
+                dictMobileWZ = arryMobileWZ.get(0);
             }
         }
 
-        if (isMobileWZValueChanged == true) {
+    }
 
-            if (isBackButtonClicked == true) {
-                updateMobileWZRadius();
+    public void setMobileWZData() {
+        Ringtone ringtone;
+
+        if (_ringtoneURI == null) {
+            _ringtoneURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        }
+        setupSliderValue();
+        if (arryMobileWZ != null) {
+
+            if (arryMobileWZ.size() > 0) {
+                dictMobileWZ = arryMobileWZ.get(0);
+                mobileRadiusSeek.setProgress(Integer.parseInt(dictMobileWZ.getWatchzoneRadius()));
+                sliderValue = mobileRadiusSeek.getProgress();
+                setupSliderValue();
+                _ringtoneURI = Uri.parse(dictMobileWZ.getWatchzoneSound());
+
+//            setMobileWzStatus();
+            }
+        } else {
+            mobileRadiusSeek.setProgress(Constants.DEFAULT_VALUE_RADIUS);
+            sliderValue = mobileRadiusSeek.getProgress();
+            setupSliderValue();
+
+        }
+
+        //Get Notification Sound name
+        ringtone = RingtoneManager.getRingtone(_context, _ringtoneURI);
+        _ringtoneName = ringtone.getTitle(_context);
+        if (_ringtoneName == "") {
+            _ringtoneURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            ringtone = RingtoneManager.getRingtone(_context, _ringtoneURI);
+
+            _ringtoneName = ringtone.getTitle(_context);
+        }
+
+        ringtonePickerBuilder.setCurrentRingtoneUri(_ringtoneURI);
+        notificationSound.setText(_ringtoneName);
+    }
+
+    public void updateMobileWZDataOrNot() {
+        getMobileWZData();
+
+        if (dictMobileWZ != null) {
+
+            if ((sliderValue != Integer.parseInt(dictMobileWZ.getWatchzoneRadius())) || (!_ringtoneURI.toString().equalsIgnoreCase(Uri.parse(dictMobileWZ.getWatchzoneSound()).toString()))) {
+                isMobileWZValueChanged = true;
             } else {
-                if (viewSwitcher.getCurrentView() == staticLayout) {
+                if (isBackButtonClicked == true) {
+                    isMobileWZValueChanged = false;
+                }
+            }
+
+            if (isMobileWZValueChanged == true) {
+
+                if (isBackButtonClicked == true) {
+                    updateMobileWZRadius();
+                } else {
+                    if (viewSwitcher.getCurrentView() == staticLayout) {
                         updateMobileWZRadius();
                     }
                 }
-            }
-        else{
+            } else {
                 if (isBackButtonClicked == true) {
                     backButtonClicked();
                 }
@@ -382,16 +366,18 @@ public void updateMobileWZDataOrNot() {
         }
 
     }
-public void backButtonClicked () {
 
-}
-public void  updateMobileWZRadius() {
+    public void backButtonClicked() {
+
+    }
+
+    public void updateMobileWZRadius() {
 
 
-    if(Utility.isProximityEnabled(_context)) {
+        if (Utility.isProximityEnabled(_context)) {
 
             //Attach filtes to dic
-            ArrayList<String> defValues= new ArrayList<String>();
+            ArrayList<String> defValues = new ArrayList<String>();
 
 
             if (dictMobileWZ.getWatchzoneFilterGroupId() != null) {
@@ -403,33 +389,30 @@ public void  updateMobileWZRadius() {
 
 
             }
-           sendProximity(dictMobileWZ.getWatchzoneFilter(), defValues, true);
-        }
-        else {
+            sendProximity(dictMobileWZ.getWatchzoneFilter(), defValues, true);
+        } else {
 
             mobileRadiusSeek.setProgress(Integer.parseInt(dictMobileWZ.getWatchzoneRadius()));
-            sliderValue =  mobileRadiusSeek.getProgress();
+            sliderValue = mobileRadiusSeek.getProgress();
             setupSliderValue();
-            if(isBackButtonClicked == true)
-            {
+            if (isBackButtonClicked == true) {
 
 //                self.showAlertWithComplitionSingleOptionWithTitle(TR_MSG_UNABLETOSAVEMOBILEWZ,title: TR_MSG_ERROR ,handler: { (action:UIAlertAction) -> Void in
 //                self.backTab()
-          //  })
+                //  })
 
 
+            } else {
+                // self.showAlert(TR_MSG_UNABLETOSAVEMOBILEWZ, title: TR_MSG_ERROR)
             }
-            else{
-               // self.showAlert(TR_MSG_UNABLETOSAVEMOBILEWZ, title: TR_MSG_ERROR)
-            }
-
 
 
         }
 
 
-}
-    public void initializeControl(){
+    }
+
+    public void initializeControl() {
         defaultLayout = (LinearLayout) rootView.findViewById(R.id.defaultLayout);
         watchzoneLayout = (LinearLayout) rootView.findViewById(R.id.watchzoneLayout);
         addWzPopup = (TextView) rootView.findViewById(R.id.addWzPopup);
@@ -449,14 +432,14 @@ public void  updateMobileWZRadius() {
         mobileWzSwitch = (SwitchCompat) rootView.findViewById(R.id.mobileWzSwitch);
         mobileRadiusSeek = (DiscreteSeekBar) rootView.findViewById(R.id.mobile_radius_seek);
         mobile_wz_sound_layout = (LinearLayout) rootView.findViewById(R.id.mobile_wz_sound_layout);
-        mobile_wz_notification_layout =(LinearLayout) rootView.findViewById(R.id.mobile_wz_notification_layout);
+        mobile_wz_notification_layout = (LinearLayout) rootView.findViewById(R.id.mobile_wz_notification_layout);
         defaultView();
 
         hideShowWzPopup();
 
     }
 
-    public void initializeListener(){
+    public void initializeListener() {
 
         swipeRefreshLayout.setOnRefreshListener(this);
         addWatchZoneBtn.setOnClickListener(this);
@@ -469,8 +452,8 @@ public void  updateMobileWZRadius() {
         mobileRadiusSeek.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
             @Override
             public void onProgressChanged(DiscreteSeekBar seekBar, int radius, boolean fromUser) {
-                sliderValue =  radius;
-                Log.d("Radius",String.valueOf(radius)+ String.valueOf(sliderValue));
+                sliderValue = radius;
+                Log.d("Radius", String.valueOf(radius) + String.valueOf(sliderValue));
                 setupSliderValue();
             }
 
@@ -488,10 +471,10 @@ public void  updateMobileWZRadius() {
 
     void setupSliderValue() {
 
-        radiusValue.setText(getString(R.string.txtRadiusValue) + " " +sliderValue+ getString(R.string.txtRadiusKM));
+        radiusValue.setText(getString(R.string.txtRadiusValue) + " " + sliderValue + getString(R.string.txtRadiusKM));
     }
 
-    public void initializeWzList(){
+    public void initializeWzList() {
 
         _watchzoneList.setLayoutManager(new LinearLayoutManager(_context));
         _watchzoneList.addItemDecoration(new DividerItemDecoration(_context, LinearLayoutManager.VERTICAL));
@@ -500,15 +483,15 @@ public void  updateMobileWZRadius() {
     }
 
 
-    public void hideShowWzPopup(){
+    public void hideShowWzPopup() {
         final Handler handler = new Handler();
         addWzPopup.setVisibility(View.VISIBLE);
         new Thread(new Runnable() {
             public void run() {
-                try{
+                try {
                     Thread.sleep(3000);
+                } catch (Exception e) {
                 }
-                catch (Exception e) { }
                 handler.post(new Runnable() {
                     public void run() {
                         addWzPopup.setVisibility(View.GONE);
@@ -518,7 +501,7 @@ public void  updateMobileWZRadius() {
         }).start();
     }
 
-    public void hideShowDefaultLayout(int visibility ){
+    public void hideShowDefaultLayout(int visibility) {
         //0 visible
         //4 invisible
         //8 gone
@@ -541,9 +524,8 @@ public void  updateMobileWZRadius() {
         cancelMenuItem.setIcon(vectorDrawableCompat);
 
         super.onCreateOptionsMenu(menu, inflater);
-        this.mOptionsMenu = menu ;
+        this.mOptionsMenu = menu;
     }
-
 
 
     @Override
@@ -551,21 +533,19 @@ public void  updateMobileWZRadius() {
         super.onResume();
         //   mRecyclerView.addOnItemTouchListener(onTouchListener);
 
-        if (!getUserVisibleHint())
-        {
+        if (!getUserVisibleHint()) {
             return;
         }
         Activity activity = getActivity();
-        if(activity instanceof HomeActivity){
+        if (activity instanceof HomeActivity) {
             HomeActivity home = (HomeActivity) activity;
-            home.initializeToolbar("Watch Zone");
+            home.updateToolbarTitle("Watch Zone");
         }
 
         if (viewSwitcher.getCurrentView() == staticLayout) {
             getWatchZones();
-        }
-        else {
-           getMobileWZData();
+        } else {
+            getMobileWZData();
         }
     }
 
@@ -590,86 +570,82 @@ public void  updateMobileWZRadius() {
         }
     }
 
-    public void EditMode(Boolean wzData,int position){
-        if(wzData) {
+    public void EditMode(Boolean wzData, int position) {
+        if (wzData) {
 
-            if(PreferenceUtils.hasKey(_context, "wzLocation"))
-                PreferenceUtils.removeFromPrefs(_context,"wzLocation");
+            if (PreferenceUtils.hasKey(_context, "wzLocation"))
+                PreferenceUtils.removeFromPrefs(_context, "wzLocation");
 
             intent = new Intent(_context.getApplicationContext(), EditWatchZone.class);
-            intent.putExtra("position",position);
-            intent.putExtra("edit",true);
+            intent.putExtra("position", position);
+            intent.putExtra("edit", true);
             startActivity(intent);
         }
     }
 
-    public void showSnack(String message){
+    public void showSnack(String message) {
 
         try {
-            if(rootView != null)
-            {    snackbar = Snackbar.make(rootView, message, Snackbar.LENGTH_INDEFINITE);
+            if (rootView != null) {
+                snackbar = Snackbar.make(rootView, message, Snackbar.LENGTH_INDEFINITE);
                 View view = snackbar.getView();
-                FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)view.getLayoutParams();
+                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
                 params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
                 view.setLayoutParams(params);
                 snackbar.show();
             }
-        }
-        catch (Exception e) {
-            Log.d("ExCeption",e.getMessage().toString());
+        } catch (Exception e) {
+            Log.d("ExCeption", e.getMessage().toString());
         }
 
 
     }
 
-    public void dismisSnackbar(){
-        Thread t = new Thread()
-        {
-            public void run()
-            {
-                try{
+    public void dismisSnackbar() {
+        Thread t = new Thread() {
+            public void run() {
+                try {
                     sleep(3000);
-                }catch(InterruptedException ie)
-                {
+                } catch (InterruptedException ie) {
                     ie.printStackTrace();
-                }finally
-                {
-                    if(snackbar!=null) {
-                        if( snackbar.isShown())
-                        snackbar.dismiss();
+                } finally {
+                    if (snackbar != null) {
+                        if (snackbar.isShown())
+                            snackbar.dismiss();
                     }
 
                 }
             }
-        }; t.start();
+        };
+        t.start();
 
     }
 
-    public void changeText(String message){
+    public void changeText(String message) {
 
-        if(snackbar!=null) {
-            if(snackbar.isShown())
+        if (snackbar != null) {
+            if (snackbar.isShown())
                 snackbar.setText(message);
         }
 
     }
 
 
-    public void watchzoneShareCode(final String shareCode){
+    public void watchzoneShareCode(final String shareCode) {
         final Dialog dialog = new Dialog(getActivity());
         dialog.setCancelable(false);
-        View view  = getActivity().getLayoutInflater().inflate(R.layout.custom_share_wz_dialog, null);
+        View view = getActivity().getLayoutInflater().inflate(R.layout.custom_share_wz_dialog, null);
         dialog.setContentView(view);
         if (dialog != null) {
             Window window = getActivity().getWindow();
             Rect displayRectangle = new Rect();
             window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-            dialog.getWindow().setLayout((int) (displayRectangle.width() * 0.9f),(int) (displayRectangle.height()*0.6f));
+            dialog.getWindow().setLayout((int) (displayRectangle.width() * 0.9f), (int) (displayRectangle.height() * 0.6f));
         }
 
-        TextView tv=(TextView)view.findViewById(R.id.watch_zone_share_code);
-        ImageButton copy_btn= (ImageButton) view.findViewById(R.id.copy_to_clipboard);
-        Button ok_btn =(Button)view.findViewById(R.id.accept);
+        TextView tv = (TextView) view.findViewById(R.id.watch_zone_share_code);
+        ImageButton copy_btn = (ImageButton) view.findViewById(R.id.copy_to_clipboard);
+        Button ok_btn = (Button) view.findViewById(R.id.accept);
         tv.setText(shareCode);
 
         ok_btn.setOnClickListener(new View.OnClickListener() {
@@ -683,19 +659,20 @@ public void  updateMobileWZRadius() {
             @Override
             public void onClick(View view) {
                 //Do something
-                _deviceuUtil.copyToClipBoard(_context,shareCode); dialog.dismiss();
+                DeviceUtil.copyToClipBoard(_context, shareCode);
+                dialog.dismiss();
             }
         });
 
 
-        if(shareCode!=null) {
+        if (shareCode != null) {
             dialog.show();
         }
     }
 
-    public void callDeleteWz(String _watchzoneId, final String _name, final int position){
+    public void callDeleteWz(String _watchzoneId, final String _name, final int position) {
 
-        if(!Utility.isInternetConnected(_context)) {
+        if (!Utility.isInternetConnected(_context)) {
             Toast.makeText(_context, getString(R.string.noInternet), Toast.LENGTH_LONG).show();
             return;
         }
@@ -704,23 +681,21 @@ public void  updateMobileWZRadius() {
         showSnack(getString(R.string.msg_deletingWZ) + " " + _name);
 
 
-
         queue = RequestHandler.getInstance(_context.getApplicationContext()).getRequestQueue(); //Obtain the instance
-        volleyRequest = new JsonObjectRequest(Request.Method.DELETE, _deleteWzURL+""+_watchzoneId,
+        volleyRequest = new JsonObjectRequest(Request.Method.DELETE, _deleteWzURL + "" + _watchzoneId,
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 if (response != null) {
                     try {
                         if (response.getBoolean("success")) {
-                            changeText(getString(R.string.msg_WZ)+ " "+_name+ " " + getString(R.string.msg_deleted));
+                            changeText(getString(R.string.msg_WZ) + " " + _name + " " + getString(R.string.msg_deleted));
                             dismisSnackbar();
-                           // _adapter.remove(position); // myDataset is List<MyObject>
+                            // _adapter.remove(position); // myDataset is List<MyObject>
                             _adapter.notifyItemRemoved(position);
 
                             onResume();
-                        }
-                        else {
+                        } else {
                             changeText(getString(R.string.msg_unableDeleteWZ));
 
                             dismisSnackbar();
@@ -729,8 +704,7 @@ public void  updateMobileWZRadius() {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }
-                else {
+                } else {
                     changeText(getString(R.string.msg_unableDeleteWZ));
 
                     dismisSnackbar();
@@ -765,23 +739,23 @@ public void  updateMobileWZRadius() {
         queue.add(volleyRequest);
     }
 
-    public void callEnableDisableWz(String _watchzoneId, final boolean state, final String _name){
+    public void callEnableDisableWz(String _watchzoneId, final boolean state, final String _name) {
 
-        if(!Utility.isInternetConnected(_context)) {
+        if (!Utility.isInternetConnected(_context)) {
             Toast.makeText(_context, getString(R.string.noInternet), Toast.LENGTH_LONG).show();
             return;
         }
 
-        if(state)
-        showSnack(getString(R.string.msg_enableWZ) + " " + _name);
+        if (state)
+            showSnack(getString(R.string.msg_enableWZ) + " " + _name);
         else
-        showSnack(getString(R.string.msg_disableWZ) + " " + _name);
+            showSnack(getString(R.string.msg_disableWZ) + " " + _name);
 
-        String url=null;
-        if(state)
-            url=  _stateWzURL+""+ _watchzoneId + "/" +"enable";
+        String url = null;
+        if (state)
+            url = _stateWzURL + "" + _watchzoneId + "/" + "enable";
         else
-            url= _stateWzURL+""+ _watchzoneId + "/" +"disable";
+            url = _stateWzURL + "" + _watchzoneId + "/" + "disable";
 
         queue = RequestHandler.getInstance(_context.getApplicationContext()).getRequestQueue(); //Obtain the instance
         volleyRequest = new JsonObjectRequest(Request.Method.PUT, url,
@@ -793,18 +767,16 @@ public void  updateMobileWZRadius() {
                         if (response.getBoolean("success")) {
                             changeText(_name + " " + getString(R.string.msg_updatedWZ));
 
-                        }
-                        else {
-                            changeText( getString(R.string.msg_unableUpdateWZ));
+                        } else {
+                            changeText(getString(R.string.msg_unableUpdateWZ));
                         }
                         dismisSnackbar();
                         onResume();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }
-                else {
-                    changeText( getString(R.string.msg_unableUpdateWZ));
+                } else {
+                    changeText(getString(R.string.msg_unableUpdateWZ));
                     dismisSnackbar();
                     onResume();
                 }
@@ -839,22 +811,21 @@ public void  updateMobileWZRadius() {
         queue.add(volleyRequest);
     }
 
-    private void purifyWz(JSONObject response,boolean mobileWZ) {
+    private void purifyWz(JSONObject response, boolean mobileWZ) {
 
 
-        if(mobileWZ) {
+        if (mobileWZ) {
             arryMobileWZ = new ArrayList<EditWatchZones>();
-        }
-        else {
-            _watchzoneArray =new ArrayList<EditWatchZones>();
+        } else {
+            _watchzoneArray = new ArrayList<EditWatchZones>();
         }
 
 
         try {
-            JSONArray wz= response.getJSONArray("watchzones");
-          if(wz.length()>0){
+            JSONArray wz = response.getJSONArray("watchzones");
+            if (wz.length() > 0) {
 
-                for(int i=0;i<wz.length();i++) {
+                for (int i = 0; i < wz.length(); i++) {
                     JSONObject data = (JSONObject) wz.get(i);
 
 
@@ -874,17 +845,15 @@ public void  updateMobileWZRadius() {
                     //=== GROUP ID's FILTER
 
 
+                    List<Integer> wzFilterGroup = new ArrayList<>();
+                    JSONArray filterGroup = new JSONArray(data.get("filterGroupId").toString());
 
-                    List<Integer> wzFilterGroup=new ArrayList<>();
-                    JSONArray filterGroup =new JSONArray(data.get("filterGroupId").toString());
-
-                    for(int j=0;j<filterGroup.length();j++){
+                    for (int j = 0; j < filterGroup.length(); j++) {
                         wzFilterGroup.add(Integer.parseInt(filterGroup.get(j).toString()));
                     }
 
                     editModel.setWatchzoneFilterGroupId(wzFilterGroup);
                     //=======///
-
 
 
                     //==== FILTER
@@ -902,9 +871,9 @@ public void  updateMobileWZRadius() {
                     for (int j = 0; j < _dbCategories.size(); j++) {
                         for (int f = 0; f < filterObj.length(); f++) {
 
-                            if(filterObj.has(_dbCategories.get(j))) {
+                            if (filterObj.has(_dbCategories.get(j))) {
                                 JSONObject categoryObj = filterObj.getJSONObject(_dbCategories.get(j));
-                                JSONArray catTypesArr=categoryObj.getJSONArray("types");
+                                JSONArray catTypesArr = categoryObj.getJSONArray("types");
 
                                 HashMap<String, CategoryFilter> hash = new HashMap<String, CategoryFilter>();
                                 filterData = new ArrayList<CategoryTypeFilter>();
@@ -946,13 +915,13 @@ public void  updateMobileWZRadius() {
                     editModel.setWatchZoneShareCode(data.getString("shareCode"));
 
 
-                    JSONArray geo=new JSONArray();
+                    JSONArray geo = new JSONArray();
                     geo.put(data.get("geometry"));
-                    JSONObject g=  geo.getJSONObject(0);
+                    JSONObject g = geo.getJSONObject(0);
 
-                    JSONArray geoArr=new JSONArray(g.get("coordinates").toString());
+                    JSONArray geoArr = new JSONArray(g.get("coordinates").toString());
                     ArrayList<HashMap<String, Double>> cordinates = new ArrayList<HashMap<String, Double>>();
-                    if(g.get("type").toString().equals("Point")) {
+                    if (g.get("type").toString().equals("Point")) {
 
 
                         HashMap<String, Double> hashLoc = new HashMap<>();
@@ -961,11 +930,11 @@ public void  updateMobileWZRadius() {
                         cordinates.add(hashLoc);
 
 
-                    }else{
-                        JSONArray geoArrIn=geoArr.getJSONArray(0);
+                    } else {
+                        JSONArray geoArrIn = geoArr.getJSONArray(0);
                         for (int k = 0; k < geoArrIn.length(); k++) {
 
-                            JSONArray geoA=geoArrIn.getJSONArray(k);
+                            JSONArray geoA = geoArrIn.getJSONArray(k);
                             HashMap<String, Double> hashLoc = new HashMap<>();
                             hashLoc.put("latitude", Double.parseDouble(geoA.get(0).toString()));
                             hashLoc.put("longitude", Double.parseDouble(geoA.get(1).toString()));
@@ -978,19 +947,18 @@ public void  updateMobileWZRadius() {
                     editModel.setWatchZoneGeoms(geomModel);
 
 
-                    if(mobileWZ) {
+                    if (mobileWZ) {
 
                         arryMobileWZ.add(editModel);
 
                         Gson gson = new Gson();
 
 
-                        PreferenceUtils.saveToPrefs(_context, Constants.KEY_VALUE_PROXIMITY_DATA,gson.toJson(arryMobileWZ));
+                        PreferenceUtils.saveToPrefs(_context, Constants.KEY_VALUE_PROXIMITY_DATA, gson.toJson(arryMobileWZ));
 
 
-                    }
-                    else {
-                        if(!Boolean.valueOf(data.getString("proximity")) && !mobileWZ){
+                    } else {
+                        if (!Boolean.valueOf(data.getString("proximity")) && !mobileWZ) {
                             _watchzoneArray.add(editModel);
                         }
 
@@ -998,19 +966,15 @@ public void  updateMobileWZRadius() {
                     }
 
 
-
                 }
 
 
-
-
-                if(mobileWZ) {
+                if (mobileWZ) {
                     changeText(getString(R.string.msg_savedMobileWZ));
                     dictMobileWZ = arryMobileWZ.get(0);
                     //getMobileWZData();
 
-                }
-                else {
+                } else {
                     changeText(getString(R.string.msg_fechtedWZ));
                     _editWatchzone.setEditWz(_watchzoneArray);
                     saveWZToDatabase();
@@ -1020,27 +984,23 @@ public void  updateMobileWZRadius() {
                 }
 
 
-
-
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
-            }
-
-        if(mobileWZ) {
-
-
         }
-        else {
+
+        if (mobileWZ) {
+
+
+        } else {
             swipeRefreshLayout.setRefreshing(false);
         }
 
 
-
     }
 
-    
+
     public void saveWZToDatabase() {
         _dbController.deleteWZ();
 
@@ -1059,24 +1019,24 @@ public void  updateMobileWZRadius() {
             values.put(DBController.KEY_REF_WZ_RADIUS, wz.getWatchzoneRadius());
             values.put(DBController.KEY_REF_WZ_TYPE, wz.getWatchzoneType());
 
-            String wzFilter = "" , wzFilterGroupID = "";
+            String wzFilter = "", wzFilterGroupID = "";
 
             Gson gson = new Gson();
 
-            if(wz.getWatchzoneFilter() != null)
+            if (wz.getWatchzoneFilter() != null)
                 wzFilter = gson.toJson(wz.getWatchzoneFilter());
 
-            if(wz.getWatchzoneFilterGroupId() != null)
+            if (wz.getWatchzoneFilterGroupId() != null)
                 wzFilterGroupID = gson.toJson(wz.getWatchzoneFilterGroupId());
 
             values.put(DBController.KEY_REF_WZ_FILTER, wzFilter);
             values.put(DBController.KEY_REF_WZ_FILTERGROUPID, wzFilterGroupID);
             values.put(DBController.KEY_REF_WZ_ENABLE, String.valueOf(wz.isWzEnable()));
-            values.put(DBController.KEY_REF_WZ_PROXIMITY,String.valueOf(wz.getWatchzoneProximity()));
+            values.put(DBController.KEY_REF_WZ_PROXIMITY, String.valueOf(wz.getWatchzoneProximity()));
             values.put(DBController.KEY_REF_WZ_ISDEFAULT, String.valueOf(wz.getWatchzoneProximity()));
             values.put(DBController.KEY_REF_WZ_NOEDIT, String.valueOf(wz.getWatchzoneProximity()));
             values.put(DBController.KEY_REF_WZ_SHARECODE, wz.getWatchZoneShareCode());
-            values.put(DBController.KEY_REF_WZ_GEOMS,gson.toJson(wz.getWatchZoneGeoms()));
+            values.put(DBController.KEY_REF_WZ_GEOMS, gson.toJson(wz.getWatchZoneGeoms()));
 
             watchzones.add(values);
         }
@@ -1084,7 +1044,7 @@ public void  updateMobileWZRadius() {
         _dbController.add_WzData(watchzones);
     }
 
-    public  void getWZFromDB() {
+    public void getWZFromDB() {
         _watchzoneArray = _dbController.getAllWZ();
         _editWatchzone.setEditWz(_watchzoneArray);
 
@@ -1095,10 +1055,11 @@ public void  updateMobileWZRadius() {
 
 
     }
-    public void setUpdateForWatchzones(){
-        if(_watchzoneArray != null) {
-            if(_watchzoneArray.size() > 0) {
-                _adapter=new WzListAdapter(_context,_watchzoneArray,WatchZoneFragment.this);
+
+    public void setUpdateForWatchzones() {
+        if (_watchzoneArray != null) {
+            if (_watchzoneArray.size() > 0) {
+                _adapter = new WzListAdapter(_context, _watchzoneArray, WatchZoneFragment.this);
 
                 _watchzoneList.setVisibility(View.VISIBLE);
                 _watchzoneList.setAdapter(_adapter);
@@ -1107,14 +1068,12 @@ public void  updateMobileWZRadius() {
                 _adapter.setMode(Attributes.Mode.Single);
                 hideShowDefaultLayout(8); //8 gone, 4 invisible
 
-            }
-            else {
+            } else {
                 hideShowDefaultLayout(0);
             }
 
 
-       }
-       else {
+        } else {
             hideShowDefaultLayout(0);
         }
 
@@ -1123,8 +1082,7 @@ public void  updateMobileWZRadius() {
     public void getWatchZones() {
 
 
-
-        if(!Utility.isInternetConnected(_context)) {
+        if (!Utility.isInternetConnected(_context)) {
             Toast.makeText(_context, getString(R.string.noInternet), Toast.LENGTH_LONG).show();
             swipeRefreshLayout.setRefreshing(false);
             getWZFromDB();
@@ -1135,7 +1093,7 @@ public void  updateMobileWZRadius() {
         showSnack(getString(R.string.msg_fetchWZ));
         queue = RequestHandler.getInstance(_context.getApplicationContext()).getRequestQueue(); //Obtain the instance
 
-        volleyRequest = new JsonObjectRequest(Request.Method.GET,_watchzoneURL,
+        volleyRequest = new JsonObjectRequest(Request.Method.GET, _watchzoneURL,
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -1146,16 +1104,14 @@ public void  updateMobileWZRadius() {
                             purifyWz(response, false);
                             setUpdateForWatchzones();
                             dismisSnackbar();
-                        }
-                        else {
+                        } else {
                             changeText(getString(R.string.msg_unableFetchWZ));
                             dismisSnackbar();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                }
-                else {
+                } else {
                     changeText(getString(R.string.msg_unableFetchWZ));
                     dismisSnackbar();
                 }
@@ -1185,10 +1141,10 @@ public void  updateMobileWZRadius() {
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.floatingActionButton:
-                if(PreferenceUtils.hasKey(_context, "wzLocation"))
-                    PreferenceUtils.removeFromPrefs(_context,"wzLocation");
+                if (PreferenceUtils.hasKey(_context, "wzLocation"))
+                    PreferenceUtils.removeFromPrefs(_context, "wzLocation");
 
                 intent = new Intent(_context, AddStaticZone.class);
                 startActivity(intent);
@@ -1200,7 +1156,7 @@ public void  updateMobileWZRadius() {
                 isBackButtonClicked = false;
                 isMobileWZValueChanged = false;
                 updateMobileWZDataOrNot();
-                Log.d("viewDAta","Staticview");
+                Log.d("viewDAta", "Staticview");
                 updateOptionsMenu();
                 break;
 
@@ -1210,7 +1166,7 @@ public void  updateMobileWZRadius() {
                 isMobileWZValueChanged = false;
                 updateMobileWZDataOrNot();
                 updateOptionsMenu();
-                Log.d("viewDAta","mobileView");
+                Log.d("viewDAta", "mobileView");
                 break;
             case R.id.mobileWzSwitch:
 //                setMobileWzStatus();
@@ -1225,15 +1181,15 @@ public void  updateMobileWZRadius() {
                 intent.putExtra("position", 0);
                 intent.putExtra("edit", true);
                 intent.putExtra("mobile", true);
-                intent.putExtra("mobileRadius",sliderValue);
-                intent.putExtra("mobileSound",_ringtoneURI.toString());
-                if(dictMobileWZ == null) {
+                intent.putExtra("mobileRadius", sliderValue);
+                intent.putExtra("mobileSound", _ringtoneURI.toString());
+                if (dictMobileWZ == null) {
                     return;
                 }
                 Bundle b = new Bundle();
                 b.putSerializable("mobileWZ", (Serializable) dictMobileWZ);
                 intent.putExtras(b); //pass bundle to your intent
-                startActivityForResult(intent,REQUEST_NOTIFICATION);
+                startActivityForResult(intent, REQUEST_NOTIFICATION);
                 break;
         }
     }
@@ -1247,29 +1203,30 @@ public void  updateMobileWZRadius() {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (menu.findItem(R.id.share) != null )
+        if (menu.findItem(R.id.share) != null)
             if (viewSwitcher.getCurrentView() == staticLayout) {
                 menu.findItem(R.id.share).setVisible(true);
 
-            }
-            else {
+            } else {
                 menu.findItem(R.id.share).setVisible(false);
 
-          }
+            }
     }
-    public void mobileView(){
+
+    public void mobileView() {
         if (viewSwitcher.getCurrentView() != mobileLayout) {
 
             heading.setText(getString(R.string.lbl_mobileWZHeading));
             subHeading.setText(getString(R.string.lbl_mobileWZSubHeading));
             mobileBtn.setBackgroundResource(R.drawable.button_red_bottom_border);
-            staticBtn.setBackgroundResource(R.drawable.border_shadow);;
+            staticBtn.setBackgroundResource(R.drawable.border_shadow);
+            ;
 
             viewSwitcher.showNext();
         }
     }
 
-    public void defaultView (){
+    public void defaultView() {
         if (viewSwitcher.getCurrentView() != staticLayout) {
             heading.setText(getString(R.string.lbl_staticWZHeading));
             subHeading.setText(getString(R.string.lbl_staticWZSubHeading));
@@ -1280,15 +1237,13 @@ public void  updateMobileWZRadius() {
         }
     }
 
-    public void setMobileWzStatus(){
+    public void setMobileWzStatus() {
 
-       if(mobileWzSwitch.isChecked())
-       {
-           scrollMobileView.setVisibility(View.VISIBLE);
-       }
-       else {
-           scrollMobileView.setVisibility(View.INVISIBLE);
-       }
+        if (mobileWzSwitch.isChecked()) {
+            scrollMobileView.setVisibility(View.VISIBLE);
+        } else {
+            scrollMobileView.setVisibility(View.INVISIBLE);
+        }
 
 
     }
@@ -1316,8 +1271,7 @@ public void  updateMobileWZRadius() {
     private void setLocation() {
 
 
-
-        LocationManager locationManager = (LocationManager)_context.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) _context.getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         // Get the name of the best provider
         String provider = locationManager.getBestProvider(criteria, true);
@@ -1329,16 +1283,16 @@ public void  updateMobileWZRadius() {
         if (lastKnownLocation != null) {
             Log.d("LocationData", String.valueOf(lastKnownLocation.getLatitude()));
 
-            PreferenceUtils.saveToPrefs(_context, Constants.KEY_USERLATITUDE,String.valueOf(lastKnownLocation.getLatitude()));
-            PreferenceUtils.saveToPrefs(_context,Constants.KEY_USERLONGITUDE,String.valueOf(lastKnownLocation.getLongitude()));
+            PreferenceUtils.saveToPrefs(_context, Constants.KEY_USERLATITUDE, String.valueOf(lastKnownLocation.getLatitude()));
+            PreferenceUtils.saveToPrefs(_context, Constants.KEY_USERLONGITUDE, String.valueOf(lastKnownLocation.getLongitude()));
 
         }
     }
 
     private void setMobileWZFilters() {
 
-        ArrayList < HashMap > defaultDataWz = _dbController.getDefaultDataWz();
-        default_data = new ArrayList < EventGroup > ();
+        ArrayList<HashMap> defaultDataWz = _dbController.getDefaultDataWz();
+        default_data = new ArrayList<EventGroup>();
 
         for (int i = 0; i < defaultDataWz.size(); i++) {
             HashMap<String, String> data = defaultDataWz.get(i);
@@ -1356,7 +1310,7 @@ public void  updateMobileWZRadius() {
 
 
         //Attch filtes to dic
-        ArrayList<String> defValues= new ArrayList<String>();
+        ArrayList<String> defValues = new ArrayList<String>();
         for (int i = 0; i < default_data.size(); i++) {
             EventGroup ev = new EventGroup();
             ev = default_data.get(i);
@@ -1365,36 +1319,36 @@ public void  updateMobileWZRadius() {
             }
         }
 
-        Log.d("mobileWZdefaultFilter" , defValues.toString());
-       // mParams.put("filterGroupId", defValues);
-      //  mParams.put("filter", new ArrayList<String>());
+        Log.d("mobileWZdefaultFilter", defValues.toString());
+        // mParams.put("filterGroupId", defValues);
+        //  mParams.put("filter", new ArrayList<String>());
 
-       sendProximity( new ArrayList<HashMap<String, CategoryFilter>>(),defValues,mobileWzSwitch.isChecked());
+        sendProximity(new ArrayList<HashMap<String, CategoryFilter>>(), defValues, mobileWzSwitch.isChecked());
 
     }
 
     public void sendProximity(ArrayList<HashMap<String, CategoryFilter>> filter, ArrayList<String> filterId, final boolean enable) {
 
 
-        if(!Utility.isInternetConnected(_context)) {
+        if (!Utility.isInternetConnected(_context)) {
             Toast.makeText(_context, getString(R.string.noInternet), Toast.LENGTH_LONG).show();
             return;
         }
 
         showSnack(getString(R.string.msg_makingChangeTtoMobileWZ));
 
-        Log.d("location", PreferenceUtils. getFromPrefs(_context, Constants.KEY_USERLATITUDE, " ").toString());
+        Log.d("location", PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLATITUDE, " ").toString());
 
 
-     HashMap<String, Object> mParams = new HashMap < String, Object> ();
+        HashMap<String, Object> mParams = new HashMap<String, Object>();
 
         Gson gson = new Gson();
-            mParams.put("radius",sliderValue);
-            mParams.put("sound", _ringtoneURI.toString());
-            mParams.put("enable", enable);
-            mParams.put("latitude", (String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLATITUDE, " "));
-            mParams.put("longitude", (String ) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLONGITUDE, " "));
-            mParams.put("filterGroupId", filterId);
+        mParams.put("radius", sliderValue);
+        mParams.put("sound", _ringtoneURI.toString());
+        mParams.put("enable", enable);
+        mParams.put("latitude", (String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLATITUDE, " "));
+        mParams.put("longitude", (String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLONGITUDE, " "));
+        mParams.put("filterGroupId", filterId);
 
         LinkedTreeMap<String, Object> categoryFilters = new LinkedTreeMap<>();
 
@@ -1434,7 +1388,7 @@ public void  updateMobileWZRadius() {
                 }
 
             }
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -1449,14 +1403,14 @@ public void  updateMobileWZRadius() {
 //                mParams.put("filter",new HashMap < String, CategoryFilter> ());
 //            }
 
-            mParams.put("speed", "0.0 km/hr");
-            mParams.put("movement", "Not Moving");
+        mParams.put("speed", "0.0 km/hr");
+        mParams.put("movement", "Not Moving");
 
-            Log.d("proximityDict", mParams.toString());
+        Log.d("proximityDict", mParams.toString());
 
         queue = RequestHandler.getInstance(_context.getApplicationContext()).getRequestQueue(); //Obtain the instance
-        volleyRequest =  new JsonObjectRequest(Request.Method.POST, apiURL, new JSONObject(mParams),
-                new Response.Listener < JSONObject > () {
+        volleyRequest = new JsonObjectRequest(Request.Method.POST, apiURL, new JSONObject(mParams),
+                new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
@@ -1467,19 +1421,17 @@ public void  updateMobileWZRadius() {
 
                                     Log.e("EA", response.toString());
                                     purifyWz(response, true);
-                                    PreferenceUtils.saveToPrefs(_context,Constants.KEY_VALUE_ENABLEPROXI,enable);
+                                    PreferenceUtils.saveToPrefs(_context, Constants.KEY_VALUE_ENABLEPROXI, enable);
                                     changeText(getString(R.string.msg_savedMobileWZ));
 
-                                }
-                                else {
+                                } else {
                                     changeText(getString(R.string.msg_failedToSavedMobileWZ));
 
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                        }
-                        else {
+                        } else {
                             changeText(getString(R.string.msg_failedToSavedMobileWZ));
 
                         }
@@ -1513,7 +1465,7 @@ public void  updateMobileWZRadius() {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 headers.put("Content-Type", "application/json");
                 headers.put("Authorization", "Bearer " + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_token), ""));
-                Log.e("Token","Bearer " + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_token), "") );
+                Log.e("Token", "Bearer " + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_token), ""));
                 return headers;
             }
 
@@ -1531,32 +1483,30 @@ public void  updateMobileWZRadius() {
     public void disableProximity(final boolean enable) {
 
 
-        if(!Utility.isInternetConnected(_context)) {
+        if (!Utility.isInternetConnected(_context)) {
             Toast.makeText(_context, getString(R.string.noInternet), Toast.LENGTH_LONG).show();
             return;
         }
 
         String strURL = "";
-        if(enable)
-        {
+        if (enable) {
             strURL = BuildConfig.API_ENDPOINT + "apiInfo/" + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/enable";
-        }
-        else{
+        } else {
             strURL = BuildConfig.API_ENDPOINT + "apiInfo/" + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/disable";
         }
 
 
         showSnack(getString(R.string.msg_makingChangeTtoMobileWZ));
-        Log.d("location", PreferenceUtils. getFromPrefs(_context, Constants.KEY_USERLATITUDE, " ").toString());
+        Log.d("location", PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLATITUDE, " ").toString());
 
 
-        HashMap<String, Object> mParams = new HashMap < String, Object> ();
+        HashMap<String, Object> mParams = new HashMap<String, Object>();
 
         Gson gson = new Gson();
-Log.d("url",strURL);
+        Log.d("url", strURL);
         queue = RequestHandler.getInstance(_context.getApplicationContext()).getRequestQueue(); //Obtain the instance
-        volleyRequest =  new JsonObjectRequest(Request.Method.PUT, strURL, new JSONObject(mParams),
-                new Response.Listener < JSONObject > () {
+        volleyRequest = new JsonObjectRequest(Request.Method.PUT, strURL, new JSONObject(mParams),
+                new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
@@ -1566,22 +1516,20 @@ Log.d("url",strURL);
                                 if (response.getBoolean("success")) {
 
                                     Log.e("EA", response.toString());
-                                    changeText(getString( R.string.msg_savedMobileWZ));
+                                    changeText(getString(R.string.msg_savedMobileWZ));
                                     purifyWz(response, true);
-                                    PreferenceUtils.saveToPrefs(_context,Constants.KEY_VALUE_ENABLEPROXI,enable);
+                                    PreferenceUtils.saveToPrefs(_context, Constants.KEY_VALUE_ENABLEPROXI, enable);
                                     dismisSnackbar();
-                                    if(!enable) {
-                                       // stopTracking();
+                                    if (!enable) {
+                                        // stopTracking();
 
-                                    }
-                                    else {
-                                       // startTracking();
+                                    } else {
+                                        // startTracking();
                                     }
 
-                                }
-                                else {
-                                    changeText(getString( R.string.msg_failedToSavedMobileWZ));
-                                   // mobileWzSwitch.setChecked(!enable);
+                                } else {
+                                    changeText(getString(R.string.msg_failedToSavedMobileWZ));
+                                    // mobileWzSwitch.setChecked(!enable);
                                     getMobileWZData();
                                     setMobileWzStatus();
                                     setMobileWZData();
@@ -1591,9 +1539,8 @@ Log.d("url",strURL);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                        }
-                        else {
-                            changeText(getString( R.string.msg_failedToSavedMobileWZ));
+                        } else {
+                            changeText(getString(R.string.msg_failedToSavedMobileWZ));
                             //mobileWzSwitch.setChecked(!enable);
                             getMobileWZData();
                             setMobileWzStatus();
@@ -1637,36 +1584,34 @@ Log.d("url",strURL);
         queue.add(volleyRequest);
 
 
-
     }
 
-    public void proximityLocationCheckin()
-    {
+    public void proximityLocationCheckin() {
 
-        if(!Utility.isInternetConnected(_context)) {
+        if (!Utility.isInternetConnected(_context)) {
             //Toast.makeText(_context, getString(R.string.noInternet), Toast.LENGTH_LONG).show();
             return;
         }
 
         final AppPreferences appPreferences = new AppPreferences(_context);
         String apiURL = BuildConfig.API_ENDPOINT + "apiInfo/" + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity/location";
-        Log.d("location", PreferenceUtils. getFromPrefs(_context, Constants.KEY_USERLATITUDE, " ").toString());
+        Log.d("location", PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLATITUDE, " ").toString());
 
 
-        HashMap<String, Object> mParams = new HashMap < String, Object> ();
+        HashMap<String, Object> mParams = new HashMap<String, Object>();
 
         Gson gson = new Gson();
         //mParams.put("accuracy","0");
-        mParams.put("speed","0.0 km/hr");
-        mParams.put("movement","Not Moving");
+        mParams.put("speed", "0.0 km/hr");
+        mParams.put("movement", "Not Moving");
         mParams.put("latitude", Double.valueOf((String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLATITUDE, " ")));
-        mParams.put("longitude",  Double.valueOf((String ) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLONGITUDE, " ")));
+        mParams.put("longitude", Double.valueOf((String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLONGITUDE, " ")));
         Log.d("proximityDictlocation", mParams.toString());
 
 
         queue = RequestHandler.getInstance(_context.getApplicationContext()).getRequestQueue(); //Obtain the instance
-        volleyRequest =  new JsonObjectRequest (Request.Method.PUT, apiURL, new JSONObject(mParams),
-                new Response.Listener < JSONObject > () {
+        volleyRequest = new JsonObjectRequest(Request.Method.PUT, apiURL, new JSONObject(mParams),
+                new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
@@ -1677,8 +1622,8 @@ Log.d("url",strURL);
 
 
                                     Log.e("EA", response.toString());
-                                    PreferenceUtils.saveToPrefs(_context, Constants.KEY_LASTUPDATEDUSERLATITUDE,String.valueOf(Double.valueOf((String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLATITUDE, "0"))));
-                                    PreferenceUtils.saveToPrefs(_context,Constants.KEY_LASTUPDATEDUSERLONGITUDE,String.valueOf(Double.valueOf((String ) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLONGITUDE, "0"))));
+                                    PreferenceUtils.saveToPrefs(_context, Constants.KEY_LASTUPDATEDUSERLATITUDE, String.valueOf(Double.valueOf((String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLATITUDE, "0"))));
+                                    PreferenceUtils.saveToPrefs(_context, Constants.KEY_LASTUPDATEDUSERLONGITUDE, String.valueOf(Double.valueOf((String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLONGITUDE, "0"))));
                                     appPreferences.put(Constants.PROXIMITY_MOVEMENT, 3); //Not moving
 
                                 }
@@ -1693,7 +1638,7 @@ Log.d("url",strURL);
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                    //Toast.makeText(_context, getString(R.string.timeOut), Toast.LENGTH_LONG).show();
+                //Toast.makeText(_context, getString(R.string.timeOut), Toast.LENGTH_LONG).show();
 
 
             }
@@ -1722,13 +1667,13 @@ Log.d("url",strURL);
 
     private void startTracking() {
         Intent intent1 = new Intent(_context, BackgroundDetectedActivitiesService.class);
-        Log.d("BackgroundDetected","started.......................");
+        Log.d("BackgroundDetected", "started.......................");
         _context.startService(intent1);
     }
 
     private void stopTracking() {
         Intent intent = new Intent(_context, BackgroundDetectedActivitiesService.class);
-        Log.d("BackgroundDetected","stopped.......................");
+        Log.d("BackgroundDetected", "stopped.......................");
         _context.stopService(intent);
     }
 

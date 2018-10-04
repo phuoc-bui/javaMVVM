@@ -223,7 +223,7 @@ public class EventDetailsActivity extends BaseActivity implements GoogleMap.OnMa
     public void locationSetup() {
         if (mMap != null && event != null) {
             MarkerOptions marker = EventUtils.eventToMarker(event, event.getArea().get(0));
-            Bitmap eventIcon = IconUtils.createEventIcon(R.layout.custom_list_layer_icon, event, event.getPrimaryColor(), true, false, "");
+            Bitmap eventIcon = IconUtils.createEventIcon(this, R.layout.custom_list_layer_icon, event, event.getPrimaryColor(), true, false, "");
             BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(eventIcon);
             marker.icon(bitmapDescriptor);
 

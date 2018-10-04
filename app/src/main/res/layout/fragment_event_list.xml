@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-                binding:data="@{viewModel.eventItemViewModelList}"/>
+                app:data="@{viewModel.eventItemViewModelList}"/>
         </android.support.v4.widget.SwipeRefreshLayout >
 
         <TextView
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textSize="18sp"
-            android:visibility="@{viewModel.eventItemViewModelList.get().size() == 0}"
+            android:visibility="@{viewModel.isEmpty}"
             android:text="@string/no_data_to_display"/>
     </RelativeLayout>
 </layout>

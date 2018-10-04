@@ -16,14 +16,12 @@
     <application
         android:name=".A2MApplication"
         android:allowBackup="true"
-        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:launchMode="singleTop"
-        android:roundIcon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.A2M">
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/notification_bar_icon" />
@@ -39,71 +37,51 @@
 
         <activity
             android:name="com.redhelmet.alert2me.ui.splash.SplashScreen"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.redhelmet.alert2me.ui.termsandcondition.TermConditionActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.home.HomeActivity"
-            android:configChanges="screenSize|orientation"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.home.HomeActivity" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.hint.HintsActivity"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.hint.HintsActivity" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.AddStaticZone"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.AddStaticZone" />
         <activity
             android:name="com.redhelmet.alert2me.ui.activity.AddStaticZoneLocation"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:screenOrientation="portrait" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.ShareWatchZone"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.ShareWatchZone" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.AddStaticZoneNotification"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.AddStaticZoneNotification" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.AddStaticZoneNotificationTypes"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.AddStaticZoneNotificationTypes" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.AddStaticZoneNotificationStatus"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.AddStaticZoneNotificationStatus" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.EditWatchZone"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.EditWatchZone" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.EventDetailsActivity"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.EventDetailsActivity" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.EventMapFilter"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.EventMapFilter" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.EventMapStatus"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.EventMapStatus" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.EventMapTypes"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.EventMapTypes" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.AddObservation"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.AddObservation" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.ObservationWhatCategory"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.ObservationWhatCategory" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.ObservationLocation"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.ObservationLocation" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.ObservationComments"
-            android:theme="@style/AppTheme" />
+            android:name="com.redhelmet.alert2me.ui.activity.ObservationComments" />
 
         <!-- [Start firebase_service] -->
         <service android:name="com.redhelmet.alert2me.core.MyFirebaseMessagingService">
@@ -128,7 +106,7 @@
         <service
             android:name="com.redhelmet.alert2me.ui.services.BackgroundDetectedActivitiesService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
     </application>
 
 </manifest>

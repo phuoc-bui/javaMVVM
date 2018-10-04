@@ -421,16 +421,6 @@ public class ObservationLocation extends BaseActivity implements LocationListene
     }
 
     @Override
-    public void OnMapReadyCallback() {
-
-    }
-
-    @Override
-    public void OnMapLoadedCallback() {
-
-    }
-
-    @Override
     public void onTextClear() {
 
     }

@@ -3,18 +3,19 @@ package com.redhelmet.alert2me.data.model;
 import android.support.annotation.DrawableRes;
 
 public class Hint implements Model {
+    private String url;
     @DrawableRes
-    private int url;
+    private int resId;
     private String title;
     private String desc;
     private boolean isLast = false;
 
-    public int getUrl() {
-        return url;
+    public int getResId() {
+        return resId;
     }
 
-    public void setUrl(int url) {
-        this.url = url;
+    public void setResId(int resId) {
+        this.resId = resId;
     }
 
     public String getTitle() {
@@ -39,5 +40,13 @@ public class Hint implements Model {
 
     public void setLast(boolean last) {
         isLast = last;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

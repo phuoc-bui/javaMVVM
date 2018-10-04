@@ -1,5 +1,8 @@
 package com.redhelmet.alert2me.data.local.pref;
 
+import android.location.Location;
+import android.support.v4.util.Pair;
+
 import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
@@ -23,4 +26,6 @@ public interface PreferenceHelper {
     List<Long> getUserDefaultFilters();
     void setDefaultFilter(boolean isDefault);
     boolean isDefaultFilter();
+    Location getLastUserLocation();
+    void saveCurrentUserLocation(Location location);
 }

@@ -16,16 +16,14 @@
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.PopupOverlay"
             app:elevation="0dp"
             app:layout_constraintTop_toTopOf="parent">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
+                style="@style/Widget.A2M.Toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@color/navigationnarHeaderColor"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                android:layout_height="?attr/actionBarSize" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -38,42 +36,13 @@
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
+            style="@style/Widget.A2M.TabLayout.Bottom"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/tab_black_top_border"
-            android:includeFontPadding="false"
-            android:tabStripEnabled="false"
+            android:layout_height="@dimen/bottom_tab_height"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:tabPaddingBottom="8dp"
+            app:tabPaddingTop="8dp"
             app:tabGravity="fill"
-            app:tabIndicatorHeight="0dp"
-            app:tabMaxWidth="0dp"
-            app:tabMode="fixed"
-            app:tabPaddingBottom="0dp"
-            app:tabPaddingEnd="0dp"
-            app:tabPaddingStart="0dp"
-            app:tabPaddingTop="0dp"
-            app:tabSelectedTextColor="@color/colorRed"
-            app:tabTextAppearance="@style/CustomTabText"
-            app:tabTextColor="#666666">
-
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_report_problem"
-                android:text="@string/tab_events" />
-
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_watch_zone"
-                android:text="@string/tab_WZ" />
-
-            <android.support.design.widget.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_help_white"
-                android:text="@string/tab_help" />
-        </android.support.design.widget.TabLayout>
+            app:tabMode="fixed" />
     </android.support.constraint.ConstraintLayout>
 </layout>

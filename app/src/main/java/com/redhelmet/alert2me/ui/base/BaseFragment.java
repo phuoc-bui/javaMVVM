@@ -9,7 +9,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,11 +66,15 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
     }
 
     protected VM obtainViewModel() {
-        return ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(getViewModelClass());
+        return ViewModelProviders.of(getBaseActivity(), ViewModelFactory.getInstance()).get(getViewModelClass());
     }
 
     public BaseActivity getBaseActivity() {
         return activity;
+    }
+
+    public VM getViewModel() {
+        return viewModel;
     }
 
     @Override

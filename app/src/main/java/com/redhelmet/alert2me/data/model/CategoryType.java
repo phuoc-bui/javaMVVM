@@ -84,6 +84,4 @@ public class CategoryType implements Model {
     public void setStatuses(List<CategoryStatus> statuses) {
         this.statuses = statuses;
     }
-
-
 }

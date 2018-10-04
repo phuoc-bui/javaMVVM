@@ -1,5 +1,8 @@
 package com.redhelmet.alert2me.data;
 
+import android.location.Location;
+import android.support.v4.util.Pair;
+
 import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
@@ -23,13 +26,15 @@ public interface DataManager {
     boolean getInitialLaunch();
     void setAccepted(boolean accepted);
     boolean getAccepted();
+    Location getLastUserLocation();
+    void saveUserLocation(Location location);
     Observable<ApiInfo> getUserId(String firebaseToken);
     Observable<ProximityLocationResponse> putProximityLocation(double lat, double lng);
     Observable<List<Event>> getAllEvents();
     Observable<List<Category>> getCategories();
     List<Category> getCategoriesSync();
     Observable<List<EventGroup>> getEventGroups();
-    List<Category> getEventGroupsSync();
+    List<EventGroup> getEventGroupsSync();
     Observable<List<Category>> getUserCustomFilters();
     Observable<List<EventGroup>> getUserDefaultFilters();
     void saveUserCustomFilters(List<Category> categories);

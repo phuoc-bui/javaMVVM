@@ -3,7 +3,6 @@ package com.redhelmet.alert2me.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
@@ -17,6 +16,8 @@ import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.CustomNotificationTypeAdapter;
 import com.redhelmet.alert2me.data.model.Category;
 
+import java.util.ArrayList;
+
 public class AddStaticZoneNotificationTypes extends BaseActivity {
 
     Toolbar toolbar;
@@ -24,14 +25,14 @@ public class AddStaticZoneNotificationTypes extends BaseActivity {
     private CustomNotificationTypeAdapter mAdapter;
     ListView exTypes;
     private int selectedCategory;
-    Category category;
+    ArrayList<Category> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_static_wz_notification_types);
-        category = new Category().getInstance();
+        categories = (ArrayList<Category>) dataManager.getCategoriesSync();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -52,7 +53,7 @@ public class AddStaticZoneNotificationTypes extends BaseActivity {
 
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setTitle(Html.fromHtml("<small>" + category.getCategoryArray().get(selectedCategory).getNameLabel() + "</small>"));
+            supportActionBar.setTitle(Html.fromHtml("<small>" + categories.get(selectedCategory).getNameLabel() + "</small>"));
         }
     }
 
@@ -62,7 +63,7 @@ public class AddStaticZoneNotificationTypes extends BaseActivity {
 
         exTypes = (ListView) findViewById(R.id.customCatTypeList);
 
-        mAdapter = new CustomNotificationTypeAdapter(this, category.getCategoryArray(), selectedCategory);
+        mAdapter = new CustomNotificationTypeAdapter(this, categories, selectedCategory);
         exTypes.setItemsCanFocus(true);
         exTypes.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -71,14 +72,14 @@ public class AddStaticZoneNotificationTypes extends BaseActivity {
         exTypes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //    if (category.getCategoryArray().get(selectedCategory).getTypes().get(position).isNotificationDefaultOn()) {
+                //    if (categories.getCategoryArray().get(selectedCategory).getTypes().get(position).isNotificationDefaultOn()) {
 
 
-                    i = new Intent(getApplicationContext(), AddStaticZoneNotificationStatus.class);
-                    i.putExtra("typeId", position);
-                    i.putExtra("catId", selectedCategory);
-                    startActivity(i);
-             //   }
+                i = new Intent(getApplicationContext(), AddStaticZoneNotificationStatus.class);
+                i.putExtra("typeId", position);
+                i.putExtra("catId", selectedCategory);
+                startActivity(i);
+                //   }
             }
         });
     }

@@ -12,10 +12,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.MapNotificationTypeAdapter;
 import com.redhelmet.alert2me.data.model.Category;
 
-import com.redhelmet.alert2me.R;
+import java.util.ArrayList;
 
 public class EventMapTypes extends BaseActivity {
 
@@ -24,14 +25,14 @@ public class EventMapTypes extends BaseActivity {
     private MapNotificationTypeAdapter mAdapter;
     ListView exTypes;
     private int selectedCategory;
-    Category category;
+    ArrayList<Category> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_static_wz_notification_types);
-        category = new Category().getInstance();
+        categories = (ArrayList<Category>) dataManager.getCategoriesSync();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -52,7 +53,7 @@ public class EventMapTypes extends BaseActivity {
 
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setTitle(Html.fromHtml("<small>" + category.getCategoryArray().get(selectedCategory).getNameLabel() + "</small>"));
+            supportActionBar.setTitle(Html.fromHtml("<small>" + categories.get(selectedCategory).getNameLabel() + "</small>"));
         }
     }
 
@@ -62,23 +63,23 @@ public class EventMapTypes extends BaseActivity {
 
         exTypes = (ListView) findViewById(R.id.customCatTypeList);
 
-        mAdapter = new MapNotificationTypeAdapter(this, category.getCategoryArray(), selectedCategory);
+        mAdapter = new MapNotificationTypeAdapter(this, categories, selectedCategory);
         exTypes.setItemsCanFocus(true);
-        exTypes.setAdapter( mAdapter);
+        exTypes.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
 
         exTypes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //    if (category.getCategoryArray().get(selectedCategory).getTypes().get(position).isNotificationDefaultOn()) {
+                //    if (categories.getCategoryArray().get(selectedCategory).getTypes().get(position).isNotificationDefaultOn()) {
 
 
-                    i = new Intent(getApplicationContext(), AddStaticZoneNotificationStatus.class);
-                    i.putExtra("typeId", position);
-                    i.putExtra("catId", selectedCategory);
-                    startActivity(i);
-             //   }
+                i = new Intent(getApplicationContext(), AddStaticZoneNotificationStatus.class);
+                i.putExtra("typeId", position);
+                i.putExtra("catId", selectedCategory);
+                startActivity(i);
+                //   }
             }
         });
     }

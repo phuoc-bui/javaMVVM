@@ -31,6 +31,7 @@ import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -149,7 +150,8 @@ public class AppModule {
     public AppDatabase provideAppDatabase() {
         AppDatabase instance = ServiceLocator.get(AppDatabase.class);
         if (instance == null) {
-            instance = Room.databaseBuilder(application, AppDatabase.class, BuildConfig.DB_FILE_NAME).build();
+            instance = Room.databaseBuilder(application, AppDatabase.class, BuildConfig.DB_FILE_NAME + "room")
+                    .build();
             ServiceLocator.addService(instance);
         }
         return instance;
@@ -181,8 +183,11 @@ public class AppModule {
     }
 
     private OkHttpClient buildOkHttpClient() {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return new OkHttpClient.Builder()
                 .addInterceptor(provideInterceptor())
+                .addInterceptor(loggingInterceptor)
                 .connectTimeout(10L, TimeUnit.SECONDS)
                 .writeTimeout(10L, TimeUnit.SECONDS)
                 .readTimeout(30L, TimeUnit.SECONDS)

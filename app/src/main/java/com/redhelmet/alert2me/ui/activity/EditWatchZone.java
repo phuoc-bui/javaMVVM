@@ -90,7 +90,7 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
             position = extras.getInt("position");
         }
 
-        dbController = new DBController(getApplicationContext());
+//        dbController = DBController.getInstance(this);
         categoryNamesDB=new ArrayList<>();
         categoryNamesDB=dbController.getCategoriesNames();
 

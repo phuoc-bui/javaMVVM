@@ -125,9 +125,6 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
 
         info2.setText(getText(R.string.help_email_support_info) + " " +(String)PreferenceUtils.getFromPrefs(_context,getString(R.string.pref_help_support_email),""));
 
-        GradientDrawable drawable = (GradientDrawable) testNotification.getBackground();
-           drawable.setColor(Color.parseColor((String)PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_secondary_color), "#F2453D")));
-
         cf=new CoreFunctions(_context);
 
     }

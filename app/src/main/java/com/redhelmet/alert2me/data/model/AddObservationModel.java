@@ -7,7 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
  * Created by inbox on 8/2/18.
  */
 
-public class AddObservationModel {
+public class AddObservationModel implements Model{
 
     private static AddObservationModel instance;
     public LatLng latLng;

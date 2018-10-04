@@ -67,7 +67,7 @@ public class HintFragment extends Fragment {
         }
         final ImageView imageView = view.findViewById(R.id.background);
         if (!hint.isLast())
-            imageView.setBackgroundResource(hint.getUrl());
+            imageView.setBackgroundResource(hint.getResId());
 
         return view;
     }

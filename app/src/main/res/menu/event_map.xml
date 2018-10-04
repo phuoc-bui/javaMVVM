@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:compat="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/filter_map"
@@ -11,6 +12,7 @@
         android:id="@+id/refresh_map"
         android:orderInCategory="101"
         android:icon="@drawable/ic_baseline_refresh_24px"
+        compat:actionViewClass="android.widget.ImageView"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/listOptions"

@@ -683,7 +683,7 @@ public class AddObservation extends BaseActivity implements OnMapReadyCallback, 
 //                        "group": "Weather",
 //                        "type": "Thunder",
 //                        "icon": "icons_public_observation_weather",
-//                        "category": "public_observation",
+//                        "categories": "public_observation",
 //                        "obsWhen": "",
 //                        "obsWhere": "",
 //                        "osVersion": "10.0.1",
@@ -705,7 +705,7 @@ public class AddObservation extends BaseActivity implements OnMapReadyCallback, 
                 params.put("group", "Weather");//addObservation.getGroup());
                 params.put("type", "Thunder");//addObservation.getType());
                 params.put("icon",  "icons_public_observation_weather");//addObservation.getIcon());
-                params.put("category", "public_observation");
+                params.put("categories", "public_observation");
                 params.put("obsWhen", "");//temp empty
                 params.put("obsWhere", "");//temp empty
                 params.put("osVersion", DeviceUtil.getOsVersion());

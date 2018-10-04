@@ -33,7 +33,7 @@ android {
         versionName VERSION_NAME
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -62,6 +62,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
 // Android support
+    implementation 'com.android.support:multidex:1.0.3'
     api "com.android.support:design:$SUPPORT_PACKAGE_VERSION"
     implementation "com.android.support:support-v4:$SUPPORT_PACKAGE_VERSION"
     implementation "com.android.support.constraint:constraint-layout:$CONSTRAIN_LAYOUT_VERSION"
@@ -74,9 +75,10 @@ dependencies {
 // Network
     implementation "com.google.code.gson:gson:$GSON_VERSION"
     implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
+    implementation "com.squareup.okhttp3:logging-interceptor:$OK_HTTP_VERSION"
     implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$RETROFIT_VERSION"
-    compile 'com.android.volley:volley:1.1.1'
+    implementation 'com.android.volley:volley:1.1.1'
 
 // Firebase
     implementation "com.google.firebase:firebase-auth:$FIREBASE_VERSION"

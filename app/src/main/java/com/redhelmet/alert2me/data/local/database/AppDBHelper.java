@@ -21,12 +21,12 @@ public class AppDBHelper implements DBHelper {
 
     @Override
     public Observable<List<Category>> getCategories() {
-        return database.categoryDao().getCategories();
+        return database.categoryDao().getCategories().toObservable();
     }
 
     @Override
     public List<Category> getCategoriesSync() {
-        return null;
+        return database.categoryDao().getCategoriesSync();
     }
 
     @Override
@@ -36,21 +36,21 @@ public class AppDBHelper implements DBHelper {
 
     @Override
     public Observable<List<EventGroup>> getEventGroups() {
-        return database.eventGroupDao().getEventGroups();
+        return database.eventGroupDao().getEventGroups().toObservable();
     }
 
     @Override
     public List<EventGroup> getEventGroupsSync() {
-        return null;
+        return database.eventGroupDao().getEventGroupsSync();
     }
 
     @Override
     public Observable<List<Category>> getCategoriesWithIds(List<Long> ids) {
-        return database.categoryDao().getCategoriesWithIds(ids);
+        return database.categoryDao().getCategoriesWithIds(ids).toObservable();
     }
 
     @Override
     public Observable<List<EventGroup>> getEventGroupsWithIds(List<Long> ids) {
-        return database.eventGroupDao().getEventGroupWithIds(ids);
+        return database.eventGroupDao().getEventGroupWithIds(ids).toObservable();
     }
 }

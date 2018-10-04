@@ -13,9 +13,12 @@ import com.redhelmet.alert2me.data.model.EventGroup;
 /**
  * The Room Database that contains the User table.
  */
-@Database(entities = {Category.class, EventGroup.class}, version = BuildConfig.DB_SCHEMA_VERSION)
+@Database(entities = {Category.class, EventGroup.class},
+        version = BuildConfig.DB_SCHEMA_VERSION,
+        exportSchema = false)
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract CategoryDao categoryDao();
+
     public abstract EventGroupDao eventGroupDao();
 }

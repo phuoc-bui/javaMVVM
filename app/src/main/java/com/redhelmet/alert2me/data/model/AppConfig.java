@@ -23,6 +23,11 @@ public class AppConfig implements Model {
     @SerializedName("hintScreen")
     private List<Hint> hintsScreen;
 
+    public AppConfig() {
+        navColor = "#002c41";
+        termsAndConditionUrl = "https://a2me-api.redhelmet.tech/legal";
+    }
+
     public void setNavColor(String navColor) {
         this.navColor = navColor;
     }
@@ -109,10 +114,5 @@ public class AppConfig implements Model {
 
     public void setShowMobileWatchZone(boolean showMobileWatchZone) {
         this.showMobileWatchZone = showMobileWatchZone;
-    }
-
-    @Override
-    public long getId() {
-        return 0;
     }
 }

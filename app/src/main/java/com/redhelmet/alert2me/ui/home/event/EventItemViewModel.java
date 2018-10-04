@@ -2,14 +2,12 @@ package com.redhelmet.alert2me.ui.home.event;
 
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
-import android.graphics.Bitmap;
 
-import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Area;
 import com.redhelmet.alert2me.data.model.Event;
+import com.redhelmet.alert2me.global.EventIcon;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.util.EventUtils;
-import com.redhelmet.alert2me.util.IconUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -17,7 +15,7 @@ import java.util.Locale;
 
 public class EventItemViewModel extends BaseViewModel {
     public ObservableField<Event> event = new ObservableField<>();
-    public ObservableField<Bitmap> eventIcon = new ObservableField<>();
+    public ObservableField<EventIcon> eventIcon = new ObservableField<>();
     public ObservableBoolean isStateWide = new ObservableBoolean(false);
     public ObservableField<String> eventLocation = new ObservableField<>();
     public ObservableField<String> eventTimeAgo = new ObservableField<>();
@@ -38,8 +36,6 @@ public class EventItemViewModel extends BaseViewModel {
         String formattedDistance = String.format(Locale.getDefault(), "%.1f km", distance);
         eventDistance.set(formattedDistance);
 
-        String backgroundColor = event.getPrimaryColor();
-        Bitmap icon = IconUtils.createEventIcon(R.layout.custom_list_layer_icon, event, backgroundColor, true, false, "");
-        eventIcon.set(icon);
+        eventIcon.set(EventIcon.DETAIL_ICON.setEvent(event));
     }
 }
