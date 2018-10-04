@@ -3,7 +3,7 @@ package com.redhelmet.alert2me.ui.home.event;
 import android.databinding.ObservableField;
 
 import com.redhelmet.alert2me.data.model.Event;
-import com.redhelmet.alert2me.ui.activity.EventDetailsActivity;
+import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 

@@ -11,6 +11,7 @@ import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
+import com.redhelmet.alert2me.data.model.EventGroupDisplayFilter;
 import com.redhelmet.alert2me.data.model.Hint;
 import com.redhelmet.alert2me.data.remote.ApiHelper;
 import com.redhelmet.alert2me.data.remote.request.ProximityLocationRequest;
@@ -196,6 +197,17 @@ public class AppDataManager implements DataManager {
     }
 
     private Single<Boolean> filterEventWithDefaultFilter(Event event) {
+//        return getUserDefaultFilters()
+//                .flatMap(eventGroups -> {
+//                    for (EventGroup group : eventGroups) {
+//                        for (EventGroupDisplayFilter displayFilter : group.getDisplayFilter()) {
+//                            for (String layer : displayFilter.getLayers()) {
+//                                if (layer.equalsIgnoreCase(event.getGroup())) return Observable.just(true);
+//                            }
+//                        }
+//                    }
+//                    return Observable.just(false);
+//                }).all(b -> b);
         return getUserDefaultFilters()
                 .flatMap(Observable::fromIterable)
                 .flatMap(group -> Observable.fromIterable(group.getDisplayFilter()))

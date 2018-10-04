@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -14,12 +12,11 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.adapters.EmptyListRecyclerAdapter;
 import com.redhelmet.alert2me.adapters.EventListRecyclerAdapter;
 import com.redhelmet.alert2me.adapters.RecyclerTouchListener;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.databinding.ActivityClusterEventListBinding;
-import com.redhelmet.alert2me.ui.activity.EventDetailsActivity;
+import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
 
 import java.io.Serializable;

@@ -19,7 +19,10 @@ import com.redhelmet.alert2me.domain.ExceptionHandler;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDataBinding> extends Fragment{
+public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDataBinding> extends Fragment {
+
+    protected static final String TAG = BaseFragment.class.getSimpleName();
+
     protected VM viewModel;
     protected VDB binder;
 
@@ -63,6 +66,12 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
         viewModel = obtainViewModel();
         binder.setVariable(getBindingVariable(), viewModel);
         binder.executePendingBindings();
+
+        viewModel.navigationEvent.observe(this, event -> {
+            if (event != null) {
+                onNavigationEvent(event.getContentIfNotHandled());
+            }
+        });
     }
 
     protected VM obtainViewModel() {
@@ -76,6 +85,19 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
     public VM getViewModel() {
         return viewModel;
     }
+
+    /**
+     * Handle navigation event from viewModel, modified this function if any custom navigation
+     * such as add bundle, flag, animation, ...
+     *
+     * @param item type of navigation (with data from viewModel)
+     */
+    protected void onNavigationEvent(@Nullable NavigationItem item) {
+        if (item != null) {
+            item.navigation(getBaseActivity());
+        }
+    }
+
 
     @Override
     public void onDestroy() {

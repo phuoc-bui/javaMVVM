@@ -1,6 +1,7 @@
 package com.redhelmet.alert2me.ui.home.event;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,11 +12,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,10 +30,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.ClusterManager;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.autocomplete.AutoCompleteLocation;
-import com.redhelmet.alert2me.core.Constants;
 import com.redhelmet.alert2me.core.TileProviderFactory;
 import com.redhelmet.alert2me.data.model.Area;
 import com.redhelmet.alert2me.data.model.ClusterMarker;
@@ -38,7 +43,7 @@ import com.redhelmet.alert2me.databinding.FragmentEventMapBinding;
 import com.redhelmet.alert2me.domain.util.CustomClusterRenderer;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.global.Constant;
-import com.redhelmet.alert2me.ui.activity.EventDetailsActivity;
+import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
 import com.redhelmet.alert2me.util.EventUtils;
 import com.redhelmet.alert2me.util.IconUtils;
@@ -47,14 +52,13 @@ import com.redhelmet.alert2me.util.PermissionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.redhelmet.alert2me.core.CoreFunctions._context;
-
 public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBinding> implements
         OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMyLocationClickListener,
         GoogleMap.OnMyLocationButtonClickListener,
         AutoCompleteLocation.AutoCompleteLocationListener {
     private static final int EVENT_FILTER_REQUEST = 9;
+    private static final float DEFAULT_ZOOM = 15f;
 
     private static final int MAP_TYPE_1 = GoogleMap.MAP_TYPE_NORMAL;
     private static final int MAP_TYPE_2 = GoogleMap.MAP_TYPE_TERRAIN;
@@ -69,8 +73,9 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
     SupportMapFragment mapFragment;
     private GoogleMap mMapView;
     private ClusterManager<ClusterMarker> clusterManager;
-    LocationManager locationManager;
+    FusedLocationProviderClient mFusedLocationProviderClient;
     TileProviderFactory tileProviderFactory;
+    LatLng mDefaultLocation = new LatLng(-24, 133); // australia
 
     @Override
     protected int getLayoutId() {
@@ -99,7 +104,8 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        locationManager = (LocationManager) getBaseActivity().getSystemService(Context.LOCATION_SERVICE);
+        // Construct a FusedLocationProviderClient.
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getBaseActivity());
 
         binder.autocompleteLocation.setAutoCompleteTextListener(this);
 
@@ -181,16 +187,10 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
             if (requestPermission)
                 getBaseActivity().requestPermissionsSafe(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constant.LOCATION_PERMISSION_REQUEST_CODE);
         } else if (mMapView != null) {
-            mMapView.setMyLocationEnabled(true);
-            mMapView.setOnMyLocationButtonClickListener(this);
-            mMapView.setOnMyLocationClickListener(this);
-            // Extract My Location View from maps fragment
-            View locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
-            // Change the visibility of my location button
-            if (locationButton != null) {
-                locationButton.setVisibility(View.GONE);
-                binder.locationMap.setOnClickListener(v -> locationButton.callOnClick());
-            }
+            updateLocationUI();
+
+            // Get the current location of the device and set the position of the map.
+            getDeviceLocation();
 
             binder.clusterEvents.setOnClickListener(v -> {
                 v.setSelected(!v.isSelected());
@@ -220,9 +220,53 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(getContext(), "onMyLocationClick", Toast.LENGTH_SHORT).show();
-        PreferenceUtils.saveToPrefs(_context, Constants.KEY_USERLATITUDE, String.valueOf(location.getLatitude()));
-        PreferenceUtils.saveToPrefs(_context, Constants.KEY_USERLONGITUDE, String.valueOf(location.getLongitude()));
+        viewModel.saveUserLocation(location);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void updateLocationUI() {
+        if (mMapView == null) {
+            return;
+        }
+        if (!mPermissionDenied) {
+            mMapView.setMyLocationEnabled(true);
+            mMapView.setOnMyLocationButtonClickListener(this);
+            mMapView.setOnMyLocationClickListener(this);
+            // Extract My Location View from maps fragment
+            View locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+            // Change the visibility of my location button
+            if (locationButton != null) {
+                locationButton.setVisibility(View.GONE);
+                binder.locationMap.setOnClickListener(v -> locationButton.callOnClick());
+            }
+        }
+    }
+
+    private void getDeviceLocation() {
+        /*
+         * Get the best and most recent location of the device, which may be null in rare
+         * cases when a location is not available.
+         */
+        try {
+            if (!mPermissionDenied) {
+                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
+                locationResult.addOnCompleteListener(getBaseActivity(), task -> {
+                    if (task.isSuccessful()) {
+                        viewModel.saveUserLocation(task.getResult());
+                        mMapView.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                new LatLng(task.getResult().getLatitude(),
+                                        task.getResult().getLongitude()), DEFAULT_ZOOM));
+                    } else {
+                        Log.d(TAG, "Current location is null. Using defaults.");
+                        Log.e(TAG, "Exception: %s", task.getException());
+                        mMapView.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, 3.5f));
+                        mMapView.getUiSettings().setMyLocationButtonEnabled(false);
+                    }
+                });
+            }
+        } catch(SecurityException e)  {
+            Log.e("Exception: %s", e.getMessage());
+        }
     }
 
     private void processMarker(List<Event> events) {

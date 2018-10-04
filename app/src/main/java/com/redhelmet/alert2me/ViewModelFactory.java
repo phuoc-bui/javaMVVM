@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.redhelmet.alert2me.data.DataManager;
+import com.redhelmet.alert2me.ui.eventdetail.EventDetailViewModel;
 import com.redhelmet.alert2me.ui.hint.HintViewModel;
 import com.redhelmet.alert2me.ui.home.HomeViewModel;
 import com.redhelmet.alert2me.ui.home.event.ClusterEventsViewModel;
@@ -49,7 +50,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new EventViewModel(dataManager);
         } else if (ClusterEventsViewModel.class.equals(modelClass)) {
             return (T) new ClusterEventsViewModel();
-        }else {
+        } else if (EventDetailViewModel.class.equals(modelClass)) {
+            return (T) new EventDetailViewModel();
+        } else {
             throw new Error("Invalid parameter");
         }
     }

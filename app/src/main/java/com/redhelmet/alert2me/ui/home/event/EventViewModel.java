@@ -11,6 +11,7 @@ import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.Area;
 import com.redhelmet.alert2me.data.model.Event;
+import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 
@@ -30,7 +31,7 @@ public class EventViewModel extends BaseViewModel {
 
     public MutableLiveData<Boolean> isRefreshing = new MutableLiveData<>();
 
-    private boolean isStateWide = false;
+    private boolean isStateWide = true;
 
     private int currentSortType = 0;
 
@@ -47,7 +48,7 @@ public class EventViewModel extends BaseViewModel {
         eventsObserver = events -> {
             if (events != null) {
                 disposeBag.add(Observable.fromIterable(events)
-                        .map(event -> new EventItemViewModel(event, isStateWide))
+                        .map(event -> new EventItemViewModel(setDistanceForEvents(event), isStateWide))
                         .toList()
                         .subscribe(viewModels -> eventItemViewModelList.set(viewModels)));
             }
@@ -72,28 +73,20 @@ public class EventViewModel extends BaseViewModel {
                 }));
     }
 
-    private void updateEvent(Event event) {
-        SetDistanceForEvents(event);
-
+    public void onEventClick(int position) {
+        Event event = events.getValue().get(position);
+        navigationEvent.setValue(new com.redhelmet.alert2me.global.Event<>(new NavigationItem(NavigationItem.START_ACTIVITY, EventDetailsActivity.class, EventDetailsActivity.createDataBundle(event))));
     }
 
-    private Event SetDistanceForEvents(Event event) {
-//        if (_events != null) {
-//            for (int i = 0; i < _events.size(); i++) {
-//                Event event = _events.get(i);
+    public void saveUserLocation(Location location) {
+        dataManager.saveUserLocation(location);
+    }
+
+    private Event setDistanceForEvents(Event event) {
         List<Area> areas = event.getArea();
 
         Area area = areas.get(0);
-        Location userLocation = new Location("User Location");
-        ;
-//        if (PreferenceUtils.hasKey(_context, Constants.KEY_USERLATITUDE) && (PreferenceUtils.hasKey(_context, Constants.KEY_USERLONGITUDE))) {
-//
-//            final Double latitude = Double.valueOf((String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLATITUDE, "0"));
-//            final Double longitude = Double.valueOf((String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_USERLONGITUDE, "0"));
-//            userLocation = new Location("User Location");
-//            userLocation.setLatitude(latitude);
-//            userLocation.setLongitude(longitude);
-//        }
+        Location userLocation = dataManager.getLastUserLocation();
         Location eventLocation = new Location("EventLocation");
         eventLocation.setLatitude(area.getLatitude());
         eventLocation.setLongitude(area.getLongitude());
@@ -102,12 +95,9 @@ public class EventViewModel extends BaseViewModel {
 
             event.setDistanceTo((double) 0.0f);
         } else {
-            double isdistance = userLocation.distanceTo(eventLocation);
-            event.setDistanceTo(isdistance);
+            double distance = userLocation.distanceTo(eventLocation);
+            event.setDistanceTo(distance);
         }
-//
-//                }
-//            }
         return event;
     }
 

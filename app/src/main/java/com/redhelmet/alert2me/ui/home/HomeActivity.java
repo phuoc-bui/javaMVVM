@@ -87,6 +87,7 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
         adapter.addFrag(new WatchZoneFragment(), getString(R.string.tab_WZ));
         adapter.addFrag(new HelpFragment(), getString(R.string.tab_help));
         binder.viewpager.setAdapter(adapter);
+        binder.viewpager.setOffscreenPageLimit(3);
     }
 
     private void setupTabIcons() {

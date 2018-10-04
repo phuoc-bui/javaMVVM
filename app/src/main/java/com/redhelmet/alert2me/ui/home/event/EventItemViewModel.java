@@ -16,7 +16,7 @@ import java.util.Locale;
 public class EventItemViewModel extends BaseViewModel {
     public ObservableField<Event> event = new ObservableField<>();
     public ObservableField<EventIcon> eventIcon = new ObservableField<>();
-    public ObservableBoolean isStateWide = new ObservableBoolean(false);
+    public ObservableBoolean isStateWide = new ObservableBoolean(true);
     public ObservableField<String> eventLocation = new ObservableField<>();
     public ObservableField<String> eventTimeAgo = new ObservableField<>();
     public ObservableField<String> eventDistance = new ObservableField<>();

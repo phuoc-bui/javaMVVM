@@ -67,7 +67,7 @@
         <activity
             android:name="com.redhelmet.alert2me.ui.activity.EditWatchZone" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.EventDetailsActivity" />
+            android:name="com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity" />
         <activity
             android:name="com.redhelmet.alert2me.ui.activity.EventMapFilter" />
         <activity

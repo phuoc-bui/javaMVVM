@@ -61,6 +61,7 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupViewPager();
+        updateToolbarTitle();
         rotation = AnimationUtils.loadAnimation(getBaseActivity(), R.anim.rotation);
         disposeBag.add(viewModel.isLoading.asObservable()
                 .subscribe(isLoading -> {
@@ -76,6 +77,8 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
                         }
                     }
                 }));
+
+
     }
 
     private void setupViewPager() {
@@ -87,15 +90,20 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
             @Override
             public void onPageSelected(int position) {
                 updateOptionsMenu();
-                String title;
-                if (position == 0) {
-                    title = getString(R.string.lblEvent) + " " + getString(R.string.lblMap);
-                } else {
-                    title = getString(R.string.lblEvent) + " " + getString(R.string.lblList);
-                }
-                getBaseActivity().updateToolbarTitle(title);
+                updateToolbarTitle();
             }
         });
+    }
+
+    private void updateToolbarTitle() {
+        int position = binder.viewpager.getCurrentItem();
+        String title;
+        if (position == 0) {
+            title = getString(R.string.lblEvent) + " " + getString(R.string.lblMap);
+        } else {
+            title = getString(R.string.lblEvent) + " " + getString(R.string.lblList);
+        }
+        getBaseActivity().updateToolbarTitle(title);
     }
 
     private void ShowSortDialog() {
@@ -139,12 +147,12 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
         this.mOptionsMenu = menu;
         refreshMenu = menu.findItem(R.id.refresh_map);
         if (refreshMenu != null) {
-            ImageView imageView = (ImageView) refreshMenu.getActionView();
-            imageView.setImageResource(R.drawable.ic_baseline_refresh_24px);
+            ImageView imageView = (ImageView)getLayoutInflater().inflate(R.layout.custom_iv_refresh, null);
             imageView.setOnClickListener(v -> {
                 v.startAnimation(rotation);
                 viewModel.onRefresh.run();
             });
+            refreshMenu.setActionView(imageView);
         }
         super.onCreateOptionsMenu(menu, inflater);
     }
