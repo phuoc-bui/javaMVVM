@@ -42,7 +42,7 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+//        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
     }
 
     @Override

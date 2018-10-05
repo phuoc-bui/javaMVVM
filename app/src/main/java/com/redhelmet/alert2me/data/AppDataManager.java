@@ -11,7 +11,6 @@ import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
-import com.redhelmet.alert2me.data.model.EventGroupDisplayFilter;
 import com.redhelmet.alert2me.data.model.Hint;
 import com.redhelmet.alert2me.data.remote.ApiHelper;
 import com.redhelmet.alert2me.data.remote.request.ProximityLocationRequest;
@@ -32,6 +31,9 @@ public class AppDataManager implements DataManager {
     private ApiHelper api;
     private DBHelper database;
 
+    private List<Category> categories;
+    private List<EventGroup> eventGroups;
+
     public AppDataManager(PreferenceHelper pref, DBHelper db, ApiHelper apiHelper) {
         this.pref = pref;
         this.database = db;
@@ -42,7 +44,9 @@ public class AppDataManager implements DataManager {
     public void saveConfig(ConfigResponse config) {
         pref.saveAppConfig(config.appConfig);
         database.saveCategories(config.categories);
+        categories = config.categories;
         database.saveEventGroups(config.eventGroups);
+        eventGroups.addAll(config.eventGroups);
     }
 
     @Override
@@ -126,22 +130,26 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<Category>> getCategories() {
-        return database.getCategories().subscribeOn(Schedulers.computation());
+        return database.getCategories().subscribeOn(Schedulers.computation())
+                .doOnNext(list -> categories = list);
     }
 
     @Override
     public List<Category> getCategoriesSync() {
-        return database.getCategoriesSync();
+        return categories;
+//        return database.getCategoriesSync();
     }
 
     @Override
     public Observable<List<EventGroup>> getEventGroups() {
-        return database.getEventGroups().subscribeOn(Schedulers.computation());
+        return database.getEventGroups().subscribeOn(Schedulers.computation())
+                .doOnNext(list -> eventGroups = list);
     }
 
     @Override
     public List<EventGroup> getEventGroupsSync() {
-        return database.getEventGroupsSync();
+        return eventGroups;
+//        return database.getEventGroupsSync();
     }
 
     @Override
@@ -168,32 +176,35 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<Event>> getEventsWithFilter(boolean isDefault) {
-        Log.e(TAG, "Start filter event");
+
+        return getEventsWithFilterOneByOne(isDefault)
+                .toList()
+                .doOnSuccess(list -> Log.e(TAG, "Complete filter, return list " + list.size()))
+                .toObservable();
+    }
+
+    @Override
+    public Observable<Event> getEventsWithFilterOneByOne(boolean isDefault) {
+        Log.e(TAG, "Start filter event --------");
         return getAllEvents()
                 .flatMap(Observable::fromIterable)
                 .filter(event -> {
                     if (event.isAlwaysOn()) {
                         return updateEventByCategory(event)
-                                .doOnSuccess(b -> Log.e(TAG, "updated is always event with category"))
                                 .blockingGet();
                     }
 
                     return isDefault ? filterEventWithDefaultFilter(event)
                             .map(b -> {
                                 if (b) return updateEventByCategory(event)
-                                        .doOnSuccess(a -> Log.e(TAG, "updated event with category"))
                                         .blockingGet();
                                 return false;
-                            }).doOnSuccess(b -> Log.e(TAG, "default filter done"))
-                            .blockingGet()
+                            }).blockingGet()
                             : filterEventWithCustomFilter(event)
-                            .doOnSuccess(a -> Log.e(TAG, "custom filter done"))
                             .blockingGet();
                 })
                 .doOnNext(event -> Log.e(TAG, "filter success: " + event.getId()))
-                .toList()
-                .doOnSuccess(list -> Log.e(TAG, "Complete filter, return list " + list.size()))
-                .toObservable();
+                .doOnComplete(() -> Log.e(TAG, "Complete filter event ---------"));
     }
 
     private Single<Boolean> filterEventWithDefaultFilter(Event event) {
@@ -241,17 +252,12 @@ public class AppDataManager implements DataManager {
 
     private Single<Boolean> updateEventByCategory(Event event) {
         return getCategories()
-                .flatMap(categories -> {
-                    Log.e(TAG, "start flat map");
-                    return Observable.fromIterable(categories);
-                })
+                .flatMap(Observable::fromIterable)
                 .any(category -> {
-                    Log.e(TAG, "start find category of event");
                     if (event.getCategory().equalsIgnoreCase(category.getCategory())) {
                         // update event
                         return Observable.fromIterable(category.getStatuses())
                                 .any(status -> {
-                                    Log.e(TAG, "start find status of event");
                                     if (event.getStatusCode().equals(status.getCode())) {
                                         event.setPrimaryColor(status.getPrimaryColor());
                                         event.setSecondaryColor(status.getSecondaryColor());

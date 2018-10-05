@@ -72,7 +72,7 @@ public class EventMapTypes extends BaseActivity {
         exTypes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //    if (categories.getCategoryArray().get(selectedCategory).getTypes().get(position).isNotificationDefaultOn()) {
+                //    if (allEventGroup.getCategoryArray().get(selectedCategory).getTypes().get(position).isNotificationDefaultOn()) {
 
 
                 i = new Intent(getApplicationContext(), AddStaticZoneNotificationStatus.class);

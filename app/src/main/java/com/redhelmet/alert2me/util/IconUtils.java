@@ -218,4 +218,14 @@ public class IconUtils {
         }
         return (resource != 0) ? resource : R.drawable.icons_warning_empty;
     }
+
+    public static int getColorWithAlpha(int color, float ratio) {
+        int newColor;
+        int alpha = Math.round(Color.alpha(color) * ratio);
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
+        newColor = Color.argb(alpha, r, g, b);
+        return newColor;
+    }
 }

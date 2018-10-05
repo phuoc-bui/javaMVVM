@@ -17,6 +17,8 @@ import com.redhelmet.alert2me.data.model.Category;
 
 import java.util.ArrayList;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
 public class AddStaticZoneNotificationStatus extends BaseActivity implements View.OnClickListener {
 
     Toolbar toolbar;
@@ -40,8 +42,14 @@ public class AddStaticZoneNotificationStatus extends BaseActivity implements Vie
             selectedCategory = extras.getInt("catId");
 
         }
-        initializeToolbar();
-        initializeControls();
+
+        disposeBag.add(dataManager.getCategories()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(list -> {
+                    categories = (ArrayList<Category>) list;
+                    initializeToolbar();
+                    initializeControls();
+                }));
 
     }
 

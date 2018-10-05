@@ -16,7 +16,7 @@ import java.util.Collection;
 
 public abstract class BaseRecyclerViewAdapter<IVM> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.ItemViewHolder> implements BindableAdapter<Collection<IVM>> {
 
-    private ObservableArrayList<IVM> itemsSource = new ObservableArrayList<>();
+    public ObservableArrayList<IVM> itemsSource = new ObservableArrayList<>();
 
     public BaseRecyclerViewAdapter() {
         itemsSource.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<IVM>>() {

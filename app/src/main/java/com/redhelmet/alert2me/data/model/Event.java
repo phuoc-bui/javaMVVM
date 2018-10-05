@@ -33,6 +33,7 @@ public class Event implements Model {
     private String temporal;
     private boolean alwaysOn;
     private boolean showOn;
+    private Geometry geometry;
 
     public Double getDistanceTo() {
         return distanceTo;
@@ -264,5 +265,13 @@ public class Event implements Model {
 
     public boolean isShowOn() {
         return this.showOn;
+    }
+
+    public Geometry getGeometry() {
+        return geometry;
+    }
+
+    public void setGeometry(Geometry geometry) {
+        this.geometry = geometry;
     }
 }

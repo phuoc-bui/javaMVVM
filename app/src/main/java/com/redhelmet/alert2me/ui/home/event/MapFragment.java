@@ -3,11 +3,9 @@ package com.redhelmet.alert2me.ui.home.event;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,7 +28,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.ClusterManager;
 import com.redhelmet.alert2me.R;
@@ -43,8 +41,8 @@ import com.redhelmet.alert2me.databinding.FragmentEventMapBinding;
 import com.redhelmet.alert2me.domain.util.CustomClusterRenderer;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.global.Constant;
-import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
+import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
 import com.redhelmet.alert2me.util.EventUtils;
 import com.redhelmet.alert2me.util.IconUtils;
 import com.redhelmet.alert2me.util.PermissionUtils;
@@ -60,9 +58,9 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
     private static final int EVENT_FILTER_REQUEST = 9;
     private static final float DEFAULT_ZOOM = 15f;
 
-    private static final int MAP_TYPE_1 = GoogleMap.MAP_TYPE_NORMAL;
-    private static final int MAP_TYPE_2 = GoogleMap.MAP_TYPE_TERRAIN;
-    private static final int MAP_TYPE_3 = GoogleMap.MAP_TYPE_HYBRID;
+    private static final int MAP_TYPE_1 = GoogleMap.MAP_TYPE_TERRAIN;
+    private static final int MAP_TYPE_2 = GoogleMap.MAP_TYPE_HYBRID;
+    private static final int MAP_TYPE_3 = GoogleMap.MAP_TYPE_SATELLITE;
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in
@@ -76,6 +74,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
     FusedLocationProviderClient mFusedLocationProviderClient;
     TileProviderFactory tileProviderFactory;
     LatLng mDefaultLocation = new LatLng(-24, 133); // australia
+    private List<Polygon> polygons = new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
@@ -111,7 +110,16 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
 
         tileProviderFactory = new TileProviderFactory();
 
-        viewModel.events.observe(this, this::processMarker);
+        if (viewModel.isLoadOneByOne) {
+            disposeBag.add(viewModel.eventsOneByOne
+                    .subscribe(this::processMarkerForEvent, e -> Toast.makeText(getBaseActivity(), R.string.msgUnableToGetEvent, Toast.LENGTH_SHORT).show()));
+        } else {
+            viewModel.events.observe(this, this::processMarker);
+        }
+
+        viewModel.onClearEvents.observe(this, b -> {
+            if (b) clearData();
+        });
     }
 
     @Override
@@ -208,6 +216,8 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
             binder.mapType3.setOnClickListener(v -> updateMapType(MAP_TYPE_3));
 
             updateMapType(MAP_TYPE_1);
+            if (viewModel.events.getValue() != null)
+                processMarker(viewModel.events.getValue());
         }
     }
 
@@ -264,15 +274,25 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
                     }
                 });
             }
-        } catch(SecurityException e)  {
+        } catch (SecurityException e) {
             Log.e("Exception: %s", e.getMessage());
         }
     }
 
-    private void processMarker(List<Event> events) {
-        if (mMapView == null || clusterManager == null || events == null) return;
+    private void clearData() {
+        clearMapAndMarker();
+        removeAllPolygon();
+    }
+
+    private void clearMapAndMarker() {
+        if (mMapView == null || clusterManager == null) return;
         mMapView.clear();
         clusterManager.clearItems();
+    }
+
+    private void processMarker(List<Event> events) {
+        if (events == null) return;
+        clearMapAndMarker();
 
         if (binder.clusterEvents.isSelected()) {
             processClusterMarker(events);
@@ -281,42 +301,68 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
         }
     }
 
-    private void processClusterMarker(List<Event> events) {
+    private void processMarkerForEvent(Event event) {
+        if (mMapView == null || clusterManager == null || event == null) return;
+        Log.e(TAG, "add marker for event " + event.getId());
+        if (binder.clusterEvents.isSelected()) {
+            addClusterMarker(event);
+        } else {
+            addEventMarker(event);
+        }
+    }
 
+    private void removeAllPolygon() {
+        if (polygons == null || polygons.isEmpty()) return;
+        for (Polygon polygon : polygons) {
+            polygon.remove();
+        }
+        polygons.clear();
+    }
+
+    private void processClusterMarker(List<Event> events) {
         for (int i = 0; i < events.size(); i++) {
             Event event = events.get(i);
-            //TODO: is need check isShowOn?
-            List<Area> areas = event.getArea();
-            for (int j = 0; j < areas.size(); j++) {
-                ClusterMarker customMarker = new ClusterMarker(events.get(i), areas.get(j));
-                clusterManager.addItem(customMarker);
-            }
+            addClusterMarker(event);
         }
-//        float zoom = mMapView.getCameraPosition().zoom;
-//        zoom = zoom + 0.1f;
-//        mMapView.moveCamera(CameraUpdateFactory.zoomTo(zoom));
+    }
+
+    private void addClusterMarker(Event event) {
+        //TODO: is need check isShowOn?
+        List<Area> areas = event.getArea();
+        for (int j = 0; j < areas.size(); j++) {
+            ClusterMarker customMarker = new ClusterMarker(event, areas.get(j));
+            clusterManager.addItem(customMarker);
+        }
         clusterManager.cluster();
+        Polygon p = mMapView.addPolygon(viewModel.createPolygonForEvent(event));
+        polygons.add(p);
     }
 
     private void processEventMarker(List<Event> events) {
         for (int i = 0; i < events.size(); i++) {
             try {
                 Event event = events.get(i);
-                //TODO: is need check isShowOn?
-                List<Area> areas = event.getArea();
-                for (int j = 0; j < areas.size(); j++) {
-
-                    MarkerOptions markerOptions = EventUtils.eventToMarker(event, areas.get(j));
-
-                    BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(IconUtils.createEventIcon(getBaseActivity(), R.layout.custom_map_layer_icon, event, event.getPrimaryColor(), false, false, ""));
-                    markerOptions.icon(bitmapDescriptor);
-                    Marker marker = mMapView.addMarker(markerOptions);
-                    marker.setTag(event);
-                }
+                addEventMarker(event);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
+    }
+
+    private void addEventMarker(Event event) {
+        //TODO: is need check isShowOn?
+        List<Area> areas = event.getArea();
+        for (int j = 0; j < areas.size(); j++) {
+
+            MarkerOptions markerOptions = EventUtils.eventToMarker(event, areas.get(j));
+
+            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(IconUtils.createEventIcon(getBaseActivity(), R.layout.custom_map_layer_icon, event, event.getPrimaryColor(), false, false, ""));
+            markerOptions.icon(bitmapDescriptor);
+            Marker marker = mMapView.addMarker(markerOptions);
+            marker.setTag(event);
+        }
+        Polygon p = mMapView.addPolygon(viewModel.createPolygonForEvent(event));
+        polygons.add(p);
     }
 
     @Override

@@ -623,7 +623,7 @@ public class DBController extends SQLiteOpenHelper {
 //
 //        String default_query ="SELECT * FROM "+TABLE_TYPES + " WHERE "+KEY_REF_TYPE_CATEGORY_ID +" = "+catId;
 //
-//        ArrayList<HashMap> categories=new ArrayList<HashMap>();
+//        ArrayList<HashMap> allEventGroup=new ArrayList<HashMap>();
 //        HashMap<String, String> category=null;
 //        SQLiteDatabase db = getReadableDatabase();
 //        Cursor cursor = db.rawQuery(default_query, null);
@@ -640,7 +640,7 @@ public class DBController extends SQLiteOpenHelper {
 //                    category.put(KEY_CAT_TYPE_NOTIF_CAN_FILTER,cursor.getString(cursor.getColumnIndex(KEY_CAT_TYPE_NOTIF_CAN_FILTER)));
 //                    category.put(KEY_CAT_TYPE_NOTIF_DEFAULT,cursor.getString(cursor.getColumnIndex(KEY_CAT_TYPE_NOTIF_DEFAULT)));
 //
-//                    categories.add(category);
+//                    allEventGroup.add(category);
 //
 //                } while(cursor.moveToNext());
 //            }
@@ -652,7 +652,7 @@ public class DBController extends SQLiteOpenHelper {
 //                cursor.close();
 //            }
 //        }
-//        return categories;
+//        return allEventGroup;
 //    }
 //
 //    public ArrayList<HashMap> getCustomCatStatusName(String catId) {
@@ -660,7 +660,7 @@ public class DBController extends SQLiteOpenHelper {
 //
 //        String default_query ="SELECT * FROM "+TABLE_STATUS + " WHERE "+KEY_REF_TYPE_CATEGORY_ID +" = "+catId;
 //
-//        ArrayList<HashMap> categories=new ArrayList<HashMap>();
+//        ArrayList<HashMap> allEventGroup=new ArrayList<HashMap>();
 //        HashMap<String, String> category=null;
 //        SQLiteDatabase db = getReadableDatabase();
 //        Cursor cursor = db.rawQuery(default_query, null);
@@ -670,7 +670,7 @@ public class DBController extends SQLiteOpenHelper {
 //                    category =  new  HashMap<String, String>();
 //
 //
-//                    categories.add(category);
+//                    allEventGroup.add(category);
 //
 //                } while(cursor.moveToNext());
 //            }
@@ -682,7 +682,7 @@ public class DBController extends SQLiteOpenHelper {
 //                cursor.close();
 //            }
 //        }
-//        return categories;
+//        return allEventGroup;
 //    }
     public String CREATE_DEFAULT_CAT_TABLE() {
         return "CREATE TABLE " + TABLE_DEFAULT_CATEGORY +

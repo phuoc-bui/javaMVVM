@@ -40,6 +40,7 @@ public interface DataManager {
     void saveUserCustomFilters(List<Category> categories);
     void saveUserDefaultFilters(List<EventGroup> eventGroups);
     Observable<List<Event>> getEventsWithFilter(boolean isDefault);
+    Observable<Event> getEventsWithFilterOneByOne(boolean isDefault);
     boolean isDefaultFilter();
     void setDefaultFilter(boolean isDefault);
 }

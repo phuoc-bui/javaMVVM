@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.EventGroup;
@@ -18,9 +19,9 @@ import com.redhelmet.alert2me.data.model.EventGroup;
 
 public class DefaultNotificationAdapter extends BaseExpandableListAdapter {
     private Context _context;
-    private ArrayList<EventGroup> data;
+    private List<EventGroup> data;
 
-    public DefaultNotificationAdapter(Context context, ArrayList<EventGroup> data) {
+    public DefaultNotificationAdapter(Context context, List<EventGroup> data) {
         this._context = context;
         this.data = data;
     }

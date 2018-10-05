@@ -1,6 +1,5 @@
 package com.redhelmet.alert2me.ui.home.event;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,11 +18,9 @@ import android.widget.ImageView;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.AppViewPagerAdapter;
-import com.redhelmet.alert2me.core.Constants;
 import com.redhelmet.alert2me.databinding.FragmentEventBinding;
-import com.redhelmet.alert2me.domain.util.PreferenceUtils;
-import com.redhelmet.alert2me.ui.activity.EventMapFilter;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
+import com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity;
 
 
 public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBinding> {
@@ -31,7 +28,6 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
     private Menu mOptionsMenu;
     Intent intent;
     int Activity_Filter_Result = 77;
-    private int sortByList;
     private MenuItem refreshMenu;
     private Animation rotation;
 
@@ -70,8 +66,7 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
                         if (isLoading) {
                             v.setClickable(false);
                             if (rotation.hasEnded()) v.startAnimation(rotation);
-                        }
-                        else {
+                        } else {
                             v.setClickable(true);
                             v.clearAnimation();
                         }
@@ -112,30 +107,14 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getBaseActivity());
         int selectedSortItem = 2;
 
-        sortByList = 2;
         dialogBuilder.setTitle(getString(R.string.listSortOrder));
 
-        dialogBuilder.setSingleChoiceItems(items, selectedSortItem, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+        dialogBuilder.setSingleChoiceItems(items, selectedSortItem, (dialogInterface, i) -> viewModel.setCurrentSortType(i));
+        dialogBuilder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> dialogInterface.dismiss());
+        dialogBuilder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+            viewModel.sortList();
+            dialogInterface.dismiss();
 
-                sortByList = i;
-            }
-        });
-        dialogBuilder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        dialogBuilder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                PreferenceUtils.saveToPrefs(getBaseActivity(), Constants.SORT_PREFERENCE_KEY, sortByList);
-                viewModel.sortList();
-                dialogInterface.dismiss();
-
-            }
         });
         AlertDialog dialog = dialogBuilder.create();
         dialog.show();
@@ -147,7 +126,7 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
         this.mOptionsMenu = menu;
         refreshMenu = menu.findItem(R.id.refresh_map);
         if (refreshMenu != null) {
-            ImageView imageView = (ImageView)getLayoutInflater().inflate(R.layout.custom_iv_refresh, null);
+            ImageView imageView = (ImageView) getLayoutInflater().inflate(R.layout.custom_iv_refresh, null);
             imageView.setOnClickListener(v -> {
                 v.startAnimation(rotation);
                 viewModel.onRefresh.run();
@@ -184,7 +163,7 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
         switch (item.getItemId()) {
             case R.id.filter_map:
             case R.id.menuFilterList:
-                intent = new Intent(getActivity(), EventMapFilter.class);
+                intent = new Intent(getActivity(), EventFilterActivity.class);
                 startActivityForResult(intent, Activity_Filter_Result);
                 return true;
 

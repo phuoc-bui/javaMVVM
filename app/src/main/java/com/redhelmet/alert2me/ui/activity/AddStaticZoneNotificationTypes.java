@@ -17,6 +17,9 @@ import com.redhelmet.alert2me.adapters.CustomNotificationTypeAdapter;
 import com.redhelmet.alert2me.data.model.Category;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class AddStaticZoneNotificationTypes extends BaseActivity {
 
@@ -25,23 +28,28 @@ public class AddStaticZoneNotificationTypes extends BaseActivity {
     private CustomNotificationTypeAdapter mAdapter;
     ListView exTypes;
     private int selectedCategory;
-    ArrayList<Category> categories;
+    private ArrayList<Category> categories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_static_wz_notification_types);
-        categories = (ArrayList<Category>) dataManager.getCategoriesSync();
+
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             selectedCategory = extras.getInt("catId");
         }
 
-        initializeToolbar();
-        initializeControls();
-
+        disposeBag.add(dataManager.getCategories()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(list -> {
+                    categories = (ArrayList<Category>) list;
+                    initializeToolbar();
+                    initializeControls();
+                }
+        ));
     }
 
     public void initializeToolbar() {
@@ -72,7 +80,7 @@ public class AddStaticZoneNotificationTypes extends BaseActivity {
         exTypes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //    if (categories.getCategoryArray().get(selectedCategory).getTypes().get(position).isNotificationDefaultOn()) {
+                //    if (allEventGroup.getCategoryArray().get(selectedCategory).getTypes().get(position).isNotificationDefaultOn()) {
 
 
                 i = new Intent(getApplicationContext(), AddStaticZoneNotificationStatus.class);
@@ -107,13 +115,5 @@ public class AddStaticZoneNotificationTypes extends BaseActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        mAdapter.notifyDataSetChanged();
-
     }
 }

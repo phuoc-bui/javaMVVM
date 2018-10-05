@@ -22,7 +22,6 @@ public class SplashViewModel extends BaseViewModel {
         disposeBag.add(dataManager.loadConfig()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-                    isLoading.set(false);
                     startTimer();
                 }, error -> {
                     isLoading.set(false);
@@ -36,6 +35,7 @@ public class SplashViewModel extends BaseViewModel {
         disposeBag.add(Observable.timer(Constant.SPLASH_DISPLAY_LENGTH, TimeUnit.MILLISECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(number -> {
+                    isLoading.set(false);
                     Class dest;
                     if (dataManager.getInitialLaunch()) {
                         if (dataManager.getAccepted()) {

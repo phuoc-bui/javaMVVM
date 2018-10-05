@@ -6,12 +6,15 @@ import android.support.annotation.NonNull;
 
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.ui.eventdetail.EventDetailViewModel;
+import com.redhelmet.alert2me.ui.eventfilter.custom.CustomFilterViewModel;
+import com.redhelmet.alert2me.ui.eventfilter.defaultfilter.DefaultFilterViewModel;
 import com.redhelmet.alert2me.ui.hint.HintViewModel;
 import com.redhelmet.alert2me.ui.home.HomeViewModel;
 import com.redhelmet.alert2me.ui.home.event.ClusterEventsViewModel;
 import com.redhelmet.alert2me.ui.home.event.EventViewModel;
 import com.redhelmet.alert2me.ui.splash.SplashViewModel;
 import com.redhelmet.alert2me.ui.termsandcondition.TermsConditionViewModel;
+import com.redhelmet.alert2me.ui.eventfilter.EventFilterViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
     private static ViewModelFactory INSTANCE;
@@ -52,7 +55,14 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new ClusterEventsViewModel();
         } else if (EventDetailViewModel.class.equals(modelClass)) {
             return (T) new EventDetailViewModel();
-        } else {
+        } else if (EventFilterViewModel.class.equals(modelClass)) {
+            return (T) new EventFilterViewModel(dataManager);
+        }else if (DefaultFilterViewModel.class.equals(modelClass)) {
+            return (T) new DefaultFilterViewModel(dataManager);
+        }else if (CustomFilterViewModel.class.equals(modelClass)) {
+            return (T) new CustomFilterViewModel(dataManager);
+        }
+        else {
             throw new Error("Invalid parameter");
         }
     }

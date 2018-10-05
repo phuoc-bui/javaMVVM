@@ -93,7 +93,7 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_static_wz_notification);
+        setContentView(R.layout.activity_event_filter);
 //        dbController = DBController.getInstance(this);
         _dbCategories = new ArrayList<>();
         _dbCategories = dbController.getCategoriesNames();
@@ -154,11 +154,6 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
 
         originCategories = dataManager.getCategoriesSync();
 
-        defaultBtn = (Button) findViewById(R.id.defaultBtn);
-        customBtn = (Button) findViewById(R.id.customBtn);
-        notificationView = (ViewSwitcher) findViewById(R.id.notification_switcher);
-        customView = (RelativeLayout) findViewById(R.id.custom_view);
-        defaultView = (RelativeLayout) findViewById(R.id.default_view);
         addWz_layout = (RelativeLayout) findViewById(R.id.addWz_layout);
         defaultBtn.setOnClickListener(this);
         customBtn.setOnClickListener(this);
@@ -587,21 +582,21 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.defaultBtn:
-                if (notificationView.getCurrentView() != defaultView) {
-
-                    showCustomToDefaultAlert();
-                }
-                break;
-            case R.id.customBtn:
-                if (notificationView.getCurrentView() != customView) {
-                    customView();
-
-                }
-                break;
-
-        }
+//        switch (v.getId()) {
+//            case R.id.defaultBtn:
+//                if (notificationView.getCurrentView() != defaultView) {
+//
+//                    showCustomToDefaultAlert();
+//                }
+//                break;
+//            case R.id.customBtn:
+//                if (notificationView.getCurrentView() != customView) {
+//                    customView();
+//
+//                }
+//                break;
+//
+//        }
     }
 
     void setListener() {

@@ -2,13 +2,13 @@ package com.redhelmet.alert2me.util;
 
 import android.app.Activity;
 import android.databinding.BindingAdapter;
-import android.graphics.Bitmap;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.redhelmet.alert2me.global.EventIcon;
+import com.redhelmet.alert2me.ui.base.BaseRecyclerViewAdapter;
 import com.redhelmet.alert2me.ui.base.BindableAdapter;
 
 import java.util.Collection;
@@ -26,6 +26,11 @@ public class BindingAdapters {
         if (recyclerView.getAdapter() instanceof BindableAdapter) {
             ((BindableAdapter<T>) recyclerView.getAdapter()).setData(data);
         }
+    }
+
+    @BindingAdapter("adapter")
+    public static <T extends BaseRecyclerViewAdapter> void setRecyclerViewAdapter(RecyclerView recyclerView, T adapter) {
+        recyclerView.setAdapter(adapter);
     }
 
     @BindingAdapter("onRefresh")

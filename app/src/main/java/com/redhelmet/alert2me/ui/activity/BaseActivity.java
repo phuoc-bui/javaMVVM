@@ -13,6 +13,8 @@ import com.redhelmet.alert2me.data.model.Observations;
 
 import org.json.JSONArray;
 
+import io.reactivex.disposables.CompositeDisposable;
+
 /**
  * Created by inbox on 27/11/17.
  */
@@ -24,7 +26,8 @@ public abstract class BaseActivity extends AppCompatActivity{
     Snackbar snackbar=null;
     Observations observations;
     AddObservationModel addObservation;
-    DataManager dataManager;
+    protected DataManager dataManager;
+    protected CompositeDisposable disposeBag = new CompositeDisposable();
 
 
     @Override
@@ -35,8 +38,6 @@ public abstract class BaseActivity extends AppCompatActivity{
         config= dataManager.getAppConfig();
         observations=observations.getInstance();
         addObservation = addObservation.getInstance();
-
-
     }
     public void showSnack(View watchzoneLayout, String message){
 
@@ -67,5 +68,11 @@ public abstract class BaseActivity extends AppCompatActivity{
     public void changeText(String message){
         if(snackbar.isShown() && snackbar!=null)
             snackbar.setText(message);
+    }
+
+    @Override
+    protected void onDestroy() {
+        disposeBag.dispose();
+        super.onDestroy();
     }
 }

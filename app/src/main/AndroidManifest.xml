@@ -69,7 +69,7 @@
         <activity
             android:name="com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.EventMapFilter" />
+            android:name="com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity" />
         <activity
             android:name="com.redhelmet.alert2me.ui.activity.EventMapStatus" />
         <activity
