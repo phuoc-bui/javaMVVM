@@ -4,15 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.AdapterView;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.CustomNotificationCategoryAdapter;
 import com.redhelmet.alert2me.databinding.FragmentCustomFilterBinding;
 import com.redhelmet.alert2me.ui.activity.AddStaticZoneNotificationTypes;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
+import com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity;
 
-public class CustomFilterFragment extends BaseFragment<CustomFilterViewModel, FragmentCustomFilterBinding> {
+public class CustomFilterFragment extends BaseFragment<CustomFilterViewModel, FragmentCustomFilterBinding> implements EventFilterActivity.OnSaveClickListener {
 
     private CustomNotificationCategoryAdapter adapter;
 
@@ -42,5 +42,10 @@ public class CustomFilterFragment extends BaseFragment<CustomFilterViewModel, Fr
             startActivity(i);
 
         });
+    }
+
+    @Override
+    public void onSaveClick(boolean editMode) {
+        viewModel.saveData(editMode);
     }
 }

@@ -2,8 +2,6 @@ package com.redhelmet.alert2me.ui.home.event;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -55,7 +53,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
         GoogleMap.OnMyLocationClickListener,
         GoogleMap.OnMyLocationButtonClickListener,
         AutoCompleteLocation.AutoCompleteLocationListener {
-    private static final int EVENT_FILTER_REQUEST = 9;
+
     private static final float DEFAULT_ZOOM = 15f;
 
     private static final int MAP_TYPE_1 = GoogleMap.MAP_TYPE_TERRAIN;
@@ -447,13 +445,6 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
             startActivity(EventDetailsActivity.newInstance(getBaseActivity(), event));
         } else {
             Toast.makeText(getContext(), "Unable to get event details", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == EVENT_FILTER_REQUEST && resultCode == Activity.RESULT_OK) {
-            processMarker(viewModel.events.getValue());
         }
     }
 }

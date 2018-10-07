@@ -4,26 +4,18 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ExpandableListView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.ViewSwitcher;
 
 import com.google.gson.Gson;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.AppViewPagerAdapter;
-import com.redhelmet.alert2me.adapters.CustomNotificationCategoryAdapter;
-import com.redhelmet.alert2me.adapters.DefaultNotificationAdapter;
 import com.redhelmet.alert2me.data.local.database.DBController;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.CategoryFilter;
@@ -41,9 +33,8 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-public class EventFilterActivity extends BaseActivity<EventFilterViewModel, ActivityEventFilterBinding> implements View.OnClickListener {
+public class EventFilterActivity extends BaseActivity<EventFilterViewModel, ActivityEventFilterBinding> {
 
     public ArrayList<Category> category_data = new ArrayList<Category>();
     public ArrayList<CategoryType> types_data = new ArrayList<CategoryType>();
@@ -53,6 +44,7 @@ public class EventFilterActivity extends BaseActivity<EventFilterViewModel, Acti
 
     public boolean editMode = false;
     public int position = 0;
+    private AppViewPagerAdapter adapter;
 
     @Override
     protected int getLayoutId() {
@@ -93,7 +85,7 @@ public class EventFilterActivity extends BaseActivity<EventFilterViewModel, Acti
     }
 
     private void setupViewPager() {
-        AppViewPagerAdapter adapter = new AppViewPagerAdapter(getSupportFragmentManager());
+        adapter = new AppViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new DefaultFilterFragment(), getString(R.string.lblDefault));
         adapter.addFrag(new CustomFilterFragment(), getString(R.string.lblCustom));
         binder.viewpager.setAdapter(adapter);
@@ -118,7 +110,7 @@ public class EventFilterActivity extends BaseActivity<EventFilterViewModel, Acti
 
 
     public void initializeControls() {
-        if(viewModel.isDefaultFilter()) {
+        if (viewModel.isDefaultFilter()) {
             binder.viewpager.setCurrentItem(0, false);
         } else {
             binder.viewpager.setCurrentItem(1, false);
@@ -337,30 +329,11 @@ public class EventFilterActivity extends BaseActivity<EventFilterViewModel, Acti
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.done_btn:
-//                if(editMode){
-//                    if (notificationView.getCurrentView() == defaultView) {
-//                        //default
-//                        editModeNotificationSave(true);
-//
-//
-//                    } else {
-//                        //custom
-//                        editModeNotificationSave(false);
-//                    }
-//
-//
-//                }else {
-//                if (notificationView.getCurrentView() == defaultView) {
-//                    //default
-//                    saveDataToserver(true);
-//
-//
-//                } else {
-//                    //custom
-//                    saveDataToserver(false);
-//                }
-                // }
-
+                int currentPosition = binder.viewpager.getCurrentItem();
+                Fragment fragment = adapter.getItem(currentPosition);
+                if (fragment instanceof OnSaveClickListener) {
+                    ((OnSaveClickListener) fragment).onSaveClick(editMode);
+                }
                 return true;
 
             case android.R.id.home:
@@ -369,26 +342,6 @@ public class EventFilterActivity extends BaseActivity<EventFilterViewModel, Acti
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-
-    @Override
-    public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.defaultBtn:
-//                if (notificationView.getCurrentView() != defaultView) {
-//
-//                    showCustomToDefaultAlert();
-//                }
-//                break;
-//            case R.id.customBtn:
-//                if (notificationView.getCurrentView() != customView) {
-//                    customView();
-//
-//                }
-//                break;
-//
-//        }
     }
 
     public void showCustomToDefaultAlert() {
@@ -414,150 +367,7 @@ public class EventFilterActivity extends BaseActivity<EventFilterViewModel, Acti
                 .show();
     }
 
-
-    public void saveDataToserver(boolean state) {
-
-
-        Gson gson = new Gson();
-
-        ArrayList<String> defValues = new ArrayList<String>();
-
-
-        if (state) // default
-        {
-
-            for (int i = 0; i < default_data.size(); i++) {
-                EventGroup ev = new EventGroup();
-                ev = default_data.get(i);
-                if (ev.isFilterOn()) {
-                    defValues.add(String.valueOf(ev.getId()));
-                }
-            }
-
-
-            PreferenceUtils.saveToPrefs(getApplicationContext(), getString(R.string.pref_map_filter), gson.toJson(defValues));
-
-        } else {
-
-//                LinkedTreeMap<String, Object> categoryFilters = new LinkedTreeMap<>();
-//                for (Category catData : cat.getCategoryArray()) {
-//                    JSONObject allEventGroup = new JSONObject();
-//                    JSONArray typeArray = new JSONArray();
-//
-//                    for (CategoryType catType : catData.getTypes()) {
-//                        JSONObject type = new JSONObject();
-//                        JSONArray status = new JSONArray();
-//
-//                        for (CategoryStatus catStatus : catType.getStatuses()) {
-//                            if (catStatus.isNotificationDefaultOn()) {
-//                                status.put(catStatus.getCode());
-//                            }
-//                        }
-//                        type.put("code", catType.getCode());
-//                        type.put("status", status);
-//                        typeArray.put(type);
-//                    }
-//                    allEventGroup.put("types", typeArray);
-//                    categoryFilters.put(catData.getCategory(), allEventGroup);
-//                }
-
-            ArrayList<HashMap<String, CategoryFilter>> categoryFilters = new ArrayList<HashMap<String, CategoryFilter>>();
-
-            ArrayList<CategoryTypeFilter> typeArray = new ArrayList<CategoryTypeFilter>();
-//            for (Category catData : originCategories) {
-//
-//                HashMap<String, CategoryFilter> categoryHash = new HashMap<>();
-//                typeArray = new ArrayList<CategoryTypeFilter>();
-//
-//                for (CategoryType catType : catData.getTypes()) {
-//
-//
-//                    List<String> status = new ArrayList<>();
-//                    CategoryTypeFilter type = new CategoryTypeFilter();
-//
-//                    for (CategoryStatus catStatus : catType.getStatuses()) {
-//                        if (catStatus.isNotificationDefaultOn()) {
-//                            status.add(catStatus.getCode());
-//                        }
-//                    }
-//                    type.setCode(catType.getCode());
-//                    type.setStatus(status);
-//                    typeArray.add(type);
-//                }
-//                CategoryFilter catFilter = new CategoryFilter();
-//                catFilter.setTypes(typeArray);
-//
-//                categoryHash.put(catData.getCategory(), catFilter);
-//                categoryFilters.add(categoryHash);
-//            }
-            PreferenceUtils.saveToPrefs(getApplicationContext(), getString(R.string.pref_map_filter), gson.toJson(categoryFilters));
-
-        }
-        PreferenceUtils.saveToPrefs(getApplicationContext(), getString(R.string.pref_map_isDefault), state);
-
-        Intent resultIntent = new Intent();
-
-        setResult(Activity.RESULT_OK, resultIntent);
-        finish();
-    }
-
-    public void editModeNotificationSave(boolean state) {
-        ArrayList<String> defValues = new ArrayList<String>();
-        ArrayList<HashMap<String, CategoryFilter>> categoryFilters = new ArrayList<HashMap<String, CategoryFilter>>();
-        if (state) // default
-        {
-
-            for (int i = 0; i < default_data.size(); i++) {
-                EventGroup ev = new EventGroup();
-                ev = default_data.get(i);
-                if (ev.isFilterOn()) {
-                    defValues.add(String.valueOf(ev.getId()));
-                }
-            }
-
-
-        } else {
-
-
-            ArrayList<CategoryTypeFilter> typeArray = new ArrayList<CategoryTypeFilter>();
-//            for (Category catData : originCategories) {
-//
-//                HashMap<String, CategoryFilter> categoryHash = new HashMap<>();
-//                typeArray = new ArrayList<CategoryTypeFilter>();
-//
-//                for (CategoryType catType : catData.getTypes()) {
-//
-//
-//                    List<String> status = new ArrayList<>();
-//                    CategoryTypeFilter type = new CategoryTypeFilter();
-//
-//                    for (CategoryStatus catStatus : catType.getStatuses()) {
-//                        if (catStatus.isNotificationDefaultOn()) {
-//                            status.add(catStatus.getCode());
-//                        }
-//                    }
-//                    type.setCode(catType.getCode());
-//                    type.setStatus(status);
-//                    typeArray.add(type);
-//                }
-//                CategoryFilter catFilter = new CategoryFilter();
-//                catFilter.setTypes(typeArray);
-//
-//                categoryHash.put(catData.getCategory(), catFilter);
-//                categoryFilters.add(categoryHash);
-//            }
-
-            //  editWatchZones.setWatchzoneFilter(categoryFilters);
-            // editWatchZones.setWatchzoneFilterGroupId(new ArrayList<Integer>());
-
-        }
-
-        Intent resultIntent = new Intent();
-
-        resultIntent.putExtra("default", state);
-        resultIntent.putExtra("filter", categoryFilters);
-        resultIntent.putExtra("filterGroup", defValues);
-        setResult(Activity.RESULT_OK, resultIntent);
-        finish();
+    public interface OnSaveClickListener {
+        void onSaveClick(boolean editMode);
     }
 }

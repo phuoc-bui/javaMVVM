@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.ui.home.event;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,9 +26,10 @@ import com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity;
 
 public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBinding> {
 
+    private static final int EVENT_FILTER_REQUEST = 9;
+
     private Menu mOptionsMenu;
     Intent intent;
-    int Activity_Filter_Result = 77;
     private MenuItem refreshMenu;
     private Animation rotation;
 
@@ -164,7 +166,7 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
             case R.id.filter_map:
             case R.id.menuFilterList:
                 intent = new Intent(getActivity(), EventFilterActivity.class);
-                startActivityForResult(intent, Activity_Filter_Result);
+                startActivityForResult(intent, EVENT_FILTER_REQUEST);
                 return true;
 
             case R.id.refresh_map:
@@ -180,6 +182,13 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EVENT_FILTER_REQUEST && resultCode == Activity.RESULT_OK) {
+            viewModel.onRefresh.run();
         }
     }
 }

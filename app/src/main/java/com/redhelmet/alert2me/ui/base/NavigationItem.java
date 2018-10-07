@@ -31,8 +31,12 @@ public class NavigationItem {
      * Show toast with data is String or String resource
      */
     public static final int SHOW_TOAST = 5;
+    /**
+     * Finish current activity and return result
+     */
+    public static final int FINISH_AND_RETURN = 6;
 
-    @IntDef({START_ACTIVITY, START_ACTIVITY_AND_FINISH, FINISH, START_WEB_VIEW, SHOW_TOAST})
+    @IntDef({START_ACTIVITY, START_ACTIVITY_AND_FINISH, FINISH, START_WEB_VIEW, SHOW_TOAST, FINISH_AND_RETURN})
     @Retention(RetentionPolicy.SOURCE)
     public @interface NavigationType {
     }
@@ -75,6 +79,16 @@ public class NavigationItem {
                     Toast.makeText(context, (int) data[0], Toast.LENGTH_SHORT).show();
                 } else if (data[0] instanceof String) {
                     Toast.makeText(context, (String) data[0], Toast.LENGTH_SHORT).show();
+                } else {
+                    throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
+                }
+                break;
+            case FINISH_AND_RETURN:
+                if (data == null || data.length == 0)
+                    throw new Error(String.format(wrongDataError, "null/empty", context.getLocalClassName()));
+                if (data[0] instanceof Intent) {
+                    context.setResult(Activity.RESULT_OK, (Intent) data[0]);
+                    context.finish();
                 } else {
                     throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
                 }
