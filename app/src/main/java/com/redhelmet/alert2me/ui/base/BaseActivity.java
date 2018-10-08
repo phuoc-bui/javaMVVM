@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.redhelmet.alert2me.BR;
 import com.redhelmet.alert2me.ViewModelFactory;
-import com.redhelmet.alert2me.domain.ExceptionHandler;
 import com.redhelmet.alert2me.util.PermissionUtils;
 
 import io.reactivex.disposables.CompositeDisposable;

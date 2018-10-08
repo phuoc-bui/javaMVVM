@@ -1,6 +1,8 @@
 package com.redhelmet.alert2me.data.model;
 
-public class CategoryStatus implements Model {
+import com.redhelmet.alert2me.data.model.base.UserModel;
+
+public class CategoryStatus extends UserModel {
     private String code;
     private String name;
     private String primaryColor;
@@ -13,7 +15,6 @@ public class CategoryStatus implements Model {
     private boolean defaultOn;
     private boolean notificationCanFilter;
     private boolean notificationDefaultOn;
-
 
     public String getCode() {
         return code;

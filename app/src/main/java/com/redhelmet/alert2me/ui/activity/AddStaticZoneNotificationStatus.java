@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -13,44 +14,37 @@ import android.widget.Toast;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.CustomNotificationStatusAdapter;
-import com.redhelmet.alert2me.data.model.Category;
-
-import java.util.ArrayList;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import com.redhelmet.alert2me.data.model.CategoryStatus;
+import com.redhelmet.alert2me.data.model.CategoryType;
 
 public class AddStaticZoneNotificationStatus extends BaseActivity implements View.OnClickListener {
-
+    public static final String EXTRA_CATEGORY_TYPE = "EXTRA_CATEGORY_TYPE";
+    public static final String EXTRA_TYPE_POSITION = "EXTRA_TYPE_POSITION";
     Toolbar toolbar;
-    Intent i;
-    private CustomNotificationStatusAdapter mAdapter;
     ListView exTypes;
-    int selectedType;
-    int selectedCategory;
-    ArrayList<Category> categories;
+    private CategoryType selectedType;
+    private int typePosition;
+
+    public static Intent newInstance(Context context, CategoryType categoryType, int typePosition) {
+        Intent intent = new Intent(context, AddStaticZoneNotificationStatus.class);
+        intent.putExtra(EXTRA_CATEGORY_TYPE, categoryType);
+        intent.putExtra(EXTRA_TYPE_POSITION, typePosition);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_static_wz_notification_types);
-        categories = (ArrayList<Category>) dataManager.getCategoriesSync();
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            selectedType = extras.getInt("typeId");
-            selectedCategory = extras.getInt("catId");
-
+            selectedType = (CategoryType) extras.getSerializable(EXTRA_CATEGORY_TYPE);
+            typePosition = extras.getInt(EXTRA_TYPE_POSITION);
         }
 
-        disposeBag.add(dataManager.getCategories()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> {
-                    categories = (ArrayList<Category>) list;
-                    initializeToolbar();
-                    initializeControls();
-                }));
-
+        initializeToolbar();
+        initializeControls();
     }
 
     public void initializeToolbar() {
@@ -62,7 +56,7 @@ public class AddStaticZoneNotificationStatus extends BaseActivity implements Vie
 
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setTitle(Html.fromHtml("<small>" + categories.get(selectedCategory).getTypes().get(selectedType).getName() + "</small>"));
+            supportActionBar.setTitle(Html.fromHtml("<small>" + selectedType.getName() + "</small>"));
         }
     }
 
@@ -70,7 +64,7 @@ public class AddStaticZoneNotificationStatus extends BaseActivity implements Vie
     public void initializeControls() {
 
         exTypes = (ListView) findViewById(R.id.customCatTypeList);
-        mAdapter = new CustomNotificationStatusAdapter(AddStaticZoneNotificationStatus.this, categories, selectedCategory, selectedType);
+        CustomNotificationStatusAdapter mAdapter = new CustomNotificationStatusAdapter(selectedType);
         exTypes.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
@@ -94,13 +88,28 @@ public class AddStaticZoneNotificationStatus extends BaseActivity implements Vie
                 return true;
 
             case android.R.id.home:
-                onBackPressed();
+                updateSelectedTypeStatus();
+                Intent result = new Intent();
+                result.putExtra(EXTRA_CATEGORY_TYPE, selectedType);
+                result.putExtra(EXTRA_TYPE_POSITION, typePosition);
+                setResult(RESULT_OK, result);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    private void updateSelectedTypeStatus() {
+        int enabledCount = 0;
+        for (int i = 0; i < selectedType.getStatuses().size(); i++) {
+            CategoryStatus status = selectedType.getStatuses().get(i);
+            if (status.isNotificationDefaultOn()) enabledCount++;
+        }
+        if (enabledCount > 0) {
+            selectedType.setNotificationDefaultOn(true);
+        }
+    }
 
     @Override
     public void onClick(View v) {

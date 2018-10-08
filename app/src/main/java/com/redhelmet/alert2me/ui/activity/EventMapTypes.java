@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -16,27 +17,28 @@ import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.MapNotificationTypeAdapter;
 import com.redhelmet.alert2me.data.model.Category;
 
-import java.util.ArrayList;
-
 public class EventMapTypes extends BaseActivity {
-
+    private static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
     Toolbar toolbar;
-    Intent i;
     private MapNotificationTypeAdapter mAdapter;
     ListView exTypes;
-    private int selectedCategory;
-    ArrayList<Category> categories;
+    private Category selectedCategory;
+
+    public static Intent newInstance(Context context, Category category) {
+        Intent intent = new Intent(context, EventMapTypes.class);
+        intent.putExtra(EXTRA_CATEGORY, category);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_static_wz_notification_types);
-        categories = (ArrayList<Category>) dataManager.getCategoriesSync();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            selectedCategory = extras.getInt("catId");
+            selectedCategory = (Category) extras.getSerializable(EXTRA_CATEGORY);
         }
 
         initializeToolbar();
@@ -53,7 +55,7 @@ public class EventMapTypes extends BaseActivity {
 
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setTitle(Html.fromHtml("<small>" + categories.get(selectedCategory).getNameLabel() + "</small>"));
+            supportActionBar.setTitle(Html.fromHtml("<small>" + selectedCategory.getNameLabel() + "</small>"));
         }
     }
 
@@ -63,7 +65,7 @@ public class EventMapTypes extends BaseActivity {
 
         exTypes = (ListView) findViewById(R.id.customCatTypeList);
 
-        mAdapter = new MapNotificationTypeAdapter(this, categories, selectedCategory);
+        mAdapter = new MapNotificationTypeAdapter(selectedCategory);
         exTypes.setItemsCanFocus(true);
         exTypes.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -72,14 +74,8 @@ public class EventMapTypes extends BaseActivity {
         exTypes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //    if (allEventGroup.getCategoryArray().get(selectedCategory).getTypes().get(position).isNotificationDefaultOn()) {
-
-
-                i = new Intent(getApplicationContext(), AddStaticZoneNotificationStatus.class);
-                i.putExtra("typeId", position);
-                i.putExtra("catId", selectedCategory);
+                Intent i = AddStaticZoneNotificationStatus.newInstance(EventMapTypes.this, selectedCategory.getTypes().get(position), position);
                 startActivity(i);
-                //   }
             }
         });
     }

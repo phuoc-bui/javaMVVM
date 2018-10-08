@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 import com.redhelmet.alert2me.BR;
 import com.redhelmet.alert2me.ViewModelFactory;
-import com.redhelmet.alert2me.domain.ExceptionHandler;
 
 import io.reactivex.disposables.CompositeDisposable;
 

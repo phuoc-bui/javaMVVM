@@ -1,6 +1,5 @@
 package com.redhelmet.alert2me.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -13,32 +12,24 @@ import android.widget.Toast;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.CustomNotificationStatusAdapter;
-import com.redhelmet.alert2me.data.model.Category;
-
-import java.util.ArrayList;
+import com.redhelmet.alert2me.data.model.CategoryType;
 
 public class EventMapStatus extends BaseActivity implements View.OnClickListener {
-
+    private static final String EXTRA_CATEGORY_TYPE = "EXTRA_CATEGORY_TYPE";
     Toolbar toolbar;
-    Intent i;
     private CustomNotificationStatusAdapter mAdapter;
     ListView exTypes;
-    ArrayList<Category> categories;
-    int selectedType;
-    int selectedCategory;
+    private CategoryType selectedType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_static_wz_notification_types);
-        categories = (ArrayList<Category>) dataManager.getCategoriesSync();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            selectedType = extras.getInt("typeId");
-            selectedCategory = extras.getInt("catId");
-
+            selectedType = (CategoryType) extras.getSerializable(EXTRA_CATEGORY_TYPE);
         }
         initializeToolbar();
         initializeControls();
@@ -54,7 +45,7 @@ public class EventMapStatus extends BaseActivity implements View.OnClickListener
 
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setTitle(Html.fromHtml("<small>" + categories.get(selectedCategory).getTypes().get(selectedType).getName() + "</small>"));
+            supportActionBar.setTitle(Html.fromHtml("<small>" + selectedType.getName() + "</small>"));
         }
     }
 
@@ -62,7 +53,7 @@ public class EventMapStatus extends BaseActivity implements View.OnClickListener
     public void initializeControls() {
 
         exTypes = (ListView) findViewById(R.id.customCatTypeList);
-        mAdapter = new CustomNotificationStatusAdapter(EventMapStatus.this, categories, selectedCategory, selectedType);
+        mAdapter = new CustomNotificationStatusAdapter(selectedType);
         exTypes.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 

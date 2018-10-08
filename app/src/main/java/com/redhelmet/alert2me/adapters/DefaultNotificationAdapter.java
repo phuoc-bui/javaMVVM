@@ -10,11 +10,10 @@ import android.widget.ExpandableListView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.EventGroup;
+
+import java.util.List;
 
 
 public class DefaultNotificationAdapter extends BaseExpandableListAdapter {
@@ -25,6 +24,7 @@ public class DefaultNotificationAdapter extends BaseExpandableListAdapter {
         this._context = context;
         this.data = data;
     }
+
     @Override
     public EventGroup getChild(int groupPosition, int childPosititon) {
 
@@ -42,15 +42,15 @@ public class DefaultNotificationAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        EventGroup defaultData=getChild(groupPosition,childPosition);
+        EventGroup defaultData = getChild(groupPosition, childPosition);
         String childText = defaultData.getDescription();
-         if (convertView == null) {
+        if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.default_notification_child, parent, false);
         }
 
-       TextView child_text = (TextView) convertView.findViewById(R.id.default_head_content);
+        TextView child_text = (TextView) convertView.findViewById(R.id.default_head_content);
         child_text.setText(childText);
 
         return convertView;
@@ -59,13 +59,13 @@ public class DefaultNotificationAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
 
-       return 1;
+        return 1;
     }
 
     @Override
-        public EventGroup getGroup(int groupPosition) {
-            return this.data.get(groupPosition);
-        }
+    public EventGroup getGroup(int groupPosition) {
+        return this.data.get(groupPosition);
+    }
 
     @Override
     public int getGroupCount() {
@@ -83,7 +83,7 @@ public class DefaultNotificationAdapter extends BaseExpandableListAdapter {
     public View getGroupView(final int groupPosition, final boolean isExpanded,
                              View convertView, final ViewGroup parent) {
 
-        EventGroup defaultData=getGroup(groupPosition);
+        EventGroup defaultData = getGroup(groupPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -92,50 +92,36 @@ public class DefaultNotificationAdapter extends BaseExpandableListAdapter {
         }
 
         TextView header_text = (TextView) convertView.findViewById(R.id.default_head_text);
-        final ImageButton arrow_direction=(ImageButton)convertView.findViewById(R.id.default_head_trigger);
-        final SwitchCompat toggle_switch=(SwitchCompat) convertView.findViewById(R.id.default_head_switch);
+        final ImageButton arrow_direction = (ImageButton) convertView.findViewById(R.id.default_head_trigger);
+        final SwitchCompat toggle_switch = (SwitchCompat) convertView.findViewById(R.id.default_head_switch);
         toggle_switch.setTag(defaultData.getId());
         TextView toggle_always = (TextView) convertView.findViewById(R.id.default_head_always);
         toggle_always.setTextSize(12);
         header_text.setText(defaultData.getName());
 
-        if(defaultData.isFilterToggle()){
+        if (defaultData.isFilterToggle()) {
             toggle_switch.setVisibility(View.VISIBLE);
             toggle_always.setVisibility(View.GONE);
-        }else{
+        } else {
             toggle_always.setVisibility(View.VISIBLE);
             toggle_switch.setVisibility(View.GONE);
 
         }
-            toggle_switch.setChecked(defaultData.isFilterOn());
+        toggle_switch.setChecked(defaultData.isFilterOn());
 
-//        toggle_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                  data.get(groupPosition).setFilterOn(isChecked);
-//            }
-//        });
+        toggle_switch.setOnClickListener(v -> {
+            data.get(groupPosition).setFilterOn(((SwitchCompat) v).isChecked());
+            data.get(groupPosition).setUserEdited(true);
+        });
 
-        toggle_switch.setOnClickListener(new View.OnClickListener() {
-                                             @Override
-                                             public void onClick(View v) {
-
-                                                 data.get(groupPosition).setFilterOn(((SwitchCompat) v).isChecked());
-                                             }
-                                         });
-
-        arrow_direction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ExpandableListView expandableListView = (ExpandableListView)parent;
-                if (!isExpanded) {
-                    expandableListView.expandGroup(groupPosition);
-                    arrow_direction.setImageResource(R.drawable.icon_up);
-                }
-                else {
-                    expandableListView.collapseGroup(groupPosition);
-                    arrow_direction.setImageResource(R.drawable.icon_down);
-                }
+        arrow_direction.setOnClickListener(view -> {
+            ExpandableListView expandableListView = (ExpandableListView) parent;
+            if (!isExpanded) {
+                expandableListView.expandGroup(groupPosition);
+                arrow_direction.setImageResource(R.drawable.icon_up);
+            } else {
+                expandableListView.collapseGroup(groupPosition);
+                arrow_direction.setImageResource(R.drawable.icon_down);
             }
         });
         return convertView;

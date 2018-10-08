@@ -204,7 +204,7 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
         exCustom = (ListView) findViewById(R.id.customCatList);
 
         simplifyData(dbController.getCustomCatName(1));
-        mAdapter = new CustomNotificationCategoryAdapter(AddStaticZoneNotification.this, category_data);
+        mAdapter = new CustomNotificationCategoryAdapter(category_data);
         exCustom.setAdapter(mAdapter);
 
 
@@ -343,7 +343,6 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                     if (hash_types.get(DBController.KEY_REF_TYPE_CATEGORY_ID).equals(hash_categories.get(DBController.KEY_CATEGORY_ID))) {
                         CategoryType type_model = new CategoryType();
                         type_model.setName(hash_types.get(DBController.KEY_CAT_TYPE_NAME));
-                        type_model.setNameLabel(hash_types.get(DBController.KEY_CAT_TYPE_NAME));
                         type_model.setCode(hash_types.get(DBController.KEY_CAT_TYPE_CODE));
                         type_model.setCanFilter(Boolean.valueOf(hash_types.get(DBController.KEY_CAT_TYPE_CAN_FILTER)));
                         type_model.setDefaultOn(Boolean.valueOf(hash_types.get(DBController.KEY_CAT_TYPE_DEFAULT)));
@@ -461,7 +460,6 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                     if (hash_types.get(DBController.KEY_REF_TYPE_CATEGORY_ID).equals(hash_categories.get(DBController.KEY_CATEGORY_ID))) {
                         CategoryType type_model = new CategoryType();
                         type_model.setName(hash_types.get(DBController.KEY_CAT_TYPE_NAME));
-                        type_model.setNameLabel(hash_types.get(DBController.KEY_CAT_TYPE_NAME));
                         type_model.setCode(hash_types.get(DBController.KEY_CAT_TYPE_CODE));
                         type_model.setCanFilter(Boolean.valueOf(hash_types.get(DBController.KEY_CAT_TYPE_CAN_FILTER)));
                         type_model.setDefaultOn(Boolean.valueOf(hash_types.get(DBController.KEY_CAT_TYPE_DEFAULT)));

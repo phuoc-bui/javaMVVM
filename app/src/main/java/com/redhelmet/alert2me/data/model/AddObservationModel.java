@@ -2,12 +2,13 @@ package com.redhelmet.alert2me.data.model;
 
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLng;
+import com.redhelmet.alert2me.data.model.base.Model;
 
 /**
  * Created by inbox on 8/2/18.
  */
 
-public class AddObservationModel implements Model{
+public class AddObservationModel implements Model {
 
     private static AddObservationModel instance;
     public LatLng latLng;

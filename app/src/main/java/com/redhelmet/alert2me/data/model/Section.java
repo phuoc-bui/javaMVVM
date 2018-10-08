@@ -1,5 +1,7 @@
 package com.redhelmet.alert2me.data.model;
 
+import com.redhelmet.alert2me.data.model.base.Model;
+
 import java.util.List;
 
 public class Section implements Model {

@@ -9,6 +9,8 @@ import com.redhelmet.alert2me.data.local.pref.PreferenceHelper;
 import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
+import com.redhelmet.alert2me.data.model.CategoryStatus;
+import com.redhelmet.alert2me.data.model.CategoryType;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
 import com.redhelmet.alert2me.data.model.Hint;
@@ -43,10 +45,10 @@ public class AppDataManager implements DataManager {
     @Override
     public void saveConfig(ConfigResponse config) {
         pref.saveAppConfig(config.appConfig);
-        database.saveCategories(config.categories);
-        categories = config.categories;
+        categories = copyStatusToCategoryType(config.categories);
+        database.saveCategories(categories);
         database.saveEventGroups(config.eventGroups);
-        eventGroups.addAll(config.eventGroups);
+        eventGroups = config.eventGroups;
     }
 
     @Override
@@ -137,7 +139,6 @@ public class AppDataManager implements DataManager {
     @Override
     public List<Category> getCategoriesSync() {
         return categories;
-//        return database.getCategoriesSync();
     }
 
     @Override
@@ -149,29 +150,26 @@ public class AppDataManager implements DataManager {
     @Override
     public List<EventGroup> getEventGroupsSync() {
         return eventGroups;
-//        return database.getEventGroupsSync();
     }
 
     @Override
     public Observable<List<Category>> getUserCustomFilters() {
-        List<Long> ids = pref.getUserCustomFilters();
-        return database.getCategoriesWithIds(ids);
+        return database.getEditedCategories();
     }
 
     @Override
     public Observable<List<EventGroup>> getUserDefaultFilters() {
-        List<Long> ids = pref.getUserDefaultFilters();
-        return database.getEventGroupsWithIds(ids);
+        return database.getEditedEventGroups();
     }
 
     @Override
     public void saveUserCustomFilters(List<Category> categories) {
-        pref.saveUserCustomFilters(categories);
+        database.saveEditedCategories(categories);
     }
 
     @Override
     public void saveUserDefaultFilters(List<EventGroup> eventGroups) {
-        pref.saveUserDefaultFilters(eventGroups);
+        database.saveEditedEventGroups(eventGroups);
     }
 
     @Override
@@ -208,17 +206,6 @@ public class AppDataManager implements DataManager {
     }
 
     private Single<Boolean> filterEventWithDefaultFilter(Event event) {
-//        return getUserDefaultFilters()
-//                .flatMap(eventGroups -> {
-//                    for (EventGroup group : eventGroups) {
-//                        for (EventGroupDisplayFilter displayFilter : group.getDisplayFilter()) {
-//                            for (String layer : displayFilter.getLayers()) {
-//                                if (layer.equalsIgnoreCase(event.getGroup())) return Observable.just(true);
-//                            }
-//                        }
-//                    }
-//                    return Observable.just(false);
-//                }).all(b -> b);
         return getUserDefaultFilters()
                 .flatMap(Observable::fromIterable)
                 .flatMap(group -> Observable.fromIterable(group.getDisplayFilter()))
@@ -316,5 +303,20 @@ public class AppDataManager implements DataManager {
 
     private void handleError(Throwable error) {
         Log.e(TAG, error.getMessage());
+    }
+
+    private List<Category> copyStatusToCategoryType(List<Category> categories) {
+        if (categories == null) return null;
+        for (Category category : categories) {
+            List<CategoryType> typeList = category.getTypes();
+            for (CategoryType type : typeList) {
+                // update status
+                for (CategoryStatus status : category.getStatuses()) {
+                    status.setNotificationDefaultOn(type.isNotificationDefaultOn());
+                }
+                type.setStatuses(category.getStatuses());
+            }
+        }
+        return categories;
     }
 }

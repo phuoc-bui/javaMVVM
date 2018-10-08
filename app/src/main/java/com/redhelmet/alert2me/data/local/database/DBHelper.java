@@ -23,4 +23,12 @@ public interface DBHelper {
     List<EventGroup> getEventGroupsSync();
 
     Observable<List<EventGroup>> getEventGroupsWithIds(List<Long> ids);
+
+    void saveEditedCategories(List<Category> categories);
+
+    void saveEditedEventGroups(List<EventGroup> eventGroups);
+
+    Observable<List<Category>> getEditedCategories();
+
+    Observable<List<EventGroup>> getEditedEventGroups();
 }

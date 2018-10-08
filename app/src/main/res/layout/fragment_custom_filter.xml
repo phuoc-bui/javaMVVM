@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
+
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.eventfilter.custom.CustomFilterViewModel"/>
+            type="com.redhelmet.alert2me.ui.eventfilter.custom.CustomFilterViewModel" />
     </data>
-    <android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <TextView
             android:id="@+id/staticHeader"
             android:layout_width="match_parent"
@@ -24,19 +28,21 @@
             android:layout_height="wrap_content"
             android:padding="3dp"
             android:text="@string/lbl_mapLayersDefaultSubTitle"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@+id/staticHeader" />
 
         <View
+            android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="bottom"
-            android:background="@color/light_gray" />
+            android:background="@color/light_gray"
+            app:layout_constraintTop_toBottomOf="@+id/staticSubHeader" />
 
         <ListView
             android:id="@+id/customCatList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true" />
+            app:layout_constraintTop_toBottomOf="@+id/divider" />
     </android.support.constraint.ConstraintLayout>
 </layout>

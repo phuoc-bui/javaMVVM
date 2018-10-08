@@ -1,34 +1,39 @@
 package com.redhelmet.alert2me.ui.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.CustomNotificationTypeAdapter;
 import com.redhelmet.alert2me.data.model.Category;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import com.redhelmet.alert2me.data.model.CategoryType;
 
 public class AddStaticZoneNotificationTypes extends BaseActivity {
+    public static final String EXTRA_CATEGORY = "EXTRA_CATEGORY";
+    public static final String EXTRA_CATEGORY_INDEX = "EXTRA_CATEGORY_INDEX";
+    private static final int REQUEST_CATEGORY_TYPE = 9;
 
     Toolbar toolbar;
-    Intent i;
-    private CustomNotificationTypeAdapter mAdapter;
     ListView exTypes;
-    private int selectedCategory;
-    private ArrayList<Category> categories;
+    private Category selectedCategory;
+    private int categoryIndex;
+
+    public static Intent newInstance(Context context, Category category, int index) {
+        Intent intent = new Intent(context, AddStaticZoneNotificationTypes.class);
+        intent.putExtra(EXTRA_CATEGORY, category);
+        intent.putExtra(EXTRA_CATEGORY_INDEX, index);
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,24 +41,17 @@ public class AddStaticZoneNotificationTypes extends BaseActivity {
 
         setContentView(R.layout.activity_static_wz_notification_types);
 
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            selectedCategory = extras.getInt("catId");
+            selectedCategory = (Category) extras.getSerializable(EXTRA_CATEGORY);
+            categoryIndex = extras.getInt(EXTRA_CATEGORY_INDEX);
         }
-
-        disposeBag.add(dataManager.getCategories()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(list -> {
-                    categories = (ArrayList<Category>) list;
-                    initializeToolbar();
-                    initializeControls();
-                }
-        ));
+        initializeToolbar();
+        initializeControls();
     }
 
     public void initializeToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
@@ -61,34 +59,22 @@ public class AddStaticZoneNotificationTypes extends BaseActivity {
 
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setTitle(Html.fromHtml("<small>" + categories.get(selectedCategory).getNameLabel() + "</small>"));
+            supportActionBar.setTitle(Html.fromHtml("<small>" + selectedCategory.getNameLabel() + "</small>"));
         }
     }
 
 
     public void initializeControls() {
+        exTypes = findViewById(R.id.customCatTypeList);
 
-
-        exTypes = (ListView) findViewById(R.id.customCatTypeList);
-
-        mAdapter = new CustomNotificationTypeAdapter(this, categories, selectedCategory);
+        CustomNotificationTypeAdapter mAdapter = new CustomNotificationTypeAdapter(selectedCategory);
         exTypes.setItemsCanFocus(true);
         exTypes.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
-
-        exTypes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //    if (allEventGroup.getCategoryArray().get(selectedCategory).getTypes().get(position).isNotificationDefaultOn()) {
-
-
-                i = new Intent(getApplicationContext(), AddStaticZoneNotificationStatus.class);
-                i.putExtra("typeId", position);
-                i.putExtra("catId", selectedCategory);
-                startActivity(i);
-                //   }
-            }
+        exTypes.setOnItemClickListener((parent, view, position, id) -> {
+            Intent i = AddStaticZoneNotificationStatus.newInstance(AddStaticZoneNotificationTypes.this, selectedCategory.getTypes().get(position), position);
+            startActivityForResult(i, REQUEST_CATEGORY_TYPE);
         });
     }
 
@@ -106,14 +92,27 @@ public class AddStaticZoneNotificationTypes extends BaseActivity {
                 Toast.makeText(getApplicationContext(),
                         "next static",
                         Toast.LENGTH_SHORT).show();
-
                 return true;
 
             case android.R.id.home:
-                onBackPressed();
+                Intent result = new Intent();
+                result.putExtra(EXTRA_CATEGORY, selectedCategory);
+                result.putExtra(EXTRA_CATEGORY_INDEX, categoryIndex);
+                setResult(RESULT_OK, result);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_CATEGORY_TYPE && resultCode == Activity.RESULT_OK) {
+            CategoryType selectedType = (CategoryType) data.getSerializableExtra(AddStaticZoneNotificationStatus.EXTRA_CATEGORY_TYPE);
+            int position = data.getIntExtra(AddStaticZoneNotificationStatus.EXTRA_TYPE_POSITION, 0);
+
+            selectedCategory.getTypes().set(position, selectedType);
         }
     }
 }

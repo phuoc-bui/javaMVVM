@@ -1,5 +1,7 @@
 package com.redhelmet.alert2me.data.model;
 
+import com.redhelmet.alert2me.data.model.base.Model;
+
 public class Entry implements Model {
     private String title;
     private Object value;

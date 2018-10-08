@@ -1,39 +1,27 @@
 package com.redhelmet.alert2me.adapters;
 
-import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Category;
+
+import java.util.List;
 
 
 public class CustomNotificationCategoryAdapter extends BaseAdapter {
 
-    private static LayoutInflater inflater=null;
     private List<Category> category_data;
-    private Category tempValues;
 
-    public TextView catName;
-    public Activity _context;
-
-    public CustomNotificationCategoryAdapter(Activity context, List<Category> category_data) {
+    public CustomNotificationCategoryAdapter(List<Category> category_data) {
         this.category_data = category_data;
-        this._context = context;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
 
     @Override
     public int getCount() {
-
         return category_data.size();
     }
 
@@ -42,7 +30,6 @@ public class CustomNotificationCategoryAdapter extends BaseAdapter {
         return position;
     }
 
-
     @Override
     public long getItemId(int position) {
         return position;
@@ -50,12 +37,12 @@ public class CustomNotificationCategoryAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View vi, ViewGroup parent) {
-        View rootView=vi;
-        if(vi==null)
-            rootView = inflater.inflate(R.layout.custom_notification_category, null);
-        catName = (TextView) rootView.findViewById(R.id.custom_head_text);
+        View rootView = vi;
+        if (vi == null)
+            rootView = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_notification_category, null);
+        TextView catName = rootView.findViewById(R.id.custom_head_text);
 
-        tempValues = ( Category ) category_data.get( position );
+        Category tempValues = category_data.get(position);
 
         catName.setText(tempValues.getNameLabel());
 

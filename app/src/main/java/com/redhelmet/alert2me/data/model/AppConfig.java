@@ -1,6 +1,7 @@
 package com.redhelmet.alert2me.data.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.redhelmet.alert2me.data.model.base.Model;
 
 import java.util.List;
 

@@ -3,10 +3,12 @@ package com.redhelmet.alert2me.data.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.redhelmet.alert2me.data.model.base.UserModel;
+
 import java.util.List;
 
 @Entity(tableName = "EventGroup")
-public class EventGroup implements Model {
+public class EventGroup extends UserModel {
     private String description;
     private List<EventGroupDisplayFilter> displayFilter;
     private boolean displayOn;

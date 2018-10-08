@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.data.model;
+package com.redhelmet.alert2me.data.model.base;
 
 import java.io.Serializable;
 

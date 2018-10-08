@@ -2,6 +2,7 @@ package com.redhelmet.alert2me.util;
 
 import android.app.Activity;
 import android.databinding.BindingAdapter;
+import android.graphics.Bitmap;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,9 +17,12 @@ import java.util.Collection;
 public class BindingAdapters {
 
     @BindingAdapter("android:visibility")
-    public static void bindVisibility(View view, boolean visible) {
-        int visibility = visible ? View.VISIBLE : View.GONE;
-        view.setVisibility(visibility);
+    public static void bindVisibility(View view, Boolean visible) {
+        if (visible == null) view.setVisibility(View.GONE);
+        else {
+            int visibility = visible ? View.VISIBLE : View.GONE;
+            view.setVisibility(visibility);
+        }
     }
 
     @BindingAdapter("data")
@@ -40,8 +44,11 @@ public class BindingAdapters {
 
     @BindingAdapter("android:src")
     public static void setImageviewBitmap(ImageView imageView, EventIcon icon) {
+        if (icon == null) return;
         Activity activity = (Activity) imageView.getContext();
-        imageView.setImageBitmap(icon.createIcon(activity));
+        Bitmap bitmap = icon.createIcon(activity);
+        if (bitmap == null) return;
+        imageView.setImageBitmap(bitmap);
     }
 
     @BindingAdapter("android:src")

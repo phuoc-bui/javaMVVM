@@ -3,10 +3,12 @@ package com.redhelmet.alert2me.data.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.redhelmet.alert2me.data.model.base.UserModel;
+
 import java.util.List;
 
 @Entity(tableName = "Category")
-public class Category implements Model {
+public class Category extends UserModel {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private String category;

@@ -1,25 +1,15 @@
 package com.redhelmet.alert2me.ui.eventfilter.defaultfilter;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ExpandableListView;
 
-import com.google.gson.Gson;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.DefaultNotificationAdapter;
-import com.redhelmet.alert2me.data.model.CategoryFilter;
-import com.redhelmet.alert2me.data.model.CategoryTypeFilter;
-import com.redhelmet.alert2me.data.model.EventGroup;
 import com.redhelmet.alert2me.databinding.FragmentDefaultFilterBinding;
-import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
 import com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DefaultFilterFragment extends BaseFragment<DefaultFilterViewModel, FragmentDefaultFilterBinding> implements EventFilterActivity.OnSaveClickListener {
 
@@ -57,7 +47,7 @@ public class DefaultFilterFragment extends BaseFragment<DefaultFilterViewModel, 
     }
 
     @Override
-    public void onSaveClick(boolean editMode) {
-        viewModel.saveData(editMode);
+    public void onSaveClick() {
+        viewModel.saveData();
     }
 }

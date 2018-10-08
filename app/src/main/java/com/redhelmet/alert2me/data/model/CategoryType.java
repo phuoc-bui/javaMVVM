@@ -1,16 +1,19 @@
 package com.redhelmet.alert2me.data.model;
 
+import com.redhelmet.alert2me.data.model.base.UserModel;
+
 import java.util.List;
 
-public class CategoryType implements Model {
+public class CategoryType extends UserModel {
     private String code;
     private String name;
-    private String nameLabel;
+//    private String nameLabel;
     private boolean canFilter;
     private boolean defaultOn;
     private boolean notificationCanFilter;
     private boolean notificationDefaultOn;
     private String icon;
+    // create list of status for each category type
     private List<CategoryStatus> statuses;
 
     public String getCode() {
@@ -21,13 +24,13 @@ public class CategoryType implements Model {
         this.code = code;
     }
 
-    public String getNameLabel() {
-        return nameLabel;
-    }
-
-    public void setNameLabel(String nameLabel) {
-        this.nameLabel = nameLabel;
-    }
+//    public String getNameLabel() {
+//        return nameLabel;
+//    }
+//
+//    public void setNameLabel(String nameLabel) {
+//        this.nameLabel = nameLabel;
+//    }
 
     public String getName() {
         return name;

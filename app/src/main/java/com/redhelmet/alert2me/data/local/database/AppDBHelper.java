@@ -6,6 +6,7 @@ import com.redhelmet.alert2me.data.model.EventGroup;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 
 public class AppDBHelper implements DBHelper {
     private AppDatabase database;
@@ -52,5 +53,25 @@ public class AppDBHelper implements DBHelper {
     @Override
     public Observable<List<EventGroup>> getEventGroupsWithIds(List<Long> ids) {
         return database.eventGroupDao().getEventGroupWithIds(ids).toObservable();
+    }
+
+    @Override
+    public void saveEditedCategories(List<Category> categories) {
+        database.categoryDao().updateCategories(categories);
+    }
+
+    @Override
+    public void saveEditedEventGroups(List<EventGroup> eventGroups) {
+        database.eventGroupDao().updateEventGroups(eventGroups);
+    }
+
+    @Override
+    public Observable<List<Category>> getEditedCategories() {
+        return database.categoryDao().getFilterOnCategories().toObservable();
+    }
+
+    @Override
+    public Observable<List<EventGroup>> getEditedEventGroups() {
+        return database.eventGroupDao().getFilterOnEventGroups().toObservable();
     }
 }
