@@ -40,14 +40,20 @@
     <style name="Widget.A2M.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="hintTextAppearance">@style/TextAppearance.A2M.TextInputLayout.HintText</item>
         <item name="android:paddingBottom">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">20dp</item>
+        <item name="boxCornerRadiusBottomStart">20dp</item>
+        <item name="boxCornerRadiusTopEnd">20dp</item>
+        <item name="boxCornerRadiusTopStart">20dp</item>
     </style>
 
     <style name="Widget.A2M.Button" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">@android:color/white</item>
+        <item name="cornerRadius">20dp</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="Widget.A2M.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textColor">?android:attr/colorAccent</item>
     </style>
 
     <style name="TextAppearance.A2M.Toolbar" parent="TextAppearance.MaterialComponents.Subtitle2">
@@ -62,6 +68,11 @@
     <style name="TextAppearance.A2M.TextInputLayout.TextInputEditText" parent="TextAppearance.MaterialComponents.Subtitle2">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:drawablePadding">8dp</item>
+    </style>
+
+    <style name="TextAppearance.A2M.Headline" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="textAllCaps">true</item>
+        <item name="android:textColor">?attr/colorAccent</item>
     </style>
 
     <style name="TextAppearance.A2M.TabItem.Title" parent="TextAppearance.MaterialComponents.Tab">

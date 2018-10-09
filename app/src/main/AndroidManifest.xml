@@ -44,6 +44,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.signin.SignInActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name="com.redhelmet.alert2me.ui.termsandcondition.TermConditionActivity"
             android:screenOrientation="portrait" />

@@ -1,7 +1,6 @@
 package com.redhelmet.alert2me.data;
 
 import android.location.Location;
-import android.support.v4.util.Pair;
 
 import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
@@ -11,7 +10,6 @@ import com.redhelmet.alert2me.data.model.EventGroup;
 import com.redhelmet.alert2me.data.model.Hint;
 import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
 import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
-import com.redhelmet.alert2me.data.remote.response.RegisterResponse;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.data.local.database;
+package com.redhelmet.alert2me.data.database;
 
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.EventGroup;

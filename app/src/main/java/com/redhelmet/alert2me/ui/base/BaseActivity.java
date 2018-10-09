@@ -7,12 +7,16 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import com.redhelmet.alert2me.BR;
+import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.ViewModelFactory;
 import com.redhelmet.alert2me.util.PermissionUtils;
 
@@ -109,5 +113,18 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     protected void onDestroy() {
         disposeBag.dispose();
         super.onDestroy();
+    }
+
+    @IdRes
+    protected int getFragmentContainer() {
+        throw new Error("Activity should override this method to support change fragment");
+    }
+
+    public void changeFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(getFragmentContainer(), fragment);
+        transaction.setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

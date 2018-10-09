@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.data.local.database.dao;
+package com.redhelmet.alert2me.data.database.dao;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;

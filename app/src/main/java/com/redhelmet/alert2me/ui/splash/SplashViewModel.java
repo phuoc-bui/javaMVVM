@@ -2,12 +2,14 @@ package com.redhelmet.alert2me.ui.splash;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;
+import com.redhelmet.alert2me.data.PreferenceHelper;
 import com.redhelmet.alert2me.global.Constant;
 import com.redhelmet.alert2me.global.Event;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 import com.redhelmet.alert2me.ui.hint.HintsActivity;
 import com.redhelmet.alert2me.ui.home.HomeActivity;
+import com.redhelmet.alert2me.ui.signin.SignInActivity;
 import com.redhelmet.alert2me.ui.termsandcondition.TermConditionActivity;
 
 import java.util.concurrent.TimeUnit;
@@ -16,14 +18,15 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class SplashViewModel extends BaseViewModel {
-    public SplashViewModel(DataManager dataManager) {
+    private PreferenceHelper pref;
+
+    public SplashViewModel(DataManager dataManager, PreferenceHelper pref) {
         super(dataManager);
+        this.pref = pref;
         isLoading.set(true);
         disposeBag.add(dataManager.loadConfig()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    startTimer();
-                }, error -> {
+                .subscribe(response -> startTimer(), error -> {
                     isLoading.set(false);
                     startTimer();
                     navigationEvent.setValue(
@@ -37,9 +40,9 @@ public class SplashViewModel extends BaseViewModel {
                 .subscribe(number -> {
                     isLoading.set(false);
                     Class dest;
-                    if (dataManager.getInitialLaunch()) {
-                        if (dataManager.getAccepted()) {
-                            dest = HomeActivity.class;
+                    if (pref.isInitialLaunch()) {
+                        if (pref.isAccepted()) {
+                            dest = pref.isLoggedIn() ? HomeActivity.class : SignInActivity.class;
                         } else {
                             dest = TermConditionActivity.class;
                         }
@@ -47,7 +50,7 @@ public class SplashViewModel extends BaseViewModel {
                         dest = HintsActivity.class;
                     }
 
-                    navigationEvent.postValue(new Event<>(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH,dest)));
+                    navigationEvent.postValue(new Event<>(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH, dest)));
                 }));
     }
 }

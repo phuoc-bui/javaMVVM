@@ -35,7 +35,7 @@ import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.CustomNotificationCategoryAdapter;
 import com.redhelmet.alert2me.adapters.DefaultNotificationAdapter;
 import com.redhelmet.alert2me.core.Constants;
-import com.redhelmet.alert2me.data.local.database.DBController;
+import com.redhelmet.alert2me.data.database.DBController;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.CategoryFilter;
 import com.redhelmet.alert2me.data.model.CategoryStatus;

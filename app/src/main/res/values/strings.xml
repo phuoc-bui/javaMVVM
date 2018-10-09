@@ -206,4 +206,18 @@
     <string name="location_permission_denied">This sample requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Google Maps API Demos\'.</string>
     <string name="permission_required_toast">Location permission is required for this demo.</string>
 
+    <!--Sign in page-->
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_button_title">Login</string>
+    <string name="login_forgot_password_title">Forgot password?</string>
+    <string name="login_back_title">Back</string>
+    <string name="register_title">Registration</string>
+    <string name="register_first_name_hint">First Name</string>
+    <string name="register_surname_hint">Surname</string>
+    <string name="register_postcode_hint">Postcode</string>
+    <string name="register_repeat_password_hint">Repeat Password</string>
+    <string name="register_button_title">Register</string>
+    <string name="register_have_account_title">Already have account?</string>
+    <string name="register_sign_in_title">Sign in</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.data.local.database;
+package com.redhelmet.alert2me.data.database;
 
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.EventGroup;
@@ -6,7 +6,6 @@ import com.redhelmet.alert2me.data.model.EventGroup;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
 
 public class AppDBHelper implements DBHelper {
     private AppDatabase database;

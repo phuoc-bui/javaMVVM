@@ -4,8 +4,7 @@ import android.location.Location;
 import android.util.Log;
 
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.data.local.database.DBHelper;
-import com.redhelmet.alert2me.data.local.pref.PreferenceHelper;
+import com.redhelmet.alert2me.data.database.DBHelper;
 import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;

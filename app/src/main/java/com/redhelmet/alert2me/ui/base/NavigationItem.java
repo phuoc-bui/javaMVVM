@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import java.lang.annotation.Retention;
@@ -36,7 +37,12 @@ public class NavigationItem {
      */
     public static final int FINISH_AND_RETURN = 6;
 
-    @IntDef({START_ACTIVITY, START_ACTIVITY_AND_FINISH, FINISH, START_WEB_VIEW, SHOW_TOAST, FINISH_AND_RETURN})
+    /**
+     * Change fragment data
+     */
+    public static final int CHANGE_FRAGMENT = 7;
+
+    @IntDef({START_ACTIVITY, START_ACTIVITY_AND_FINISH, FINISH, START_WEB_VIEW, SHOW_TOAST, FINISH_AND_RETURN, CHANGE_FRAGMENT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface NavigationType {
     }
@@ -50,7 +56,7 @@ public class NavigationItem {
         this.navigationType = type;
     }
 
-    public void navigation(Activity context) {
+    public void navigation(BaseActivity context) {
         switch (navigationType) {
             case START_ACTIVITY:
                 startActivity(context, data);
@@ -89,6 +95,15 @@ public class NavigationItem {
                 if (data[0] instanceof Intent) {
                     context.setResult(Activity.RESULT_OK, (Intent) data[0]);
                     context.finish();
+                } else {
+                    throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
+                }
+                break;
+            case CHANGE_FRAGMENT:
+                if (data == null || data.length == 0)
+                    throw new Error(String.format(wrongDataError, "null/empty", context.getLocalClassName()));
+                if (data[0] instanceof Fragment) {
+                    context.changeFragment((Fragment) data[0]);
                 } else {
                     throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
                 }

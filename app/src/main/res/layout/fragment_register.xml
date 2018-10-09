@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.redhelmet.alert2me.ui.signin.RegisterViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/normal_margin"
+            android:paddingEnd="@dimen/normal_margin"
+            android:background="?attr/colorBackgroundFloating">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/TextAppearance.A2M.Headline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/register_title"
+                android:layout_marginTop="@dimen/normal_margin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayout"
+                style="@style/Widget.A2M.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:hint="@string/login_email_hint"
+                app:layout_constraintTop_toBottomOf="@+id/title">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txt_input_email"
+                    style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_login_email"
+                    android:inputType="textEmailAddress"
+                    android:text="@={viewModel.userEmail}" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayout1"
+                style="@style/Widget.A2M.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:hint="@string/register_first_name_hint"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txt_input_first_name"
+                    style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_register_username"
+                    android:text="@={viewModel.firstName}" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayout2"
+                style="@style/Widget.A2M.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:hint="@string/register_surname_hint"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout1">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txt_input_surname"
+                    style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_register_username"
+                    android:text="@={viewModel.surname}" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayout3"
+                style="@style/Widget.A2M.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:hint="@string/register_postcode_hint"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txt_input_postcode"
+                    style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_register_postcode"
+                    android:inputType="number"
+                    android:text="@={viewModel.postcode}" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayout4"
+                style="@style/Widget.A2M.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:hint="@string/login_password_hint"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout3"
+                app:passwordToggleEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txt_input_password"
+                    style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_login_password"
+                    android:inputType="textPassword"
+                    android:text="@={viewModel.password}" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/textInputLayout5"
+                style="@style/Widget.A2M.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:hint="@string/register_repeat_password_hint"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
+                app:passwordToggleEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txt_input_repeat_password"
+                    style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_login_password"
+                    android:inputType="textPassword"
+                    android:text="@={viewModel.repeatPassword}" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/btn_register"
+                style="@style/Widget.A2M.Button"
+                android:layout_width="@dimen/login_button_width"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@string/register_button_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout5" />
+
+            <TextView
+                android:id="@+id/txt_have_account"
+                style="@style/TextAppearance.A2M.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@string/register_have_account_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btn_register" />
+
+            <android.support.design.button.MaterialButton
+                android:id="@+id/btn_sign_in"
+                style="@style/Widget.A2M.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/register_sign_in_title"
+                android:onClick="@{() -> viewModel.onSignInClick()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_have_account" />
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</layout>

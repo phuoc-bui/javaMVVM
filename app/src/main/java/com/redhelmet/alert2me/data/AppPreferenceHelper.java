@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.data.local.pref;
+package com.redhelmet.alert2me.data;
 
 import android.content.Context;
 import android.location.Location;
@@ -22,6 +22,8 @@ public class AppPreferenceHelper implements PreferenceHelper {
     private final String DEFAULT_FILTER_KEY = "DEFAULT_FILTER_KEY";
     private final String CUSTOM_FILTER_KEY = "CUSTOM_FILTER_KEY";
     private final String IS_DEFAULT_FILTER_KEY = "IS_DEFAULT_FILTER_KEY";
+    private final String HAVE_ACCOUNT_KEY = "HAVE_ACCOUNT_KEY";
+    private final String LOGGED_IN_KEY = "LOGGED_IN_KEY";
     private Context context;
     private Gson gson;
 
@@ -156,5 +158,25 @@ public class AppPreferenceHelper implements PreferenceHelper {
         String provider = location.getProvider();
         String str = provider + "," + lat + "," + lng;
         PreferenceUtils.saveToPrefs(context, USER_LOCATION_KEY, str);
+    }
+
+    @Override
+    public boolean haveAccount() {
+        return (boolean) PreferenceUtils.getFromPrefs(context, HAVE_ACCOUNT_KEY, false);
+    }
+
+    @Override
+    public void setHaveAccount(boolean haveAccount) {
+        PreferenceUtils.saveToPrefs(context, HAVE_ACCOUNT_KEY, haveAccount);
+    }
+
+    @Override
+    public boolean isLoggedIn() {
+        return (boolean) PreferenceUtils.getFromPrefs(context, LOGGED_IN_KEY, false);
+    }
+
+    @Override
+    public void setLoggedIn(boolean isLoggedIn) {
+        PreferenceUtils.saveToPrefs(context, LOGGED_IN_KEY, isLoggedIn);
     }
 }

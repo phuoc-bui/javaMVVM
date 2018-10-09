@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.data.local.pref;
+package com.redhelmet.alert2me.data;
 
 import android.location.Location;
 import android.support.v4.util.Pair;
@@ -28,4 +28,8 @@ public interface PreferenceHelper {
     boolean isDefaultFilter();
     Location getLastUserLocation();
     void saveCurrentUserLocation(Location location);
+    boolean haveAccount();
+    void setHaveAccount(boolean haveAccount);
+    boolean isLoggedIn();
+    void setLoggedIn(boolean isLoggedIn);
 }
