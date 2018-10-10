@@ -9,7 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -18,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.redhelmet.alert2me.BR;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.ViewModelFactory;
+import com.redhelmet.alert2me.ui.custom.LoadingDialog;
 import com.redhelmet.alert2me.util.PermissionUtils;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -36,6 +39,10 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     private Bundle bundle;
 
     protected CompositeDisposable disposeBag = new CompositeDisposable();
+
+    Fragment currentFragment;
+
+    private LoadingDialog loadingDialog;
 
     @LayoutRes
     protected abstract int getLayoutId();
@@ -62,6 +69,7 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
             }
         });
         bundle = getIntent().getBundleExtra(BUNDLE_EXTRA);
+        loadingDialog = new LoadingDialog();
     }
 
     /**
@@ -121,10 +129,39 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     }
 
     public void changeFragment(Fragment fragment) {
+        currentFragment = fragment;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(getFragmentContainer(), fragment);
         transaction.setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public void popBack() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 1) {
+            fragmentManager.popBackStack();
+            currentFragment = fragmentManager.getFragments().get(fragmentManager.getFragments().size() - 1);
+            invalidateOptionsMenu();
+        } else finish();
+    }
+
+    public void showDialog(DialogFragment dialog, String tag) {
+        dialog.show(getSupportFragmentManager(), tag);
+    }
+
+    public void dismissDialog(String tag) {
+        DialogFragment dialog = (DialogFragment) getSupportFragmentManager().findFragmentByTag(tag);
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+    }
+
+    public void showLoadingDialog(boolean show) {
+        if (show) {
+            loadingDialog.show(getSupportFragmentManager(), "loading");
+        } else {
+            loadingDialog.dismiss();
+        }
     }
 }

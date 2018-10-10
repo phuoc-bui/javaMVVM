@@ -13,6 +13,7 @@ import com.redhelmet.alert2me.ui.hint.HintViewModel;
 import com.redhelmet.alert2me.ui.home.HomeViewModel;
 import com.redhelmet.alert2me.ui.home.event.ClusterEventsViewModel;
 import com.redhelmet.alert2me.ui.home.event.EventViewModel;
+import com.redhelmet.alert2me.ui.signin.ForgotPasswordViewModel;
 import com.redhelmet.alert2me.ui.signin.LoginViewModel;
 import com.redhelmet.alert2me.ui.signin.RegisterViewModel;
 import com.redhelmet.alert2me.ui.signin.SignInViewModel;
@@ -62,18 +63,19 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new EventDetailViewModel();
         } else if (EventFilterViewModel.class.equals(modelClass)) {
             return (T) new EventFilterViewModel(dataManager);
-        }else if (DefaultFilterViewModel.class.equals(modelClass)) {
+        } else if (DefaultFilterViewModel.class.equals(modelClass)) {
             return (T) new DefaultFilterViewModel(dataManager);
-        }else if (CustomFilterViewModel.class.equals(modelClass)) {
+        } else if (CustomFilterViewModel.class.equals(modelClass)) {
             return (T) new CustomFilterViewModel(dataManager);
         } else if (SignInViewModel.class.equals(modelClass)) {
             return (T) new SignInViewModel(pref);
         } else if (LoginViewModel.class.equals(modelClass)) {
             return (T) new LoginViewModel(dataManager);
-        }  else if (RegisterViewModel.class.equals(modelClass)) {
+        } else if (RegisterViewModel.class.equals(modelClass)) {
             return (T) new RegisterViewModel(dataManager);
-        }
-        else {
+        } else if (ForgotPasswordViewModel.class.equals(modelClass)) {
+            return (T) new ForgotPasswordViewModel(dataManager);
+        } else {
             throw new Error("Invalid parameter");
         }
     }

@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.redhelmet.alert2me.data.DataManager;
-import com.redhelmet.alert2me.global.Event;
 import com.redhelmet.alert2me.global.RxProperty;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
@@ -23,13 +22,20 @@ public class LoginViewModel extends BaseViewModel {
         super(dataManager);
         disposeBag.add(Observable.combineLatest(userEmail.asObservable(),
                 password.asObservable(),
-                (email, pass) -> email!=null && email.length() > 0 && pass != null && pass.length() > 0)
+                (email, pass) -> email != null && email.length() > 0 && pass != null && pass.length() > 0)
                 .subscribe(enable -> disableLoginButton.set(enable)));
     }
 
     public void login() {
-        isLoading.set(true);
-        onLoginSuccess();
+        showLoadingDialog(true);
+        disposeBag.add(dataManager.login(userEmail.get(), password.get())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    onLoginSuccess();
+                }, error -> {
+                    showLoadingDialog(false);
+                    navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, error.getMessage()));
+                }));
     }
 
     private void onLoginSuccess() {
@@ -41,27 +47,30 @@ public class LoginViewModel extends BaseViewModel {
         FirebaseInstanceId.getInstance()
                 .getInstanceId()
                 .addOnFailureListener(e -> {
-            isLoading.set(false);
-            onLoadFinish();
-            Log.e("FirebaseInstanceId", "Fail to get firebase token: " + e.getMessage());
-        });
+                    showLoadingDialog(false);
+                    onLoadFinish();
+                    Log.e("FirebaseInstanceId", "Fail to get firebase token: " + e.getMessage());
+                });
     }
 
     private void onLoadFinish() {
         disposeBag.add(dataManager.getEventGroups()
+                .doOnNext(eventGroups -> dataManager.saveUserDefaultFilters(eventGroups))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(eventGroups -> {
-                    isLoading.set(false);
-                    dataManager.saveUserDefaultFilters(eventGroups);
-                    navigationEvent.setValue(new Event<>(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH, HomeActivity.class)));
+                    showLoadingDialog(false);
+                    navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH, HomeActivity.class));
+                }, error -> {
+                    showLoadingDialog(false);
+                    navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, error.getMessage()));
                 }));
     }
 
     public void forgotPassword() {
-
+        navigateTo(new NavigationItem(NavigationItem.CHANGE_FRAGMENT, ForgotPasswordFragment.newInstance()));
     }
 
     public void back() {
-        navigationEvent.setValue(new Event<>(new NavigationItem(NavigationItem.FINISH)));
+        navigateTo(new NavigationItem(NavigationItem.POP_FRAGMENT_BACK));
     }
 }

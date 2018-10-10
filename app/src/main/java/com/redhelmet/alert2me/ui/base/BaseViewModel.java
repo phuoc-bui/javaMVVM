@@ -11,8 +11,6 @@ import com.redhelmet.alert2me.global.RxProperty;
 
 import org.json.JSONArray;
 
-import java.io.Serializable;
-
 import io.reactivex.disposables.CompositeDisposable;
 
 public class BaseViewModel extends ViewModel {
@@ -43,5 +41,14 @@ public class BaseViewModel extends ViewModel {
     protected void onCleared() {
         disposeBag.dispose();
         super.onCleared();
+    }
+
+    protected void showLoadingDialog(boolean show) {
+        NavigationItem item = new NavigationItem(show ? NavigationItem.SHOW_LOADING_DIALOG : NavigationItem.DISMISS_LOADING_DIALOG);
+        navigateTo(item);
+    }
+
+    protected void navigateTo(NavigationItem item) {
+        navigationEvent.setValue(new Event<>(item));
     }
 }

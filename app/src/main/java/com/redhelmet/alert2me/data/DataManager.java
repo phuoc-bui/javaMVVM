@@ -8,8 +8,12 @@ import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
 import com.redhelmet.alert2me.data.model.Hint;
+import com.redhelmet.alert2me.data.model.User;
 import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
+import com.redhelmet.alert2me.data.remote.response.ForgotPasswordResponse;
+import com.redhelmet.alert2me.data.remote.response.LoginResponse;
 import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
+import com.redhelmet.alert2me.data.remote.response.RegisterAccountResponse;
 
 import java.util.List;
 
@@ -41,4 +45,7 @@ public interface DataManager {
     Observable<Event> getEventsWithFilterOneByOne(boolean isDefault);
     boolean isDefaultFilter();
     void setDefaultFilter(boolean isDefault);
+    Observable<RegisterAccountResponse> registerAccount(User user);
+    Observable<LoginResponse> login(String email, String password);
+    Observable<ForgotPasswordResponse> forgotPassword(String email);
 }

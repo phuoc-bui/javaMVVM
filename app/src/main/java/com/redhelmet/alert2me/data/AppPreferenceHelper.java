@@ -24,6 +24,7 @@ public class AppPreferenceHelper implements PreferenceHelper {
     private final String IS_DEFAULT_FILTER_KEY = "IS_DEFAULT_FILTER_KEY";
     private final String HAVE_ACCOUNT_KEY = "HAVE_ACCOUNT_KEY";
     private final String LOGGED_IN_KEY = "LOGGED_IN_KEY";
+    private final String TOKEN_KEY = "TOKEN_KEY";
     private Context context;
     private Gson gson;
 
@@ -178,5 +179,15 @@ public class AppPreferenceHelper implements PreferenceHelper {
     @Override
     public void setLoggedIn(boolean isLoggedIn) {
         PreferenceUtils.saveToPrefs(context, LOGGED_IN_KEY, isLoggedIn);
+    }
+
+    @Override
+    public void saveToken(String token) {
+        PreferenceUtils.saveToPrefs(context, TOKEN_KEY, token);
+    }
+
+    @Override
+    public String getToken() {
+        return (String) PreferenceUtils.getFromPrefs(context, TOKEN_KEY, "");
     }
 }

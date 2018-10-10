@@ -5,7 +5,6 @@ import android.content.Intent;
 
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.EventGroup;
-import com.redhelmet.alert2me.global.Event;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 
@@ -49,7 +48,7 @@ public class DefaultFilterViewModel extends BaseViewModel {
 
 //        resultIntent.putExtra("default", true);
 //        resultIntent.putExtra("filterGroup", defValues);
-                    navigationEvent.setValue(new Event<>(new NavigationItem(NavigationItem.FINISH_AND_RETURN, resultIntent)));
+                    navigateTo(new NavigationItem(NavigationItem.FINISH_AND_RETURN, resultIntent));
                 }));
 
 

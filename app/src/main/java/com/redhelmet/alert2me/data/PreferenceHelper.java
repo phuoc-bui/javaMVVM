@@ -32,4 +32,6 @@ public interface PreferenceHelper {
     void setHaveAccount(boolean haveAccount);
     boolean isLoggedIn();
     void setLoggedIn(boolean isLoggedIn);
+    void saveToken(String token);
+    String getToken();
 }

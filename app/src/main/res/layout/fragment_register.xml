@@ -16,17 +16,17 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?attr/colorBackgroundFloating"
             android:paddingStart="@dimen/normal_margin"
-            android:paddingEnd="@dimen/normal_margin"
-            android:background="?attr/colorBackgroundFloating">
+            android:paddingEnd="@dimen/normal_margin">
 
             <TextView
                 android:id="@+id/title"
                 style="@style/TextAppearance.A2M.Headline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/register_title"
                 android:layout_marginTop="@dimen/normal_margin"
+                android:text="@string/register_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_login_email"
                     android:inputType="textEmailAddress"
-                    android:text="@={viewModel.userEmail}" />
+                    android:text="@={viewModel.userModel.userEmail}" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -65,7 +65,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_register_username"
-                    android:text="@={viewModel.firstName}" />
+                    android:text="@={viewModel.userModel.firstName}" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -83,7 +83,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_register_username"
-                    android:text="@={viewModel.surname}" />
+                    android:text="@={viewModel.userModel.surname}" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_register_postcode"
                     android:inputType="number"
-                    android:text="@={viewModel.postcode}" />
+                    android:text="@={viewModel.userModel.postcode}" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -122,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_login_password"
                     android:inputType="textPassword"
-                    android:text="@={viewModel.password}" />
+                    android:text="@={viewModel.userModel.password}" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -142,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_login_password"
                     android:inputType="textPassword"
-                    android:text="@={viewModel.repeatPassword}" />
+                    android:text="@={viewModel.userModel.repeatPassword}" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.button.MaterialButton
@@ -151,6 +151,8 @@
                 android:layout_width="@dimen/login_button_width"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_margin"
+                android:enabled="@{viewModel.enableButton}"
+                android:onClick="@{() -> viewModel.onRegisterClick()}"
                 android:text="@string/register_button_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -172,8 +174,8 @@
                 style="@style/Widget.A2M.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/register_sign_in_title"
                 android:onClick="@{() -> viewModel.onSignInClick()}"
+                android:text="@string/register_sign_in_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_have_account" />

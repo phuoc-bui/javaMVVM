@@ -13,10 +13,14 @@ import com.redhelmet.alert2me.data.model.CategoryType;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
 import com.redhelmet.alert2me.data.model.Hint;
+import com.redhelmet.alert2me.data.model.User;
 import com.redhelmet.alert2me.data.remote.ApiHelper;
 import com.redhelmet.alert2me.data.remote.request.ProximityLocationRequest;
 import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
+import com.redhelmet.alert2me.data.remote.response.ForgotPasswordResponse;
+import com.redhelmet.alert2me.data.remote.response.LoginResponse;
 import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
+import com.redhelmet.alert2me.data.remote.response.RegisterAccountResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -298,6 +302,23 @@ public class AppDataManager implements DataManager {
         hints.add(hint3);
         hints.add(hint4);
         return hints;
+    }
+
+    @Override
+    public Observable<RegisterAccountResponse> registerAccount(User user) {
+        return api.registerAccount(user)
+                .subscribeOn(Schedulers.io())
+                .doOnNext(response -> pref.saveToken(response.account.token));
+    }
+
+    @Override
+    public Observable<LoginResponse> login(String email, String password) {
+        return api.login(email, password).subscribeOn(Schedulers.io());
+    }
+
+    @Override
+    public Observable<ForgotPasswordResponse> forgotPassword(String email) {
+        return api.forgotPassword(email).subscribeOn(Schedulers.io());
     }
 
     private void handleError(Throwable error) {

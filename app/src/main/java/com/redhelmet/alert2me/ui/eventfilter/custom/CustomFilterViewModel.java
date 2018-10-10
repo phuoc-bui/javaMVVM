@@ -5,7 +5,6 @@ import android.content.Intent;
 
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.Category;
-import com.redhelmet.alert2me.global.Event;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 
@@ -52,7 +51,7 @@ public class CustomFilterViewModel extends BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     Intent resultIntent = new Intent();
-                    navigationEvent.setValue(new Event<>(new NavigationItem(NavigationItem.FINISH_AND_RETURN, resultIntent)));
+                    navigateTo(new NavigationItem(NavigationItem.FINISH_AND_RETURN, resultIntent));
                 }));
 
     }

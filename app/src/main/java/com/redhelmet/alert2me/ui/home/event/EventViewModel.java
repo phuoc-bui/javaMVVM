@@ -9,7 +9,6 @@ import android.location.Location;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.common.collect.ComparisonChain;
-import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.EventListRecyclerAdapter;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.Area;
@@ -65,7 +64,7 @@ public class EventViewModel extends BaseViewModel {
                                 adapter.itemsSource.add(event);
                                 isEmpty.set(false);
                             },
-                            e -> notifyError()));
+                            this::notifyError));
         } else {
             getEvents();
             // update event list fragment when event list change
@@ -101,7 +100,7 @@ public class EventViewModel extends BaseViewModel {
                 }, error -> {
                     isLoading.set(false);
                     isRefreshing.setValue(false);
-                    notifyError();
+                    notifyError(error);
                 }));
     }
 
@@ -122,7 +121,7 @@ public class EventViewModel extends BaseViewModel {
                     eventsOneByOne.onError(error);
                     isLoading.set(false);
                     isRefreshing.setValue(false);
-                    notifyError();
+                    notifyError(error);
                 }, () -> {
                     events.setValue(eventList);
                     isLoading.set(false);
@@ -144,7 +143,7 @@ public class EventViewModel extends BaseViewModel {
 
     public void onEventClick(int position) {
         Event event = events.getValue().get(position);
-        navigationEvent.setValue(new com.redhelmet.alert2me.global.Event<>(new NavigationItem(NavigationItem.START_ACTIVITY, EventDetailsActivity.class, EventDetailsActivity.createDataBundle(event))));
+        navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY, EventDetailsActivity.class, EventDetailsActivity.createDataBundle(event)));
     }
 
     public void saveUserLocation(Location location) {
@@ -210,15 +209,11 @@ public class EventViewModel extends BaseViewModel {
         super.onCleared();
     }
 
-    public int getCurrentSortType() {
-        return currentSortType;
-    }
-
     public void setCurrentSortType(int currentSortType) {
         this.currentSortType = currentSortType;
     }
 
-    private void notifyError() {
-        navigationEvent.setValue(new com.redhelmet.alert2me.global.Event<>(new NavigationItem(NavigationItem.SHOW_TOAST, R.string.msgUnableToGetEvent)));
+    private void notifyError(Throwable e) {
+        navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, e.getMessage()));
     }
 }

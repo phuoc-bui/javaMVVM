@@ -29,14 +29,13 @@ public class SplashViewModel extends BaseViewModel {
                 .subscribe(response -> startTimer(), error -> {
                     isLoading.set(false);
                     startTimer();
-                    navigationEvent.setValue(
-                            new Event<>(new NavigationItem(NavigationItem.SHOW_TOAST, R.string.timeOut)));
+                    navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, error.getMessage()));
                 }));
     }
 
     private void startTimer() {
         disposeBag.add(Observable.timer(Constant.SPLASH_DISPLAY_LENGTH, TimeUnit.MILLISECONDS)
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(number -> {
                     isLoading.set(false);
                     Class dest;
@@ -50,7 +49,7 @@ public class SplashViewModel extends BaseViewModel {
                         dest = HintsActivity.class;
                     }
 
-                    navigationEvent.postValue(new Event<>(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH, dest)));
+                    navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH, dest));
                 }));
     }
 }

@@ -38,11 +38,26 @@ public class NavigationItem {
     public static final int FINISH_AND_RETURN = 6;
 
     /**
-     * Change fragment data
+     * Change fragment and add to back stack
      */
     public static final int CHANGE_FRAGMENT = 7;
 
-    @IntDef({START_ACTIVITY, START_ACTIVITY_AND_FINISH, FINISH, START_WEB_VIEW, SHOW_TOAST, FINISH_AND_RETURN, CHANGE_FRAGMENT})
+    /**
+     * Return to previous fragment
+     */
+    public static final int POP_FRAGMENT_BACK = 8;
+
+    public static final int SHOW_DIALOG = 9;
+
+    public static final int DISMISS_DIALOG = 10;
+
+    public static final int SHOW_LOADING_DIALOG = 11;
+
+    public static final int DISMISS_LOADING_DIALOG = 12;
+
+    @IntDef({START_ACTIVITY, START_ACTIVITY_AND_FINISH, FINISH, START_WEB_VIEW,
+            SHOW_TOAST, FINISH_AND_RETURN, CHANGE_FRAGMENT, POP_FRAGMENT_BACK,
+            SHOW_DIALOG, DISMISS_DIALOG, SHOW_LOADING_DIALOG, DISMISS_LOADING_DIALOG})
     @Retention(RetentionPolicy.SOURCE)
     public @interface NavigationType {
     }
@@ -107,6 +122,24 @@ public class NavigationItem {
                 } else {
                     throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
                 }
+                break;
+
+            case POP_FRAGMENT_BACK:
+                context.popBack();
+                break;
+
+            case SHOW_DIALOG:
+                break;
+
+            case DISMISS_DIALOG:
+                break;
+
+            case SHOW_LOADING_DIALOG:
+                context.showLoadingDialog(true);
+                break;
+
+            case DISMISS_LOADING_DIALOG:
+                context.showLoadingDialog(false);
                 break;
         }
     }

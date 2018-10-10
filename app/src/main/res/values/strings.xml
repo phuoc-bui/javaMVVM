@@ -220,4 +220,10 @@
     <string name="register_button_title">Register</string>
     <string name="register_have_account_title">Already have account?</string>
     <string name="register_sign_in_title">Sign in</string>
+    <string name="forgot_description">Please type your username or email address below and click Reset Password</string>
+    <string name="forgot_send_button_title">Send</string>
+    <string name="forgot_send_successful">Your request has sent successful.</string>
+
+    <!--general-->
+    <string name="loading">Loading...</string>
 </resources>
