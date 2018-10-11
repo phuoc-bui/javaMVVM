@@ -11,16 +11,16 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.redhelmet.alert2me.data.AppDataManager;
+import com.redhelmet.alert2me.data.AppPreferenceHelper;
 import com.redhelmet.alert2me.data.DataManager;
+import com.redhelmet.alert2me.data.PreferenceHelper;
 import com.redhelmet.alert2me.data.database.AppDBHelper;
 import com.redhelmet.alert2me.data.database.AppDatabase;
 import com.redhelmet.alert2me.data.database.DBHelper;
-import com.redhelmet.alert2me.data.AppPreferenceHelper;
-import com.redhelmet.alert2me.data.PreferenceHelper;
 import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.remote.ApiHelper;
-import com.redhelmet.alert2me.data.remote.ApiService;
 import com.redhelmet.alert2me.data.remote.AppApiHelper;
+import com.redhelmet.alert2me.global.RxErrorHandlingCallAdapterFactory;
 
 import java.io.File;
 import java.util.HashMap;
@@ -33,7 +33,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -106,24 +105,9 @@ public class AppModule {
             instance = new Retrofit.Builder()
                     .baseUrl(BuildConfig.API_ENDPOINT)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory.create())
                     .client(buildOkHttpClient())
                     .build();
-            ServiceLocator.addService(instance);
-        }
-        return instance;
-    }
-
-    public ApiService provideApiService() {
-        ApiService instance = ServiceLocator.get(ApiService.class);
-        if (instance == null) {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(BuildConfig.API_ENDPOINT)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .client(buildOkHttpClient())
-                    .build();
-            instance = retrofit.create(ApiService.class);
             ServiceLocator.addService(instance);
         }
         return instance;
@@ -160,7 +144,7 @@ public class AppModule {
     public ApiHelper provideApiHelper() {
         ApiHelper instance = ServiceLocator.get(ApiHelper.class);
         if (instance == null) {
-            instance = new AppApiHelper(provideApiService());
+            instance = new AppApiHelper(provideRetrofit());
             ServiceLocator.addService(instance);
         }
         return instance;

@@ -56,10 +56,8 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<ConfigResponse> loadConfig() {
-        return api.getConfig()
-                .doOnNext(this::saveConfig)
-                .doOnError(this::handleError)
-                .subscribeOn(Schedulers.io());
+        return api.getConfig().subscribeOn(Schedulers.io())
+                .doOnNext(this::saveConfig);
     }
 
     @Override
@@ -90,14 +88,12 @@ public class AppDataManager implements DataManager {
     @Override
     public Observable<ApiInfo> getUserId(String firebaseToken) {
         return api.registerDevice(firebaseToken)
-                .subscribeOn(Schedulers.io())
                 .doOnNext(apiInfo -> pref.saveDeviceInfo(apiInfo))
                 .doOnError(error -> {
                     ApiInfo apiInfo = new ApiInfo();
                     apiInfo.setUserId("0");
                     apiInfo.setApiToken("");
                     pref.saveDeviceInfo(apiInfo);
-                    handleError(error);
                 });
     }
 
@@ -129,8 +125,7 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<Event>> getAllEvents() {
-        return api.getAllEvents().subscribeOn(Schedulers.io())
-                .doOnError(this::handleError);
+        return api.getAllEvents();
     }
 
     @Override
@@ -157,12 +152,12 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<Category>> getUserCustomFilters() {
-        return database.getEditedCategories();
+        return database.getEditedCategories().subscribeOn(Schedulers.computation());
     }
 
     @Override
     public Observable<List<EventGroup>> getUserDefaultFilters() {
-        return database.getEditedEventGroups();
+        return database.getEditedEventGroups().subscribeOn(Schedulers.computation());
     }
 
     @Override
@@ -177,7 +172,6 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<Event>> getEventsWithFilter(boolean isDefault) {
-
         return getEventsWithFilterOneByOne(isDefault)
                 .toList()
                 .doOnSuccess(list -> Log.e(TAG, "Complete filter, return list " + list.size()))
@@ -307,22 +301,17 @@ public class AppDataManager implements DataManager {
     @Override
     public Observable<RegisterAccountResponse> registerAccount(User user) {
         return api.registerAccount(user)
-                .subscribeOn(Schedulers.io())
                 .doOnNext(response -> pref.saveToken(response.account.token));
     }
 
     @Override
     public Observable<LoginResponse> login(String email, String password) {
-        return api.login(email, password).subscribeOn(Schedulers.io());
+        return api.login(email, password);
     }
 
     @Override
     public Observable<ForgotPasswordResponse> forgotPassword(String email) {
-        return api.forgotPassword(email).subscribeOn(Schedulers.io());
-    }
-
-    private void handleError(Throwable error) {
-        Log.e(TAG, error.getMessage());
+        return api.forgotPassword(email);
     }
 
     private List<Category> copyStatusToCategoryType(List<Category> categories) {

@@ -1,10 +1,8 @@
 package com.redhelmet.alert2me.ui.splash;
 
-import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.PreferenceHelper;
 import com.redhelmet.alert2me.global.Constant;
-import com.redhelmet.alert2me.global.Event;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 import com.redhelmet.alert2me.ui.hint.HintsActivity;
@@ -29,7 +27,7 @@ public class SplashViewModel extends BaseViewModel {
                 .subscribe(response -> startTimer(), error -> {
                     isLoading.set(false);
                     startTimer();
-                    navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, error.getMessage()));
+                    handleError(error);
                 }));
     }
 

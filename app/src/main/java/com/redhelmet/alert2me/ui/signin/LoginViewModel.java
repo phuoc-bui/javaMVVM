@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.redhelmet.alert2me.data.DataManager;
+import com.redhelmet.alert2me.data.PreferenceHelper;
 import com.redhelmet.alert2me.global.RxProperty;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
@@ -18,8 +19,11 @@ public class LoginViewModel extends BaseViewModel {
     public RxProperty<String> password = new RxProperty<>("");
     public ObservableBoolean disableLoginButton = new ObservableBoolean(true);
 
-    public LoginViewModel(DataManager dataManager) {
+    private PreferenceHelper pref;
+
+    public LoginViewModel(DataManager dataManager, PreferenceHelper pref) {
         super(dataManager);
+        this.pref = pref;
         disposeBag.add(Observable.combineLatest(userEmail.asObservable(),
                 password.asObservable(),
                 (email, pass) -> email != null && email.length() > 0 && pass != null && pass.length() > 0)
@@ -34,7 +38,7 @@ public class LoginViewModel extends BaseViewModel {
                     onLoginSuccess();
                 }, error -> {
                     showLoadingDialog(false);
-                    navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, error.getMessage()));
+                    handleError(error);
                 }));
     }
 
@@ -59,10 +63,11 @@ public class LoginViewModel extends BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(eventGroups -> {
                     showLoadingDialog(false);
+                    pref.setLoggedIn(true);
                     navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH, HomeActivity.class));
                 }, error -> {
                     showLoadingDialog(false);
-                    navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, error.getMessage()));
+                    handleError(error);
                 }));
     }
 

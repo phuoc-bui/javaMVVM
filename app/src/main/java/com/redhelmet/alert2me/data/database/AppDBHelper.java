@@ -1,5 +1,7 @@
 package com.redhelmet.alert2me.data.database;
 
+import android.util.Log;
+
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.EventGroup;
 
@@ -21,7 +23,9 @@ public class AppDBHelper implements DBHelper {
 
     @Override
     public Observable<List<Category>> getCategories() {
-        return database.categoryDao().getCategories().toObservable();
+        return database.categoryDao().getCategories()
+                .doOnSuccess(list -> Log.e("Database", "getCategories: " + list.size()))
+                .toObservable();
     }
 
     @Override
@@ -36,7 +40,9 @@ public class AppDBHelper implements DBHelper {
 
     @Override
     public Observable<List<EventGroup>> getEventGroups() {
-        return database.eventGroupDao().getEventGroups().toObservable();
+        return database.eventGroupDao().getEventGroups()
+                .doOnSuccess(list -> Log.e("Database", "getEventGroups: " + list.size()))
+                .toObservable();
     }
 
     @Override

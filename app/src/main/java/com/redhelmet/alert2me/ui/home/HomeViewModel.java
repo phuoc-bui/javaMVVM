@@ -18,6 +18,6 @@ public class HomeViewModel extends BaseViewModel {
                 .subscribe(response -> {
 //                    PreferenceUtils.saveToPrefs(getApplicationContext(), Constants.KEY_USERLATITUDE,String.valueOf(lastKnownLocation.getLatitude()));
 //                    PreferenceUtils.saveToPrefs(getApplicationContext(),Constants.KEY_USERLONGITUDE,String.valueOf(lastKnownLocation.getLongitude()));
-                }, error -> navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, error.getMessage()))));
+                }, this::handleError));
     }
 }

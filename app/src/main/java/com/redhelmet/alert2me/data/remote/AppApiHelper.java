@@ -17,12 +17,13 @@ import java.util.List;
 
 import io.reactivex.Notification;
 import io.reactivex.Observable;
+import retrofit2.Retrofit;
 
 public class AppApiHelper implements ApiHelper {
     private ApiService apiService;
 
-    public AppApiHelper(ApiService apiService) {
-        this.apiService = apiService;
+    public AppApiHelper(Retrofit retrofit) {
+        this.apiService = retrofit.create(ApiService.class);
     }
 
     @Override
@@ -68,11 +69,9 @@ public class AppApiHelper implements ApiHelper {
 
     private <T extends Response> Observable<T> filterSuccessResponse(Observable<T> response) {
         return response.materialize().map(notification -> {
-            if(notification.isOnNext() && !notification.getValue().success) {
+            if (notification.isOnNext() && !notification.getValue().success) {
                 return Notification.createOnError(new Throwable(notification.getValue().errorMessage));
-            } else {
-                return notification;
-            }
+            } else return notification;
         }).dematerialize();
     }
 }

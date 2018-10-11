@@ -64,7 +64,7 @@ public class EventViewModel extends BaseViewModel {
                                 adapter.itemsSource.add(event);
                                 isEmpty.set(false);
                             },
-                            this::notifyError));
+                            this::handleError));
         } else {
             getEvents();
             // update event list fragment when event list change
@@ -100,7 +100,7 @@ public class EventViewModel extends BaseViewModel {
                 }, error -> {
                     isLoading.set(false);
                     isRefreshing.setValue(false);
-                    notifyError(error);
+                    handleError(error);
                 }));
     }
 
@@ -121,7 +121,7 @@ public class EventViewModel extends BaseViewModel {
                     eventsOneByOne.onError(error);
                     isLoading.set(false);
                     isRefreshing.setValue(false);
-                    notifyError(error);
+                    handleError(error);
                 }, () -> {
                     events.setValue(eventList);
                     isLoading.set(false);
@@ -211,9 +211,5 @@ public class EventViewModel extends BaseViewModel {
 
     public void setCurrentSortType(int currentSortType) {
         this.currentSortType = currentSortType;
-    }
-
-    private void notifyError(Throwable e) {
-        navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, e.getMessage()));
     }
 }

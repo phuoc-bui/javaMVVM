@@ -70,7 +70,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         } else if (SignInViewModel.class.equals(modelClass)) {
             return (T) new SignInViewModel(pref);
         } else if (LoginViewModel.class.equals(modelClass)) {
-            return (T) new LoginViewModel(dataManager);
+            return (T) new LoginViewModel(dataManager, pref);
         } else if (RegisterViewModel.class.equals(modelClass)) {
             return (T) new RegisterViewModel(dataManager);
         } else if (ForgotPasswordViewModel.class.equals(modelClass)) {

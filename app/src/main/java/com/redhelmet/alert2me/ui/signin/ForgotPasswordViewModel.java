@@ -28,9 +28,10 @@ public class ForgotPasswordViewModel extends BaseViewModel {
                 .subscribe(response -> {
                     showLoadingDialog(false);
                     navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, R.string.forgot_send_successful));
+                    navigateTo(new NavigationItem(NavigationItem.POP_FRAGMENT_BACK));
                 }, error -> {
                     showLoadingDialog(false);
-                    navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, error.getMessage()));
+                    handleError(error);
                 }));
     }
 

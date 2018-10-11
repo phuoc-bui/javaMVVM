@@ -2,12 +2,12 @@ package com.redhelmet.alert2me.ui.signin;
 
 import android.databinding.ObservableBoolean;
 
+import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.User;
 import com.redhelmet.alert2me.global.RxProperty;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
-import com.redhelmet.alert2me.ui.home.HomeActivity;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -28,10 +28,11 @@ public class RegisterViewModel extends BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     showLoadingDialog(false);
-                    navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH, HomeActivity.class));
+                    navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, R.string.register_successful_message));
+                    navigateTo(new NavigationItem(NavigationItem.CHANGE_FRAGMENT, LoginFragment.newInstance()));
                 }, error -> {
                     showLoadingDialog(false);
-                    navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, error.getMessage()));
+                    handleError(error);
                 }));
     }
 
