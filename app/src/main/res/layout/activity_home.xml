@@ -44,5 +44,16 @@
             app:tabPaddingTop="8dp"
             app:tabGravity="fill"
             app:tabMode="fixed" />
+
+        <com.redhelmet.alert2me.ui.widget.FadingSnackbar
+            android:id="@+id/snackbar"
+            android:layout_width="@dimen/snackbar_width"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/snackbar_margin_bottom_bab"
+            android:layout_marginEnd="@dimen/snackbar_margin_end_fab"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 </layout>

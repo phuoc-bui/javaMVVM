@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.ui.custom;
+package com.redhelmet.alert2me.ui.dialog;
 
 import android.app.Dialog;
 import android.os.Bundle;
