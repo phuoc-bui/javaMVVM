@@ -11,12 +11,12 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.redhelmet.alert2me.data.AppDataManager;
-import com.redhelmet.alert2me.data.AppPreferenceHelper;
+import com.redhelmet.alert2me.data.SharedPreferenceStorage;
 import com.redhelmet.alert2me.data.DataManager;
-import com.redhelmet.alert2me.data.PreferenceHelper;
-import com.redhelmet.alert2me.data.database.AppDBHelper;
-import com.redhelmet.alert2me.data.database.AppDatabase;
-import com.redhelmet.alert2me.data.database.DBHelper;
+import com.redhelmet.alert2me.data.PreferenceStorage;
+import com.redhelmet.alert2me.data.database.RoomDatabase;
+import com.redhelmet.alert2me.data.database.RoomDatabaseStorage;
+import com.redhelmet.alert2me.data.database.DatabaseStorage;
 import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.remote.ApiHelper;
 import com.redhelmet.alert2me.data.remote.AppApiHelper;
@@ -84,7 +84,7 @@ public class AppModule {
     }
 
     public Interceptor provideInterceptor() {
-        PreferenceHelper pref = providePreferenceHelper();
+        PreferenceStorage pref = providePreferenceHelper();
         return chain -> {
             Request originalRequest = chain.request();
             Request.Builder builder = originalRequest.newBuilder();
@@ -113,28 +113,28 @@ public class AppModule {
         return instance;
     }
 
-    public PreferenceHelper providePreferenceHelper() {
-        PreferenceHelper instance = ServiceLocator.get(PreferenceHelper.class);
+    public PreferenceStorage providePreferenceHelper() {
+        PreferenceStorage instance = ServiceLocator.get(PreferenceStorage.class);
         if (instance == null) {
-            instance = new AppPreferenceHelper(provideApplication(), provideGson());
+            instance = new SharedPreferenceStorage(provideApplication(), provideGson());
             ServiceLocator.addService(instance);
         }
         return instance;
     }
 
-    public DBHelper provideDBHelper() {
-        DBHelper instance = ServiceLocator.get(DBHelper.class);
+    public DatabaseStorage provideDBHelper() {
+        DatabaseStorage instance = ServiceLocator.get(DatabaseStorage.class);
         if (instance == null) {
-            instance = new AppDBHelper(provideAppDatabase());
+            instance = new RoomDatabaseStorage(provideAppDatabase());
             ServiceLocator.addService(instance);
         }
         return instance;
     }
 
-    public AppDatabase provideAppDatabase() {
-        AppDatabase instance = ServiceLocator.get(AppDatabase.class);
+    public RoomDatabase provideAppDatabase() {
+        RoomDatabase instance = ServiceLocator.get(RoomDatabase.class);
         if (instance == null) {
-            instance = Room.databaseBuilder(application, AppDatabase.class, BuildConfig.DB_FILE_NAME + "room")
+            instance = Room.databaseBuilder(application, RoomDatabase.class, BuildConfig.DB_FILE_NAME + "room")
                     .build();
             ServiceLocator.addService(instance);
         }

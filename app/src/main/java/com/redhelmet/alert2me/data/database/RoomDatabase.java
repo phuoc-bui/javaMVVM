@@ -17,7 +17,7 @@ import com.redhelmet.alert2me.data.model.EventGroup;
         version = BuildConfig.DB_SCHEMA_VERSION,
         exportSchema = false)
 @TypeConverters({Converter.class})
-public abstract class AppDatabase extends RoomDatabase {
+public abstract class RoomDatabase extends android.arch.persistence.room.RoomDatabase {
     public abstract CategoryDao categoryDao();
 
     public abstract EventGroupDao eventGroupDao();

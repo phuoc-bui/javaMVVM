@@ -2,14 +2,18 @@ package com.redhelmet.alert2me.ui.home;
 
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
-import com.redhelmet.alert2me.ui.base.NavigationItem;
+
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class HomeViewModel extends BaseViewModel {
 
+    private DataManager dataManager;
+
+    @Inject
     public HomeViewModel(DataManager dataManager) {
-        super(dataManager);
+        this.dataManager = dataManager;
     }
 
     public void proximityLocationCheckin() {

@@ -28,6 +28,8 @@ import io.reactivex.subjects.ReplaySubject;
 
 public class EventViewModel extends BaseViewModel {
 
+    private DataManager dataManager;
+
     public EventListRecyclerAdapter adapter = new EventListRecyclerAdapter();
     // flag to show/hide empty text view in event list fragment
     public ObservableBoolean isEmpty = new ObservableBoolean(true);
@@ -54,7 +56,7 @@ public class EventViewModel extends BaseViewModel {
     };
 
     public EventViewModel(DataManager dataManager) {
-        super(dataManager);
+        this.dataManager = dataManager;
         if (isLoadOneByOne) {
             eventsOneByOne = ReplaySubject.create();
             getEventsOneByOne();

@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.redhelmet.alert2me.data.DataManager;
-import com.redhelmet.alert2me.data.PreferenceHelper;
+import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.global.RxProperty;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
@@ -19,9 +19,9 @@ public class LoginViewModel extends BaseViewModel {
     public RxProperty<String> password = new RxProperty<>("");
     public ObservableBoolean disableLoginButton = new ObservableBoolean(true);
 
-    private PreferenceHelper pref;
+    private PreferenceStorage pref;
 
-    public LoginViewModel(DataManager dataManager, PreferenceHelper pref) {
+    public LoginViewModel(DataManager dataManager, PreferenceStorage pref) {
         super(dataManager);
         this.pref = pref;
         disposeBag.add(Observable.combineLatest(userEmail.asObservable(),

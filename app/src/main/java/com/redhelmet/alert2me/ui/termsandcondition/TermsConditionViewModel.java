@@ -8,10 +8,15 @@ import com.redhelmet.alert2me.ui.base.NavigationItem;
 import com.redhelmet.alert2me.ui.hint.HintsActivity;
 import com.redhelmet.alert2me.ui.signin.SignInActivity;
 
+import javax.inject.Inject;
+
 public class TermsConditionViewModel extends BaseViewModel {
 
+    private DataManager dataManager;
+
+    @Inject
     public TermsConditionViewModel(DataManager dataManager) {
-        super(dataManager);
+        this.dataManager = dataManager;
     }
 
     public void onTermsAccept() {

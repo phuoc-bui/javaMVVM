@@ -7,7 +7,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
-public interface DBHelper {
+public interface DatabaseStorage {
     void saveCategories(List<Category> categories);
 
     Observable<List<Category>> getCategories();

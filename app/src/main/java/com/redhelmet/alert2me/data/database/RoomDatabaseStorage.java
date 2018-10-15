@@ -9,10 +9,10 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
-public class AppDBHelper implements DBHelper {
-    private AppDatabase database;
+public class RoomDatabaseStorage implements DatabaseStorage {
+    private RoomDatabase database;
 
-    public AppDBHelper(AppDatabase database) {
+    public RoomDatabaseStorage(RoomDatabase database) {
         this.database = database;
     }
 

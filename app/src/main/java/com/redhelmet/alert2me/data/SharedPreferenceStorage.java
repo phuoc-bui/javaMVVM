@@ -15,7 +15,7 @@ import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppPreferenceHelper implements PreferenceHelper {
+public class SharedPreferenceStorage implements PreferenceStorage {
     private final String CONFIG_KEY = "CONFIG_KEY";
     private final String DEVICE_KEY = "DEVICE_KEY";
     private final String USER_LOCATION_KEY = "USER_LOCATION_KEY";
@@ -28,7 +28,7 @@ public class AppPreferenceHelper implements PreferenceHelper {
     private Context context;
     private Gson gson;
 
-    public AppPreferenceHelper(Context context, Gson gson) {
+    public SharedPreferenceStorage(Context context, Gson gson) {
         this.context = context.getApplicationContext();
         this.gson = gson;
     }

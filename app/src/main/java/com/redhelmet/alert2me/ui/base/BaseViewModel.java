@@ -4,7 +4,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.AddObservationModel;
 import com.redhelmet.alert2me.data.model.Observations;
 import com.redhelmet.alert2me.data.remote.NetworkError;
@@ -25,14 +24,6 @@ public class BaseViewModel extends ViewModel {
     protected Observations observations;
     protected AddObservationModel addObservation;
     protected MutableLiveData<Event<NavigationItem>> navigationEvent = new MutableLiveData<>();
-    protected DataManager dataManager;
-
-    public BaseViewModel(DataManager dataManager) {
-        wz_notification_selection = new JSONArray();
-        observations = Observations.getInstance();
-        addObservation = AddObservationModel.getInstance();
-        this.dataManager = dataManager;
-    }
 
     public BaseViewModel() {
         wz_notification_selection = new JSONArray();

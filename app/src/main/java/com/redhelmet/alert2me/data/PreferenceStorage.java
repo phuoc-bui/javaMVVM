@@ -11,7 +11,7 @@ import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
 
 import java.util.List;
 
-public interface PreferenceHelper {
+public interface PreferenceStorage {
     void saveAppConfig(AppConfig appConfig);
     AppConfig getAppConfig();
     boolean isInitialLaunch();

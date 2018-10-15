@@ -4,7 +4,7 @@ import android.location.Location;
 import android.util.Log;
 
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.data.database.DBHelper;
+import com.redhelmet.alert2me.data.database.DatabaseStorage;
 import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
@@ -32,14 +32,14 @@ import io.reactivex.schedulers.Schedulers;
 public class AppDataManager implements DataManager {
     private final String TAG = AppDataManager.class.getSimpleName();
 
-    private PreferenceHelper pref;
+    private PreferenceStorage pref;
     private ApiHelper api;
-    private DBHelper database;
+    private DatabaseStorage database;
 
     private List<Category> categories;
     private List<EventGroup> eventGroups;
 
-    public AppDataManager(PreferenceHelper pref, DBHelper db, ApiHelper apiHelper) {
+    public AppDataManager(PreferenceStorage pref, DatabaseStorage db, ApiHelper apiHelper) {
         this.pref = pref;
         this.database = db;
         this.api = apiHelper;

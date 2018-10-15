@@ -45,7 +45,7 @@ public class Event<T> {
     /**
      * Returns the content, even if it's already been handled.
      */
-    T peekContent() {
+    public T peekContent() {
         return content;
     }
 

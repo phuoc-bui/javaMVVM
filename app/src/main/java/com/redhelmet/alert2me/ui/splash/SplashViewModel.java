@@ -1,7 +1,7 @@
 package com.redhelmet.alert2me.ui.splash;
 
 import com.redhelmet.alert2me.data.DataManager;
-import com.redhelmet.alert2me.data.PreferenceHelper;
+import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.global.Constant;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
@@ -12,15 +12,19 @@ import com.redhelmet.alert2me.ui.termsandcondition.TermConditionActivity;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class SplashViewModel extends BaseViewModel {
-    private PreferenceHelper pref;
+    private PreferenceStorage pref;
+    private DataManager dataManager;
 
-    public SplashViewModel(DataManager dataManager, PreferenceHelper pref) {
-        super(dataManager);
+    @Inject
+    public SplashViewModel(DataManager dataManager, PreferenceStorage pref) {
         this.pref = pref;
+        this.dataManager = dataManager;
         isLoading.set(true);
         disposeBag.add(dataManager.loadConfig()
                 .observeOn(AndroidSchedulers.mainThread())

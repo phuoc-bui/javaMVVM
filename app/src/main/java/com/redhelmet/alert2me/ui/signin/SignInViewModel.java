@@ -1,14 +1,14 @@
 package com.redhelmet.alert2me.ui.signin;
 
-import com.redhelmet.alert2me.data.PreferenceHelper;
+import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 
 public class SignInViewModel extends BaseViewModel {
 
-    public SignInViewModel(PreferenceHelper preferenceHelper) {
+    public SignInViewModel(PreferenceStorage preferenceStorage) {
         NavigationItem item;
-        if (preferenceHelper.haveAccount()) {
+        if (preferenceStorage.haveAccount()) {
             item = new NavigationItem(NavigationItem.CHANGE_FRAGMENT, LoginFragment.newInstance());
         } else {
             item = new NavigationItem(NavigationItem.CHANGE_FRAGMENT, RegisterFragment.newInstance());

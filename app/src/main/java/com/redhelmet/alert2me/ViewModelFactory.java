@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import com.redhelmet.alert2me.data.DataManager;
-import com.redhelmet.alert2me.data.PreferenceHelper;
+import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.ui.eventdetail.EventDetailViewModel;
 import com.redhelmet.alert2me.ui.eventfilter.custom.CustomFilterViewModel;
 import com.redhelmet.alert2me.ui.eventfilter.defaultfilter.DefaultFilterViewModel;
@@ -24,7 +24,7 @@ import com.redhelmet.alert2me.ui.eventfilter.EventFilterViewModel;
 public class ViewModelFactory implements ViewModelProvider.Factory {
     private static ViewModelFactory INSTANCE;
     private DataManager dataManager;
-    private PreferenceHelper pref;
+    private PreferenceStorage pref;
 
     private ViewModelFactory() {
         AppModule appModule = AppModule.getInstance();

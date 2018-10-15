@@ -84,6 +84,12 @@ dependencies {
     implementation "com.google.firebase:firebase-core:$FIREBASE_VERSION"
     implementation "com.google.firebase:firebase-messaging:$FIREBASE_MESSAGING_VERSION"
 
+    // Dagger
+    implementation "com.google.dagger:dagger-android:$DAGGER_VERSION"
+    implementation "com.google.dagger:dagger-android-support:$DAGGER_VERSION"
+    annotationProcessor "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$DAGGER_VERSION"
+
 // GCM
     implementation "com.google.android.gms:play-services-maps:$GOOGLE_SERVICE_VERSION"
     implementation "com.google.android.gms:play-services-location:$GOOGLE_SERVICE_VERSION"

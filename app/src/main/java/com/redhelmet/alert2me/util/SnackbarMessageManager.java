@@ -2,7 +2,7 @@ package com.redhelmet.alert2me.util;
 
 import android.arch.lifecycle.MutableLiveData;
 
-import com.redhelmet.alert2me.data.PreferenceHelper;
+import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.global.Event;
 import com.redhelmet.alert2me.ui.SnackbarMessage;
 
@@ -21,14 +21,14 @@ import java.util.List;
  */
 public class SnackbarMessageManager {
     public final int MAX_ITEMS = 10;
-    private PreferenceHelper preferenceHelper;
+    private PreferenceStorage preferenceStorage;
 
     private List<Event<SnackbarMessage>> messages = new ArrayList<>();
 
     private MutableLiveData<Event<SnackbarMessage>> result = new MutableLiveData<>();
 
-    public SnackbarMessageManager(PreferenceHelper pref) {
-        this.preferenceHelper = pref;
+    public SnackbarMessageManager(PreferenceStorage pref) {
+        this.preferenceStorage = pref;
     }
 
     public void addMessage(SnackbarMessage msg) {
@@ -36,27 +36,31 @@ public class SnackbarMessageManager {
 //            return
 //        }
         // If the new message is about the same change as a pending one, keep the new one. (rare)
-        val sameRequestId = messages.filter {
-            it.peekContent().requestChangeId == msg.requestChangeId && !it.hasBeenHandled
+        List<Event<SnackbarMessage>> sameRequestId = new ArrayList<>();
+        List<Event<SnackbarMessage>> alreadyHandledWithSameId = new ArrayList<>();
+        for (Event<SnackbarMessage> event : messages) {
+            if (event.peekContent().requestChangeId.equals(msg.requestChangeId)) {
+                if (event.isHasBeenHandled()) sameRequestId.add(event);
+                else alreadyHandledWithSameId.add(event);
+            }
         }
-        if (sameRequestId.isNotEmpty()) {
-            messages.removeAll(sameRequestId)
+        if (!sameRequestId.isEmpty()) {
+            messages.removeAll(sameRequestId);
         }
-
-        // If the new message is about a change that was already notified, ignore it.
-        val alreadyHandledWithSameId = messages.filter {
-            it.peekContent().requestChangeId == msg.requestChangeId && it.hasBeenHandled
-        }
-
-        // Only add the message if it hasn't been handled before
         if (alreadyHandledWithSameId.isEmpty()) {
-            messages.add(Event(msg))
-            loadNextMessage()
+            messages.add(new Event<>(msg));
+            loadNextMessage();
         }
 
         // Remove old messages
-        if (messages.size > MAX_ITEMS) {
-            messages.retainAll(messages.drop(messages.size - MAX_ITEMS))
+        if (messages.size() > MAX_ITEMS) {
+            List<Event<SnackbarMessage>> oldMessages = new ArrayList<>();
+            for (int i = 0; i < messages.size(); i++) {
+                if (i >= MAX_ITEMS) {
+                    oldMessages.add(messages.get(i));
+                }
+            }
+            messages.removeAll(oldMessages);
         }
     }
 

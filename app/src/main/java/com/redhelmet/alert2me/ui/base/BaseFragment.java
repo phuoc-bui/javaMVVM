@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.ui.base;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -62,7 +63,6 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = obtainViewModel();
         binder.setVariable(getBindingVariable(), viewModel);
         binder.executePendingBindings();
 
@@ -73,8 +73,9 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
         });
     }
 
-    protected VM obtainViewModel() {
-        return ViewModelProviders.of(getBaseActivity(), ViewModelFactory.getInstance()).get(getViewModelClass());
+    @SuppressWarnings("unchecked")
+    protected <T extends BaseViewModel> T obtainViewModel(ViewModelProvider.Factory factory) {
+        return viewModel = ViewModelProviders.of(getBaseActivity(), factory).get((Class<VM>) viewModel.getClass());
     }
 
     public BaseActivity getBaseActivity() {
