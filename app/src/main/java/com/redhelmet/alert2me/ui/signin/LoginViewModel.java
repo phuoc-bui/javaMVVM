@@ -11,19 +11,20 @@ import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 import com.redhelmet.alert2me.ui.home.HomeActivity;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class LoginViewModel extends BaseViewModel {
+
     public RxProperty<String> userEmail = new RxProperty<>("");
     public RxProperty<String> password = new RxProperty<>("");
     public ObservableBoolean disableLoginButton = new ObservableBoolean(true);
 
-    private PreferenceStorage pref;
-
+    @Inject
     public LoginViewModel(DataManager dataManager, PreferenceStorage pref) {
-        super(dataManager);
-        this.pref = pref;
+        super(dataManager, pref);
         disposeBag.add(Observable.combineLatest(userEmail.asObservable(),
                 password.asObservable(),
                 (email, pass) -> email != null && email.length() > 0 && pass != null && pass.length() > 0)
@@ -63,7 +64,7 @@ public class LoginViewModel extends BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(eventGroups -> {
                     showLoadingDialog(false);
-                    pref.setLoggedIn(true);
+                    preferenceStorage.setLoggedIn(true);
                     navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH, HomeActivity.class));
                 }, error -> {
                     showLoadingDialog(false);

@@ -25,6 +25,8 @@ import com.redhelmet.alert2me.data.remote.response.RegisterAccountResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
@@ -39,6 +41,7 @@ public class AppDataManager implements DataManager {
     private List<Category> categories;
     private List<EventGroup> eventGroups;
 
+    @Inject
     public AppDataManager(PreferenceStorage pref, DatabaseStorage db, ApiHelper apiHelper) {
         this.pref = pref;
         this.database = db;

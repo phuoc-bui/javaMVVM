@@ -4,9 +4,13 @@ import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 
+import javax.inject.Inject;
+
 public class SignInViewModel extends BaseViewModel {
 
+    @Inject
     public SignInViewModel(PreferenceStorage preferenceStorage) {
+        super(preferenceStorage);
         NavigationItem item;
         if (preferenceStorage.haveAccount()) {
             item = new NavigationItem(NavigationItem.CHANGE_FRAGMENT, LoginFragment.newInstance());

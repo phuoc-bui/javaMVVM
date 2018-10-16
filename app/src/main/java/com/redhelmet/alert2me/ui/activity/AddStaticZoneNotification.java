@@ -152,7 +152,7 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
 
     public void initializeControls() {
 
-        originCategories = dataManager.getCategoriesSync();
+//        originCategories = dataManager.getCategoriesSync();
 
         addWz_layout = (RelativeLayout) findViewById(R.id.addWz_layout);
         defaultBtn.setOnClickListener(this);

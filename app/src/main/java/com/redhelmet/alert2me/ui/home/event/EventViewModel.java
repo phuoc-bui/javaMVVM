@@ -22,13 +22,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.subjects.ReplaySubject;
 
 public class EventViewModel extends BaseViewModel {
-
-    private DataManager dataManager;
 
     public EventListRecyclerAdapter adapter = new EventListRecyclerAdapter();
     // flag to show/hide empty text view in event list fragment
@@ -55,8 +55,9 @@ public class EventViewModel extends BaseViewModel {
         else getEvents();
     };
 
+    @Inject
     public EventViewModel(DataManager dataManager) {
-        this.dataManager = dataManager;
+        super(dataManager);
         if (isLoadOneByOne) {
             eventsOneByOne = ReplaySubject.create();
             getEventsOneByOne();

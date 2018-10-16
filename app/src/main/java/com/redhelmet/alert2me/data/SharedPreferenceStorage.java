@@ -15,6 +15,8 @@ import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class SharedPreferenceStorage implements PreferenceStorage {
     private final String CONFIG_KEY = "CONFIG_KEY";
     private final String DEVICE_KEY = "DEVICE_KEY";
@@ -28,6 +30,7 @@ public class SharedPreferenceStorage implements PreferenceStorage {
     private Context context;
     private Gson gson;
 
+    @Inject
     public SharedPreferenceStorage(Context context, Gson gson) {
         this.context = context.getApplicationContext();
         this.gson = gson;

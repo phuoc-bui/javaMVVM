@@ -1,6 +1,7 @@
 package com.redhelmet.alert2me.ui.base;
 
 import android.annotation.TargetApi;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -15,21 +16,20 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 
 import com.redhelmet.alert2me.BR;
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.ViewModelFactory;
 import com.redhelmet.alert2me.ui.dialog.LoadingDialog;
 import com.redhelmet.alert2me.util.PermissionUtils;
 
+import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.disposables.CompositeDisposable;
 
 /**
  * Created by inbox on 27/11/17.
  */
 
-public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDataBinding> extends AppCompatActivity {
+public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDataBinding> extends DaggerAppCompatActivity {
 
     public static final String BUNDLE_EXTRA = "BUNDLE_EXTRA";
 
@@ -47,8 +47,6 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     @LayoutRes
     protected abstract int getLayoutId();
 
-    protected abstract Class<VM> obtainViewModel();
-
     protected void configWindow() {
     }
 
@@ -62,14 +60,18 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
         configWindow();
 //        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
         binder = DataBindingUtil.setContentView(this, getLayoutId());
-        viewModel = ViewModelProviders.of(this, ViewModelFactory.getInstance()).get(obtainViewModel());
+        bundle = getIntent().getBundleExtra(BUNDLE_EXTRA);
+        loadingDialog = new LoadingDialog();
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void obtainViewModel(ViewModelProvider.Factory factory, Class<VM> clazz) {
+        viewModel = ViewModelProviders.of(this, factory).get(clazz);
         viewModel.navigationEvent.observe(this, event -> {
             if (event != null) {
                 onNavigationEvent(event.getContentIfNotHandled());
             }
         });
-        bundle = getIntent().getBundleExtra(BUNDLE_EXTRA);
-        loadingDialog = new LoadingDialog();
     }
 
     /**

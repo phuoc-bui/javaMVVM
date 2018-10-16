@@ -15,6 +15,8 @@ import com.redhelmet.alert2me.data.remote.response.Response;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Notification;
 import io.reactivex.Observable;
 import retrofit2.Retrofit;
@@ -22,6 +24,7 @@ import retrofit2.Retrofit;
 public class AppApiHelper implements ApiHelper {
     private ApiService apiService;
 
+    @Inject
     public AppApiHelper(Retrofit retrofit) {
         this.apiService = retrofit.create(ApiService.class);
     }

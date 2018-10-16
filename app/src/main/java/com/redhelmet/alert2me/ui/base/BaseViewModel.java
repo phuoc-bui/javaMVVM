@@ -4,6 +4,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.data.DataManager;
+import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.data.model.AddObservationModel;
 import com.redhelmet.alert2me.data.model.Observations;
 import com.redhelmet.alert2me.data.remote.NetworkError;
@@ -17,6 +19,10 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class BaseViewModel extends ViewModel {
 
+    protected DataManager dataManager;
+
+    protected PreferenceStorage preferenceStorage;
+
     protected CompositeDisposable disposeBag = new CompositeDisposable();
 
     public RxProperty<Boolean> isLoading = new RxProperty<>();
@@ -26,9 +32,23 @@ public class BaseViewModel extends ViewModel {
     protected MutableLiveData<Event<NavigationItem>> navigationEvent = new MutableLiveData<>();
 
     public BaseViewModel() {
+        this(null, null);
+    }
+
+    public BaseViewModel(DataManager dataManager) {
+        this(dataManager, null);
+    }
+
+    public BaseViewModel(PreferenceStorage pref) {
+        this(null, pref);
+    }
+
+    public BaseViewModel(DataManager dataManager, PreferenceStorage pref) {
         wz_notification_selection = new JSONArray();
         observations = Observations.getInstance();
         addObservation = AddObservationModel.getInstance();
+        this.dataManager = dataManager;
+        this.preferenceStorage = pref;
     }
 
     @Override

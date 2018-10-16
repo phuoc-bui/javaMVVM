@@ -1,8 +1,17 @@
 package com.redhelmet.alert2me.di;
 
+import com.redhelmet.alert2me.ui.eventdetail.EventDetailModule;
+import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
+import com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity;
+import com.redhelmet.alert2me.ui.eventfilter.EventFilterModule;
+import com.redhelmet.alert2me.ui.eventfilter.custom.CustomFilterModule;
+import com.redhelmet.alert2me.ui.eventfilter.defaultfilter.DefaultFilterModule;
+import com.redhelmet.alert2me.ui.hint.HintModule;
 import com.redhelmet.alert2me.ui.hint.HintsActivity;
 import com.redhelmet.alert2me.ui.home.HomeActivity;
 import com.redhelmet.alert2me.ui.home.HomeModule;
+import com.redhelmet.alert2me.ui.home.event.ClusterEventListActivity;
+import com.redhelmet.alert2me.ui.home.event.ClusterEventModule;
 import com.redhelmet.alert2me.ui.home.event.EventModule;
 import com.redhelmet.alert2me.ui.home.help.HelpModule;
 import com.redhelmet.alert2me.ui.home.watchzone.WatchZoneModule;
@@ -11,6 +20,7 @@ import com.redhelmet.alert2me.ui.signin.LoginModule;
 import com.redhelmet.alert2me.ui.signin.RegisterModule;
 import com.redhelmet.alert2me.ui.signin.SignInActivity;
 import com.redhelmet.alert2me.ui.signin.SignInModule;
+import com.redhelmet.alert2me.ui.splash.SplashModule;
 import com.redhelmet.alert2me.ui.splash.SplashScreen;
 import com.redhelmet.alert2me.ui.termsandcondition.TermConditionActivity;
 import com.redhelmet.alert2me.ui.termsandcondition.TermConditionModule;
@@ -31,11 +41,11 @@ import dagger.android.ContributesAndroidInjector;
 abstract class ActivityBindingModule {
 
     @ActivityScoped
-    @ContributesAndroidInjector(modules = {SplashScreen.class})
+    @ContributesAndroidInjector(modules = {SplashModule.class})
     abstract SplashScreen splashScreen();
 
     @ActivityScoped
-    @ContributesAndroidInjector(modules = {HintsActivity.class})
+    @ContributesAndroidInjector(modules = {HintModule.class})
     abstract HintsActivity hintsActivity();
 
     @ActivityScoped
@@ -63,4 +73,20 @@ abstract class ActivityBindingModule {
             }
     )
     abstract HomeActivity homeActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = {EventDetailModule.class})
+    abstract EventDetailsActivity eventDetailsActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = {
+            EventFilterModule.class,
+            DefaultFilterModule.class,
+            CustomFilterModule.class
+    })
+    abstract EventFilterActivity eventFilterActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = {ClusterEventModule.class})
+    abstract ClusterEventListActivity clusterEventListActivity();
 }

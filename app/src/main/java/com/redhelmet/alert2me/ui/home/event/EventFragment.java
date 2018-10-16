@@ -1,6 +1,7 @@
 package com.redhelmet.alert2me.ui.home.event;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,10 +24,15 @@ import com.redhelmet.alert2me.databinding.FragmentEventBinding;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
 import com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity;
 
+import javax.inject.Inject;
+
 
 public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBinding> {
 
     private static final int EVENT_FILTER_REQUEST = 9;
+
+    @Inject
+    ViewModelProvider.Factory factory;
 
     private Menu mOptionsMenu;
     Intent intent;
@@ -36,11 +42,6 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_event;
-    }
-
-    @Override
-    protected Class<EventViewModel> getViewModelClass() {
-        return EventViewModel.class;
     }
 
     @Override
@@ -58,6 +59,7 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        obtainViewModel(factory, EventViewModel.class);
         setupViewPager();
         updateToolbarTitle();
         rotation = AnimationUtils.loadAnimation(getBaseActivity(), R.anim.rotation);

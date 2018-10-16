@@ -9,11 +9,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class HomeViewModel extends BaseViewModel {
 
-    private DataManager dataManager;
-
     @Inject
     public HomeViewModel(DataManager dataManager) {
-        this.dataManager = dataManager;
+        super(dataManager);
     }
 
     public void proximityLocationCheckin() {

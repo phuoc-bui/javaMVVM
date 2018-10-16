@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.ui.eventfilter.defaultfilter;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -11,7 +12,12 @@ import com.redhelmet.alert2me.databinding.FragmentDefaultFilterBinding;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
 import com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity;
 
+import javax.inject.Inject;
+
 public class DefaultFilterFragment extends BaseFragment<DefaultFilterViewModel, FragmentDefaultFilterBinding> implements EventFilterActivity.OnSaveClickListener {
+
+    @Inject
+    ViewModelProvider.Factory factory;
 
     private DefaultNotificationAdapter adapter;
 
@@ -21,13 +27,9 @@ public class DefaultFilterFragment extends BaseFragment<DefaultFilterViewModel, 
     }
 
     @Override
-    protected Class<DefaultFilterViewModel> getViewModelClass() {
-        return DefaultFilterViewModel.class;
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        obtainViewModel(factory, DefaultFilterViewModel.class);
         binder.defaultList.setGroupIndicator(null);
         viewModel.allEventGroup.observe(this, eventGroups -> {
             adapter = new DefaultNotificationAdapter(getBaseActivity(), eventGroups);

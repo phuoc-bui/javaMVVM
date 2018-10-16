@@ -1,7 +1,6 @@
 package com.redhelmet.alert2me.data.database;
 
 import android.arch.persistence.room.Database;
-import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 
 import com.redhelmet.alert2me.BuildConfig;

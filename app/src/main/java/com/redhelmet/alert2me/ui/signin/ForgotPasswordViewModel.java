@@ -8,12 +8,15 @@ import com.redhelmet.alert2me.global.RxProperty;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class ForgotPasswordViewModel extends BaseViewModel {
     public RxProperty<String> userEmail = new RxProperty<>();
     public ObservableBoolean isValid = new ObservableBoolean(false);
 
+    @Inject
     public ForgotPasswordViewModel(DataManager dataManager) {
         super(dataManager);
         disposeBag.add(userEmail.asObservable()

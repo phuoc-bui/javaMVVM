@@ -2,6 +2,7 @@ package com.redhelmet.alert2me.ui.home.event;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -48,6 +49,8 @@ import com.redhelmet.alert2me.util.PermissionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBinding> implements
         OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMyLocationClickListener,
@@ -59,6 +62,9 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
     private static final int MAP_TYPE_1 = GoogleMap.MAP_TYPE_TERRAIN;
     private static final int MAP_TYPE_2 = GoogleMap.MAP_TYPE_HYBRID;
     private static final int MAP_TYPE_3 = GoogleMap.MAP_TYPE_SATELLITE;
+
+    @Inject
+    ViewModelProvider.Factory factory;
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in
@@ -79,11 +85,6 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
         return R.layout.fragment_event_map;
     }
 
-    @Override
-    protected Class<EventViewModel> getViewModelClass() {
-        return EventViewModel.class;
-    }
-
     public static MapFragment newInstance() {
         return new MapFragment();
     }
@@ -97,6 +98,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        obtainViewModel(factory, EventViewModel.class);
         mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.ui.eventdetail;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -42,10 +43,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 
 public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, ActivityEventDetailBinding> implements GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, OnMapReadyCallback {
 
     private static final String EVENT_EXTRA = "EVENT_EXTRA";
+
+    @Inject
+    ViewModelProvider.Factory factory;
 
     Toolbar toolbar;
     Event event;
@@ -74,14 +80,9 @@ public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, Act
     }
 
     @Override
-    protected Class<EventDetailViewModel> obtainViewModel() {
-        return EventDetailViewModel.class;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        obtainViewModel(factory, EventDetailViewModel.class);
         if (getBundle() != null) { //edit mode
 
             event = (Event) getBundle().get(EVENT_EXTRA);

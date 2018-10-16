@@ -1,6 +1,7 @@
 package com.redhelmet.alert2me.ui.eventfilter.custom;
 
 import android.app.Activity;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,7 +17,13 @@ import com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class CustomFilterFragment extends BaseFragment<CustomFilterViewModel, FragmentCustomFilterBinding> implements EventFilterActivity.OnSaveClickListener {
+
+    @Inject
+    ViewModelProvider.Factory factory;
+
     private static final int REQUEST_CATEGORY = 9;
     private CustomNotificationCategoryAdapter adapter;
 
@@ -26,13 +33,9 @@ public class CustomFilterFragment extends BaseFragment<CustomFilterViewModel, Fr
     }
 
     @Override
-    protected Class<CustomFilterViewModel> getViewModelClass() {
-        return CustomFilterViewModel.class;
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        obtainViewModel(factory, CustomFilterViewModel.class);
         viewModel.allCategories.observe(this, categories -> {
 
 //        simplifyData(dbController.getCustomCatName(0));

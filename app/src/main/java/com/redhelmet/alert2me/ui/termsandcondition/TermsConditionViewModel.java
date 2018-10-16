@@ -12,11 +12,9 @@ import javax.inject.Inject;
 
 public class TermsConditionViewModel extends BaseViewModel {
 
-    private DataManager dataManager;
-
     @Inject
     public TermsConditionViewModel(DataManager dataManager) {
-        this.dataManager = dataManager;
+        super(dataManager);
     }
 
     public void onTermsAccept() {

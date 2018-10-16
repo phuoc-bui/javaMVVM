@@ -1,14 +1,19 @@
 package com.redhelmet.alert2me;
 
-import android.app.Application;
+import com.redhelmet.alert2me.di.DaggerAppComponent;
 
-import com.redhelmet.alert2me.data.DataManager;
+import dagger.android.AndroidInjector;
+import dagger.android.support.DaggerApplication;
 
-public class A2MApplication extends Application {
+public class A2MApplication extends DaggerApplication {
 
     @Override
     public void onCreate() {
         super.onCreate();
-       AppModule.init(this);
+    }
+
+    @Override
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerAppComponent.builder().create(this);
     }
 }

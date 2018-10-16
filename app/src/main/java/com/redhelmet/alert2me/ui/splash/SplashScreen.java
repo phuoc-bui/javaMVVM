@@ -1,6 +1,7 @@
 
 package com.redhelmet.alert2me.ui.splash;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -9,16 +10,16 @@ import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.databinding.ActivitySplashScreenBinding;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
 
+import javax.inject.Inject;
+
 public class SplashScreen extends BaseActivity<SplashViewModel, ActivitySplashScreenBinding> {
+
+    @Inject
+    ViewModelProvider.Factory factory;
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_splash_screen;
-    }
-
-    @Override
-    protected Class<SplashViewModel> obtainViewModel() {
-        return SplashViewModel.class;
     }
 
     @Override
@@ -30,5 +31,6 @@ public class SplashScreen extends BaseActivity<SplashViewModel, ActivitySplashSc
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        obtainViewModel(factory, SplashViewModel.class);
     }
 }

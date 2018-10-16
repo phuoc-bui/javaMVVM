@@ -13,5 +13,5 @@ public abstract class HomeModule {
     @Binds
     @IntoMap
     @ViewModelKey(HomeViewModel.class)
-    abstract ViewModel bindLaunchViewModel(HomeViewModel viewModel);
+    abstract ViewModel bindHomeViewModel(HomeViewModel viewModel);
 }

@@ -10,7 +10,14 @@ import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class ClusterEventsViewModel extends BaseViewModel {
+
+    @Inject
+    public ClusterEventsViewModel() {
+    }
+
     public ObservableField<List<Event>> events = new ObservableField<>(new ArrayList<>());
 
     public void setEvents(List<Event> events) {

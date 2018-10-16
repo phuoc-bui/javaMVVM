@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.ui.termsandcondition;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -8,20 +9,20 @@ import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.databinding.ActivityMainBinding;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
 
+import javax.inject.Inject;
+
 /**
  * Created by inbox on 13/11/17.
  */
 
 public class TermConditionActivity extends BaseActivity<TermsConditionViewModel, ActivityMainBinding> {
 
+    @Inject
+    ViewModelProvider.Factory factory;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_main;
-    }
-
-    @Override
-    protected Class<TermsConditionViewModel> obtainViewModel() {
-        return TermsConditionViewModel.class;
     }
 
     @Override
@@ -33,5 +34,6 @@ public class TermConditionActivity extends BaseActivity<TermsConditionViewModel,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        obtainViewModel(factory, TermsConditionViewModel.class);
     }
 }

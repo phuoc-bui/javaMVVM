@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.ui.eventfilter;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,7 +18,13 @@ import com.redhelmet.alert2me.ui.base.BaseActivity;
 import com.redhelmet.alert2me.ui.eventfilter.custom.CustomFilterFragment;
 import com.redhelmet.alert2me.ui.eventfilter.defaultfilter.DefaultFilterFragment;
 
+import javax.inject.Inject;
+
 public class EventFilterActivity extends BaseActivity<EventFilterViewModel, ActivityEventFilterBinding> {
+
+    @Inject
+    ViewModelProvider.Factory factory;
+
     public int position = 0;
     private AppViewPagerAdapter adapter;
 
@@ -27,14 +34,9 @@ public class EventFilterActivity extends BaseActivity<EventFilterViewModel, Acti
     }
 
     @Override
-    protected Class<EventFilterViewModel> obtainViewModel() {
-        return EventFilterViewModel.class;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        obtainViewModel(factory, EventFilterViewModel.class);
         setupViewPager();
         initializeToolbar();
         initializeControls();

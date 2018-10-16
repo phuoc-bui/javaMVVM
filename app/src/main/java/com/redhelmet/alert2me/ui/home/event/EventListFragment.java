@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.ui.home.event;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,16 +13,16 @@ import com.redhelmet.alert2me.adapters.RecyclerTouchListener;
 import com.redhelmet.alert2me.databinding.FragmentEventListBinding;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
 
+import javax.inject.Inject;
+
 public class EventListFragment extends BaseFragment<EventViewModel, FragmentEventListBinding> {
+
+    @Inject
+    ViewModelProvider.Factory factory;
 
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_event_list;
-    }
-
-    @Override
-    protected Class<EventViewModel> getViewModelClass() {
-        return EventViewModel.class;
     }
 
     public static EventListFragment newInstance() {
@@ -37,6 +38,7 @@ public class EventListFragment extends BaseFragment<EventViewModel, FragmentEven
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        obtainViewModel(factory, EventViewModel.class);
         binder.rvEvents.addOnItemTouchListener(new RecyclerTouchListener(getContext(), binder.rvEvents, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {

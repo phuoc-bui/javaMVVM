@@ -11,12 +11,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class HintViewModel extends BaseViewModel {
-    private DataManager dataManager;
     private List<Hint> hints;
 
     @Inject
     public HintViewModel(DataManager dataManager) {
-        this.dataManager = dataManager;
+        super(dataManager);
         hints = dataManager.getHintData();
     }
 

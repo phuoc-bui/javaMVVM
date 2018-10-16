@@ -1,6 +1,7 @@
 package com.redhelmet.alert2me.ui.hint;
 
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +19,12 @@ import com.redhelmet.alert2me.ui.base.BaseActivity;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class HintsActivity extends BaseActivity<HintViewModel, ActivityIntroBinding> {
+
+    @Inject
+    ViewModelProvider.Factory factory;
 
     private boolean isLastPageSwiped;
     private int counterPageScroll;
@@ -27,11 +33,6 @@ public class HintsActivity extends BaseActivity<HintViewModel, ActivityIntroBind
     @Override
     protected int getLayoutId() {
         return R.layout.activity_intro;
-    }
-
-    @Override
-    protected Class<HintViewModel> obtainViewModel() {
-        return HintViewModel.class;
     }
 
     @Override
@@ -44,6 +45,8 @@ public class HintsActivity extends BaseActivity<HintViewModel, ActivityIntroBind
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        obtainViewModel(factory, HintViewModel.class);
 
         Bundle extras = getIntent().getExtras();
 

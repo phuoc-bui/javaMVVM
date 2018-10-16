@@ -18,13 +18,10 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class SplashViewModel extends BaseViewModel {
-    private PreferenceStorage pref;
-    private DataManager dataManager;
 
     @Inject
     public SplashViewModel(DataManager dataManager, PreferenceStorage pref) {
-        this.pref = pref;
-        this.dataManager = dataManager;
+        super(dataManager, pref);
         isLoading.set(true);
         disposeBag.add(dataManager.loadConfig()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -41,9 +38,9 @@ public class SplashViewModel extends BaseViewModel {
                 .subscribe(number -> {
                     isLoading.set(false);
                     Class dest;
-                    if (pref.isInitialLaunch()) {
-                        if (pref.isAccepted()) {
-                            dest = pref.isLoggedIn() ? HomeActivity.class : SignInActivity.class;
+                    if (preferenceStorage.isInitialLaunch()) {
+                        if (preferenceStorage.isAccepted()) {
+                            dest = preferenceStorage.isLoggedIn() ? HomeActivity.class : SignInActivity.class;
                         } else {
                             dest = TermConditionActivity.class;
                         }

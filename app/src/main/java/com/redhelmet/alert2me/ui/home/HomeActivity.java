@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.ui.home;
 
+import android.arch.lifecycle.ViewModelProvider;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -14,11 +15,16 @@ import com.redhelmet.alert2me.ui.home.event.EventFragment;
 import com.redhelmet.alert2me.ui.home.help.HelpFragment;
 import com.redhelmet.alert2me.ui.home.watchzone.WatchZoneFragment;
 
+import javax.inject.Inject;
+
 /**
  * Created by inbox on 13/11/17.
  */
 
 public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBinding> {
+
+    @Inject
+    ViewModelProvider.Factory factory;
 
     int positionTabSelected = 0;
     LatLng latLng;
@@ -29,13 +35,9 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
     }
 
     @Override
-    protected Class<HomeViewModel> obtainViewModel() {
-        return HomeViewModel.class;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        obtainViewModel(factory, HomeViewModel.class);
         if (binder.toolbar != null) {
             setSupportActionBar(binder.toolbar);
         }

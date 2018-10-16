@@ -9,6 +9,8 @@ import com.redhelmet.alert2me.global.RxProperty;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -17,6 +19,7 @@ public class RegisterViewModel extends BaseViewModel {
     public UserModel userModel = new UserModel();
     public ObservableBoolean enableButton = new ObservableBoolean(false);
 
+    @Inject
     public RegisterViewModel(DataManager dataManager) {
         super(dataManager);
         disposeBag.add(userModel.isValid().subscribe(b -> enableButton.set(b)));

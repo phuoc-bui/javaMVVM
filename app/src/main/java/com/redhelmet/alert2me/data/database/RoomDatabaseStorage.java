@@ -7,11 +7,14 @@ import com.redhelmet.alert2me.data.model.EventGroup;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Observable;
 
 public class RoomDatabaseStorage implements DatabaseStorage {
     private RoomDatabase database;
 
+    @Inject
     public RoomDatabaseStorage(RoomDatabase database) {
         this.database = database;
     }

@@ -9,17 +9,17 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.redhelmet.alert2me.BR;
-import com.redhelmet.alert2me.ViewModelFactory;
+import com.redhelmet.alert2me.domain.ExceptionHandler;
 
+import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
 
-public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDataBinding> extends Fragment {
+public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDataBinding> extends DaggerFragment {
 
     protected static final String TAG = BaseFragment.class.getSimpleName();
 
@@ -31,8 +31,6 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
     @LayoutRes
     protected abstract int getLayoutId();
 
-    protected abstract Class<VM> getViewModelClass();
-
     protected int getBindingVariable() {
         return BR.viewModel;
     }
@@ -42,7 +40,7 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
     }
 
     @Override
@@ -63,6 +61,12 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    protected void obtainViewModel(ViewModelProvider.Factory factory, Class<VM> vmClass) {
+        viewModel = ViewModelProviders.of(getBaseActivity(), factory).get(vmClass);
         binder.setVariable(getBindingVariable(), viewModel);
         binder.executePendingBindings();
 
@@ -71,11 +75,6 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
                 onNavigationEvent(event.getContentIfNotHandled());
             }
         });
-    }
-
-    @SuppressWarnings("unchecked")
-    protected <T extends BaseViewModel> T obtainViewModel(ViewModelProvider.Factory factory) {
-        return viewModel = ViewModelProviders.of(getBaseActivity(), factory).get((Class<VM>) viewModel.getClass());
     }
 
     public BaseActivity getBaseActivity() {
@@ -97,7 +96,6 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
             item.navigation(getBaseActivity());
         }
     }
-
 
     @Override
     public void onDestroy() {

@@ -1,5 +1,7 @@
 package com.redhelmet.alert2me.di;
 
+import android.arch.lifecycle.ViewModel;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,10 +16,10 @@ import dagger.MapKey;
  * @see com.redhelmet.alert2me.ui.splash.SplashModule
  * for an usage example.
  */
-@Target({ElementType.METHOD, ElementType.FIELD}
+@Target({ElementType.METHOD}
 )
 @Retention(RetentionPolicy.RUNTIME)
 @MapKey
 public @interface ViewModelKey {
-    Class value();
+    Class<? extends ViewModel> value();
 }

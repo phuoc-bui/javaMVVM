@@ -11,6 +11,8 @@ import com.redhelmet.alert2me.ui.base.NavigationItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -18,6 +20,7 @@ import io.reactivex.schedulers.Schedulers;
 public class CustomFilterViewModel extends BaseViewModel {
     public MutableLiveData<List<Category>> allCategories = new MutableLiveData<>();
 
+    @Inject
     public CustomFilterViewModel(DataManager dataManager) {
         super(dataManager);
         disposeBag.add(dataManager.getCategories()
