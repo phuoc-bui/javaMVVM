@@ -52,8 +52,6 @@
         <activity
             android:name="com.redhelmet.alert2me.ui.home.HomeActivity" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.hint.HintsActivity" />
-        <activity
             android:name="com.redhelmet.alert2me.ui.activity.AddStaticZone" />
         <activity
             android:name="com.redhelmet.alert2me.ui.activity.AddStaticZoneLocation"

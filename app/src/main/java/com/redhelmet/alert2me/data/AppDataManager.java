@@ -3,7 +3,6 @@ package com.redhelmet.alert2me.data;
 import android.location.Location;
 import android.util.Log;
 
-import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.database.DatabaseStorage;
 import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
@@ -12,7 +11,6 @@ import com.redhelmet.alert2me.data.model.CategoryStatus;
 import com.redhelmet.alert2me.data.model.CategoryType;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
-import com.redhelmet.alert2me.data.model.Hint;
 import com.redhelmet.alert2me.data.model.User;
 import com.redhelmet.alert2me.data.remote.ApiHelper;
 import com.redhelmet.alert2me.data.remote.request.ProximityLocationRequest;
@@ -22,7 +20,6 @@ import com.redhelmet.alert2me.data.remote.response.LoginResponse;
 import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
 import com.redhelmet.alert2me.data.remote.response.RegisterAccountResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -66,16 +63,6 @@ public class AppDataManager implements DataManager {
     @Override
     public AppConfig getAppConfig() {
         return pref.getAppConfig();
-    }
-
-    @Override
-    public void setInitialLaunch(boolean isInitial) {
-        pref.setInitialLaunch(isInitial);
-    }
-
-    @Override
-    public boolean getInitialLaunch() {
-        return pref.isInitialLaunch();
     }
 
     @Override
@@ -267,38 +254,6 @@ public class AppDataManager implements DataManager {
     @Override
     public void setDefaultFilter(boolean isDefault) {
         pref.setDefaultFilter(isDefault);
-    }
-
-    @Override
-    public List<Hint> getHintData() {
-        List<Hint> hints = new ArrayList<>();
-
-        Hint hint1 = new Hint();
-        hint1.setTitle("");
-        hint1.setDesc("EmergencyAUS keeps you<br>updated with current<br>emergency information and<br>alerts in Australia.");
-        hint1.setResId(R.drawable.hint1);
-        hint1.setLast(true);
-
-        Hint hint2 = new Hint();
-        hint2.setTitle("Observation");
-        hint2.setDesc("Share what you know<br>share what you see, hear and feel.");
-        hint2.setResId(R.drawable.hint1);
-
-        Hint hint3 = new Hint();
-        hint3.setTitle("Watch Zones");
-        hint3.setDesc("Monitor the risk all day<br>all night, all year");
-        hint3.setResId(R.drawable.hint2);
-
-        Hint hint4 = new Hint();
-        hint4.setTitle("Warning & Incidents");
-        hint4.setDesc("Be aware of your environment<br>your risk, your safety");
-        hint4.setResId(R.drawable.hint3);
-
-        hints.add(hint1);
-        hints.add(hint2);
-        hints.add(hint3);
-        hints.add(hint4);
-        return hints;
     }
 
     @Override

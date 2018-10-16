@@ -37,16 +37,6 @@ public class SharedPreferenceStorage implements PreferenceStorage {
     }
 
     @Override
-    public boolean isInitialLaunch() {
-        return (boolean) PreferenceUtils.getFromPrefs(context, context.getString(R.string.pref_initialLaunch), false);
-    }
-
-    @Override
-    public void setInitialLaunch(boolean isInitial) {
-        PreferenceUtils.saveToPrefs(context, context.getString(R.string.pref_initialLaunch), true);
-    }
-
-    @Override
     public boolean isAccepted() {
         return (boolean) PreferenceUtils.getFromPrefs(context, context.getString(R.string.pref_accepted), false);
     }

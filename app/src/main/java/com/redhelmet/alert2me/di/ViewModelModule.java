@@ -2,8 +2,6 @@ package com.redhelmet.alert2me.di;
 
 import android.arch.lifecycle.ViewModelProvider;
 
-import javax.inject.Singleton;
-
 import dagger.Binds;
 import dagger.Module;
 

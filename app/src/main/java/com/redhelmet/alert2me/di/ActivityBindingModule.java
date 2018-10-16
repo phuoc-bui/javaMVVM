@@ -6,8 +6,6 @@ import com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity;
 import com.redhelmet.alert2me.ui.eventfilter.EventFilterModule;
 import com.redhelmet.alert2me.ui.eventfilter.custom.CustomFilterModule;
 import com.redhelmet.alert2me.ui.eventfilter.defaultfilter.DefaultFilterModule;
-import com.redhelmet.alert2me.ui.hint.HintModule;
-import com.redhelmet.alert2me.ui.hint.HintsActivity;
 import com.redhelmet.alert2me.ui.home.HomeActivity;
 import com.redhelmet.alert2me.ui.home.HomeModule;
 import com.redhelmet.alert2me.ui.home.event.ClusterEventListActivity;
@@ -43,10 +41,6 @@ abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = {SplashModule.class})
     abstract SplashScreen splashScreen();
-
-    @ActivityScoped
-    @ContributesAndroidInjector(modules = {HintModule.class})
-    abstract HintsActivity hintsActivity();
 
     @ActivityScoped
     @ContributesAndroidInjector(modules = {TermConditionModule.class})

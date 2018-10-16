@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:paddingStart="@dimen/normal_margin"
         android:paddingEnd="@dimen/normal_margin"
-        android:background="@drawable/hint4">
+        android:background="@drawable/splash">
 
         <ProgressBar
             android:id="@+id/progressBar2"
@@ -31,11 +31,11 @@
             android:id="@+id/termsCondition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/replayHint"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="@dimen/large_margin"
             android:text="@string/terms_and_conditions"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/colorRed"
             android:onClick="@{() -> viewModel.onShowTermsCondition()}"
             android:textSize="18sp" />
 
@@ -45,21 +45,9 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/termsCondition"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="26dp"
+            android:layout_marginBottom="@dimen/normal_margin"
             android:onClick="@{() -> viewModel.onTermsAccept()}"
             android:text="@string/termsAndCondition" />
-
-        <TextView
-            android:id="@+id/replayHint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
-            android:text="@string/replay_hints"
-            android:onClick="@{() -> viewModel.onReplayHint()}"
-            android:textColor="@color/colorWhite"
-            android:textSize="18sp" />
 
     </RelativeLayout>
 </layout>

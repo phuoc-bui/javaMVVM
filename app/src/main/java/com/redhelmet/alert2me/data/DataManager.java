@@ -23,9 +23,6 @@ public interface DataManager {
     void saveConfig(ConfigResponse config);
     Observable<ConfigResponse> loadConfig();
     AppConfig getAppConfig();
-    List<Hint> getHintData();
-    void setInitialLaunch(boolean isInitial);
-    boolean getInitialLaunch();
     void setAccepted(boolean accepted);
     boolean getAccepted();
     Location getLastUserLocation();

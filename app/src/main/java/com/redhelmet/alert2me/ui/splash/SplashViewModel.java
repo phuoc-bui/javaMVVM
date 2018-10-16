@@ -5,7 +5,6 @@ import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.global.Constant;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
-import com.redhelmet.alert2me.ui.hint.HintsActivity;
 import com.redhelmet.alert2me.ui.home.HomeActivity;
 import com.redhelmet.alert2me.ui.signin.SignInActivity;
 import com.redhelmet.alert2me.ui.termsandcondition.TermConditionActivity;
@@ -38,14 +37,10 @@ public class SplashViewModel extends BaseViewModel {
                 .subscribe(number -> {
                     isLoading.set(false);
                     Class dest;
-                    if (preferenceStorage.isInitialLaunch()) {
-                        if (preferenceStorage.isAccepted()) {
-                            dest = preferenceStorage.isLoggedIn() ? HomeActivity.class : SignInActivity.class;
-                        } else {
-                            dest = TermConditionActivity.class;
-                        }
+                    if (preferenceStorage.isAccepted()) {
+                        dest = preferenceStorage.isLoggedIn() ? HomeActivity.class : SignInActivity.class;
                     } else {
-                        dest = HintsActivity.class;
+                        dest = TermConditionActivity.class;
                     }
 
                     navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH, dest));

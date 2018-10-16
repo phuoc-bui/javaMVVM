@@ -13,6 +13,7 @@
     <color name="colorDarkRed">#ff0d00</color>
     <color name="teal">#31e7b6</color>
     <color name="colorGrey">#FF666666</color>
+    <color name="colorPink">#f13558</color>
     <!-- dots inactive colors -->
     <color name="dot_dark_screen1">#d1395c</color>
     <color name="dot_dark_screen2">#14a895</color>

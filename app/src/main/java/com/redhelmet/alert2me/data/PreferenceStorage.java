@@ -14,8 +14,6 @@ import java.util.List;
 public interface PreferenceStorage {
     void saveAppConfig(AppConfig appConfig);
     AppConfig getAppConfig();
-    boolean isInitialLaunch();
-    void setInitialLaunch(boolean isInitial);
     boolean isAccepted();
     void setAccepted(boolean accepted);
     void saveDeviceInfo(ApiInfo apiInfo);

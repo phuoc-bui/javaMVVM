@@ -5,7 +5,7 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <item name="colorPrimaryDark">@color/navigationnarStatusColor</item>
         <item name="colorPrimary">@color/navigationnarHeaderColor</item>
-        <item name="colorAccent">@color/colorRed</item>
+        <item name="colorAccent">@color/colorPink</item>
         <item name="android:colorBackground">@color/navigationnarHeaderColor</item>
         <item name="colorBackgroundFloating">@color/white</item>
         <item name="colorControlActivated">?attr/colorAccent</item>
@@ -68,7 +68,7 @@
     </style>
 
     <style name="TextAppearance.A2M.TextInputLayout.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textColor">?attr/colorAccent</item>
     </style>
 
     <style name="TextAppearance.A2M.TextInputLayout.TextInputEditText" parent="TextAppearance.MaterialComponents.Subtitle2">
