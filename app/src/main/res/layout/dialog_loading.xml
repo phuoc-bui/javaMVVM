@@ -5,11 +5,11 @@
     android:gravity="center"
     android:orientation="vertical"
     android:padding="@dimen/normal_margin"
-    android:background="@color/blue_semi_transparent_pressed">
+    android:background="?android:attr/colorBackground">
 
     <ProgressBar
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:indeterminate="true" />
 
     <TextView

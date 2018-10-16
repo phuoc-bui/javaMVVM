@@ -31,6 +31,7 @@ import com.redhelmet.alert2me.core.CoreFunctions;
 import com.redhelmet.alert2me.core.RequestHandler;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
+import com.redhelmet.alert2me.ui.signin.SignInActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -100,6 +101,7 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
         emailSupportBtn = (ImageButton) view.findViewById(R.id.email_support_btn);
         aboutBtn = (ImageButton) view.findViewById(R.id.about_us_btn);
         tocBtn = (ImageButton) view.findViewById(R.id.terms_condition_btn);
+        watchIntro = (LinearLayout) view.findViewById(R.id.watch_intro);
         helpDefaultLayout = (LinearLayout) view.findViewById(R.id.helpDefaultLayout);
         appSupportCode = (TextView) view.findViewById(R.id.app_support_code);
         appVersionCode = (TextView) view.findViewById(R.id.app_version_number);
@@ -170,6 +172,11 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.terms_condition_btn:
                 openWebPage((String) PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_terms_and_condition_url), ""));
+                break;
+            case R.id.watch_intro:
+                intent = new Intent(this.getActivity(), SignInActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
             case R.id.testNotification:
                 showSnack(getString(R.string.msg_sendNotification));
