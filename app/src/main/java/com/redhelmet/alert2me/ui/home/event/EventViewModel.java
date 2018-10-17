@@ -58,6 +58,7 @@ public class EventViewModel extends BaseViewModel {
     @Inject
     public EventViewModel(DataManager dataManager) {
         super(dataManager);
+        events.setValue(new ArrayList<>());
         if (isLoadOneByOne) {
             eventsOneByOne = ReplaySubject.create();
             getEventsOneByOne();
@@ -120,13 +121,13 @@ public class EventViewModel extends BaseViewModel {
                 .subscribe(event -> {
                     eventsOneByOne.onNext(event);
                     eventList.add(event);
+                    events.getValue().add(event);
                 }, error -> {
                     eventsOneByOne.onError(error);
                     isLoading.set(false);
                     isRefreshing.setValue(false);
                     handleError(error);
                 }, () -> {
-                    events.setValue(eventList);
                     isLoading.set(false);
                     isRefreshing.setValue(false);
                 }));

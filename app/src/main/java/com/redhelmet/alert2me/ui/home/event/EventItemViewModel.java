@@ -20,9 +20,11 @@ public class EventItemViewModel extends BaseViewModel {
     public ObservableField<String> eventLocation = new ObservableField<>();
     public ObservableField<String> eventTimeAgo = new ObservableField<>();
     public ObservableField<String> eventDistance = new ObservableField<>();
+    public ObservableField<String> eventColor = new ObservableField<>();
 
     public EventItemViewModel(Event event, boolean isStateWide) {
         this.event.set(event);
+        eventColor.set(event.getPrimaryColor());
         this.isStateWide.set(isStateWide);
         List<Area> areas = event.getArea();
         Area area = areas.get(0);

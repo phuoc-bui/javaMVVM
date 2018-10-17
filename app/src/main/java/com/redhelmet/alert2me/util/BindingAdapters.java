@@ -3,10 +3,13 @@ package com.redhelmet.alert2me.util;
 import android.app.Activity;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.redhelmet.alert2me.global.EventIcon;
 import com.redhelmet.alert2me.ui.base.BaseRecyclerViewAdapter;
@@ -25,21 +28,26 @@ public class BindingAdapters {
         }
     }
 
-    @BindingAdapter("data")
+    @BindingAdapter("binding:data")
     public static <T extends Collection> void setRecyclerViewData(RecyclerView recyclerView, T data) {
         if (recyclerView.getAdapter() instanceof BindableAdapter) {
             ((BindableAdapter<T>) recyclerView.getAdapter()).setData(data);
         }
     }
 
-    @BindingAdapter("adapter")
+    @BindingAdapter("binding:adapter")
     public static <T extends BaseRecyclerViewAdapter> void setRecyclerViewAdapter(RecyclerView recyclerView, T adapter) {
         recyclerView.setAdapter(adapter);
     }
 
-    @BindingAdapter("onRefresh")
+    @BindingAdapter("binding:onRefresh")
     public static void onSwipeToRefresh(SwipeRefreshLayout refreshLayout, Runnable runnable) {
         refreshLayout.setOnRefreshListener(runnable::run);
+    }
+
+    @BindingAdapter("android:src")
+    public static void setImageViewResource(ImageView imageView, int resource) {
+        imageView.setImageResource(resource);
     }
 
     @BindingAdapter("android:src")
@@ -51,8 +59,34 @@ public class BindingAdapters {
         imageView.setImageBitmap(bitmap);
     }
 
-    @BindingAdapter("android:src")
-    public static void setImageViewResource(ImageView imageView, int resource) {
-        imageView.setImageResource(resource);
+    @BindingAdapter("binding:rounded_background_stroke_color")
+    public static void setRoundedBackgroundStrokeColor(View view, String color) {
+        if(color == null || color.isEmpty()) return;
+        int eventColor = Color.parseColor(color);
+        GradientDrawable drawable = IconUtils.createRoundedBackgroundStroke((Activity) view.getContext(), eventColor);
+        view.setBackground(drawable);
+    }
+
+    @BindingAdapter("binding:rounded_background_color")
+    public static void setRoundedBackgroundColor(View view, String color) {
+        if(color == null || color.isEmpty()) return;
+        int eventColor = Color.parseColor(color);
+        GradientDrawable drawable = IconUtils.createRoundedBackground((Activity) view.getContext(), eventColor);
+        view.setBackground(drawable);
+    }
+
+    @BindingAdapter("binding:top_rounded_background_color")
+    public static void setTopRoundedBackgroundColor(View view, String color) {
+        if(color == null || color.isEmpty()) return;
+        int eventColor = Color.parseColor(color);
+        GradientDrawable drawable = IconUtils.createTopRoundedBackground((Activity) view.getContext(), eventColor);
+        view.setBackground(drawable);
+    }
+
+    @BindingAdapter("android:textColor")
+    public static void setEventTextColor(TextView textView, String color) {
+        if(color == null || color.isEmpty()) return;
+        int eventColor = Color.parseColor(color);
+        textView.setTextColor(eventColor);
     }
 }

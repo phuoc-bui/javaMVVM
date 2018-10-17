@@ -9,13 +9,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,10 +35,6 @@ import com.redhelmet.alert2me.ui.home.HomeActivity;
 import com.redhelmet.alert2me.util.EventUtils;
 import com.redhelmet.alert2me.util.IconUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -53,9 +47,7 @@ public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, Act
     @Inject
     ViewModelProvider.Factory factory;
 
-    Toolbar toolbar;
     Event event;
-    TextView eventType, eventStatus, eventLocation, eventTime;
     ActionBar supportActionBar;
     DetailSectionBuilder detailSectionBuilder;
     GoogleMap mMap;
@@ -90,9 +82,11 @@ public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, Act
 
         initializeToolbar();
 
+        viewModel.setEvent(event);
+
         initializeMap();
 
-
+        initializeControls();
     }
 
     public void initializeMap() {
@@ -103,73 +97,37 @@ public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, Act
     }
 
     public void initializeToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-        }
+        setSupportActionBar(binder.toolbar);
         supportActionBar = getSupportActionBar();
 
-        if (supportActionBar != null) {
+        if (supportActionBar != null && event != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(event.getPrimaryColor())));
+            supportActionBar.setTitle(Html.fromHtml("<small style='color:'" + event.getTextColor() + "''>" + event.getName() + "</small>"));
+
+            Window window = getWindow();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                window.setStatusBarColor(Color.parseColor(String.valueOf(event.getSecondaryColor())));
+            }
         }
     }
 
     public void initializeControls() {
-        eventType = (TextView) findViewById(R.id.event_type);
-        eventStatus = (TextView) findViewById(R.id.event_status);
-        eventLocation = (TextView) findViewById(R.id.event_location);
-        eventTime = (TextView) findViewById(R.id.time_ago);
-        LinearLayout sectionContainer = (LinearLayout) findViewById(R.id.section_container);
-
         detailSectionBuilder = new DetailSectionBuilder(getApplicationContext());
 
-
-        if (event != null) {
-            eventType.setText(event.getType());
-            eventStatus.setText(event.getStatus());
-            eventLocation.setText(event.getArea().get(0).getLocation());
-            ChangeToolBarColor(event.getPrimaryColor(), event.getSecondaryColor(), event.getTextColor());
-
-
-            Date updatedTime = new Date(event.getUpdated());
-            Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("H:mm a");
-            simpleDateFormat.setTimeZone(calendar.getTimeZone());
-
-            try {
-                eventTime.setText(EventUtils.getDetailTimeAgo(updatedTime));
-            } catch (ParseException e) {
-                e.printStackTrace();
+        //section
+        List<Section> sections = event.getSection();
+        if (sections != null && sections.size() > 0) {
+            for (Section section : sections) {
+                View sectionView = detailSectionBuilder.BuildSection(section);
+//                sectionContainer.addView(sectionView);
             }
-            locationSetup();
-            //section
-            List<Section> sections = event.getSection();
-            if (sections != null && sections.size() > 0) {
-                for (Section section : sections) {
-                    View sectionView = detailSectionBuilder.BuildSection(section);
-                    sectionContainer.addView(sectionView);
-                }
-            } else {
-                Toast.makeText(getApplicationContext(), "Event Expired", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(this, HomeActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "Event Expired", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
 
-            }
-
-        }
-    }
-
-    public void ChangeToolBarColor(String primaryColor, String secondaryColor, String textColor) {
-
-        if (supportActionBar != null) {
-            supportActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(primaryColor)));
-            supportActionBar.setTitle(Html.fromHtml("<small style='color:'" + textColor + "''>" + event.getName() + "</small>"));
-        }
-
-        Window window = getWindow();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(Color.parseColor(String.valueOf(secondaryColor)));
         }
     }
 
@@ -217,14 +175,13 @@ public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, Act
         LatLng australia = new LatLng(-24, 133);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(australia, (float) 3.5));
         locationSetup();
-
     }
 
 
     public void locationSetup() {
         if (mMap != null && event != null) {
             MarkerOptions marker = EventUtils.eventToMarker(event, event.getArea().get(0));
-            Bitmap eventIcon = IconUtils.createEventIcon(this, R.layout.custom_list_layer_icon, event, event.getPrimaryColor(), true, false, "");
+            Bitmap eventIcon = IconUtils.createEventIcon(this, R.layout.custom_map_layer_icon, event, event.getPrimaryColor(), false, false, "");
             BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(eventIcon);
             marker.icon(bitmapDescriptor);
 
@@ -232,15 +189,6 @@ public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, Act
             this.marker = mMap.addMarker(marker);
             mMap.setOnMarkerClickListener(this);
             mMap.setOnMapClickListener(this);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (event != null) {
-
-            initializeControls();
         }
     }
 }

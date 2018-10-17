@@ -37,23 +37,20 @@ public class EventUtils {
         long diffMinutes = TimeUnit.MILLISECONDS.toMinutes(diffInMilliSec);
         if (diffMinutes < 60) {
             if (diffMinutes == 1) {
-                return String.format("%s min", diffMinutes);
+                return String.format("%s min ago", diffMinutes);
             }
-            return String.format("%s mins", diffMinutes);
+            return String.format("%s mins ago", diffMinutes);
         }
         long diffInHours = TimeUnit.MILLISECONDS.toHours(diffInMilliSec);
         if (diffInHours < 24) {
             if (diffInHours == 1) {
-                return String.format("%s hr", diffInHours);
+                return String.format("%s hr ago", diffInHours);
             }
-            return String.format("%s hrs", diffInHours);
+            return String.format("%s hrs ago", diffInHours);
         }
         long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMilliSec);
         if (diffInDays < 30) {
-            if (diffInDays == 1) {
-                return String.format("%s day", diffInDays);
-            }
-            return String.format("%s days", diffInDays);
+            return String.format("%sd ago", diffInDays);
         }
         long diffInMonths = Math.round(diffInDays / 30);
         SimpleDateFormat date = new SimpleDateFormat("MMM");
@@ -67,15 +64,12 @@ public class EventUtils {
         return String.format("%s %s %s", day, monthName, year);
     }
 
-    public static String getDetailTimeAgo(Date eventDate) throws ParseException {
+    public static String getDetailTimeAgo(Date eventDate) {
 
         Calendar calendar = Calendar.getInstance();
         Calendar current = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd H:mm:ss");
-        //simpleDateFormat.setTimeZone(calendar.getTimeZone());
-        String localStringDate = simpleDateFormat.format(eventDate);
-        Date localDate = simpleDateFormat.parse(localStringDate);
-        calendar.setTime(localDate);
+
+        calendar.setTime(eventDate);
 
 
         SimpleDateFormat simpleHourFormat = new SimpleDateFormat("h:mm a");
@@ -83,31 +77,31 @@ public class EventUtils {
         String localStringHour = simpleHourFormat.format(eventDate);
 
 
-        long diffInMilliSec = current.getTime().getTime() - localDate.getTime();
+        long diffInMilliSec = current.getTime().getTime() - eventDate.getTime();
         long diffSeconds = TimeUnit.MILLISECONDS.toSeconds(diffInMilliSec);
         if (diffSeconds < 60) {
-            return String.format("Updated now at %s", localStringHour);
+            return String.format("Now @ %s", localStringHour);
         }
         long diffMinutes = TimeUnit.MILLISECONDS.toMinutes(diffInMilliSec);
         if (diffMinutes < 60) {
             if (diffMinutes == 1) {
-                return String.format("Updated %s minute ago at %s", diffMinutes, localStringHour);
+                return String.format("%s minute ago @ %s", diffMinutes, localStringHour);
             }
-            return String.format("Updated %s minutes ago at %s", diffMinutes, localStringHour);
+            return String.format("%s minutes ago @ %s", diffMinutes, localStringHour);
         }
         long diffInHours = TimeUnit.MILLISECONDS.toHours(diffInMilliSec);
         if (diffInHours < 24) {
             if (diffInHours == 1) {
-                return String.format("Updated %s hour ago at %s", diffInHours, localStringHour);
+                return String.format("%s hour ago @ %s", diffInHours, localStringHour);
             }
-            return String.format("Updated %s hours ago at %s", diffInHours, localStringHour);
+            return String.format("%s hours ago @ %s", diffInHours, localStringHour);
         }
         long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMilliSec);
         if (diffInDays < 30) {
             if (diffInDays == 1) {
-                return String.format("Updated %s day ago at %s", diffInDays, localStringHour);
+                return String.format("%s day ago @ %s", diffInDays, localStringHour);
             }
-            return String.format("Updated %s days ago at %s", diffInDays, localStringHour);
+            return String.format("%s days ago @ %s", diffInDays, localStringHour);
         }
         long diffInMonths = Math.round(diffInDays / 30);
         SimpleDateFormat date = new SimpleDateFormat("MMMM");
@@ -116,9 +110,9 @@ public class EventUtils {
         String day = decimalFormat.format(calendar.get(Calendar.DAY_OF_MONTH));
         String year = String.valueOf(calendar.get(Calendar.YEAR));
         if (diffInMonths < 12) {
-            return String.format("Updated %s %s at %s", day, monthName, localStringHour);
+            return String.format("%s %s @ %s", day, monthName, localStringHour);
         }
-        return String.format("Updated %s %s %s at %s", day, monthName, year, localStringHour);
+        return String.format("%s %s %s @ %s", day, monthName, year, localStringHour);
     }
 }
 

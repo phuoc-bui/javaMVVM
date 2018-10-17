@@ -93,6 +93,7 @@
 
     <style name="TextAppearance.A2M.Title" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="TextAppearance.A2M.SubTitle" parent="TextAppearance.MaterialComponents.Subtitle2">
@@ -100,7 +101,12 @@
     </style>
 
     <style name="TextAppearance.A2M.Body" parent="TextAppearance.MaterialComponents.Body2">
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColor">@color/textColorGrey</item>
+    </style>
+
+    <style name="TextAppearance.A2M.Event.Body" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/colorGrey</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="SwitchCompatStyle" >

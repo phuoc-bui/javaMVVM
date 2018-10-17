@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -32,6 +33,23 @@ public class IconUtils {
         return (resource != 0) ? resource : R.drawable.icons_warning_empty;
     }
 
+    public static GradientDrawable createRoundedBackgroundStroke(Activity context, int color) {
+        GradientDrawable shape = (GradientDrawable) context.getResources().getDrawable(R.drawable.bg_rounded_red_stroke);
+        shape.setStroke(1, color);
+        return shape;
+    }
+
+    public static GradientDrawable createRoundedBackground(Activity context, int color) {
+        GradientDrawable shape = (GradientDrawable) context.getResources().getDrawable(R.drawable.bg_rounded_white);
+        shape.setColor(color);
+        return shape;
+    }
+
+    public static GradientDrawable createTopRoundedBackground(Activity context, int color) {
+        GradientDrawable shape = (GradientDrawable) context.getResources().getDrawable(R.drawable.bg_top_rounded_white);
+        shape.setColor(color);
+        return shape;
+    }
 
     public static Bitmap createEventIcon(Activity context, int resourceId, Event event, String backgroundColor, boolean isListIcon, boolean isClustered, String itemsCount) {
 

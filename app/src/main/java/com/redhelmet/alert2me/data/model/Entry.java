@@ -4,7 +4,7 @@ import com.redhelmet.alert2me.data.model.base.Model;
 
 public class Entry implements Model {
     private String title;
-    private Object value;
+    private String value;
     private String link;
 
     public String getTitle() {
@@ -15,11 +15,11 @@ public class Entry implements Model {
         this.title = title;
     }
 
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
