@@ -20,6 +20,7 @@ import com.redhelmet.alert2me.data.remote.response.LoginResponse;
 import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
 import com.redhelmet.alert2me.data.remote.response.RegisterAccountResponse;
 
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -125,6 +126,11 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
+    public Single<Category> getEventCategory(Event event) {
+        return database.getEventCategory(event);
+    }
+
+    @Override
     public List<Category> getCategoriesSync() {
         return categories;
     }
@@ -161,18 +167,19 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Observable<List<Event>> getEventsWithFilter(boolean isDefault) {
-        return getEventsWithFilterOneByOne(isDefault)
+    public Observable<List<Event>> getEventsWithFilter(boolean isDefault, Comparator<Event> sort) {
+        return getEventsWithFilterOneByOne(isDefault, sort)
                 .toList()
                 .doOnSuccess(list -> Log.e(TAG, "Complete filter, return list " + list.size()))
                 .toObservable();
     }
 
     @Override
-    public Observable<Event> getEventsWithFilterOneByOne(boolean isDefault) {
+    public Observable<Event> getEventsWithFilterOneByOne(boolean isDefault, Comparator<Event> sort) {
         Log.e(TAG, "Start filter event --------");
         return getAllEvents()
                 .flatMap(Observable::fromIterable)
+                .sorted(sort)
                 .filter(event -> {
                     if (event.isAlwaysOn()) {
                         return updateEventByCategory(event)
@@ -225,24 +232,20 @@ public class AppDataManager implements DataManager {
     }
 
     private Single<Boolean> updateEventByCategory(Event event) {
-        return getCategories()
-                .flatMap(Observable::fromIterable)
-                .any(category -> {
-                    if (event.getCategory().equalsIgnoreCase(category.getCategory())) {
-                        // update event
-                        return Observable.fromIterable(category.getStatuses())
-                                .any(status -> {
-                                    if (event.getStatusCode().equals(status.getCode())) {
-                                        event.setPrimaryColor(status.getPrimaryColor());
-                                        event.setSecondaryColor(status.getSecondaryColor());
-                                        event.setTextColor(status.getTextColor());
-                                        event.setName(status.getName());
-                                        return true;
-                                    }
-                                    return false;
-                                }).blockingGet();
-                    }
-                    return false;
+        return getEventCategory(event)
+                .map(category -> {
+                    // update event
+                    return Observable.fromIterable(category.getStatuses())
+                            .any(status -> {
+                                if (event.getStatusCode().equals(status.getCode())) {
+                                    event.setPrimaryColor(status.getPrimaryColor());
+                                    event.setSecondaryColor(status.getSecondaryColor());
+                                    event.setTextColor(status.getTextColor());
+                                    event.setName(status.getName());
+                                    return true;
+                                }
+                                return false;
+                            }).blockingGet();
                 });
     }
 

@@ -42,8 +42,8 @@ import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.global.Constant;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
 import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
+import com.redhelmet.alert2me.ui.widget.EventIcon;
 import com.redhelmet.alert2me.util.EventUtils;
-import com.redhelmet.alert2me.util.IconUtils;
 import com.redhelmet.alert2me.util.PermissionUtils;
 
 import java.util.ArrayList;
@@ -355,8 +355,8 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
         for (int j = 0; j < areas.size(); j++) {
 
             MarkerOptions markerOptions = EventUtils.eventToMarker(event, areas.get(j));
-
-            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(IconUtils.createEventIcon(getBaseActivity(), R.layout.custom_map_layer_icon, event, event.getPrimaryColor(), false, false, ""));
+            EventIcon icon = new EventIcon(getBaseActivity(), event, true, -1);
+            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(icon.convertToBitMap());
             markerOptions.icon(bitmapDescriptor);
             Marker marker = mMapView.addMarker(markerOptions);
             marker.setTag(event);

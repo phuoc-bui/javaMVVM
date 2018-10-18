@@ -189,22 +189,22 @@ public class HelpFragment extends Fragment implements View.OnClickListener {
 
     public void openWebPage(String url) {
         Uri webpage;
-        if (url != null || url != "") {
+        if (url != null && !url.isEmpty()) {
             webpage = Uri.parse(url);
             intent = new Intent(Intent.ACTION_VIEW, webpage);
-            startActivity(intent);
+            getActivity().startActivity(intent);
         }
 
     }
 
     public void openEmailClient(String id) {
-        if (id != null || id != "") {
+        if (id != null && !id.isEmpty()) {
             intent = new Intent(Intent.ACTION_SEND);
             intent.setType("plain/text");
             intent.putExtra(Intent.EXTRA_EMAIL, new String[]{id});
             intent.putExtra(Intent.EXTRA_SUBJECT, "subject");
             intent.putExtra(Intent.EXTRA_TEXT, "mail body");
-            startActivity(Intent.createChooser(intent, ""));
+            getActivity().startActivity(Intent.createChooser(intent, ""));
         }
     }
 

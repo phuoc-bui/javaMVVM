@@ -5,7 +5,6 @@ import android.databinding.ObservableField;
 
 import com.redhelmet.alert2me.data.model.Area;
 import com.redhelmet.alert2me.data.model.Event;
-import com.redhelmet.alert2me.global.EventIcon;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.util.EventUtils;
 
@@ -15,7 +14,6 @@ import java.util.Locale;
 
 public class EventItemViewModel extends BaseViewModel {
     public ObservableField<Event> event = new ObservableField<>();
-    public ObservableField<EventIcon> eventIcon = new ObservableField<>();
     public ObservableBoolean isStateWide = new ObservableBoolean(true);
     public ObservableField<String> eventLocation = new ObservableField<>();
     public ObservableField<String> eventTimeAgo = new ObservableField<>();
@@ -37,7 +35,10 @@ public class EventItemViewModel extends BaseViewModel {
         Double distance = (event.getDistanceTo() / 1000);
         String formattedDistance = String.format(Locale.getDefault(), "%.1f km", distance);
         eventDistance.set(formattedDistance);
+    }
 
-        eventIcon.set(EventIcon.DETAIL_ICON.setEvent(event));
+    @Override
+    protected void onCleared() {
+        super.onCleared();
     }
 }

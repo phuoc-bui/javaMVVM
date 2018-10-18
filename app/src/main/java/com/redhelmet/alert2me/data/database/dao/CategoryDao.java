@@ -18,11 +18,17 @@ public interface CategoryDao {
     @Query("SELECT * FROM Category")
     Single<List<Category>> getCategories();
 
+    @Query("SELECT * FROM Category WHERE category = :category")
+    Single<Category> getEventCategory(String category);
+
     @Query("SELECT * FROM Category")
     List<Category> getCategoriesSync();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void saveCategories(List<Category> categories);
+
+    @Query("DELETE FROM Category")
+    void nukeTable();
 
     @Update
     void updateCategories(List<Category> categories);

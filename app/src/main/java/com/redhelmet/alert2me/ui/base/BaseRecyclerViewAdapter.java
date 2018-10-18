@@ -88,7 +88,6 @@ public abstract class BaseRecyclerViewAdapter<IVM> extends RecyclerView.Adapter<
         itemViewHolder.viewModel = itemViewModel;
         itemViewHolder.binder.setVariable(getViewModelVariable(), itemViewModel);
         itemViewHolder.binder.executePendingBindings();
-        //TODO: need destroy itemViewModel??
     }
 
     @Override

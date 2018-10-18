@@ -31,15 +31,14 @@
             android:background="@drawable/bg_event_item"
             android:padding="@dimen/small_margin">
 
-            <ImageView
+            <com.redhelmet.alert2me.ui.widget.EventIcon
                 android:id="@+id/img_event_icon"
                 android:layout_width="@dimen/event_icon_width"
                 android:layout_height="@dimen/event_icon_width"
-                android:src="@{viewModel.eventIcon}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/ea_logo" />
+                binding:event="@{viewModel.event}" />
 
             <TextView
                 android:id="@+id/tv_event_name"
@@ -87,19 +86,19 @@
             <TextView
                 android:id="@+id/tv_event_distance"
                 style="@style/TextAppearance.A2M.Event.Body"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/event_distance_text_width"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical|end"
-                android:padding="@dimen/small_margin"
-                android:paddingStart="@dimen/small_margin"
-                android:paddingEnd="@dimen/small_margin"
+                android:gravity="center"
+                android:paddingTop="@dimen/small_margin"
+                android:paddingBottom="@dimen/small_margin"
                 android:text="@{viewModel.eventDistance}"
                 android:textColor="@{viewModel.eventColor}"
                 android:visibility="@{viewModel.isStateWide}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 binding:rounded_background_stroke_color="@{viewModel.eventColor}"
-                tools:text="52345 km" />
+                tools:background="@drawable/bg_rounded_red_stroke"
+                tools:text="52345,6 km" />
 
             <android.support.constraint.Barrier
                 android:id="@+id/barrier"

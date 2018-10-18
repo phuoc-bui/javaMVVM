@@ -51,12 +51,6 @@ public class BaseViewModel extends ViewModel {
         this.preferenceStorage = pref;
     }
 
-    @Override
-    protected void onCleared() {
-        disposeBag.dispose();
-        super.onCleared();
-    }
-
     protected void showLoadingDialog(boolean show) {
         NavigationItem item = new NavigationItem(show ? NavigationItem.SHOW_LOADING_DIALOG : NavigationItem.DISMISS_LOADING_DIALOG);
         navigateTo(item);
@@ -86,5 +80,11 @@ public class BaseViewModel extends ViewModel {
 
     protected void navigateTo(NavigationItem item) {
         navigationEvent.setValue(new Event<>(item));
+    }
+
+    @Override
+    protected void onCleared() {
+        disposeBag.dispose();
+        super.onCleared();
     }
 }

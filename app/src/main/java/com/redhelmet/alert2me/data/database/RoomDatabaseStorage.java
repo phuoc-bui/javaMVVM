@@ -3,6 +3,7 @@ package com.redhelmet.alert2me.data.database;
 import android.util.Log;
 
 import com.redhelmet.alert2me.data.model.Category;
+import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 public class RoomDatabaseStorage implements DatabaseStorage {
     private RoomDatabase database;
@@ -21,6 +23,7 @@ public class RoomDatabaseStorage implements DatabaseStorage {
 
     @Override
     public void saveCategories(List<Category> categories) {
+        database.categoryDao().nukeTable();
         database.categoryDao().saveCategories(categories);
     }
 
@@ -29,6 +32,11 @@ public class RoomDatabaseStorage implements DatabaseStorage {
         return database.categoryDao().getCategories()
                 .doOnSuccess(list -> Log.e("Database", "getCategories: " + list.size()))
                 .toObservable();
+    }
+
+    @Override
+    public Single<Category> getEventCategory(Event event) {
+        return database.categoryDao().getEventCategory(event.getCategory());
     }
 
     @Override

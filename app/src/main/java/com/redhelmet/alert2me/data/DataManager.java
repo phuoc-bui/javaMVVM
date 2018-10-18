@@ -15,9 +15,11 @@ import com.redhelmet.alert2me.data.remote.response.LoginResponse;
 import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
 import com.redhelmet.alert2me.data.remote.response.RegisterAccountResponse;
 
+import java.util.Comparator;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 public interface DataManager {
     void saveConfig(ConfigResponse config);
@@ -31,6 +33,7 @@ public interface DataManager {
     Observable<ProximityLocationResponse> putProximityLocation(double lat, double lng);
     Observable<List<Event>> getAllEvents();
     Observable<List<Category>> getCategories();
+    Single<Category> getEventCategory(Event event);
     List<Category> getCategoriesSync();
     Observable<List<EventGroup>> getEventGroups();
     List<EventGroup> getEventGroupsSync();
@@ -38,8 +41,8 @@ public interface DataManager {
     Observable<List<EventGroup>> getUserDefaultFilters();
     void saveUserCustomFilters(List<Category> categories);
     void saveUserDefaultFilters(List<EventGroup> eventGroups);
-    Observable<List<Event>> getEventsWithFilter(boolean isDefault);
-    Observable<Event> getEventsWithFilterOneByOne(boolean isDefault);
+    Observable<List<Event>> getEventsWithFilter(boolean isDefault, Comparator<Event> sort);
+    Observable<Event> getEventsWithFilterOneByOne(boolean isDefault, Comparator<Event> sort);
     boolean isDefaultFilter();
     void setDefaultFilter(boolean isDefault);
     Observable<RegisterAccountResponse> registerAccount(User user);

@@ -9,10 +9,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
-import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.ClusterMarker;
 import com.redhelmet.alert2me.data.model.Event;
-import com.redhelmet.alert2me.util.IconUtils;
+import com.redhelmet.alert2me.ui.widget.EventIcon;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,8 +34,8 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<ClusterMarker>
                                                MarkerOptions markerOptions) {
         Event event = item.getEvent();
         if (event != null) {
-            Bitmap eventIcon = IconUtils.createEventIcon(context, R.layout.custom_map_layer_icon, event, event.getPrimaryColor(), false, false, "");
-            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(eventIcon));
+            EventIcon icon = new EventIcon(context, event, true, -1);
+            markerOptions.icon(BitmapDescriptorFactory.fromBitmap(icon.convertToBitMap()));
             markerOptions.title(String.format("%s", event.getName()));
         }
     }
@@ -59,7 +58,8 @@ public class CustomClusterRenderer extends DefaultClusterRenderer<ClusterMarker>
         Event event = customMarker.getEvent();
         if (event != null) {
             int size = items.size();
-            Bitmap clusteredIcon = IconUtils.createEventIcon(context, R.layout.custom_cluster_layer_icon, event, event.getPrimaryColor(), false, true, String.valueOf(size));
+            EventIcon icon = new EventIcon(context, event, true, size);
+            Bitmap clusteredIcon = icon.convertToBitMap();
             if (clusteredIcon != null)
 //                markerOptions.title(String.format("%s events\nTap to see all", size));
                 markerOptions.icon(BitmapDescriptorFactory.fromBitmap(clusteredIcon));

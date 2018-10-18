@@ -3,18 +3,13 @@ package com.redhelmet.alert2me.ui.eventdetail;
 import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.text.Html;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,15 +22,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Event;
-import com.redhelmet.alert2me.data.model.Section;
 import com.redhelmet.alert2me.databinding.ActivityEventDetailBinding;
 import com.redhelmet.alert2me.domain.util.DetailSectionBuilder;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
 import com.redhelmet.alert2me.ui.home.HomeActivity;
+import com.redhelmet.alert2me.ui.widget.EventIcon;
 import com.redhelmet.alert2me.util.EventUtils;
-import com.redhelmet.alert2me.util.IconUtils;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -85,8 +77,6 @@ public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, Act
         viewModel.setEvent(event);
 
         initializeMap();
-
-        initializeControls();
     }
 
     public void initializeMap() {
@@ -103,31 +93,13 @@ public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, Act
         if (supportActionBar != null && event != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(event.getPrimaryColor())));
-            supportActionBar.setTitle(Html.fromHtml("<small style='color:'" + event.getTextColor() + "''>" + event.getName() + "</small>"));
+            supportActionBar.setTitle(event.getName());
+            binder.toolbar.setTitleTextColor(Color.parseColor(event.getTextColor()));
 
             Window window = getWindow();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 window.setStatusBarColor(Color.parseColor(String.valueOf(event.getSecondaryColor())));
             }
-        }
-    }
-
-    public void initializeControls() {
-        detailSectionBuilder = new DetailSectionBuilder(getApplicationContext());
-
-        //section
-        List<Section> sections = event.getSection();
-        if (sections != null && sections.size() > 0) {
-            for (Section section : sections) {
-                View sectionView = detailSectionBuilder.BuildSection(section);
-//                sectionContainer.addView(sectionView);
-            }
-        } else {
-            Toast.makeText(getApplicationContext(), "Event Expired", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(this, HomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-
         }
     }
 
@@ -181,8 +153,8 @@ public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, Act
     public void locationSetup() {
         if (mMap != null && event != null) {
             MarkerOptions marker = EventUtils.eventToMarker(event, event.getArea().get(0));
-            Bitmap eventIcon = IconUtils.createEventIcon(this, R.layout.custom_map_layer_icon, event, event.getPrimaryColor(), false, false, "");
-            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(eventIcon);
+            EventIcon icon = new EventIcon(this, event, true, -1);
+            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(icon.convertToBitMap());
             marker.icon(bitmapDescriptor);
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), 15f));

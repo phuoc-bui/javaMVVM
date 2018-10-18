@@ -1,16 +1,20 @@
 package com.redhelmet.alert2me.data.database;
 
 import com.redhelmet.alert2me.data.model.Category;
+import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
 
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 public interface DatabaseStorage {
     void saveCategories(List<Category> categories);
 
     Observable<List<Category>> getCategories();
+
+    Single<Category> getEventCategory(Event event);
 
     List<Category> getCategoriesSync();
 

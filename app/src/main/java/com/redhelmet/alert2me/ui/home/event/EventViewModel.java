@@ -19,7 +19,7 @@ import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
 import com.redhelmet.alert2me.util.IconUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -37,7 +37,7 @@ public class EventViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> isRefreshing = new MutableLiveData<>();
     private boolean isStateWide = true;
     // sort mode in even list fragment
-    private int currentSortType = 0;
+    private int currentSortType = 2;
 
     // Variables for one by one mode
     public boolean isLoadOneByOne = true;
@@ -93,9 +93,9 @@ public class EventViewModel extends BaseViewModel {
 
     private void getEvents() {
         isLoading.set(true);
-        isEmpty.set(true);
+//        isEmpty.set(true);
         onClearEvents.setValue(true);
-        disposeBag.add(dataManager.getEventsWithFilter(isDefaultFilter())
+        disposeBag.add(dataManager.getEventsWithFilter(isDefaultFilter(), getSortComparator())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(data -> {
                     isLoading.set(false);
@@ -113,10 +113,10 @@ public class EventViewModel extends BaseViewModel {
         // clear data
         onClearEvents.setValue(true);
         adapter.itemsSource.clear();
-        isEmpty.set(true);
+//        isEmpty.set(true);
 
         List<Event> eventList = new ArrayList<>();
-        disposeBag.add(dataManager.getEventsWithFilterOneByOne(isDefaultFilter())
+        disposeBag.add(dataManager.getEventsWithFilterOneByOne(isDefaultFilter(), getSortComparator())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
                     eventsOneByOne.onNext(event);
@@ -178,32 +178,20 @@ public class EventViewModel extends BaseViewModel {
     }
 
     public void sortList() {
+        adapter.sortItemSource(getSortComparator());
+    }
+
+    private Comparator<Event> getSortComparator() {
         switch (currentSortType) {
             case 0:
-                SortByDistance();
-                break;
+                return (o1, o2) -> o1.getDistanceTo() > o2.getDistanceTo() ? 1 : (o1.getDistanceTo() < o2.getDistanceTo() ? -1 : 0);
             case 1:
-                SortByTime();
-                break;
+                return (o1, o2) -> Long.compare(o2.getUpdated(), o1.getUpdated());
             case 2:
-                SortByStatus();
-                break;
+                return (o1, o2) -> ComparisonChain.start().compare(o2.getSeverity(), o1.getSeverity()).compare(o2.getUpdated(), o1.getUpdated()).result();
             default:
-                SortByStatus();
-                break;
+                return (o1, o2) -> ComparisonChain.start().compare(o2.getSeverity(), o1.getSeverity()).compare(o2.getUpdated(), o1.getUpdated()).result();
         }
-    }
-
-    private void SortByTime() {
-        Collections.sort(events.getValue(), (event, event2) -> Long.compare(event2.getUpdated(), event.getUpdated()));
-    }
-
-    private void SortByDistance() {
-        Collections.sort(events.getValue(), (event, event2) -> event.getDistanceTo() > event2.getDistanceTo() ? 1 : (event.getDistanceTo() < event2.getDistanceTo() ? -1 : 0));
-    }
-
-    private void SortByStatus() {
-        Collections.sort(events.getValue(), (event, event2) -> ComparisonChain.start().compare(event2.getSeverity(), event.getSeverity()).compare(event2.getUpdated(), event.getUpdated()).result());
     }
 
     @Override
@@ -215,5 +203,9 @@ public class EventViewModel extends BaseViewModel {
 
     public void setCurrentSortType(int currentSortType) {
         this.currentSortType = currentSortType;
+    }
+
+    public int getCurrentSortType() {
+        return currentSortType;
     }
 }

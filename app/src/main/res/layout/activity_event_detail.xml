@@ -20,7 +20,8 @@
             android:id="@+id/appBarLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.PopupOverlay">
+            android:theme="@style/AppTheme.PopupOverlay"
+            app:elevation="0dp">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -35,6 +36,13 @@
             android:layout_height="match_parent"
             android:background="@drawable/background">
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:scaleType="fitXY"
+                android:tint="@{viewModel.eventColor}"
+                app:srcCompat="@drawable/bg_event_detail" />
+
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/event_info"
                 android:layout_width="0dp"
@@ -45,15 +53,14 @@
                 app:layout_constraintStart_toStartOf="@+id/start_guideline"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
+                <com.redhelmet.alert2me.ui.widget.EventIcon
                     android:id="@+id/img_event_icon"
                     android:layout_width="@dimen/event_icon_width"
                     android:layout_height="@dimen/event_icon_width"
-                    android:src="@{viewModel.eventIcon}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@drawable/ea_logo" />
+                    binding:event="@{viewModel.event}" />
 
                 <TextView
                     android:id="@+id/event_type"
@@ -112,11 +119,14 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_event_sections"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:background="@color/white"
                 android:orientation="horizontal"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/end_guideline"
+                app:layout_constraintStart_toStartOf="@+id/start_guideline"
                 app:layout_constraintTop_toBottomOf="@+id/detail_map"
                 binding:adapter="@{viewModel.sectionAdapter}" />
 

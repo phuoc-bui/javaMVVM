@@ -6,8 +6,9 @@ import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Entry;
 import com.redhelmet.alert2me.data.model.Section;
 import com.redhelmet.alert2me.ui.base.BaseRecyclerViewAdapter;
+import com.redhelmet.alert2me.ui.base.BaseViewModel;
 
-public class ItemSectionViewModel {
+public class ItemSectionViewModel extends BaseViewModel {
     public ObservableField<String> sectionTitle = new ObservableField<>();
     public SectionContentAdapter adapter = new SectionContentAdapter();
     public ObservableField<String> eventColor = new ObservableField<>();

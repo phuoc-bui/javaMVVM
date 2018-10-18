@@ -12,4 +12,8 @@
         format="color"/>
   </declare-styleable>
 
+  <declare-styleable name="EventIcon">
+    <attr name="have_tail" format="boolean" />
+    <attr name="items_count" format="integer"/>
+  </declare-styleable>
 </resources>

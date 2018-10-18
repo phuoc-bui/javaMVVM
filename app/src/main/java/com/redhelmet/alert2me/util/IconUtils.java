@@ -20,6 +20,8 @@ import android.widget.TextView;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Event;
 
+import java.lang.reflect.Field;
+
 
 public class IconUtils {
 
@@ -237,6 +239,16 @@ public class IconUtils {
         return (resource != 0) ? resource : R.drawable.icons_warning_empty;
     }
 
+    public static int getResId(String resName, Class<?> c) {
+        try {
+            Field idField = c.getDeclaredField(resName);
+            return idField.getInt(idField);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     public static int getColorWithAlpha(int color, float ratio) {
         int newColor;
         int alpha = Math.round(Color.alpha(color) * ratio);
@@ -245,5 +257,15 @@ public class IconUtils {
         int b = Color.blue(color);
         newColor = Color.argb(alpha, r, g, b);
         return newColor;
+    }
+
+    public static float convertDpToPixel(Context context, float dp) {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    public static float convertPixelsToDp(Context context, float pixel) {
+        return pixel / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 }

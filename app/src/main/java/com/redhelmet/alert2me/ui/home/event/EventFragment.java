@@ -109,7 +109,7 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
 
         final CharSequence[] items = {getString(R.string.listSortOrderDistance), getString(R.string.listSortOrderTime), getString(R.string.listSortOrderStatus)};
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getBaseActivity());
-        int selectedSortItem = 2;
+        int selectedSortItem = viewModel.getCurrentSortType();
 
         dialogBuilder.setTitle(getString(R.string.listSortOrder));
 
