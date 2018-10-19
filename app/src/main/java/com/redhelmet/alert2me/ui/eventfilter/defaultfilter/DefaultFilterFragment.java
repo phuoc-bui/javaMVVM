@@ -19,8 +19,6 @@ public class DefaultFilterFragment extends BaseFragment<DefaultFilterViewModel, 
     @Inject
     ViewModelProvider.Factory factory;
 
-    private DefaultNotificationAdapter adapter;
-
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_default_filter;
@@ -30,22 +28,6 @@ public class DefaultFilterFragment extends BaseFragment<DefaultFilterViewModel, 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         obtainViewModel(factory, DefaultFilterViewModel.class);
-        binder.defaultList.setGroupIndicator(null);
-        viewModel.allEventGroup.observe(this, eventGroups -> {
-            adapter = new DefaultNotificationAdapter(getBaseActivity(), eventGroups);
-            binder.defaultList.setAdapter(adapter);
-        });
-
-        binder.defaultList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-            int previousGroup = -1;
-
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                if (groupPosition != previousGroup)
-                    binder.defaultList.collapseGroup(previousGroup);
-                previousGroup = groupPosition;
-            }
-        });
     }
 
     @Override

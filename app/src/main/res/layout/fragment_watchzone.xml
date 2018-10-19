@@ -18,7 +18,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:layout_marginLeft="16dp"
-                android:theme="@style/SwitchCompatStyle"
+                android:theme="@style/Widget.A2M.SwitchCompatStyle"
                 android:id="@+id/mzSwitch"
                 android:gravity="center_horizontal"/>
 

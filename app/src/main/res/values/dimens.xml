@@ -5,9 +5,11 @@
     <dimen name="activity_vertical_margin">12dp</dimen>
 
     <!--general margin-->
-    <dimen name="small_margin">8dp</dimen>
-    <dimen name="normal_margin">16dp</dimen>
-    <dimen name="large_margin">32dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_normal">16dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="spacing_normal">8dp</dimen>
+    <dimen name="spacing_micro">4dp</dimen>
 
     <dimen name="fab_margin_px">05dp</dimen>
     <dimen name="dots_height">60dp</dimen>

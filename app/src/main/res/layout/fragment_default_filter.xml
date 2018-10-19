@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:binding="http://schemas.android.com/tools">
 
     <data>
 
@@ -40,10 +41,12 @@
             android:background="@color/light_gray"
             app:layout_constraintTop_toBottomOf="@+id/staticSubHeader" />
 
-        <ExpandableListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/defaultList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            binding:adapter="@{viewModel.adapter}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/separator" />
     </android.support.constraint.ConstraintLayout>

@@ -48,7 +48,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_top_rounded_white"
-                android:padding="@dimen/small_margin"
+                android:padding="@dimen/margin_small"
                 app:layout_constraintEnd_toEndOf="@+id/end_guideline"
                 app:layout_constraintStart_toStartOf="@+id/start_guideline"
                 app:layout_constraintTop_toTopOf="parent">
@@ -135,14 +135,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/normal_margin" />
+                app:layout_constraintGuide_begin="@dimen/margin_normal" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/end_guideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_end="@dimen/normal_margin" />
+                app:layout_constraintGuide_end="@dimen/margin_normal" />
 
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>

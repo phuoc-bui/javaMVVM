@@ -121,7 +121,7 @@
             <android.support.v7.widget.SwitchCompat
                 android:id="@+id/wz_state"
 
-                android:theme="@style/SwitchCompatStyle"
+                android:theme="@style/Widget.A2M.SwitchCompatStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"

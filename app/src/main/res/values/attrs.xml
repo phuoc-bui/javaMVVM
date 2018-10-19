@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <declare-styleable name="AutoCompleteLocation">
-    <attr name="background_layout"
-        format="integer"/>
-    <attr name="hint_text"
-        format="string"/>
-    <attr name="hint_text_color"
-        format="color"/>
-    <attr name="text_color"
-        format="color"/>
-  </declare-styleable>
+    <declare-styleable name="AutoCompleteLocation">
+        <attr name="background_layout" format="integer" />
+        <attr name="hint_text" format="string" />
+        <attr name="hint_text_color" format="color" />
+        <attr name="text_color" format="color" />
+    </declare-styleable>
 
-  <declare-styleable name="EventIcon">
-    <attr name="have_tail" format="boolean" />
-    <attr name="items_count" format="integer"/>
-  </declare-styleable>
+    <declare-styleable name="EventIcon">
+        <attr name="have_tail" format="boolean" />
+        <attr name="items_count" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="CollapsibleCard">
+        <attr name="cardTitle" format="string" />
+        <attr name="cardDescription" format="string" />
+    </declare-styleable>
 </resources>

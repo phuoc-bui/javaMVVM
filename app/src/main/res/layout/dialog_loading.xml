@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="@dimen/normal_margin"
+    android:padding="@dimen/margin_normal"
     android:background="?android:attr/colorBackground">
 
     <ProgressBar

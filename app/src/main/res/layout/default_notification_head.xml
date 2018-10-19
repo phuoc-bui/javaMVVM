@@ -29,7 +29,7 @@
             android:layout_gravity="center_horizontal|center_vertical"
             android:layout_marginLeft="10dp"
             android:visibility="gone"
-            android:theme="@style/SwitchCompatStyle"
+            android:theme="@style/Widget.A2M.SwitchCompatStyle"
             android:id="@+id/default_head_switch"
             android:gravity="center_horizontal"/>
 

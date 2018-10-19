@@ -22,7 +22,7 @@
             android:visibility="visible"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:theme="@style/SwitchCompatStyle"
+            android:theme="@style/Widget.A2M.SwitchCompatStyle"
             android:id="@+id/custom_type_switch"
             android:gravity="center_horizontal"/>
 

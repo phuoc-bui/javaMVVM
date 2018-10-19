@@ -244,7 +244,7 @@
                         android:id="@+id/mobileWzSwitch"
 
                         android:paddingRight="@dimen/activity_horizontal_margin"
-                        android:theme="@style/SwitchCompatStyle"
+                        android:theme="@style/Widget.A2M.SwitchCompatStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center_vertical"

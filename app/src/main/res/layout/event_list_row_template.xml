@@ -14,9 +14,9 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/normal_margin"
+        android:layout_marginStart="@dimen/margin_normal"
         android:layout_marginTop="4dp"
-        android:layout_marginEnd="@dimen/normal_margin"
+        android:layout_marginEnd="@dimen/margin_normal"
         android:layout_marginBottom="4dp"
         android:background="@android:color/transparent">
 
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_event_item"
-            android:padding="@dimen/small_margin">
+            android:padding="@dimen/margin_small">
 
             <com.redhelmet.alert2me.ui.widget.EventIcon
                 android:id="@+id/img_event_icon"
@@ -75,8 +75,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingStart="@dimen/small_margin"
-                android:paddingEnd="@dimen/small_margin"
+                android:paddingStart="@dimen/margin_small"
+                android:paddingEnd="@dimen/margin_small"
                 android:text="@{viewModel.eventTimeAgo}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -89,8 +89,8 @@
                 android:layout_width="@dimen/event_distance_text_width"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:paddingTop="@dimen/small_margin"
-                android:paddingBottom="@dimen/small_margin"
+                android:paddingTop="@dimen/margin_small"
+                android:paddingBottom="@dimen/margin_small"
                 android:text="@{viewModel.eventDistance}"
                 android:textColor="@{viewModel.eventColor}"
                 android:visibility="@{viewModel.isStateWide}"
