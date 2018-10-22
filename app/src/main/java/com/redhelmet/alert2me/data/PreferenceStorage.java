@@ -7,6 +7,7 @@ import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.EventGroup;
+import com.redhelmet.alert2me.data.model.User;
 import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
 
 import java.util.List;
@@ -32,4 +33,6 @@ public interface PreferenceStorage {
     void setLoggedIn(boolean isLoggedIn);
     void saveToken(String token);
     String getToken();
+    void saveUserInfo(User user);
+    User getCurrentUser();
 }

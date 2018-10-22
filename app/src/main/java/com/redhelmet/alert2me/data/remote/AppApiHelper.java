@@ -7,7 +7,6 @@ import com.redhelmet.alert2me.data.remote.request.ProximityLocationRequest;
 import com.redhelmet.alert2me.data.remote.request.RegisterDeviceRequest;
 import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
 import com.redhelmet.alert2me.data.remote.response.ForgotPasswordResponse;
-import com.redhelmet.alert2me.data.remote.response.LoginResponse;
 import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
 import com.redhelmet.alert2me.data.remote.response.RegisterAccountResponse;
 import com.redhelmet.alert2me.data.remote.response.Response;
@@ -56,11 +55,11 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Observable<LoginResponse> login(String email, String password) {
+    public Observable<User> login(String email, String password) {
         HashMap<String, String> requestMap = new HashMap<>();
         requestMap.put("email", email);
         requestMap.put("password", password);
-        return filterSuccessResponse(apiService.login(requestMap));
+        return filterSuccessResponse(apiService.login(requestMap)).map(response -> response.account);
     }
 
     @Override

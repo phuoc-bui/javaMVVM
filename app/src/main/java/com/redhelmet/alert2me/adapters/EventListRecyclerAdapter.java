@@ -5,7 +5,7 @@ import com.google.common.collect.ComparisonChain;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.ui.base.BaseRecyclerViewAdapter;
-import com.redhelmet.alert2me.ui.home.event.EventItemViewModel;
+import com.redhelmet.alert2me.ui.event.EventItemViewModel;
 
 import java.util.Collections;
 import java.util.Comparator;

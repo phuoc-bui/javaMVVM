@@ -92,7 +92,7 @@
 
         <!-- [END firebase_service] -->
 
-        <activity android:name="com.redhelmet.alert2me.ui.home.event.ClusterEventListActivity" />
+        <activity android:name=".ui.event.ClusterEventListActivity" />
 
         <service
             android:name="com.redhelmet.alert2me.ui.services.ActivityRecognizedService"

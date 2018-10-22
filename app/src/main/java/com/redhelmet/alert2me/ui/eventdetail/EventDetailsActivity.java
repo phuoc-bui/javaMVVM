@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,7 +24,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.databinding.ActivityEventDetailBinding;
-import com.redhelmet.alert2me.domain.util.DetailSectionBuilder;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
 import com.redhelmet.alert2me.ui.home.HomeActivity;
 import com.redhelmet.alert2me.ui.widget.EventIcon;
@@ -41,7 +41,6 @@ public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, Act
 
     Event event;
     ActionBar supportActionBar;
-    DetailSectionBuilder detailSectionBuilder;
     GoogleMap mMap;
     private Marker marker;
 
@@ -94,7 +93,10 @@ public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, Act
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(event.getPrimaryColor())));
             supportActionBar.setTitle(event.getName());
-            binder.toolbar.setTitleTextColor(Color.parseColor(event.getTextColor()));
+            int color = getResources().getColor(R.color.colorWhite);
+            if (binder.toolbar.getNavigationIcon() != null)
+                binder.toolbar.getNavigationIcon().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            binder.toolbar.setTitleTextColor(color);
 
             Window window = getWindow();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

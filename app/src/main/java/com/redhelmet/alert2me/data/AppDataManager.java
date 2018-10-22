@@ -16,7 +16,6 @@ import com.redhelmet.alert2me.data.remote.ApiHelper;
 import com.redhelmet.alert2me.data.remote.request.ProximityLocationRequest;
 import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
 import com.redhelmet.alert2me.data.remote.response.ForgotPasswordResponse;
-import com.redhelmet.alert2me.data.remote.response.LoginResponse;
 import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
 import com.redhelmet.alert2me.data.remote.response.RegisterAccountResponse;
 
@@ -266,8 +265,9 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Observable<LoginResponse> login(String email, String password) {
-        return api.login(email, password);
+    public Observable<User> login(String email, String password) {
+        return api.login(email, password)
+                .doOnNext(user -> pref.saveUserInfo(user));
     }
 
     @Override

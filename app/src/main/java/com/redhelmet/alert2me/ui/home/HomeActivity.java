@@ -11,9 +11,9 @@ import com.redhelmet.alert2me.adapters.AppViewPagerAdapter;
 import com.redhelmet.alert2me.databinding.ActivityHomeBinding;
 import com.redhelmet.alert2me.databinding.CustomHomeTabBinding;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
-import com.redhelmet.alert2me.ui.home.event.EventFragment;
-import com.redhelmet.alert2me.ui.home.help.HelpFragment;
-import com.redhelmet.alert2me.ui.home.watchzone.WatchZoneFragment;
+import com.redhelmet.alert2me.ui.event.EventFragment;
+import com.redhelmet.alert2me.ui.help.HelpFragment;
+import com.redhelmet.alert2me.ui.watchzone.WatchZoneFragment;
 
 import javax.inject.Inject;
 
@@ -59,14 +59,17 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
                 switch (positionTabSelected) {
                     case 0:
                         updateToolbarTitle(getString(R.string.lblEvent) + " " + getString(R.string.lblMap));
+                        hideToolbar(false);
                         //startTracking();
                         break;
                     case 1:
                         updateToolbarTitle(getString(R.string.toolbar_WZ));
+                        hideToolbar(false);
                         // stopTracking();
                         break;
                     case 2:
                         updateToolbarTitle(getString(R.string.toolbar_help));
+                        hideToolbar(true);
                         break;
                 }
             }

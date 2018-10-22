@@ -25,7 +25,7 @@ public interface ApiHelper {
 
     Observable<RegisterAccountResponse> registerAccount(User user);
 
-    Observable<LoginResponse> login(String email, String password);
+    Observable<User> login(String email, String password);
 
     Observable<ForgotPasswordResponse> forgotPassword(String email);
 }

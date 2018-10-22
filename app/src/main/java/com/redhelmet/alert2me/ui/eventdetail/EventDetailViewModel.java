@@ -48,7 +48,7 @@ public class EventDetailViewModel extends BaseViewModel {
             navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH, HomeActivity.class));
         } else {
             for (Section section : event.getSection()) {
-                sectionAdapter.itemsSource.add(new ItemSectionViewModel(section, event.getPrimaryColor(), event.getTextColor()));
+                sectionAdapter.itemsSource.add(new ItemSectionViewModel(section, event.getPrimaryColor(), "#ffffff"));
             }
         }
     }

@@ -10,6 +10,7 @@ import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.EventGroup;
+import com.redhelmet.alert2me.data.model.User;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class SharedPreferenceStorage implements PreferenceStorage {
     private final String HAVE_ACCOUNT_KEY = "HAVE_ACCOUNT_KEY";
     private final String LOGGED_IN_KEY = "LOGGED_IN_KEY";
     private final String TOKEN_KEY = "TOKEN_KEY";
+    private final String USER_KEY = "USER_KEY";
     private Context context;
     private Gson gson;
 
@@ -182,5 +184,17 @@ public class SharedPreferenceStorage implements PreferenceStorage {
     @Override
     public String getToken() {
         return (String) PreferenceUtils.getFromPrefs(context, TOKEN_KEY, "");
+    }
+
+    @Override
+    public void saveUserInfo(User user) {
+        String json = gson.toJson(user);
+        PreferenceUtils.saveToPrefs(context, USER_KEY, json);
+    }
+
+    @Override
+    public User getCurrentUser() {
+        String json = (String) PreferenceUtils.getFromPrefs(context, USER_KEY, "");
+        return gson.fromJson(json, User.class);
     }
 }

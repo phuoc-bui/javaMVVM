@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.home.event.EventViewModel" />
+            type="com.redhelmet.alert2me.ui.event.EventViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout

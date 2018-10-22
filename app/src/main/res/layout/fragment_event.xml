@@ -2,7 +2,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.home.event.EventViewModel"/>
+            type="com.redhelmet.alert2me.ui.event.EventViewModel"/>
     </data>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

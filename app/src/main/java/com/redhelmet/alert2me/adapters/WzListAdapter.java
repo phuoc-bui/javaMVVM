@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.EditWatchZones;
-import com.redhelmet.alert2me.ui.home.watchzone.WatchZoneFragment;
+import com.redhelmet.alert2me.ui.watchzone.WatchZoneFragment;
 
 /**
  * Created by inbox on 30/11/17.
