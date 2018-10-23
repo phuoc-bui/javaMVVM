@@ -1,6 +1,7 @@
 package com.redhelmet.alert2me.ui.signin;
 
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;
@@ -44,6 +45,8 @@ public class RegisterViewModel extends BaseViewModel {
     }
 
     public static class UserModel {
+        private User user;
+        public RxProperty<String> code = new RxProperty<>("");
         public RxProperty<String> userEmail = new RxProperty<>("");
         public RxProperty<String> firstName = new RxProperty<>("");
         public RxProperty<String> surname = new RxProperty<>("");
@@ -51,8 +54,21 @@ public class RegisterViewModel extends BaseViewModel {
         public RxProperty<String> password = new RxProperty<>("");
         public RxProperty<String> repeatPassword = new RxProperty<>("");
 
+        public UserModel() {
+            user = new User();
+        }
+
+        public UserModel(User user) {
+            this.user = user;
+            code.set(String.valueOf(user.getId()));
+            userEmail.set(user.getEmail());
+            firstName.set(user.getFirstName());
+            password.set(user.getPassword());
+            postcode.set(user.getPostcode());
+            surname.set(user.getSurname());
+        }
+
         public User getUser() {
-            User user = new User();
             user.setEmail(userEmail.get());
             user.setFirstName(firstName.get());
             user.setSurname(surname.get());

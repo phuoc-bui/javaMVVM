@@ -40,7 +40,7 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
 
     protected CompositeDisposable disposeBag = new CompositeDisposable();
 
-    Fragment currentFragment;
+    protected NavigationFragment currentFragment;
 
     private LoadingDialog loadingDialog;
 
@@ -136,20 +136,26 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
         throw new Error("Activity should override this method to support change fragment");
     }
 
-    public void changeFragment(Fragment fragment) {
-        currentFragment = fragment;
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(getFragmentContainer(), fragment);
-        transaction.setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right);
-        transaction.addToBackStack(null);
-        transaction.commit();
+    public void changeFragment(NavigationFragment fragment) {
+        changeFragment(fragment, false);
+    }
+
+    public void changeFragment(NavigationFragment fragment, boolean addToBackStack) {
+        if (fragment instanceof Fragment) {
+            currentFragment = fragment;
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(getFragmentContainer(), (Fragment) fragment);
+            transaction.setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right);
+            if (addToBackStack) transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
 
     public void popBack() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager.getBackStackEntryCount() > 1) {
             fragmentManager.popBackStack();
-            currentFragment = fragmentManager.getFragments().get(fragmentManager.getFragments().size() - 1);
+            currentFragment = (NavigationFragment) fragmentManager.getFragments().get(fragmentManager.getFragments().size() - 1);
             invalidateOptionsMenu();
         } else finish();
     }

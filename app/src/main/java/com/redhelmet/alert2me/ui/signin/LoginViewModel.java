@@ -65,7 +65,7 @@ public class LoginViewModel extends BaseViewModel {
                 .subscribe(eventGroups -> {
                     showLoadingDialog(false);
                     preferenceStorage.setLoggedIn(true);
-                    navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH, HomeActivity.class));
+                    navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_AND_CLEAR_TASK, HomeActivity.class));
                 }, error -> {
                     showLoadingDialog(false);
                     handleError(error);

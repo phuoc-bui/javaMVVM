@@ -79,6 +79,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/item_help_legal"
                 app:title="@string/help_version" />
 
+            <com.redhelmet.alert2me.ui.widget.HelpItemView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/item_help_code"
+                app:description="@{viewModel.userModel.code}"
+                app:showArrow="false"
+                android:layout_marginTop="@dimen/margin_large"
+                app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                app:layout_constraintStart_toStartOf="@id/guideline_start"
+                app:layout_constraintTop_toBottomOf="@+id/item_help_legal"
+                app:title="@string/help_version" />
+
             <android.support.constraint.Guideline
                 android:id="@+id/guideline_start"
                 android:layout_width="wrap_content"

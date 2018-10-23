@@ -2,6 +2,7 @@ package com.redhelmet.alert2me.ui.help;
 
 import android.arch.lifecycle.ViewModel;
 
+import com.redhelmet.alert2me.di.ChildFragmentScoped;
 import com.redhelmet.alert2me.di.FragmentScoped;
 import com.redhelmet.alert2me.di.ViewModelKey;
 
@@ -12,6 +13,10 @@ import dagger.multibindings.IntoMap;
 
 @Module
 public abstract class HelpModule {
+
+    @FragmentScoped
+    @ContributesAndroidInjector
+    abstract ProfileFragment provideProfileFragment();
 
     @FragmentScoped
     @ContributesAndroidInjector

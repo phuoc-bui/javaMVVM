@@ -6,21 +6,23 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.databinding.FragmentHelpBinding;
+import com.redhelmet.alert2me.databinding.FragmentProfileBinding;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
-import com.redhelmet.alert2me.ui.base.NavigationFragment;
 
 import javax.inject.Inject;
 
-
-public class HelpFragment extends BaseFragment<HelpViewModel, FragmentHelpBinding> {
+public class ProfileFragment extends BaseFragment<HelpViewModel, FragmentProfileBinding> {
 
     @Inject
     ViewModelProvider.Factory factory;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_help;
+        return R.layout.fragment_profile;
+    }
+
+    public static ProfileFragment newInstance() {
+        return new ProfileFragment();
     }
 
     @Override

@@ -22,7 +22,7 @@
     <dimen name="default_padding_helpScreen">5dp</dimen>
     <dimen name="default_padding">12dp</dimen>
     <dimen name="swipeWidth">85dp</dimen>
-    <dimen name="bottom_tab_height">54dp</dimen>
+    <dimen name="bottom_tab_height">56dp</dimen>
 
     <dimen name="event_icon_width">40dp</dimen>
     <dimen name="event_distance_text_width">80dp</dimen>

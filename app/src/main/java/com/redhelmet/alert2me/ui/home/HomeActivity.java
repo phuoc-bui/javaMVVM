@@ -1,16 +1,13 @@
 package com.redhelmet.alert2me.ui.home;
 
 import android.arch.lifecycle.ViewModelProvider;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.adapters.AppViewPagerAdapter;
 import com.redhelmet.alert2me.databinding.ActivityHomeBinding;
-import com.redhelmet.alert2me.databinding.CustomHomeTabBinding;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
+import com.redhelmet.alert2me.ui.base.NavigationFragment;
 import com.redhelmet.alert2me.ui.event.EventFragment;
 import com.redhelmet.alert2me.ui.help.HelpFragment;
 import com.redhelmet.alert2me.ui.watchzone.WatchZoneFragment;
@@ -26,12 +23,16 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
     @Inject
     ViewModelProvider.Factory factory;
 
-    int positionTabSelected = 0;
     LatLng latLng;
 
     @Override
     protected int getLayoutId() {
         return R.layout.activity_home;
+    }
+
+    @Override
+    protected int getFragmentContainer() {
+        return R.id.fragment_container;
     }
 
     @Override
@@ -46,69 +47,52 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
             latLng = (LatLng) extras.get("marker");
         }
 
-        setupViewPager();
+        // trick to change default item selected, prevent invoking setOnNavigationItemReselectedListener
+        // when call setSelectedItemId(R.id.navigation_events);
+        binder.navigation.setSelectedItemId(R.id.navigation_help);
 
-        binder.tabs.setupWithViewPager(binder.viewpager);
-        setupTabIcons();
+        binder.navigation.setOnNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.navigation_events:
+                    changeFragment(new EventFragment());
+                    updateToolbarTitle(getString(R.string.lblEvent) + " " + getString(R.string.lblMap));
+                    hideToolbar(false);
 
-        binder.tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                //do stuff here
-                positionTabSelected = tab.getPosition();
-                switch (positionTabSelected) {
-                    case 0:
-                        updateToolbarTitle(getString(R.string.lblEvent) + " " + getString(R.string.lblMap));
-                        hideToolbar(false);
-                        //startTracking();
-                        break;
-                    case 1:
-                        updateToolbarTitle(getString(R.string.toolbar_WZ));
-                        hideToolbar(false);
-                        // stopTracking();
-                        break;
-                    case 2:
-                        updateToolbarTitle(getString(R.string.toolbar_help));
-                        hideToolbar(true);
-                        break;
-                }
-            }
+                    return true;
+                case R.id.navigation_watch_zone:
+                    changeFragment(new WatchZoneFragment());
+                    updateToolbarTitle(getString(R.string.toolbar_WZ));
+                    hideToolbar(false);
+                    return true;
+                case R.id.navigation_help:
+                    changeFragment(new HelpFragment());
+                    updateToolbarTitle(getString(R.string.toolbar_help));
+                    hideToolbar(true);
+                    return true;
 
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
+                default:
+                    return false;
             }
         });
+        binder.navigation.setOnNavigationItemReselectedListener(menuItem -> {
+        });
+
+        if (savedInstanceState == null) {
+            binder.navigation.setSelectedItemId(R.id.navigation_events);
+        } else {
+            currentFragment = (NavigationFragment) getSupportFragmentManager().findFragmentById(getFragmentContainer());
+        }
     }
 
-    private void setupViewPager() {
-        AppViewPagerAdapter adapter = new AppViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new EventFragment(), getString(R.string.tab_events));
-        adapter.addFrag(new WatchZoneFragment(), getString(R.string.tab_WZ));
-        adapter.addFrag(new HelpFragment(), getString(R.string.tab_help));
-        binder.viewpager.setAdapter(adapter);
-        binder.viewpager.setOffscreenPageLimit(3);
+    @Override
+    public void onBackPressed() {
+        if (currentFragment == null || !currentFragment.onBackPressed()) super.onBackPressed();
     }
 
-    private void setupTabIcons() {
-        CustomHomeTabBinding reportBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.custom_home_tab, binder.tabs, false);
-        reportBinding.setIcon(R.drawable.ic_report_problem);
-        reportBinding.setTitle(getString(R.string.tab_events));
-        binder.tabs.getTabAt(0).setCustomView(reportBinding.getRoot());
-
-        CustomHomeTabBinding watchBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.custom_home_tab, binder.tabs, false);
-        watchBinding.setIcon(R.drawable.ic_watch_zone);
-        watchBinding.setTitle(getString(R.string.tab_WZ));
-        binder.tabs.getTabAt(1).setCustomView(watchBinding.getRoot());
-
-        CustomHomeTabBinding helpBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.custom_home_tab, binder.tabs, false);
-        helpBinding.setIcon(R.drawable.ic_help_white);
-        helpBinding.setTitle(getString(R.string.tab_help));
-        binder.tabs.getTabAt(2).setCustomView(helpBinding.getRoot());
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if (currentFragment != null)
+            currentFragment.onUserInteraction();
     }
 }

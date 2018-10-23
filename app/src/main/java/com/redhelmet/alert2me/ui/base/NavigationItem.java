@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
-import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import java.lang.annotation.Retention;
@@ -55,9 +54,14 @@ public class NavigationItem {
 
     public static final int DISMISS_LOADING_DIALOG = 12;
 
+    public static final int START_ACTIVITY_AND_CLEAR_TASK = 13;
+
+    public static final int CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK = 14;
+
     @IntDef({START_ACTIVITY, START_ACTIVITY_AND_FINISH, FINISH, START_WEB_VIEW,
             SHOW_TOAST, FINISH_AND_RETURN, CHANGE_FRAGMENT, POP_FRAGMENT_BACK,
-            SHOW_DIALOG, DISMISS_DIALOG, SHOW_LOADING_DIALOG, DISMISS_LOADING_DIALOG})
+            SHOW_DIALOG, DISMISS_DIALOG, SHOW_LOADING_DIALOG, DISMISS_LOADING_DIALOG,
+            START_ACTIVITY_AND_CLEAR_TASK, CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK})
     @Retention(RetentionPolicy.SOURCE)
     public @interface NavigationType {
     }
@@ -74,10 +78,10 @@ public class NavigationItem {
     public void navigation(BaseActivity context) {
         switch (navigationType) {
             case START_ACTIVITY:
-                startActivity(context, data);
+                startActivity(context, false, data);
                 break;
             case START_ACTIVITY_AND_FINISH:
-                startActivity(context, data);
+                startActivity(context, false, data);
                 context.finish();
                 break;
             case FINISH:
@@ -117,8 +121,8 @@ public class NavigationItem {
             case CHANGE_FRAGMENT:
                 if (data == null || data.length == 0)
                     throw new Error(String.format(wrongDataError, "null/empty", context.getLocalClassName()));
-                if (data[0] instanceof Fragment) {
-                    context.changeFragment((Fragment) data[0]);
+                if (data[0] instanceof NavigationFragment) {
+                    context.changeFragment((NavigationFragment) data[0]);
                 } else {
                     throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
                 }
@@ -141,10 +145,22 @@ public class NavigationItem {
             case DISMISS_LOADING_DIALOG:
                 context.showLoadingDialog(false);
                 break;
+            case START_ACTIVITY_AND_CLEAR_TASK:
+                startActivity(context, true, data);
+                break;
+            case CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK:
+                if (data == null || data.length == 0)
+                    throw new Error(String.format(wrongDataError, "null/empty", context.getLocalClassName()));
+                if (data[0] instanceof NavigationFragment) {
+                    context.changeFragment((NavigationFragment) data[0], true);
+                } else {
+                    throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
+                }
+                break;
         }
     }
 
-    private void startActivity(Activity context, Object... data) {
+    private void startActivity(Activity context, boolean clearTask, Object... data) {
         if (data == null || data.length == 0)
             throw new Error(String.format(wrongDataError, "null/empty", context.getLocalClassName()));
         if (data[0] instanceof Class) {
@@ -152,6 +168,9 @@ public class NavigationItem {
             if (data.length >= 2 && data[1] instanceof Bundle) {
                 Bundle bundle = (Bundle) data[1];
                 intent.putExtra(BaseActivity.BUNDLE_EXTRA, bundle);
+            }
+            if (clearTask) {
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             }
             context.startActivity(intent);
         } else {

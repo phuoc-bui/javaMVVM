@@ -76,13 +76,7 @@ public class EventViewModel extends BaseViewModel {
                 if (events != null) {
                     if (events.isEmpty()) isEmpty.set(true);
                     else isEmpty.set(false);
-                    disposeBag.add(Observable.fromIterable(events)
-                            .map(event -> new EventItemViewModel(setDistanceForEvents(event), isStateWide))
-                            .toList()
-                            .subscribe(viewModels -> {
-                                adapter.itemsSource.clear();
-                                adapter.itemsSource.addAll(viewModels);
-                            }));
+                    updateEventList();
                 } else {
                     isEmpty.set(true);
                 }
@@ -151,7 +145,23 @@ public class EventViewModel extends BaseViewModel {
     }
 
     public void saveUserLocation(Location location) {
+        Location oldLocation = dataManager.getLastUserLocation();
         dataManager.saveUserLocation(location);
+        // update event list if user location is changed
+        if (oldLocation == null || oldLocation.getLatitude() != location.getLatitude() || oldLocation.getLongitude() != location.getLongitude())
+            updateEventList();
+    }
+
+    private void updateEventList() {
+        if (events.getValue() != null) {
+            disposeBag.add(Observable.fromIterable(events.getValue())
+                    .map(event -> new EventItemViewModel(setDistanceForEvents(event), isStateWide))
+                    .toList()
+                    .subscribe(viewModels -> {
+                        adapter.itemsSource.clear();
+                        adapter.itemsSource.addAll(viewModels);
+                    }));
+        }
     }
 
     private Event setDistanceForEvents(Event event) {

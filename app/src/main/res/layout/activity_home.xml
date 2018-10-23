@@ -27,23 +27,25 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
-            android:layout_width="match_parent"
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/tabs"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+            app:layout_constraintBottom_toTopOf="@id/navigation"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
-            style="@style/Widget.A2M.TabLayout.Bottom"
-            android:layout_width="match_parent"
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/navigation"
+            style="@style/Widget.A2M.BottomNav"
+            android:layout_width="0dp"
             android:layout_height="@dimen/bottom_tab_height"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:tabPaddingBottom="8dp"
-            app:tabPaddingTop="8dp"
-            app:tabGravity="fill"
-            app:tabMode="fixed" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_insetEdge="bottom"
+            app:menu="@menu/navigation" />
 
         <com.redhelmet.alert2me.ui.widget.FadingSnackbar
             android:id="@+id/snackbar"

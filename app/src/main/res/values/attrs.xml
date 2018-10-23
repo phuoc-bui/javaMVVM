@@ -22,5 +22,7 @@
         <attr name="title" format="string" />
         <attr name="description" format="string" />
         <attr name="showArrow" format="boolean" />
+        <attr name="isPasswordField" format="boolean" />
+        <attr name="hasEndDivider" format="boolean" />
     </declare-styleable>
 </resources>

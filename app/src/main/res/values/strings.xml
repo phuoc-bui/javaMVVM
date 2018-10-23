@@ -93,7 +93,7 @@
     <string name="help_about_info">Want to know about us? Follow the link below to know more about us and our Terms and Conditions/ Privacy.</string>
     <string name="help_terms_heading">Terms and Conditions / Privacy</string>
     <string name="help_about_heading">About Us</string>
-    <string name="help_logout_heading">Sign out</string>
+    <string name="help_logout_heading">Logout</string>
     
     <string name="pref_secondary_color">pref_secondary_color</string>
     <string name="observation_heading">Each observation you submit contributes to keeping your community informed.</string>

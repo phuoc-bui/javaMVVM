@@ -17,6 +17,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -80,7 +82,9 @@ import com.redhelmet.alert2me.ui.activity.AddStaticZone;
 import com.redhelmet.alert2me.ui.activity.AddStaticZoneNotification;
 import com.redhelmet.alert2me.ui.activity.EditWatchZone;
 import com.redhelmet.alert2me.ui.activity.ShareWatchZone;
+import com.redhelmet.alert2me.ui.base.BaseFragment;
 import com.redhelmet.alert2me.ui.home.HomeActivity;
+import com.redhelmet.alert2me.ui.base.NavigationFragment;
 import com.redhelmet.alert2me.ui.services.BackgroundDetectedActivitiesService;
 import com.redhelmet.alert2me.util.DeviceUtil;
 
@@ -101,7 +105,7 @@ import java.util.Map;
 
 import static com.redhelmet.alert2me.ui.activity.EditWatchZone.REQUEST_NOTIFICATION;
 
-public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class WatchZoneFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     private Context _context;
     private Intent intent;
@@ -150,16 +154,24 @@ public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.On
 
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return rootView = super.onCreateView(inflater, container, savedInstanceState);
+    }
 
-        rootView = inflater.inflate(R.layout.fragment_watchzone_list, container, false);
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         initializeControl();
         initializeVariables();
         initializeListener();
         initializeWzList();
-        return rootView;
+    }
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_watchzone_list;
     }
 
     @Override
@@ -1676,6 +1688,4 @@ public class WatchZoneFragment extends Fragment implements SwipeRefreshLayout.On
         Log.d("BackgroundDetected", "stopped.......................");
         _context.stopService(intent);
     }
-
-
 }

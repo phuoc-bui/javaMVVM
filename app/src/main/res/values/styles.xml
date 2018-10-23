@@ -37,6 +37,15 @@
         <item name="tabIndicatorHeight">0dp</item>
     </style>
 
+    <style name="Widget.A2M.BottomNav" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="itemIconTint">@color/bottom_nav_item</item>
+        <item name="itemTextColor">@color/bottom_nav_item</item>
+        <!--<item name="itemTextAppearanceActive">@style/TextAppearance.A2M.BottomNavigationView.Active</item>-->
+        <!--<item name="itemTextAppearanceInactive">@style/TextAppearance.A2M.BottomNavigationView</item>-->
+        <item name="labelVisibilityMode">selected</item>
+        <!--<item name="android:theme">@style/ThemeOverlay.MaterialComponents.Dark</item>-->
+    </style>
+
     <style name="Widget.A2M.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="hintTextAppearance">@style/TextAppearance.A2M.TextInputLayout.HintText</item>
         <item name="android:paddingBottom">8dp</item>
@@ -59,6 +68,15 @@
     <style name="TextAppearance.A2M.Toolbar" parent="TextAppearance.MaterialComponents.Subtitle2">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <style name="TextAppearance.A2M.BottomNavigationView" parent="@style/Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:textColor">@color/bottom_nav_item</item>
+    </style>
+
+    <style name="TextAppearance.A2M.BottomNavigationView.Active">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="TextAppearance.A2M.FadingSnackbarAction" parent="@style/TextAppearance.AppCompat.Button">

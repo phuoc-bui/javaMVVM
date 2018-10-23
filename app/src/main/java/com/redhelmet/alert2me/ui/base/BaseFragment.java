@@ -19,7 +19,7 @@ import com.redhelmet.alert2me.domain.ExceptionHandler;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.disposables.CompositeDisposable;
 
-public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDataBinding> extends DaggerFragment {
+public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDataBinding> extends DaggerFragment implements NavigationFragment {
 
     protected static final String TAG = BaseFragment.class.getSimpleName();
 
@@ -101,5 +101,15 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
     public void onDestroy() {
         disposeBag.dispose();
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
+    }
+
+    @Override
+    public void onUserInteraction() {
+
     }
 }
