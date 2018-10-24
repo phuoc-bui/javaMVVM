@@ -120,9 +120,8 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    public void requestPermissionsSafe(String[] permissions, int requestCode) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            requestPermissions(permissions, requestCode);
+    public void requestPermissionsSafe(String permission, int requestCode) {
+        PermissionUtils.requestPermission(this, requestCode, permission, false);
     }
 
     @Override

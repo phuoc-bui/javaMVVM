@@ -2,6 +2,7 @@ package com.redhelmet.alert2me.ui.home;
 
 import android.arch.lifecycle.ViewModelProvider;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.redhelmet.alert2me.R;
@@ -94,5 +95,10 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
         super.onUserInteraction();
         if (currentFragment != null)
             currentFragment.onUserInteraction();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 }

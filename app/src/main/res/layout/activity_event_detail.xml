@@ -48,10 +48,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_top_rounded_white"
-                android:padding="@dimen/margin_small"
+                android:padding="@dimen/margin_normal"
+                android:backgroundTint="@color/colorWhite"
                 app:layout_constraintEnd_toEndOf="@+id/end_guideline"
                 app:layout_constraintStart_toStartOf="@+id/start_guideline"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                tools:targetApi="lollipop">
 
                 <com.redhelmet.alert2me.ui.widget.EventIcon
                     android:id="@+id/img_event_icon"
@@ -67,7 +69,7 @@
                     style="@style/TextAppearance.A2M.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/margin_normal"
                     android:text="@{viewModel.event.type}"
                     app:layout_constraintStart_toEndOf="@+id/img_event_icon"
                     app:layout_constraintTop_toTopOf="parent"
@@ -78,7 +80,7 @@
                     style="@style/TextAppearance.A2M.Event.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/margin_normal"
                     android:text="@{viewModel.eventLocation}"
                     app:layout_constraintStart_toEndOf="@+id/img_event_icon"
                     app:layout_constraintTop_toBottomOf="@+id/event_type"

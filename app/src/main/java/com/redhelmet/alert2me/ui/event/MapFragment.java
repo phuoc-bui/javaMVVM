@@ -193,7 +193,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
         if (ActivityCompat.checkSelfPermission(getBaseActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Access to the location has been granted to the app.
             if (requestPermission)
-                getBaseActivity().requestPermissionsSafe(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constant.LOCATION_PERMISSION_REQUEST_CODE);
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constant.LOCATION_PERMISSION_REQUEST_CODE);
         } else if (mMapView != null) {
             updateLocationUI();
 
