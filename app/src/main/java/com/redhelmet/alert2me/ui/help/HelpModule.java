@@ -22,6 +22,14 @@ public abstract class HelpModule {
     @ContributesAndroidInjector
     abstract HelpFragment provideHelpFragment();
 
+    @FragmentScoped
+    @ContributesAndroidInjector
+    abstract EditProfileFieldFragment provideEditProfileFieldFragment();
+
+    @FragmentScoped
+    @ContributesAndroidInjector
+    abstract EditPasswordFragment provideEditPasswordFragment();
+
     @Binds
     @IntoMap
     @ViewModelKey(HelpViewModel.class)

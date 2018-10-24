@@ -1,6 +1,7 @@
 package com.redhelmet.alert2me.ui.base;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.pm.PackageManager;
@@ -16,6 +17,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.redhelmet.alert2me.BR;
 import com.redhelmet.alert2me.R;
@@ -103,6 +106,13 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
         }
     }
 
+    public void showHomeButton(boolean show) {
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(show);
+        }
+    }
+
     public void hideToolbar(boolean isHide) {
         if (getSupportActionBar() != null)
             if (isHide) getSupportActionBar().hide();
@@ -136,27 +146,25 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     }
 
     public void changeFragment(NavigationFragment fragment) {
-        changeFragment(fragment, false);
+        changeFragment(fragment, false, false);
     }
 
-    public void changeFragment(NavigationFragment fragment, boolean addToBackStack) {
+    public void changeFragment(NavigationFragment fragment, boolean addToBackStack, boolean clearBackStack) {
         if (fragment instanceof Fragment) {
+            hideKeyboard();
             currentFragment = fragment;
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+            if (addToBackStack)
+                transaction.setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right);
+
+            if (clearBackStack)
+                getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
             transaction.replace(getFragmentContainer(), (Fragment) fragment);
-            transaction.setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left, R.anim.slide_in_from_left, R.anim.slide_out_to_right);
             if (addToBackStack) transaction.addToBackStack(null);
             transaction.commit();
         }
-    }
-
-    public void popBack() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        if (fragmentManager.getBackStackEntryCount() > 1) {
-            fragmentManager.popBackStack();
-            currentFragment = (NavigationFragment) fragmentManager.getFragments().get(fragmentManager.getFragments().size() - 1);
-            invalidateOptionsMenu();
-        } else finish();
     }
 
     public void showDialog(DialogFragment dialog, String tag) {
@@ -176,5 +184,22 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
         } else {
             loadingDialog.dismiss();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        hideKeyboard();
+        super.onBackPressed();
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(this);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

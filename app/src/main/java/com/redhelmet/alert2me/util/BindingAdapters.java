@@ -5,12 +5,14 @@ import android.databinding.BindingAdapter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.ui.base.BaseRecyclerViewAdapter;
 import com.redhelmet.alert2me.ui.base.BindableAdapter;
@@ -93,5 +95,17 @@ public class BindingAdapters {
     public static void setEventforIcon(EventIcon eventIcon, Event event) {
         if (event == null) return;
         eventIcon.setEvent(event);
+    }
+
+    @BindingAdapter("android:text")
+    public static void setTextWithId(TextView textView, int stringId) {
+        textView.setText(stringId);
+    }
+
+    @BindingAdapter("android:hint")
+    public static void setHintWithId(TextInputLayout inputLayout, Integer stringId) {
+        if (stringId == null) return;
+        String str = inputLayout.getContext().getString(stringId);
+        inputLayout.setHint(str);
     }
 }

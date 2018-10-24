@@ -82,6 +82,7 @@
     <string name="help_legal_title">Legal</string>
     <string name="help_legal_desc">Term and Conditions, GDPR compliance and more</string>
     <string name="help_version">Version</string>
+    <string name="help_support_code_title">Support code</string>
     <string name="help_online_help_heading">Online Help</string>
     <string name="help_tagline">We would be happy to help you.</string>
     <string name="help_online_help_info">Need help using the app? Follow the link below to our online help.</string>
@@ -94,6 +95,9 @@
     <string name="help_terms_heading">Terms and Conditions / Privacy</string>
     <string name="help_about_heading">About Us</string>
     <string name="help_logout_heading">Logout</string>
+    <string name="help_update_button">Update</string>
+    <string name="help_update_old_password">Old Password</string>
+    <string name="help_update_new_password">New Password</string>
     
     <string name="pref_secondary_color">pref_secondary_color</string>
     <string name="observation_heading">Each observation you submit contributes to keeping your community informed.</string>
@@ -236,4 +240,5 @@
 
     <!--general-->
     <string name="loading">Loading…</string>
+    <string name="back">Back</string>
 </resources>

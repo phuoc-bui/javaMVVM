@@ -48,4 +48,5 @@ public interface DataManager {
     Observable<RegisterAccountResponse> registerAccount(User user);
     Observable<User> login(String email, String password);
     Observable<ForgotPasswordResponse> forgotPassword(String email);
+    Observable<User> updateUserProfile(User user);
 }

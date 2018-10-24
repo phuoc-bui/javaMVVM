@@ -28,4 +28,11 @@ public class HelpFragment extends BaseFragment<HelpViewModel, FragmentHelpBindin
         super.onViewCreated(view, savedInstanceState);
         obtainViewModel(factory, HelpViewModel.class);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // prevent show toolbar when back from profile fragment
+        getBaseActivity().hideToolbar(true);
+    }
 }

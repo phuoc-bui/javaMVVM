@@ -275,6 +275,12 @@ public class AppDataManager implements DataManager {
         return api.forgotPassword(email);
     }
 
+    @Override
+    public Observable<User> updateUserProfile(User user) {
+        return api.updateUserProfile(user)
+                .doOnNext(u -> pref.saveUserInfo(u));
+    }
+
     private List<Category> copyStatusToCategoryType(List<Category> categories) {
         if (categories == null) return null;
         for (Category category : categories) {

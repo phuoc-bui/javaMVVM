@@ -69,6 +69,12 @@ public class AppApiHelper implements ApiHelper {
         return filterSuccessResponse(apiService.forgotPassword(request));
     }
 
+    @Override
+    public Observable<User> updateUserProfile(User user) {
+        // TODO: call API to get response
+        return Observable.just(user);
+    }
+
     private <T extends Response> Observable<T> filterSuccessResponse(Observable<T> response) {
         return response.materialize().map(notification -> {
             if (notification.isOnNext() && !notification.getValue().success) {

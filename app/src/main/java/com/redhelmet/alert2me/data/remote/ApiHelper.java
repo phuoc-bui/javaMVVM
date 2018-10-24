@@ -28,4 +28,6 @@ public interface ApiHelper {
     Observable<User> login(String email, String password);
 
     Observable<ForgotPasswordResponse> forgotPassword(String email);
+
+    Observable<User> updateUserProfile(User user);
 }

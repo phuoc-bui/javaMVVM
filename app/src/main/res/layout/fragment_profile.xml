@@ -16,7 +16,22 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_large">
+
+            <ImageView
+                android:id="@+id/iv_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_help" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher_big"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline_start"
@@ -39,6 +54,8 @@
                 android:layout_marginTop="@dimen/margin_large"
                 app:description="@{viewModel.userModel.userEmail}"
                 app:hasEndDivider="true"
+                app:showArrow="false"
+                app:layout_constraintTop_toBottomOf="@+id/iv_background"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
                 app:title="@string/login_email_hint" />
@@ -49,6 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
                 app:description="@{viewModel.userModel.firstName}"
+                android:onClick="@{() -> viewModel.onFirstNameClick()}"
                 app:hasEndDivider="true"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
@@ -61,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
                 app:description="@{viewModel.userModel.surname}"
+                android:onClick="@{() -> viewModel.onSurnameClick()}"
                 app:hasEndDivider="true"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
@@ -73,6 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
                 app:description="@{viewModel.userModel.postcode}"
+                android:onClick="@{() -> viewModel.onPostcodeClick()}"
                 app:hasEndDivider="true"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
@@ -85,6 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
                 app:description="@{viewModel.userModel.password}"
+                android:onClick="@{() -> viewModel.onPasswordClick()}"
                 app:hasEndDivider="true"
                 app:isPasswordField="true"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -101,6 +122,7 @@
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
                 app:layout_constraintTop_toBottomOf="@+id/item_profile_password"
                 app:showArrow="false"
+                android:onClick="@{v -> viewModel.onLogoutClick()}"
                 app:title="@string/help_logout_heading" />
 
         </android.support.constraint.ConstraintLayout>

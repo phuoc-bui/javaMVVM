@@ -3,6 +3,7 @@ package com.redhelmet.alert2me.ui.home;
 import android.arch.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.redhelmet.alert2me.R;
@@ -55,18 +56,18 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
         binder.navigation.setOnNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
                 case R.id.navigation_events:
-                    changeFragment(new EventFragment());
+                    changeFragment(new EventFragment(), false, true);
                     updateToolbarTitle(getString(R.string.lblEvent) + " " + getString(R.string.lblMap));
                     hideToolbar(false);
 
                     return true;
                 case R.id.navigation_watch_zone:
-                    changeFragment(new WatchZoneFragment());
+                    changeFragment(new WatchZoneFragment(), false, true);
                     updateToolbarTitle(getString(R.string.toolbar_WZ));
                     hideToolbar(false);
                     return true;
                 case R.id.navigation_help:
-                    changeFragment(new HelpFragment());
+                    changeFragment(new HelpFragment(), false, true);
                     updateToolbarTitle(getString(R.string.toolbar_help));
                     hideToolbar(true);
                     return true;
@@ -95,6 +96,18 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
         super.onUserInteraction();
         if (currentFragment != null)
             currentFragment.onUserInteraction();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

@@ -16,7 +16,7 @@ public class HelpItemView extends ConstraintLayout {
     private String title, description;
     private boolean showArrow, hasDivider, isPasswordField;
     private TextView txtTitle, txtDescription;
-    private View arrow;
+    private View arrow, divider;
 
     public HelpItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -32,14 +32,13 @@ public class HelpItemView extends ConstraintLayout {
         txtTitle = view.findViewById(R.id.txt_title);
         txtDescription = view.findViewById(R.id.txt_description);
         arrow = view.findViewById(R.id.iv_right_arrow);
-        View divider = view.findViewById(R.id.divider);
+        divider = view.findViewById(R.id.divider);
 
         txtTitle.setText(title);
         if (isPasswordField) txtDescription.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        if (description != null && !description.isEmpty()) txtDescription.setText(description);
-        else txtDescription.setVisibility(GONE);
-        arrow.setVisibility(showArrow ? VISIBLE : GONE);
-        divider.setVisibility(hasDivider ? VISIBLE : GONE);
+        setDescription(description);
+        setShowArrow(showArrow);
+        setHasDivider(hasDivider);
     }
 
     public String getTitle() {
@@ -57,7 +56,11 @@ public class HelpItemView extends ConstraintLayout {
 
     public void setDescription(String description) {
         this.description = description;
-        txtDescription.setText(description);
+        if (description != null && !description.isEmpty()){
+            txtDescription.setVisibility(VISIBLE);
+            txtDescription.setText(description);
+        }
+        else txtDescription.setVisibility(GONE);
     }
 
     public boolean isShowArrow() {
@@ -67,5 +70,22 @@ public class HelpItemView extends ConstraintLayout {
     public void setShowArrow(boolean showArrow) {
         this.showArrow = showArrow;
         arrow.setVisibility(showArrow ? VISIBLE : GONE);
+    }
+
+    public boolean isHasDivider() {
+        return hasDivider;
+    }
+
+    public void setHasDivider(boolean hasDivider) {
+        this.hasDivider = hasDivider;
+        divider.setVisibility(hasDivider ? VISIBLE : GONE);
+    }
+
+    public boolean isPasswordField() {
+        return isPasswordField;
+    }
+
+    public void setPasswordField(boolean passwordField) {
+        isPasswordField = passwordField;
     }
 }

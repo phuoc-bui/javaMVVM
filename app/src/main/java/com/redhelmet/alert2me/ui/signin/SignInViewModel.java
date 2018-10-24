@@ -11,12 +11,7 @@ public class SignInViewModel extends BaseViewModel {
     @Inject
     public SignInViewModel(PreferenceStorage preferenceStorage) {
         super(preferenceStorage);
-        NavigationItem item;
-        if (preferenceStorage.haveAccount()) {
-            item = new NavigationItem(NavigationItem.CHANGE_FRAGMENT, LoginFragment.newInstance());
-        } else {
-            item = new NavigationItem(NavigationItem.CHANGE_FRAGMENT, RegisterFragment.newInstance());
-        }
+        NavigationItem item = new NavigationItem(NavigationItem.CHANGE_FRAGMENT, RegisterFragment.newInstance());
         navigateTo(item);
     }
 }

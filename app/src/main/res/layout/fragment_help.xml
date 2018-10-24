@@ -88,8 +88,8 @@
                 android:layout_marginTop="@dimen/margin_large"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@+id/item_help_legal"
-                app:title="@string/help_version" />
+                app:layout_constraintTop_toBottomOf="@+id/item_help_version"
+                app:title="@string/help_support_code_title" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline_start"

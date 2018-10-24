@@ -58,10 +58,13 @@ public class NavigationItem {
 
     public static final int CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK = 14;
 
+    public static final int CHANGE_FRAGMENT_AND_CLEAR_BACK_STACK = 15;
+
     @IntDef({START_ACTIVITY, START_ACTIVITY_AND_FINISH, FINISH, START_WEB_VIEW,
             SHOW_TOAST, FINISH_AND_RETURN, CHANGE_FRAGMENT, POP_FRAGMENT_BACK,
             SHOW_DIALOG, DISMISS_DIALOG, SHOW_LOADING_DIALOG, DISMISS_LOADING_DIALOG,
-            START_ACTIVITY_AND_CLEAR_TASK, CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK})
+            START_ACTIVITY_AND_CLEAR_TASK, CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK,
+            CHANGE_FRAGMENT_AND_CLEAR_BACK_STACK })
     @Retention(RetentionPolicy.SOURCE)
     public @interface NavigationType {
     }
@@ -119,17 +122,11 @@ public class NavigationItem {
                 }
                 break;
             case CHANGE_FRAGMENT:
-                if (data == null || data.length == 0)
-                    throw new Error(String.format(wrongDataError, "null/empty", context.getLocalClassName()));
-                if (data[0] instanceof NavigationFragment) {
-                    context.changeFragment((NavigationFragment) data[0]);
-                } else {
-                    throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
-                }
+                changeFragment(context, false, false, data);
                 break;
 
             case POP_FRAGMENT_BACK:
-                context.popBack();
+                context.onBackPressed();
                 break;
 
             case SHOW_DIALOG:
@@ -149,13 +146,10 @@ public class NavigationItem {
                 startActivity(context, true, data);
                 break;
             case CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK:
-                if (data == null || data.length == 0)
-                    throw new Error(String.format(wrongDataError, "null/empty", context.getLocalClassName()));
-                if (data[0] instanceof NavigationFragment) {
-                    context.changeFragment((NavigationFragment) data[0], true);
-                } else {
-                    throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
-                }
+                changeFragment(context, false, true, data);
+                break;
+            case CHANGE_FRAGMENT_AND_CLEAR_BACK_STACK:
+                changeFragment(context, true, false, data);
                 break;
         }
     }
@@ -173,6 +167,16 @@ public class NavigationItem {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             }
             context.startActivity(intent);
+        } else {
+            throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
+        }
+    }
+
+    private void changeFragment(BaseActivity context, boolean clearTask, boolean addToTask, Object... data) {
+        if (data == null || data.length == 0)
+            throw new Error(String.format(wrongDataError, "null/empty", context.getLocalClassName()));
+        if (data[0] instanceof NavigationFragment) {
+            context.changeFragment((NavigationFragment) data[0], addToTask, clearTask);
         } else {
             throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
         }
