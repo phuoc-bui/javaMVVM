@@ -5,6 +5,7 @@ import android.util.Log;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
+import com.redhelmet.alert2me.ui.activity.EditWatchZone;
 
 import java.util.List;
 
@@ -89,5 +90,16 @@ public class RoomDatabaseStorage implements DatabaseStorage {
     @Override
     public Observable<List<EventGroup>> getEditedEventGroups() {
         return database.eventGroupDao().getFilterOnEventGroups().toObservable();
+    }
+
+    @Override
+    public void saveWatchZones(List<EditWatchZone> watchZones) {
+        database.watchZoneDao().nukeTable();
+        database.watchZoneDao().saveWatchZones(watchZones);
+    }
+
+    @Override
+    public Observable<List<EditWatchZone>> getWatchZones() {
+        return database.watchZoneDao().getWatchZones().toObservable();
     }
 }

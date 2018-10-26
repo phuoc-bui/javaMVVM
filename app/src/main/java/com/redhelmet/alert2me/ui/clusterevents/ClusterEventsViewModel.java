@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.ui.event;
+package com.redhelmet.alert2me.ui.clusterevents;
 
 import android.databinding.ObservableField;
 

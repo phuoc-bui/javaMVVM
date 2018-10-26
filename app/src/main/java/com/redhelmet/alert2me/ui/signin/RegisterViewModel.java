@@ -33,7 +33,7 @@ public class RegisterViewModel extends BaseViewModel {
                 .subscribe(response -> {
                     showLoadingDialog(false);
                     navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, R.string.register_successful_message));
-                    navigateTo(new NavigationItem(NavigationItem.CHANGE_FRAGMENT, LoginFragment.newInstance()));
+                    navigateTo(new NavigationItem(NavigationItem.CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK, LoginFragment.newInstance()));
                 }, error -> {
                     showLoadingDialog(false);
                     handleError(error);
@@ -41,7 +41,7 @@ public class RegisterViewModel extends BaseViewModel {
     }
 
     public void onSignInClick() {
-        navigateTo(new NavigationItem(NavigationItem.CHANGE_FRAGMENT, LoginFragment.newInstance()));
+        navigateTo(new NavigationItem(NavigationItem.CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK, LoginFragment.newInstance()));
     }
 
     public static class UserModel {

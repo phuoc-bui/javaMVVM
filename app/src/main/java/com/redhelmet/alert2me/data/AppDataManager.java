@@ -9,6 +9,7 @@ import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.CategoryStatus;
 import com.redhelmet.alert2me.data.model.CategoryType;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
 import com.redhelmet.alert2me.data.model.User;
@@ -294,5 +295,15 @@ public class AppDataManager implements DataManager {
             }
         }
         return categories;
+    }
+
+    @Override
+    public Observable<List<EditWatchZones>> getWatchZones() {
+        return null;
+    }
+
+    @Override
+    public void saveWatchZones(List<EditWatchZones> watchZones) {
+
     }
 }

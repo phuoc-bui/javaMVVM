@@ -5,6 +5,7 @@ import android.location.Location;
 import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
 import com.redhelmet.alert2me.data.model.Hint;
@@ -49,4 +50,6 @@ public interface DataManager {
     Observable<User> login(String email, String password);
     Observable<ForgotPasswordResponse> forgotPassword(String email);
     Observable<User> updateUserProfile(User user);
+    Observable<List<EditWatchZones>> getWatchZones();
+    void saveWatchZones(List<EditWatchZones> watchZones);
 }

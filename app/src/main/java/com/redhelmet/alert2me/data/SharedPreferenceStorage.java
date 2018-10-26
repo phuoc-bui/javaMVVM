@@ -29,6 +29,7 @@ public class SharedPreferenceStorage implements PreferenceStorage {
     private final String LOGGED_IN_KEY = "LOGGED_IN_KEY";
     private final String TOKEN_KEY = "TOKEN_KEY";
     private final String USER_KEY = "USER_KEY";
+    private final String ENABLE_PROXIMITY_KEY = "ENABLE_PROXIMITY_KEY";
     private Context context;
     private Gson gson;
 
@@ -196,5 +197,15 @@ public class SharedPreferenceStorage implements PreferenceStorage {
     public User getCurrentUser() {
         String json = (String) PreferenceUtils.getFromPrefs(context, USER_KEY, "");
         return gson.fromJson(json, User.class);
+    }
+
+    @Override
+    public boolean isProximityEnabled() {
+        return (boolean) PreferenceUtils.getFromPrefs(context, ENABLE_PROXIMITY_KEY, false);
+    }
+
+    @Override
+    public void setProximityEnabled(boolean enabled) {
+        PreferenceUtils.saveToPrefs(context, ENABLE_PROXIMITY_KEY, enabled);
     }
 }

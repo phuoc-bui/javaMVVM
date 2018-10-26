@@ -35,4 +35,6 @@ public interface PreferenceStorage {
     String getToken();
     void saveUserInfo(User user);
     User getCurrentUser();
+    boolean isProximityEnabled();
+    void setProximityEnabled(boolean enabled);
 }

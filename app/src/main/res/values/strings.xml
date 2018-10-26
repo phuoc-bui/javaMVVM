@@ -33,6 +33,7 @@
     <string name="next">Next</string>
     <string name="watch_zone_name">Watch Zone name</string>
     <string name="notification_sound">Watch Zone notification sound</string>
+    <string name="notification_option">Notification Options</string>
     <string name="watchzone_location_inst_circle">Touch-hold map to place your Watch Zone</string>
     <string name="watchzone_location_inst_polygon">Touch-hold map to draw at least three points.</string>
     <string name="done">Done</string>
@@ -151,6 +152,7 @@
 
 
     <!--WZ-->
+    <string name="wz_title">Watch Zone</string>
     <string name="lbl_mobileWZHeading">MOBILE WATCH ZONES</string>
     <string name="lbl_mobileWZSubHeading">Receive notification for area around you while your on the move.</string>
     <string name="lbl_staticWZTitleHeader">Create a Watch Zone by selecting the Plus icon at the bottom of the screen.</string>
@@ -158,6 +160,7 @@
     <string name="lbl_staticWZSubHeading">Receive notification for your areas of interest.</string>
     <string name="lbl_static">Static</string>
     <string name="lbl_mobile">Mobile</string>
+    <string name="lbl_mobileWZTitle">Mobile Watch Zone</string>
     <string name="msg_savedMobileWZ">Any changes made to your Mobile Watch Zone have been saved.</string>
     <string name="msg_failedToSavedMobileWZ">Unable to saved your Mobile Watch Zone setting.</string>
     <string name="msg_makingChangeTtoMobileWZ">Making changes mobile watch zone...</string>

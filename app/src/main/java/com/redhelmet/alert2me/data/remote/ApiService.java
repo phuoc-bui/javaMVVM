@@ -41,4 +41,7 @@ public interface ApiService {
 
     @POST("account/forgot")
     Observable<ForgotPasswordResponse> forgotPassword(@Body HashMap<String, String> email);
+
+    @PUT("/account/user/{userId}")
+    Observable<Object> updateProfile(@Path("userId") String userId);
 }

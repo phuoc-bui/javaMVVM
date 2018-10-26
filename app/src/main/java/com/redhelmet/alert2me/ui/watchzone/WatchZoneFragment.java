@@ -3,6 +3,7 @@ package com.redhelmet.alert2me.ui.watchzone;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,6 +25,7 @@ import android.support.design.widget.Snackbar;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -64,6 +66,7 @@ import com.kevalpatel.ringtonepicker.RingtonePickerDialog;
 import com.kevalpatel.ringtonepicker.RingtonePickerListener;
 import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.adapters.AppViewPagerAdapter;
 import com.redhelmet.alert2me.adapters.WzListAdapter;
 import com.redhelmet.alert2me.core.Constants;
 import com.redhelmet.alert2me.core.RequestHandler;
@@ -76,6 +79,7 @@ import com.redhelmet.alert2me.data.model.CategoryTypeFilter;
 import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.EventGroup;
 import com.redhelmet.alert2me.data.model.WatchZoneGeom;
+import com.redhelmet.alert2me.databinding.FragmentWatchzoneListBinding;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
 import com.redhelmet.alert2me.ui.activity.AddStaticZone;
@@ -83,6 +87,8 @@ import com.redhelmet.alert2me.ui.activity.AddStaticZoneNotification;
 import com.redhelmet.alert2me.ui.activity.EditWatchZone;
 import com.redhelmet.alert2me.ui.activity.ShareWatchZone;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
+import com.redhelmet.alert2me.ui.event.EventListFragment;
+import com.redhelmet.alert2me.ui.event.MapFragment;
 import com.redhelmet.alert2me.ui.home.HomeActivity;
 import com.redhelmet.alert2me.ui.base.NavigationFragment;
 import com.redhelmet.alert2me.ui.services.BackgroundDetectedActivitiesService;
@@ -103,9 +109,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import static com.redhelmet.alert2me.ui.activity.EditWatchZone.REQUEST_NOTIFICATION;
 
-public class WatchZoneFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
+public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, FragmentWatchzoneListBinding> implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
     private Context _context;
     private Intent intent;
@@ -150,23 +158,14 @@ public class WatchZoneFragment extends BaseFragment implements SwipeRefreshLayou
     public ArrayList<CategoryStatus> statuses_data = new ArrayList<CategoryStatus>();
     public ArrayList<EventGroup> default_data = new ArrayList<EventGroup>();
 
-    public WatchZoneFragment() {
 
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return rootView = super.onCreateView(inflater, container, savedInstanceState);
-    }
+    @Inject
+    ViewModelProvider.Factory factory;
 
     @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initializeControl();
-        initializeVariables();
-        initializeListener();
-        initializeWzList();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -175,45 +174,58 @@ public class WatchZoneFragment extends BaseFragment implements SwipeRefreshLayou
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        obtainViewModel(factory, WatchZoneViewModel.class);
 
-        apiURL = BuildConfig.API_ENDPOINT + "apiInfo/" + PreferenceUtils.getFromPrefs(_context, getString(R.string.pref_user_id), "") + "/" + "watchzones/proximity";
+        setupViewPager();
+        getBaseActivity().updateToolbarTitle(getString(R.string.wz_title));
 
+        viewModel.proximityEnable.observe(this, enable -> binder.viewpager.setCurrentItem(enable ? 1 : 0));
 
-//
-//        mApiClient = new GoogleApiClient.Builder(_context)
-//                .addApi(ActivityRecognition.API)
-//                .build();
-//
-//        mApiClient.connect();
+//        initializeControl();
+        initializeVariables();
+        initializeListener();
+        initializeWzList();
+    }
+
+    private void setupViewPager() {
+        AppViewPagerAdapter adapter = new AppViewPagerAdapter(getChildFragmentManager());
+        adapter.addFrag(new StaticWatchZoneFragment(), getString(R.string.lbl_staticWZHeading));
+        adapter.addFrag(new MobileWatchZoneFragment(), getString(R.string.lbl_mobileWZHeading));
+        binder.viewpager.setAdapter(adapter);
+        binder.viewpager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                updateOptionsMenu();
+                if (position == 0) binder.floatingActionButton.show();
+                else binder.floatingActionButton.hide();
+            }
+        });
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this._context = context;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
+        inflater.inflate(R.menu.watchzone_main, menu);
+        MenuItem cancelMenuItem = menu.getItem(0);
 
+        VectorDrawableCompat vectorDrawableCompat = VectorDrawableCompat.create(getResources(), R.drawable.icon_queue, null);
+        cancelMenuItem.setIcon(vectorDrawableCompat);
+
+        super.onCreateOptionsMenu(menu, inflater);
+        this.mOptionsMenu = menu;
     }
 
     @Override
-    public void setUserVisibleHint(boolean visible) {
-        super.setUserVisibleHint(visible);
-        if (visible && isResumed()) {
-
-            onResume();
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            this._context = getActivity();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.share:
+                intent = new Intent(getBaseActivity(), ShareWatchZone.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -271,41 +283,7 @@ public class WatchZoneFragment extends BaseFragment implements SwipeRefreshLayou
         setMobileWZData();
     }
 
-    public void getMobileWZData() {
 
-        if (Utility.isProximityEnabled(_context)) {
-            mobileWzSwitch.setChecked(true);
-
-        } else {
-            mobileWzSwitch.setChecked(false);
-        }
-
-        arryMobileWZ = new ArrayList<EditWatchZones>();
-
-        if (PreferenceUtils.hasKey(_context, Constants.KEY_VALUE_PROXIMITY_DATA)) {
-
-            Gson gson = new Gson();
-
-            String mobileWZValues = (String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_VALUE_PROXIMITY_DATA, "");
-
-            EditWatchZones[] arryMobileWZmodel = gson.fromJson(mobileWZValues, EditWatchZones[].class);
-
-            List<EditWatchZones> items = Arrays.asList(arryMobileWZmodel);
-            arryMobileWZ = new ArrayList<EditWatchZones>(items);
-
-        }
-
-
-        Log.d("sdfsd", arryMobileWZ.toString());
-
-        if (arryMobileWZ != null) {
-
-            if (arryMobileWZ.size() > 0) {
-                dictMobileWZ = arryMobileWZ.get(0);
-            }
-        }
-
-    }
 
     public void setMobileWZData() {
         Ringtone ringtone;
@@ -424,32 +402,32 @@ public class WatchZoneFragment extends BaseFragment implements SwipeRefreshLayou
 
     }
 
-    public void initializeControl() {
-        defaultLayout = (LinearLayout) rootView.findViewById(R.id.defaultLayout);
-        watchzoneLayout = (LinearLayout) rootView.findViewById(R.id.watchzoneLayout);
-        addWzPopup = (TextView) rootView.findViewById(R.id.addWzPopup);
-        heading = (TextView) rootView.findViewById(R.id.textHeading);
-        subHeading = (TextView) rootView.findViewById(R.id.textSubHeading);
-        notificationSound = (TextView) rootView.findViewById(R.id.mobile_wz_sound_text);
-        radiusValue = (TextView) rootView.findViewById(R.id.mobileRadius);
-        addWatchZoneBtn = (FloatingActionButton) rootView.findViewById(R.id.floatingActionButton);
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
-        _watchzoneList = (RecyclerView) rootView.findViewById(R.id.wz_list);
-        staticBtn = (Button) rootView.findViewById(R.id.staticBtn);
-        mobileBtn = (Button) rootView.findViewById(R.id.mobileBtn);
-        staticLayout = (RelativeLayout) rootView.findViewById(R.id.staticLayout);
-        mobileLayout = (RelativeLayout) rootView.findViewById(R.id.mobileLayout);
-        viewSwitcher = (ViewSwitcher) rootView.findViewById(R.id.viewSwitcherWz);
-        scrollMobileView = (ScrollView) rootView.findViewById(R.id.scrollMobileView);
-        mobileWzSwitch = (SwitchCompat) rootView.findViewById(R.id.mobileWzSwitch);
-        mobileRadiusSeek = (DiscreteSeekBar) rootView.findViewById(R.id.mobile_radius_seek);
-        mobile_wz_sound_layout = (LinearLayout) rootView.findViewById(R.id.mobile_wz_sound_layout);
-        mobile_wz_notification_layout = (LinearLayout) rootView.findViewById(R.id.mobile_wz_notification_layout);
-        defaultView();
-
-        hideShowWzPopup();
-
-    }
+//    public void initializeControl() {
+//        defaultLayout = (LinearLayout) rootView.findViewById(R.id.defaultLayout);
+//        watchzoneLayout = (LinearLayout) rootView.findViewById(R.id.watchzoneLayout);
+//        addWzPopup = (TextView) rootView.findViewById(R.id.addWzPopup);
+//        heading = (TextView) rootView.findViewById(R.id.textHeading);
+//        subHeading = (TextView) rootView.findViewById(R.id.textSubHeading);
+//        notificationSound = (TextView) rootView.findViewById(R.id.mobile_wz_sound_text);
+//        radiusValue = (TextView) rootView.findViewById(R.id.mobileRadius);
+//        addWatchZoneBtn = (FloatingActionButton) rootView.findViewById(R.id.floatingActionButton);
+//        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+//        _watchzoneList = (RecyclerView) rootView.findViewById(R.id.wz_list);
+//        staticBtn = (Button) rootView.findViewById(R.id.staticBtn);
+//        mobileBtn = (Button) rootView.findViewById(R.id.mobileBtn);
+//        staticLayout = (RelativeLayout) rootView.findViewById(R.id.staticLayout);
+//        mobileLayout = (RelativeLayout) rootView.findViewById(R.id.mobileLayout);
+//        viewSwitcher = (ViewSwitcher) rootView.findViewById(R.id.viewSwitcherWz);
+//        scrollMobileView = (ScrollView) rootView.findViewById(R.id.scrollMobileView);
+//        mobileWzSwitch = (SwitchCompat) rootView.findViewById(R.id.mobileWzSwitch);
+//        mobileRadiusSeek = (DiscreteSeekBar) rootView.findViewById(R.id.mobile_radius_seek);
+//        mobile_wz_sound_layout = (LinearLayout) rootView.findViewById(R.id.mobile_wz_sound_layout);
+//        mobile_wz_notification_layout = (LinearLayout) rootView.findViewById(R.id.mobile_wz_notification_layout);
+//        defaultView();
+//
+//        hideShowWzPopup();
+//
+//    }
 
     public void initializeListener() {
 
@@ -526,18 +504,7 @@ public class WatchZoneFragment extends BaseFragment implements SwipeRefreshLayou
         getWatchZones();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        inflater.inflate(R.menu.watchzone_main, menu);
-        MenuItem cancelMenuItem = menu.getItem(0);
-
-        VectorDrawableCompat vectorDrawableCompat = VectorDrawableCompat.create(getResources(), R.drawable.icon_queue, null);
-        cancelMenuItem.setIcon(vectorDrawableCompat);
-
-        super.onCreateOptionsMenu(menu, inflater);
-        this.mOptionsMenu = menu;
-    }
 
 
     @Override
@@ -561,25 +528,33 @@ public class WatchZoneFragment extends BaseFragment implements SwipeRefreshLayou
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        boolean currentState = false;
+    public void getMobileWZData() {
 
-        switch (item.getItemId()) {
-            case R.id.menu_swipeable:
+        arryMobileWZ = new ArrayList<EditWatchZones>();
 
-                return true;
-            case R.id.menu_clickable:
+        if (PreferenceUtils.hasKey(_context, Constants.KEY_VALUE_PROXIMITY_DATA)) {
 
-                return true;
-            case R.id.share:
+            Gson gson = new Gson();
 
-                intent = new Intent(_context, ShareWatchZone.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            String mobileWZValues = (String) PreferenceUtils.getFromPrefs(_context, Constants.KEY_VALUE_PROXIMITY_DATA, "");
+
+            EditWatchZones[] arryMobileWZmodel = gson.fromJson(mobileWZValues, EditWatchZones[].class);
+
+            List<EditWatchZones> items = Arrays.asList(arryMobileWZmodel);
+            arryMobileWZ = new ArrayList<EditWatchZones>(items);
+
         }
+
+
+        Log.d("sdfsd", arryMobileWZ.toString());
+
+        if (arryMobileWZ != null) {
+
+            if (arryMobileWZ.size() > 0) {
+                dictMobileWZ = arryMobileWZ.get(0);
+            }
+        }
+
     }
 
     public void EditMode(Boolean wzData, int position) {
@@ -1162,47 +1137,47 @@ public class WatchZoneFragment extends BaseFragment implements SwipeRefreshLayou
                 startActivity(intent);
                 break;
 
-            case R.id.staticBtn:
-
-                defaultView();
-                isBackButtonClicked = false;
-                isMobileWZValueChanged = false;
-                updateMobileWZDataOrNot();
-                Log.d("viewDAta", "Staticview");
-                updateOptionsMenu();
-                break;
-
-            case R.id.mobileBtn:
-                mobileView();
-                isBackButtonClicked = false;
-                isMobileWZValueChanged = false;
-                updateMobileWZDataOrNot();
-                updateOptionsMenu();
-                Log.d("viewDAta", "mobileView");
-                break;
-            case R.id.mobileWzSwitch:
-//                setMobileWzStatus();
-                break;
-            case R.id.mobile_wz_sound_layout:
-                ringtonePickerBuilder.setPlaySampleWhileSelection(checkVibrationIsOn(_context));
-
-                ringtonePickerBuilder.show();
-                break;
-            case R.id.mobile_wz_notification_layout:
-                intent = new Intent(_context, AddStaticZoneNotification.class);
-                intent.putExtra("position", 0);
-                intent.putExtra("edit", true);
-                intent.putExtra("mobile", true);
-                intent.putExtra("mobileRadius", sliderValue);
-                intent.putExtra("mobileSound", _ringtoneURI.toString());
-                if (dictMobileWZ == null) {
-                    return;
-                }
-                Bundle b = new Bundle();
-                b.putSerializable("mobileWZ", (Serializable) dictMobileWZ);
-                intent.putExtras(b); //pass bundle to your intent
-                startActivityForResult(intent, REQUEST_NOTIFICATION);
-                break;
+//            case R.id.staticBtn:
+//
+//                defaultView();
+//                isBackButtonClicked = false;
+//                isMobileWZValueChanged = false;
+//                updateMobileWZDataOrNot();
+//                Log.d("viewDAta", "Staticview");
+//                updateOptionsMenu();
+//                break;
+//
+//            case R.id.mobileBtn:
+//                mobileView();
+//                isBackButtonClicked = false;
+//                isMobileWZValueChanged = false;
+//                updateMobileWZDataOrNot();
+//                updateOptionsMenu();
+//                Log.d("viewDAta", "mobileView");
+//                break;
+//            case R.id.mobileWzSwitch:
+////                setMobileWzStatus();
+//                break;
+//            case R.id.mobile_wz_sound_layout:
+//                ringtonePickerBuilder.setPlaySampleWhileSelection(checkVibrationIsOn(_context));
+//
+//                ringtonePickerBuilder.show();
+//                break;
+//            case R.id.mobile_wz_notification_layout:
+//                intent = new Intent(_context, AddStaticZoneNotification.class);
+//                intent.putExtra("position", 0);
+//                intent.putExtra("edit", true);
+//                intent.putExtra("mobile", true);
+//                intent.putExtra("mobileRadius", sliderValue);
+//                intent.putExtra("mobileSound", _ringtoneURI.toString());
+//                if (dictMobileWZ == null) {
+//                    return;
+//                }
+//                Bundle b = new Bundle();
+//                b.putSerializable("mobileWZ", (Serializable) dictMobileWZ);
+//                intent.putExtras(b); //pass bundle to your intent
+//                startActivityForResult(intent, REQUEST_NOTIFICATION);
+//                break;
         }
     }
 

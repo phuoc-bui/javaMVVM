@@ -67,6 +67,7 @@ public class HelpViewModel extends BaseViewModel {
     }
 
     public void onLogoutClick() {
+        preferenceStorage.setLoggedIn(false);
         navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_AND_CLEAR_TASK, SignInActivity.class));
     }
 

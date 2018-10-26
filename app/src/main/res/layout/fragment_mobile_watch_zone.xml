@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.redhelmet.alert2me.ui.watchzone.WatchZoneViewModel" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background">
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/margin_normal" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/margin_normal" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundColor"
+            android:paddingStart="@dimen/margin_normal"
+            android:paddingEnd="@dimen/margin_normal"
+            android:paddingBottom="@dimen/margin_small">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="@dimen/margin_normal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/watchzone_splash" />
+
+            <TextView
+                android:id="@+id/txt_heading"
+                style="@style/TextAppearance.A2M.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_micro"
+                android:text="@string/lbl_mobileWZHeading"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+            <TextView
+                android:id="@+id/textSubHeading"
+                style="@style/TextAppearance.A2M.Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:text="@string/lbl_mobileWZSubHeading"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_heading" />
+        </android.support.constraint.ConstraintLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toBottomOf="@+id/header" />
+
+        <TextView
+            android:id="@+id/sw_mobile_wz_title"
+            style="@style/TextAppearance.A2M.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/spacing_normal"
+            android:paddingBottom="@dimen/spacing_normal"
+            android:text="@string/lbl_mobileWZTitle"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@+id/header" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/mobileWzSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/Widget.A2M.SwitchCompatStyle"
+            app:layout_constraintBottom_toBottomOf="@+id/sw_mobile_wz_title"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+            app:layout_constraintTop_toTopOf="@+id/sw_mobile_wz_title" />
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toBottomOf="@+id/sw_mobile_wz_title" />
+
+        <TextView
+            android:id="@+id/mobileRadius"
+            style="@style/TextAppearance.A2M.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:text="Radius (km)"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            app:layout_constraintTop_toTopOf="@+id/divider1" />
+
+        <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+            android:id="@+id/mobile_radius_seek"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_micro"
+            app:dsb_indicatorColor="@color/colorDarkRed"
+            app:dsb_indicatorElevation="0dp"
+            app:dsb_max="100"
+            app:dsb_min="1"
+            app:dsb_progressColor="@color/colorDarkRed"
+            app:dsb_value="5"
+            app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@+id/mobileRadius" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toBottomOf="@+id/mobile_radius_seek" />
+
+        <ImageView
+            android:id="@+id/iv_notification_sound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:layout_constraintStart_toStartOf="@+id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/divider2"
+            app:srcCompat="@drawable/icon_volume" />
+
+        <TextView
+            android:id="@+id/tv_notification_sound_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:text="@string/notification_sound"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_notification_sound"
+            app:layout_constraintStart_toEndOf="@id/iv_notification_sound"
+            app:layout_constraintTop_toTopOf="@+id/iv_notification_sound" />
+
+        <ImageView
+            android:id="@+id/iv_right_arrow_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_notification_sound_title"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintTop_toTopOf="@+id/tv_notification_sound_title"
+            app:srcCompat="@drawable/icon_right" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintTop_toBottomOf="@+id/iv_notification_sound" />
+
+        <ImageView
+            android:id="@+id/iv_notification_option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintTop_toBottomOf="@id/divider3"
+            app:srcCompat="@drawable/icon_notification" />
+
+        <TextView
+            android:id="@+id/tv_notification_option_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/notification_option"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_notification_option"
+            app:layout_constraintStart_toEndOf="@id/iv_notification_option"
+            app:layout_constraintTop_toTopOf="@+id/iv_notification_option" />
+
+        <ImageView
+            android:id="@+id/iv_right_arrow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_notification_option_title"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintTop_toTopOf="@+id/tv_notification_option_title"
+            app:srcCompat="@drawable/icon_right" />
+
+        <android.support.constraint.Group
+            android:id="@+id/group_mobile_watch_zone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="iv_notification_sound,iv_notification_option,divider3,tv_notification_sound_title,divider2,mobile_radius_seek,tv_notification_option_title,iv_right_arrow2,mobileRadius,iv_right_arrow_1" />
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

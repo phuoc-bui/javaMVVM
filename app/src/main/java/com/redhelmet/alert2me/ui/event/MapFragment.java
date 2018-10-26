@@ -41,6 +41,7 @@ import com.redhelmet.alert2me.domain.util.CustomClusterRenderer;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.global.Constant;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
+import com.redhelmet.alert2me.ui.clusterevents.ClusterEventListActivity;
 import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
 import com.redhelmet.alert2me.ui.widget.EventIcon;
 import com.redhelmet.alert2me.util.EventUtils;

@@ -73,7 +73,7 @@ public class LoginViewModel extends BaseViewModel {
     }
 
     public void forgotPassword() {
-        navigateTo(new NavigationItem(NavigationItem.CHANGE_FRAGMENT, ForgotPasswordFragment.newInstance()));
+        navigateTo(new NavigationItem(NavigationItem.CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK, ForgotPasswordFragment.newInstance()));
     }
 
     public void back() {

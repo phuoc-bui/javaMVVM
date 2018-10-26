@@ -1,11 +1,16 @@
 package com.redhelmet.alert2me.data.model;
 
+import android.arch.persistence.room.Entity;
+
+import com.redhelmet.alert2me.data.model.base.Model;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class EditWatchZones implements Serializable {
+@Entity(tableName = "WatchZone")
+public class EditWatchZones implements Model {
 
     private static EditWatchZones instance;
 
