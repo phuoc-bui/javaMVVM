@@ -1,8 +1,8 @@
 package com.redhelmet.alert2me.ui.eventfilter.defaultfilter;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.content.Intent;
-import android.support.v7.widget.SwitchCompat;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.EventGroup;

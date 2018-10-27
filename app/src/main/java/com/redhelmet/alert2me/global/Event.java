@@ -16,8 +16,8 @@
 
 package com.redhelmet.alert2me.global;
 
-import android.arch.lifecycle.Observer;
-import android.support.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.annotation.Nullable;
 
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.

@@ -1,6 +1,6 @@
 package com.redhelmet.alert2me.ui.eventfilter.custom;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.content.Intent;
 
 import com.redhelmet.alert2me.data.DataManager;

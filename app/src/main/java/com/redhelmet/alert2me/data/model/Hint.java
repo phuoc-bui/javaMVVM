@@ -1,6 +1,6 @@
 package com.redhelmet.alert2me.data.model;
 
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 import com.redhelmet.alert2me.data.model.base.Model;
 

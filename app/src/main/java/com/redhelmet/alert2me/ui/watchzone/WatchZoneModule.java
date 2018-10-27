@@ -1,6 +1,6 @@
 package com.redhelmet.alert2me.ui.watchzone;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 import com.redhelmet.alert2me.di.FragmentScoped;
 import com.redhelmet.alert2me.di.ViewModelKey;
@@ -13,7 +13,7 @@ import dagger.multibindings.IntoMap;
 @Module
 public abstract class WatchZoneModule {
     @FragmentScoped
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector (modules = {WatchZoneFragmentModule.class})
     abstract WatchZoneFragment provideWatchZoneFragment();
 
 

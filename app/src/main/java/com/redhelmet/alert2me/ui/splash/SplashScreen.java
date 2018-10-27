@@ -1,7 +1,7 @@
 
 package com.redhelmet.alert2me.ui.splash;
 
-import android.arch.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -23,7 +23,7 @@ import com.google.android.gms.location.places.Places;
 
 import com.redhelmet.alert2me.R;
 
-public class AutoCompleteLocation extends android.support.v7.widget.AppCompatAutoCompleteTextView {
+public class AutoCompleteLocation extends androidx.appcompat.widget.AppCompatAutoCompleteTextView {
 
     private Drawable mCloseIcon;
     private GoogleApiClient mGoogleApiClient;

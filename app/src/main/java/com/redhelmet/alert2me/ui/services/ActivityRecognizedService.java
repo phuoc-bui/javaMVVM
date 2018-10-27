@@ -7,8 +7,8 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Handler;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -391,8 +391,8 @@ private static int startProcessId;
             }
             Log.d("dsfsdf", "dfsdfsdf" + arryMobileWZ.toString());
 
-            if(dictMobileWZ.getWatchzoneRadius() != null){
-                distance = Integer.valueOf(dictMobileWZ.getWatchzoneRadius()) ;
+            if(dictMobileWZ.getRadius() != null){
+                distance = Integer.valueOf(dictMobileWZ.getRadius()) ;
             }
         }
 

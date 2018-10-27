@@ -1,14 +1,13 @@
 package com.redhelmet.alert2me.data;
 
 import android.location.Location;
-import android.support.v4.util.Pair;
+import androidx.core.util.Pair;
 
 import com.redhelmet.alert2me.data.model.ApiInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.EventGroup;
 import com.redhelmet.alert2me.data.model.User;
-import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
 
 import java.util.List;
 

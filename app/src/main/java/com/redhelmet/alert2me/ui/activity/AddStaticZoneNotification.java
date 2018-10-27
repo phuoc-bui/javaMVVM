@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -144,8 +144,8 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                 if (editMobileWatchZone != null)
                     Log.d("mobileWZ", editMobileWatchZone.toString());
             } else {
-                editWatchZones = EditWatchZones.getInstance();
-                wzData = editWatchZones.getEditWz();
+//                editWatchZones = EditWatchZones.getInstance();
+//                wzData = editWatchZones.getEditWz();
             }
         }
     }
@@ -179,12 +179,12 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
             boolean isDefault = false;
             List<Integer> filterId = new ArrayList<>();
             if (mobile_wz) {
-                if (editMobileWatchZone.isWzDefault()) {
+                if (editMobileWatchZone.isDefault()) {
                     isDefault = true;
                 }
 
             } else {
-                if (wzData.get(position).isWzDefault()) {
+                if (wzData.get(position).isDefault()) {
                     isDefault = true;
 
                 }
@@ -248,15 +248,15 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
 
             if (editMode) {
                 List<Integer> filterId = new ArrayList<>();
-                if (mobile_wz) {
-                    if (editMobileWatchZone.isWzDefault()) {
-                        filterId = editMobileWatchZone.getWatchzoneFilterGroupId();
-                    }
-                } else {
-                    if (wzData.get(position).isWzDefault()) {
-                        filterId = wzData.get(position).getWatchzoneFilterGroupId();
-                    }
-                }
+//                if (mobile_wz) {
+//                    if (editMobileWatchZone.isDefault()) {
+//                        filterId = editMobileWatchZone.getFilterGroupId();
+//                    }
+//                } else {
+//                    if (wzData.get(position).isDefault()) {
+//                        filterId = wzData.get(position).getFilterGroupId();
+//                    }
+//                }
                 for (int i = 0; i < defaultDataWz.size(); i++) {
 
                     HashMap<String, String> data = defaultDataWz.get(i);
@@ -370,50 +370,50 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
 
             category_data = new ArrayList<Category>();
             ArrayList<HashMap<String, CategoryFilter>> groupData;
-            if (mobile_wz) {
-                groupData = editMobileWatchZone.getWatchzoneFilter();
-            } else {
-                groupData = wzData.get(position).getWatchzoneFilter();
-                Log.d("DAta", groupData.toString());
-            }
+//            if (mobile_wz) {
+//                groupData = editMobileWatchZone.getFilter();
+//            } else {
+//                groupData = wzData.get(position).getFilter();
+//                Log.d("DAta", groupData.toString());
+//            }
 
             JSONArray categoryArray = new JSONArray();
             JSONArray typeArray = new JSONArray();
             int count = 0;
 
 
-            for (Category catData : originCategories) {
-                for (int j = 0; j < groupData.size(); j++) {
-                    HashMap<String, CategoryFilter> tempData = (HashMap<String, CategoryFilter>) groupData.get(j);
-
-                    if (tempData.keySet().toArray()[0].equals(catData.getCategory())) {
-
-                        CategoryFilter catFilter = tempData.get(catData.getCategory());
-                        for (CategoryType catType : catData.getTypes()) {
-                            count = 0;
-                            for (int ct = 0; ct < catFilter.getTypes().size(); ct++) {
-
-                                if (catType.getCode().equalsIgnoreCase(catFilter.getTypes().get(ct).getCode())) {
-
-
-                                    for (CategoryStatus catStatus : catType.getStatuses()) {
-                                        for (int i = 0; i < catFilter.getTypes().get(ct).getStatus().size(); i++) {
-                                            if (catFilter.getTypes().get(ct).getStatus().get(i).toString().equalsIgnoreCase(catStatus.getCode())) {
-                                                catStatus.setNotificationDefaultOn(true);
-                                                count++;
-                                            }
-                                        }
-                                    }
-                                    if (count > 0)
-                                        catType.setNotificationDefaultOn(true);
-
-                                }
-                            }
-                        }
-                    }
-                }
-                category_data.add(catData);
-            }
+//            for (Category catData : originCategories) {
+//                for (int j = 0; j < groupData.size(); j++) {
+//                    HashMap<String, CategoryFilter> tempData = (HashMap<String, CategoryFilter>) groupData.get(j);
+//
+//                    if (tempData.keySet().toArray()[0].equals(catData.getCategory())) {
+//
+//                        CategoryFilter catFilter = tempData.get(catData.getCategory());
+//                        for (CategoryType catType : catData.getTypes()) {
+//                            count = 0;
+//                            for (int ct = 0; ct < catFilter.getTypes().size(); ct++) {
+//
+//                                if (catType.getCode().equalsIgnoreCase(catFilter.getTypes().get(ct).getCode())) {
+//
+//
+//                                    for (CategoryStatus catStatus : catType.getStatuses()) {
+//                                        for (int i = 0; i < catFilter.getTypes().get(ct).getStatus().size(); i++) {
+//                                            if (catFilter.getTypes().get(ct).getStatus().get(i).toString().equalsIgnoreCase(catStatus.getCode())) {
+//                                                catStatus.setNotificationDefaultOn(true);
+//                                                count++;
+//                                            }
+//                                        }
+//                                    }
+//                                    if (count > 0)
+//                                        catType.setNotificationDefaultOn(true);
+//
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                category_data.add(catData);
+//            }
             originCategories = category_data;
         } else {
 
@@ -654,15 +654,15 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                         EditWatchZones editModel = new EditWatchZones();
                         WatchZoneGeom geomModel = new WatchZoneGeom();
 
-                        editModel.setWatchzoneId(data.getString("id"));
-                        editModel.setWatchzoneName(data.getString("name"));
-                        editModel.setWatchzoneDeviceId(data.getString("deviceId"));
-                        editModel.setWatchzoneAddress(data.getString("address"));
-                        editModel.setWatchzoneRadius(data.getString("radius"));
-                        editModel.setWatchzoneType(data.getString("type"));
-
-                        editModel.setWatchzoneProximity(Boolean.valueOf(data.getString("proximity")));
-                        editModel.setWzNoEdit(Boolean.valueOf(data.getString("noEdit")));
+//                        editModel.setWatchzoneId(data.getString("id"));
+//                        editModel.setWatchzoneName(data.getString("name"));
+//                        editModel.setWatchzoneDeviceId(data.getString("deviceId"));
+//                        editModel.setWatchzoneAddress(data.getString("address"));
+//                        editModel.setWatchzoneRadius(data.getString("radius"));
+//                        editModel.setWatchzoneType(data.getString("type"));
+//
+//                        editModel.setWatchzoneProximity(Boolean.valueOf(data.getString("proximity")));
+//                        editModel.setWzNoEdit(Boolean.valueOf(data.getString("noEdit")));
 
 
                         //=== GROUP ID's FILTER
@@ -675,7 +675,7 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                             wzFilterGroup.add(Integer.parseInt(filterGroup.get(j).toString()));
                         }
 
-                        editModel.setWatchzoneFilterGroupId(wzFilterGroup);
+//                        editModel.setWatchzoneFilterGroupId(wzFilterGroup);
                         //=======///
 
 
@@ -727,15 +727,15 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                             }
                         }
 
-                        editModel.setWatchzoneFilter(filterDetails);
-
-                        //=====//
-
-                        editModel.setWzDefault(Boolean.valueOf(data.getString("isDefaultFilter")));
-
-                        editModel.setWatchzoneSound(data.getString("sound"));
-                        editModel.setWzEnable(Boolean.valueOf(data.getString("enable")));
-                        editModel.setWatchZoneShareCode(data.getString("shareCode"));
+//                        editModel.setWatchzoneFilter(filterDetails);
+//
+//                        //=====//
+//
+//                        editModel.setWzDefault(Boolean.valueOf(data.getString("isDefaultFilter")));
+//
+//                        editModel.setWatchzoneSound(data.getString("sound"));
+//                        editModel.setWzEnable(Boolean.valueOf(data.getString("enable")));
+//                        editModel.setWatchZoneShareCode(data.getString("shareCode"));
 
 
                         JSONArray geo = new JSONArray();
@@ -767,7 +767,7 @@ public class AddStaticZoneNotification extends BaseActivity implements View.OnCl
                         geomModel.setCordinate(cordinates);
                         geomModel.setType(g.get("type").toString());
 
-                        editModel.setWatchZoneGeoms(geomModel);
+//                        editModel.setWatchZoneGeoms(geomModel);
                         arryMobileWZ.add(editModel);
 
                         Gson gson = new Gson();

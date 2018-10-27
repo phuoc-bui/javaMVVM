@@ -1,10 +1,10 @@
 package com.redhelmet.alert2me.ui.eventfilter.custom;
 
 import android.app.Activity;
-import android.arch.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 import com.redhelmet.alert2me.R;

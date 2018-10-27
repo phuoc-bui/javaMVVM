@@ -2,11 +2,8 @@ package com.redhelmet.alert2me.di;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.support.annotation.FloatRange;
+import androidx.annotation.FloatRange;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.data.model.ApiInfo;

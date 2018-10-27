@@ -12,7 +12,7 @@
             type="com.redhelmet.alert2me.ui.event.EventViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -116,12 +116,12 @@
             app:layout_constraintLeft_toRightOf="@+id/map_type2"
             app:srcCompat="@drawable/ic_aerial" />
 
-        <android.support.constraint.Group
+        <androidx.constraintlayout.widget.Group
             android:id="@+id/group_map_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="invisible"
             app:constraint_referenced_ids="map_type1,map_type2,map_type3" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

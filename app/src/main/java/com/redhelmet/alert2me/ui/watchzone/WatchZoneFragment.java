@@ -3,7 +3,6 @@ package com.redhelmet.alert2me.ui.watchzone;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
-import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,30 +14,14 @@ import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.graphics.drawable.VectorDrawableCompat;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -60,6 +43,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.daimajia.swipe.util.Attributes;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.kevalpatel.ringtonepicker.RingtonePickerDialog;
@@ -83,14 +68,10 @@ import com.redhelmet.alert2me.databinding.FragmentWatchzoneListBinding;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
 import com.redhelmet.alert2me.ui.activity.AddStaticZone;
-import com.redhelmet.alert2me.ui.activity.AddStaticZoneNotification;
 import com.redhelmet.alert2me.ui.activity.EditWatchZone;
 import com.redhelmet.alert2me.ui.activity.ShareWatchZone;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
-import com.redhelmet.alert2me.ui.event.EventListFragment;
-import com.redhelmet.alert2me.ui.event.MapFragment;
 import com.redhelmet.alert2me.ui.home.HomeActivity;
-import com.redhelmet.alert2me.ui.base.NavigationFragment;
 import com.redhelmet.alert2me.ui.services.BackgroundDetectedActivitiesService;
 import com.redhelmet.alert2me.util.DeviceUtil;
 
@@ -101,7 +82,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -111,7 +91,16 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import static com.redhelmet.alert2me.ui.activity.EditWatchZone.REQUEST_NOTIFICATION;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+import androidx.viewpager.widget.ViewPager;
 
 public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, FragmentWatchzoneListBinding> implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
 
@@ -176,7 +165,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        obtainViewModel(factory, WatchZoneViewModel.class);
+//        obtainViewModel(factory, WatchZoneViewModel.class);
 
         setupViewPager();
         getBaseActivity().updateToolbarTitle(getString(R.string.wz_title));
@@ -230,7 +219,6 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
     }
 
     public void initializeVariables() {
-        _editWatchzone = EditWatchZones.getInstance();
         _dbController = DBController.getInstance(getContext());
         _dbCategories = new ArrayList<>();
         _dbCategories = _dbController.getCategoriesNames();
@@ -284,7 +272,6 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
     }
 
 
-
     public void setMobileWZData() {
         Ringtone ringtone;
 
@@ -296,10 +283,10 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
 
             if (arryMobileWZ.size() > 0) {
                 dictMobileWZ = arryMobileWZ.get(0);
-                mobileRadiusSeek.setProgress(Integer.parseInt(dictMobileWZ.getWatchzoneRadius()));
+//                mobileRadiusSeek.setProgress(Integer.parseInt(dictMobileWZ.getWatchzoneRadius()));
                 sliderValue = mobileRadiusSeek.getProgress();
                 setupSliderValue();
-                _ringtoneURI = Uri.parse(dictMobileWZ.getWatchzoneSound());
+//                _ringtoneURI = Uri.parse(dictMobileWZ.getWatchzoneSound());
 
 //            setMobileWzStatus();
             }
@@ -329,7 +316,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
 
         if (dictMobileWZ != null) {
 
-            if ((sliderValue != Integer.parseInt(dictMobileWZ.getWatchzoneRadius())) || (!_ringtoneURI.toString().equalsIgnoreCase(Uri.parse(dictMobileWZ.getWatchzoneSound()).toString()))) {
+            if ((sliderValue != Integer.parseInt(dictMobileWZ.getRadius())) || (!_ringtoneURI.toString().equalsIgnoreCase(Uri.parse(dictMobileWZ.getSound()).toString()))) {
                 isMobileWZValueChanged = true;
             } else {
                 if (isBackButtonClicked == true) {
@@ -370,19 +357,19 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
             ArrayList<String> defValues = new ArrayList<String>();
 
 
-            if (dictMobileWZ.getWatchzoneFilterGroupId() != null) {
-
-
-                for (Integer item : dictMobileWZ.getWatchzoneFilterGroupId()) {
-                    defValues.add(item.toString());
-                }
-
-
-            }
-            sendProximity(dictMobileWZ.getWatchzoneFilter(), defValues, true);
+//            if (dictMobileWZ.getFilterGroupId() != null) {
+//
+//
+//                for (Integer item : dictMobileWZ.getFilterGroupId()) {
+//                    defValues.add(item.toString());
+//                }
+//
+//
+//            }
+//            sendProximity(dictMobileWZ.getFilter(), defValues, true);
         } else {
 
-            mobileRadiusSeek.setProgress(Integer.parseInt(dictMobileWZ.getWatchzoneRadius()));
+            mobileRadiusSeek.setProgress(Integer.parseInt(dictMobileWZ.getRadius()));
             sliderValue = mobileRadiusSeek.getProgress();
             setupSliderValue();
             if (isBackButtonClicked == true) {
@@ -503,8 +490,6 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
     public void onRefresh() {
         getWatchZones();
     }
-
-
 
 
     @Override
@@ -819,14 +804,14 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
                     EditWatchZones editModel = new EditWatchZones();
                     WatchZoneGeom geomModel = new WatchZoneGeom();
 
-                    editModel.setWatchzoneId(data.getString("id"));
-                    editModel.setWatchzoneName(data.getString("name"));
-                    editModel.setWatchzoneDeviceId(data.getString("deviceId"));
-                    editModel.setWatchzoneAddress(data.getString("address"));
-                    editModel.setWatchzoneRadius(data.getString("radius"));
-                    editModel.setWatchzoneType(data.getString("type"));
-                    editModel.setWatchzoneProximity(Boolean.valueOf(data.getString("proximity")));
-                    editModel.setWzNoEdit(Boolean.valueOf(data.getString("noEdit")));
+//                    editModel.setId(data.getString("id"));
+                    editModel.setName(data.getString("name"));
+                    editModel.setDeviceId(data.getString("deviceId"));
+                    editModel.setAddress(data.getString("address"));
+                    editModel.setRadius(data.getString("radius"));
+                    editModel.setType(data.getString("type"));
+                    editModel.setProximity(Boolean.valueOf(data.getString("proximity")));
+                    editModel.setNoEdit(Boolean.valueOf(data.getString("noEdit")));
 
 
                     //=== GROUP ID's FILTER
@@ -839,7 +824,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
                         wzFilterGroup.add(Integer.parseInt(filterGroup.get(j).toString()));
                     }
 
-                    editModel.setWatchzoneFilterGroupId(wzFilterGroup);
+//                    editModel.setFilterGroupId(wzFilterGroup);
                     //=======///
 
 
@@ -891,15 +876,15 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
                         }
                     }
 
-                    editModel.setWatchzoneFilter(filterDetails);
+//                    editModel.setFilter(filterDetails);
 
                     //=====//
 
-                    editModel.setWzDefault(Boolean.valueOf(data.getString("isDefaultFilter")));
+                    editModel.setDefault(Boolean.valueOf(data.getString("isDefaultFilter")));
 
-                    editModel.setWatchzoneSound(data.getString("sound"));
-                    editModel.setWzEnable(Boolean.valueOf(data.getString("enable")));
-                    editModel.setWatchZoneShareCode(data.getString("shareCode"));
+                    editModel.setSound(data.getString("sound"));
+                    editModel.setEnable(Boolean.valueOf(data.getString("enable")));
+                    editModel.setShareCode(data.getString("shareCode"));
 
 
                     JSONArray geo = new JSONArray();
@@ -931,7 +916,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
                     geomModel.setCordinate(cordinates);
                     geomModel.setType(g.get("type").toString());
 
-                    editModel.setWatchZoneGeoms(geomModel);
+//                    editModel.setWatchZoneGeoms(geomModel);
 
 
                     if (mobileWZ) {
@@ -963,7 +948,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
 
                 } else {
                     changeText(getString(R.string.msg_fechtedWZ));
-                    _editWatchzone.setEditWz(_watchzoneArray);
+//                    _editWatchzone.setEditWz(_watchzoneArray);
                     saveWZToDatabase();
                     Collections.reverse(_watchzoneArray);
 
@@ -998,32 +983,32 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
             HashMap<String, String> values = new HashMap<String, String>();
 
 
-            values.put(DBController.KEY_REF_WZ_ID, wz.getWatchzoneId());
-            values.put(DBController.KEY_REF_WZ_DEVICE_ID, wz.getWatchzoneDeviceId());
-            values.put(DBController.KEY_REF_WZ_SOUND, wz.getWatchzoneSound());
-            values.put(DBController.KEY_REF_WZ_ADDRESS, wz.getWatchzoneAddress());
-            values.put(DBController.KEY_REF_WZ_NAME, wz.getWatchzoneName());
-            values.put(DBController.KEY_REF_WZ_RADIUS, wz.getWatchzoneRadius());
-            values.put(DBController.KEY_REF_WZ_TYPE, wz.getWatchzoneType());
+//            values.put(DBController.KEY_REF_WZ_ID, wz.getId());
+            values.put(DBController.KEY_REF_WZ_DEVICE_ID, wz.getDeviceId());
+            values.put(DBController.KEY_REF_WZ_SOUND, wz.getSound());
+            values.put(DBController.KEY_REF_WZ_ADDRESS, wz.getAddress());
+            values.put(DBController.KEY_REF_WZ_NAME, wz.getName());
+            values.put(DBController.KEY_REF_WZ_RADIUS, wz.getRadius());
+            values.put(DBController.KEY_REF_WZ_TYPE, wz.getType());
 
             String wzFilter = "", wzFilterGroupID = "";
 
             Gson gson = new Gson();
 
-            if (wz.getWatchzoneFilter() != null)
-                wzFilter = gson.toJson(wz.getWatchzoneFilter());
-
-            if (wz.getWatchzoneFilterGroupId() != null)
-                wzFilterGroupID = gson.toJson(wz.getWatchzoneFilterGroupId());
+//            if (wz.getFilter() != null)
+//                wzFilter = gson.toJson(wz.getFilter());
+//
+//            if (wz.getFilterGroupId() != null)
+//                wzFilterGroupID = gson.toJson(wz.getFilterGroupId());
 
             values.put(DBController.KEY_REF_WZ_FILTER, wzFilter);
             values.put(DBController.KEY_REF_WZ_FILTERGROUPID, wzFilterGroupID);
-            values.put(DBController.KEY_REF_WZ_ENABLE, String.valueOf(wz.isWzEnable()));
-            values.put(DBController.KEY_REF_WZ_PROXIMITY, String.valueOf(wz.getWatchzoneProximity()));
-            values.put(DBController.KEY_REF_WZ_ISDEFAULT, String.valueOf(wz.getWatchzoneProximity()));
-            values.put(DBController.KEY_REF_WZ_NOEDIT, String.valueOf(wz.getWatchzoneProximity()));
-            values.put(DBController.KEY_REF_WZ_SHARECODE, wz.getWatchZoneShareCode());
-            values.put(DBController.KEY_REF_WZ_GEOMS, gson.toJson(wz.getWatchZoneGeoms()));
+            values.put(DBController.KEY_REF_WZ_ENABLE, String.valueOf(wz.isEnable()));
+//            values.put(DBController.KEY_REF_WZ_PROXIMITY, String.valueOf(wz.getWatchzoneProximity()));
+//            values.put(DBController.KEY_REF_WZ_ISDEFAULT, String.valueOf(wz.getWatchzoneProximity()));
+//            values.put(DBController.KEY_REF_WZ_NOEDIT, String.valueOf(wz.getWatchzoneProximity()));
+            values.put(DBController.KEY_REF_WZ_SHARECODE, wz.getShareCode());
+//            values.put(DBController.KEY_REF_WZ_GEOMS, gson.toJson(wz.getWatchZoneGeoms()));
 
             watchzones.add(values);
         }
@@ -1033,9 +1018,9 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
 
     public void getWZFromDB() {
         _watchzoneArray = _dbController.getAllWZ();
-        _editWatchzone.setEditWz(_watchzoneArray);
+//        _editWatchzone.setEditWz(_watchzoneArray);
 
-        Log.d("EditWZ", _editWatchzone.getEditWz().toString());
+//        Log.d("EditWZ", _editWatchzone.getEditWz().toString());
         Collections.reverse(_watchzoneArray);
 
         setUpdateForWatchzones();

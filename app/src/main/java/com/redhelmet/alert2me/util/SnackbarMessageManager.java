@@ -1,6 +1,6 @@
 package com.redhelmet.alert2me.util;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.global.Event;

@@ -426,13 +426,6 @@ public class DBController extends SQLiteOpenHelper {
                 do {
                     wz = new EditWatchZones();
 
-                    wz.setWatchzoneId(cursor.getString(cursor.getColumnIndex(KEY_REF_WZ_ID))); //(KEY_REF_WZ_ID,cursor.getString(cursor.getColumnIndex(KEY_REF_WZ_ID)));
-                    wz.setWatchzoneDeviceId(cursor.getString(cursor.getColumnIndex(KEY_REF_WZ_DEVICE_ID)));
-                    wz.setWatchzoneSound(cursor.getString(cursor.getColumnIndex(KEY_REF_WZ_SOUND)));
-                    wz.setWatchzoneAddress(cursor.getString(cursor.getColumnIndex(KEY_REF_WZ_ADDRESS)));
-                    wz.setWatchzoneName(cursor.getString(cursor.getColumnIndex(KEY_REF_WZ_NAME)));
-                    wz.setWatchzoneRadius(cursor.getString(cursor.getColumnIndex(KEY_REF_WZ_RADIUS)));
-                    wz.setWatchzoneType(cursor.getString(cursor.getColumnIndex(KEY_REF_WZ_TYPE)));
 
                     Gson gson = new Gson();
 
@@ -441,30 +434,23 @@ public class DBController extends SQLiteOpenHelper {
                     String filters = cursor.getString(cursor.getColumnIndex(KEY_REF_WZ_FILTER));
                     ArrayList<HashMap<String, CategoryFilter>> filter = gson.fromJson(filters, ArrayList.class);
 
-                    wz.setWatchzoneFilter(filter);
                     String grpIds = cursor.getString(cursor.getColumnIndex(KEY_REF_WZ_FILTERGROUPID));
 
                     List<Integer> arrrGrpId = gson.fromJson(grpIds, ArrayList.class);
 
-                    wz.setWatchzoneFilterGroupId(arrrGrpId);
 
                     Boolean enable = (cursor.getInt(cursor.getColumnIndex(KEY_REF_WZ_ENABLE)) == 1);
                     Boolean proximity = (cursor.getInt(cursor.getColumnIndex(KEY_REF_WZ_PROXIMITY)) == 1);
                     Boolean isDefault = (cursor.getInt(cursor.getColumnIndex(KEY_REF_WZ_ISDEFAULT)) == 1);
                     Boolean noEdit = (cursor.getInt(cursor.getColumnIndex(KEY_REF_WZ_ISDEFAULT)) == 1);
 
-                    wz.setWzEnable(enable);
-                    wz.setWatchzoneProximity(proximity);
-                    wz.setWzDefault(isDefault);
-                    wz.setWzNoEdit(noEdit);
-                    wz.setWatchZoneShareCode(cursor.getString(cursor.getColumnIndex(KEY_REF_WZ_SHARECODE)));
 
 
                     String geoms = cursor.getString(cursor.getColumnIndex(KEY_REF_WZ_GEOMS));
 
                     WatchZoneGeom arrrGeoms = gson.fromJson(geoms, WatchZoneGeom.class);
 
-                    wz.setWatchZoneGeoms(arrrGeoms);
+//                    wz.setWatchZoneGeoms(arrrGeoms);
 
                     watchZones.add(wz);
 

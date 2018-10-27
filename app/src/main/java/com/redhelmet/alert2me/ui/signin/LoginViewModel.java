@@ -1,6 +1,6 @@
 package com.redhelmet.alert2me.ui.signin;
 
-import android.databinding.ObservableBoolean;
+import androidx.databinding.ObservableBoolean;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;

@@ -1,6 +1,6 @@
 package com.redhelmet.alert2me.ui.clusterevents;
 
-import android.databinding.ObservableField;
+import androidx.databinding.ObservableField;
 
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;

@@ -1,8 +1,8 @@
 package com.redhelmet.alert2me.ui.event;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
-import android.databinding.ObservableBoolean;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.databinding.ObservableBoolean;
 import android.graphics.Color;
 import android.location.Location;
 

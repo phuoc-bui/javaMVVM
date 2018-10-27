@@ -118,7 +118,7 @@
             android:paddingLeft="16dp"
             android:paddingTop="@dimen/default_padding">
 
-            <android.support.v7.widget.SwitchCompat
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/wz_state"
 
                 android:theme="@style/Widget.A2M.SwitchCompatStyle"

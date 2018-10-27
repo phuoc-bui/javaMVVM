@@ -1,8 +1,8 @@
 package com.redhelmet.alert2me.ui.watchzone;
 
-import android.arch.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 import com.redhelmet.alert2me.R;

@@ -1,7 +1,7 @@
 package com.redhelmet.alert2me.global;
 
-import android.databinding.Observable;
-import android.databinding.ObservableField;
+import androidx.databinding.Observable;
+import androidx.databinding.ObservableField;
 
 import io.reactivex.subjects.BehaviorSubject;
 

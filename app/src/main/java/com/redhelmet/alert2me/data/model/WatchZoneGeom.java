@@ -1,10 +1,12 @@
 package com.redhelmet.alert2me.data.model;
 
+import com.redhelmet.alert2me.data.model.base.Model;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class WatchZoneGeom implements Serializable{
+public class WatchZoneGeom implements Model {
     private String type;
     private ArrayList<HashMap<String,Double>> cordinate;
 

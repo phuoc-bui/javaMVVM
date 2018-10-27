@@ -30,7 +30,7 @@ android {
         targetSdkVersion TARGET_SDK_VERSION as int
         versionCode VERSION_CODE as int
         versionName VERSION_NAME
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
     }
@@ -61,15 +61,15 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
 // Android support
-    implementation 'com.android.support:multidex:1.0.3'
-    api "com.android.support:design:$SUPPORT_PACKAGE_VERSION"
-    implementation "com.android.support:support-v4:$SUPPORT_PACKAGE_VERSION"
-    implementation "com.android.support.constraint:constraint-layout:$CONSTRAIN_LAYOUT_VERSION"
-    implementation "android.arch.lifecycle:extensions:$ARCH_LIFECYCLE_VERSION"
-    annotationProcessor "android.arch.lifecycle:compiler:$ARCH_LIFECYCLE_VERSION"
-    implementation "android.arch.persistence.room:runtime:$ARCH_LIFECYCLE_VERSION"
-    annotationProcessor "android.arch.persistence.room:compiler:$ARCH_LIFECYCLE_VERSION"
-    implementation "android.arch.persistence.room:rxjava2:$ARCH_LIFECYCLE_VERSION"
+    implementation 'androidx.multidex:multidex:2.0.0'
+    api 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
+    implementation 'androidx.room:room-runtime:2.1.0-alpha01'
+    annotationProcessor 'androidx.room:room-compiler:2.1.0-alpha01'
+    implementation 'androidx.room:room-rxjava2:2.1.0-alpha01'
 
 // Network
     implementation "com.google.code.gson:gson:$GSON_VERSION"
@@ -129,8 +129,8 @@ dependencies {
 
 // testing
     testImplementation "junit:junit:$JUNIT_VERSION"
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation ("com.android.support.test.espresso:espresso-core:$ESPRESSO_VERSION", {
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation ('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }

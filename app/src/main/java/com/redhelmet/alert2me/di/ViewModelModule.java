@@ -1,12 +1,12 @@
 package com.redhelmet.alert2me.di;
 
-import android.arch.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProvider;
 
 import dagger.Binds;
 import dagger.Module;
 
 /**
- * Module used to define the connection between the framework's {@link android.arch.lifecycle.ViewModelProvider.Factory} and
+ * Module used to define the connection between the framework's {@link androidx.lifecycle.ViewModelProvider.Factory} and
  * our own implementation: {@link A2MViewModelFactory}.
  */
 @Module

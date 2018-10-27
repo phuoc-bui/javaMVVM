@@ -1,8 +1,7 @@
 package com.redhelmet.alert2me.ui.help;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
-import com.redhelmet.alert2me.di.ChildFragmentScoped;
 import com.redhelmet.alert2me.di.FragmentScoped;
 import com.redhelmet.alert2me.di.ViewModelKey;
 

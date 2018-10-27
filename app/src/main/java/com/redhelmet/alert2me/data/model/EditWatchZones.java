@@ -1,176 +1,151 @@
 package com.redhelmet.alert2me.data.model;
 
-import android.arch.persistence.room.Entity;
+import com.redhelmet.alert2me.data.model.base.UserModel;
 
-import com.redhelmet.alert2me.data.model.base.Model;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 @Entity(tableName = "WatchZone")
-public class EditWatchZones implements Model {
+public class EditWatchZones extends UserModel {
 
-    private static EditWatchZones instance;
+    @PrimaryKey
+    private long id;
+    private String deviceId;
+    private String sound;
+    private String address;
+    private String name;
+    private String radius;
+    private String type;
+//    private ArrayList<HashMap<String, CategoryFilter>> filter;
+//    private List<Integer> filterGroupId;
+    private boolean enable;
+    private boolean proximity;
+    private boolean isDefault;
+    private boolean noEdit;
+    private String shareCode;
+//    private WatchZoneGeom watchZoneGeoms;
 
-    private  String watchzone_id;
-    private  String watchzone_device_id;
-    private  String watchzone_sound;
-    private  String watchzone_address;
-    private  String watchzone_name;
-    private  String watchzone_radius;
-    private  String watchzone_type;
-    private ArrayList<HashMap<String, CategoryFilter>> watchzone_filter;
-    private List<Integer> watchzone_filterGroupId;
-    private  boolean watchzone_enable;
-    private  boolean watchzone_proximity;
-    private  boolean watchzone_isDefault;
-    private  boolean watchzone_noEdit;
-    private  String watchzone_shareCode;
-    private WatchZoneGeom watchZoneGeoms;
-
-    public static ArrayList<EditWatchZones> edit_Wz;
-
-
-
-    public EditWatchZones() {
+    public long getId() {
+        return id;
     }
 
-    public static EditWatchZones getInstance() {
-
-        if (instance == null)
-            instance = new EditWatchZones();
-        return instance;
-    }
-    public String getWatchzoneDeviceId(){
-        return watchzone_device_id;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public void setWatchzoneDeviceId(String wzDeviceId ){
-        this.watchzone_device_id=wzDeviceId;
+    public String getDeviceId() {
+        return deviceId;
     }
 
-    public String getWatchzoneId(){
-        return watchzone_id;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
-    public void setWatchzoneId(String wzId ){
-        this.watchzone_id=wzId;
+    public String getSound() {
+        return sound;
     }
 
-    public String getWatchzoneName(){
-        return watchzone_name;
+    public void setSound(String sound) {
+        this.sound = sound;
     }
 
-    public void setWatchzoneName(String wzName ){
-        this.watchzone_name=wzName;
+    public String getAddress() {
+        return address;
     }
 
-    public String getWatchzoneSound(){
-        return watchzone_sound;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public void setWatchzoneSound(String wzSound ){
-        this.watchzone_sound=wzSound;
+    public String getName() {
+        return name;
     }
 
-    public String getWatchzoneAddress(){
-        return watchzone_address;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setWatchzoneAddress(String wzAddress ){
-        this.watchzone_address=wzAddress;
+    public String getRadius() {
+        return radius;
     }
 
-    public boolean getWatchzoneProximity(){
-        return watchzone_proximity;
+    public void setRadius(String radius) {
+        this.radius = radius;
     }
 
-    public void setWatchzoneProximity(boolean wzProximity ){
-        this.watchzone_proximity=wzProximity;
+    public String getType() {
+        return type;
     }
 
-    public String getWatchzoneRadius(){
-        return watchzone_radius;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public void setWatchzoneRadius(String wzRadius ){
-        this.watchzone_radius=wzRadius;
+//    public ArrayList<HashMap<String, CategoryFilter>> getFilter() {
+//        return filter;
+//    }
+//
+//    public void setFilter(ArrayList<HashMap<String, CategoryFilter>> filter) {
+//        this.filter = filter;
+//    }
+//
+//    public List<Integer> getFilterGroupId() {
+//        return filterGroupId;
+//    }
+//
+//    public void setFilterGroupId(List<Integer> filterGroupId) {
+//        this.filterGroupId = filterGroupId;
+//    }
+
+    public boolean isEnable() {
+        return enable;
     }
 
-    public String getWatchzoneType(){
-        return watchzone_type;
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
-    public void setWatchzoneType(String wzType ){
-        this.watchzone_type=wzType;
+    public boolean isProximity() {
+        return proximity;
     }
 
-    public ArrayList<HashMap<String, CategoryFilter>> getWatchzoneFilter(){
-        return watchzone_filter;
+    public void setProximity(boolean proximity) {
+        this.proximity = proximity;
     }
 
-    public void setWatchzoneFilter(ArrayList<HashMap<String, CategoryFilter>> wzFilter ){
-        this.watchzone_filter=wzFilter;
+    public boolean isDefault() {
+        return isDefault;
     }
 
-    public List<Integer> getWatchzoneFilterGroupId(){
-        return watchzone_filterGroupId;
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 
-    public void setWatchzoneFilterGroupId(List<Integer> wzFilterGroup ){
-        this.watchzone_filterGroupId=wzFilterGroup;
+    public boolean isNoEdit() {
+        return noEdit;
     }
 
-    public boolean isWzEnable(){
-        return watchzone_enable;
+    public void setNoEdit(boolean noEdit) {
+        this.noEdit = noEdit;
     }
 
-    public void setWzEnable(boolean wzEnable ){
-        this.watchzone_enable=wzEnable;
+    public String getShareCode() {
+        return shareCode;
     }
 
-    public boolean isWzDefault(){
-        return watchzone_isDefault;
+    public void setShareCode(String shareCode) {
+        this.shareCode = shareCode;
     }
 
-    public void setWzDefault(boolean wzDefault ){
-        this.watchzone_isDefault=wzDefault;
-    }
-    public boolean isWzNoEdit(){
-        return watchzone_noEdit;
-    }
-
-    public void setWzNoEdit(boolean wzEdit ){
-        this.watchzone_noEdit=wzEdit;
-    }
-
-    public String getWatchZoneShareCode(){
-        return watchzone_shareCode;
-    }
-
-    public void setWatchZoneShareCode(String shareCode ){
-        this.watchzone_shareCode=shareCode;
-    }
-
-    public void setEditWz(ArrayList<EditWatchZones> wzData) {
-
-        this.edit_Wz= wzData;
-    }
-
-    public ArrayList<EditWatchZones> getEditWz() {
-
-        return this.edit_Wz;
-    }
-
-    public void setWatchZoneGeoms(WatchZoneGeom wzGeom) {
-
-        this.watchZoneGeoms= wzGeom;
-    }
-
-    public WatchZoneGeom getWatchZoneGeoms() {
-
-        return this.watchZoneGeoms;
-    }
+//    public WatchZoneGeom getWatchZoneGeoms() {
+//        return watchZoneGeoms;
+//    }
+//
+//    public void setWatchZoneGeoms(WatchZoneGeom watchZoneGeoms) {
+//        this.watchZoneGeoms = watchZoneGeoms;
+//    }
 }

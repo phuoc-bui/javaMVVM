@@ -1,10 +1,9 @@
 package com.redhelmet.alert2me.data.database;
 
 import com.redhelmet.alert2me.data.model.Category;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
-import com.redhelmet.alert2me.data.model.WatchZoneGeom;
-import com.redhelmet.alert2me.ui.activity.EditWatchZone;
 
 import java.util.List;
 
@@ -38,8 +37,8 @@ public interface DatabaseStorage {
 
     Observable<List<EventGroup>> getEditedEventGroups();
 
-    void saveWatchZones(List<EditWatchZone> watchZones);
-
-    Observable<List<EditWatchZone>> getWatchZones();
+//    void saveWatchZones(List<EditWatchZones> watchZones);
+//
+//    Observable<List<EditWatchZones>> getWatchZones();
     
 }

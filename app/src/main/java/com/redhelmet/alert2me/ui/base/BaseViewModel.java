@@ -1,7 +1,7 @@
 package com.redhelmet.alert2me.ui.base;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;

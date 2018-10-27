@@ -1,7 +1,7 @@
 package com.redhelmet.alert2me.ui.help;
 
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
 import android.net.Uri;
 import android.util.Log;
 

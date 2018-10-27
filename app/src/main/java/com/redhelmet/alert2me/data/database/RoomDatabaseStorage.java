@@ -3,9 +3,9 @@ package com.redhelmet.alert2me.data.database;
 import android.util.Log;
 
 import com.redhelmet.alert2me.data.model.Category;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
-import com.redhelmet.alert2me.ui.activity.EditWatchZone;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public class RoomDatabaseStorage implements DatabaseStorage {
-    private RoomDatabase database;
+    private AppRoomDatabase database;
 
     @Inject
-    public RoomDatabaseStorage(RoomDatabase database) {
+    public RoomDatabaseStorage(AppRoomDatabase database) {
         this.database = database;
     }
 
@@ -92,14 +92,14 @@ public class RoomDatabaseStorage implements DatabaseStorage {
         return database.eventGroupDao().getFilterOnEventGroups().toObservable();
     }
 
-    @Override
-    public void saveWatchZones(List<EditWatchZone> watchZones) {
-        database.watchZoneDao().nukeTable();
-        database.watchZoneDao().saveWatchZones(watchZones);
-    }
-
-    @Override
-    public Observable<List<EditWatchZone>> getWatchZones() {
-        return database.watchZoneDao().getWatchZones().toObservable();
-    }
+//    @Override
+//    public void saveWatchZones(List<EditWatchZones> watchZones) {
+//        database.watchZoneDao().nukeTable();
+//        database.watchZoneDao().saveWatchZones(watchZones);
+//    }
+//
+//    @Override
+//    public Observable<List<EditWatchZones>> getWatchZones() {
+//        return database.watchZoneDao().getWatchZones().toObservable();
+//    }
 }

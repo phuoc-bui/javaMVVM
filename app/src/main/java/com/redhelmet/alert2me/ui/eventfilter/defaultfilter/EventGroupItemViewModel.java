@@ -1,9 +1,9 @@
 package com.redhelmet.alert2me.ui.eventfilter.defaultfilter;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.support.v7.widget.SwitchCompat;
+import androidx.lifecycle.MutableLiveData;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.appcompat.widget.SwitchCompat;
 import android.view.View;
 
 import com.redhelmet.alert2me.data.model.EventGroup;

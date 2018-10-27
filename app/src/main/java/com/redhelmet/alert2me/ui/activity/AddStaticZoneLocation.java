@@ -9,9 +9,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -107,12 +107,12 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
         if (extras != null) {     //edit mode
 
             editMode = extras.getBoolean("edit");
-            editWatchZones = EditWatchZones.getInstance();
-            wzData = editWatchZones.getEditWz();
+//            editWatchZones = EditWatchZones.getInstance();
+//            wzData = editWatchZones.getEditWz();
 
             position = extras.getInt("position");
 
-            wz_name = wzData.get(position).getWatchzoneName();
+            wz_name = wzData.get(position).getName();
 
 
         } else {
@@ -153,7 +153,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
 
     public void initializeMap(Bundle savedInstanceState) {
         if (editMode) {
-            if (wzData.get(position).getWatchzoneType().toString().equalsIgnoreCase("STANDARD")) {
+            if (wzData.get(position).getType().toString().equalsIgnoreCase("STANDARD")) {
                 viewSetting(true);
             } else {
                 viewSetting(false);
@@ -356,14 +356,14 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
 
                 _locationMap.setOnMapLongClickListener(AddStaticZoneLocation.this);
 
-                if (editMode) {
-                    if (wzData.get(position).getWatchzoneType().toString().equalsIgnoreCase("STANDARD")) {
-                        EditModeAddCircle(wzData.get(position).getWatchZoneGeoms(), wzData.get(position).getWatchzoneRadius());
-                    } else {
-                        EditModeAddPolygon(wzData.get(position).getWatchZoneGeoms());
-                    }
-
-                }
+//                if (editMode) {
+//                    if (wzData.get(position).getType().toString().equalsIgnoreCase("STANDARD")) {
+//                        EditModeAddCircle(wzData.get(position).getWatchZoneGeoms(), wzData.get(position).getRadius());
+//                    } else {
+//                        EditModeAddPolygon(wzData.get(position).getWatchZoneGeoms());
+//                    }
+//
+//                }
             }
         });
 

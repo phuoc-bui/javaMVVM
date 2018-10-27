@@ -1,6 +1,6 @@
 package com.redhelmet.alert2me.ui.signin;
 
-import android.databinding.ObservableBoolean;
+import androidx.databinding.ObservableBoolean;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;

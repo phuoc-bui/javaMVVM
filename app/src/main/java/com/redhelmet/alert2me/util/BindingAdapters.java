@@ -1,18 +1,17 @@
 package com.redhelmet.alert2me.util;
 
 import android.app.Activity;
-import android.databinding.BindingAdapter;
+import androidx.databinding.BindingAdapter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.ui.base.BaseRecyclerViewAdapter;
 import com.redhelmet.alert2me.ui.base.BindableAdapter;

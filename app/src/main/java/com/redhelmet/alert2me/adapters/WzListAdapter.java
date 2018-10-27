@@ -1,8 +1,8 @@
 package com.redhelmet.alert2me.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SwitchCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +96,7 @@ public class WzListAdapter extends RecyclerSwipeAdapter<WzListAdapter.WzRowHolde
             @Override
             public void onClick(View v) {
 
-                fragment.EditMode(wzList.get(position).isWzEnable(),position);
+                fragment.EditMode(wzList.get(position).isEnable(),position);
             }
         });
 
@@ -105,7 +105,7 @@ public class WzListAdapter extends RecyclerSwipeAdapter<WzListAdapter.WzRowHolde
             @Override
             public void onClick(View v) {
                 holder.swipeLayout.close(true);
-                fragment.callDeleteWz(wzList.get(position).getWatchzoneId(),wzList.get(position).getWatchzoneName(),position);
+//                fragment.callDeleteWz(wzList.get(position).getId(),wzList.get(position).getName(),position);
             }
         });
 
@@ -113,7 +113,7 @@ public class WzListAdapter extends RecyclerSwipeAdapter<WzListAdapter.WzRowHolde
             @Override
             public void onClick(View v) {
                 holder.swipeLayout.close(true);
-                fragment.watchzoneShareCode(wzList.get(position).getWatchZoneShareCode());
+                fragment.watchzoneShareCode(wzList.get(position).getShareCode());
             }
         });
 
@@ -124,7 +124,7 @@ public class WzListAdapter extends RecyclerSwipeAdapter<WzListAdapter.WzRowHolde
                if(buttonView.isPressed()) {
                    holder.stateWz.setChecked(isChecked);
 
-                       fragment.callEnableDisableWz(wzList.get(position).getWatchzoneId(), isChecked,wzList.get(position).getWatchzoneName());
+//                       fragment.callEnableDisableWz(wzList.get(position).getId(), isChecked,wzList.get(position).getName());
 
                }
 
@@ -165,8 +165,8 @@ public class WzListAdapter extends RecyclerSwipeAdapter<WzListAdapter.WzRowHolde
 
         public void bindData(int position) {
 
-            mainText.setText(wzList.get(position).getWatchzoneName());
-            stateWz.setChecked(wzList.get(position).isWzEnable());
+            mainText.setText(wzList.get(position).getName());
+            stateWz.setChecked(wzList.get(position).isEnable());
         }
     }
 

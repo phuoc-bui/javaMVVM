@@ -1,6 +1,5 @@
 package com.redhelmet.alert2me.ui.watchzone;
 
-import android.arch.lifecycle.MutableLiveData;
 
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.PreferenceStorage;
@@ -8,6 +7,7 @@ import com.redhelmet.alert2me.ui.base.BaseViewModel;
 
 import javax.inject.Inject;
 
+import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 

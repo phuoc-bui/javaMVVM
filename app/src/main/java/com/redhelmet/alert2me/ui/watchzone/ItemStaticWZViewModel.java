@@ -1,7 +1,7 @@
 package com.redhelmet.alert2me.ui.watchzone;
 
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
 
 import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
@@ -11,7 +11,7 @@ public class ItemStaticWZViewModel extends BaseViewModel {
     public ObservableBoolean wzEnable = new ObservableBoolean();
 
     public ItemStaticWZViewModel(EditWatchZones watchZone) {
-        wzName.set(watchZone.getWatchzoneName());
-        wzEnable.set(watchZone.isWzEnable());
+        wzName.set(watchZone.getName());
+        wzEnable.set(watchZone.isEnable());
     }
 }

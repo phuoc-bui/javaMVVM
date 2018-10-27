@@ -9,7 +9,7 @@
 
         <variable
             name="observable"
-            type="android.databinding.ObservableField&lt;String&gt;"/>
+            type="androidx.databinding.ObservableField&lt;String&gt;"/>
 
         <variable
             name="viewModel"
@@ -24,7 +24,7 @@
         android:paddingStart="@dimen/margin_normal"
         android:paddingEnd="@dimen/margin_normal">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"
             style="@style/Widget.A2M.TextInputLayout"
             android:layout_width="match_parent"
@@ -32,15 +32,15 @@
             android:layout_marginTop="@dimen/margin_large"
             android:hint="@{hintId}">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txt_input"
                 style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@={observable}" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.button.MaterialButton
+        <com.google.android.material.button.MaterialButton
             style="@style/Widget.A2M.Button"
             android:layout_width="@dimen/login_button_width"
             android:layout_height="wrap_content"

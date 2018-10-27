@@ -1,16 +1,14 @@
 package com.redhelmet.alert2me.di;
 
-import android.arch.persistence.room.Room;
+import androidx.room.Room;
 import android.content.Context;
 
-import com.google.gson.Gson;
 import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.data.AppDataManager;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.PreferenceStorage;
-import com.redhelmet.alert2me.data.SharedPreferenceStorage;
 import com.redhelmet.alert2me.data.database.DatabaseStorage;
-import com.redhelmet.alert2me.data.database.RoomDatabase;
+import com.redhelmet.alert2me.data.database.AppRoomDatabase;
 import com.redhelmet.alert2me.data.database.RoomDatabaseStorage;
 import com.redhelmet.alert2me.data.remote.ApiHelper;
 
@@ -30,14 +28,14 @@ public class RepositoryModule {
 
     @Singleton
     @Provides
-    public DatabaseStorage provideDatabaseStorage(RoomDatabase database) {
+    public DatabaseStorage provideDatabaseStorage(AppRoomDatabase database) {
         return new RoomDatabaseStorage(database);
     }
 
     @Singleton
     @Provides
-    public RoomDatabase provideRoomDatabase(Context context) {
-        return Room.databaseBuilder(context, RoomDatabase.class, BuildConfig.DB_FILE_NAME + "room")
+    public AppRoomDatabase provideRoomDatabase(Context context) {
+        return Room.databaseBuilder(context, AppRoomDatabase.class, BuildConfig.DB_FILE_NAME + "room")
                 .build();
     }
 }

@@ -1,11 +1,11 @@
 package com.redhelmet.alert2me.data.database.dao;
 
-import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Insert;
-import android.arch.persistence.room.OnConflictStrategy;
-import android.arch.persistence.room.Query;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
 
-import com.redhelmet.alert2me.ui.activity.EditWatchZone;
+import androidx.room.Dao;
+import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ import io.reactivex.Single;
 public interface WatchZoneDao {
 
     @Query("SELECT * FROM WatchZone")
-    Single<List<EditWatchZone>> getWatchZones();
+    Single<List<EditWatchZones>> getWatchZones();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void saveWatchZones(List<EditWatchZone> watchZones);
+    void saveWatchZones(List<EditWatchZones> watchZones);
 
     @Query("DELETE FROM WatchZone")
     void nukeTable();

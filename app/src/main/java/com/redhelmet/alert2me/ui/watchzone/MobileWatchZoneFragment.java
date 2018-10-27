@@ -1,8 +1,6 @@
 package com.redhelmet.alert2me.ui.watchzone;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.redhelmet.alert2me.R;
@@ -10,6 +8,9 @@ import com.redhelmet.alert2me.databinding.FragmentMobileWatchZoneBinding;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
 
 import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 
 public class MobileWatchZoneFragment extends BaseFragment<WatchZoneViewModel, FragmentMobileWatchZoneBinding> {
     @Inject

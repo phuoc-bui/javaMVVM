@@ -1,13 +1,11 @@
 package com.redhelmet.alert2me.ui.eventfilter.defaultfilter;
 
-import android.arch.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
-import android.widget.ExpandableListView;
 
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.adapters.DefaultNotificationAdapter;
 import com.redhelmet.alert2me.databinding.FragmentDefaultFilterBinding;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
 import com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity;

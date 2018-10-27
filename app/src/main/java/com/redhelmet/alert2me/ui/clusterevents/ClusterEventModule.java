@@ -1,6 +1,6 @@
 package com.redhelmet.alert2me.ui.clusterevents;
 
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModel;
 
 import com.redhelmet.alert2me.di.ViewModelKey;
 

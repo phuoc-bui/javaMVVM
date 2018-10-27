@@ -5,8 +5,8 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -82,7 +82,7 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_edit_watchzone);
-        editWz =  EditWatchZones.getInstance();
+//        editWz =  EditWatchZones.getInstance();
         Bundle extras = getIntent().getExtras();
 
         if (extras != null) {
@@ -93,8 +93,8 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
         categoryNamesDB=new ArrayList<>();
         categoryNamesDB=dbController.getCategoriesNames();
 
-        wzData = editWz.getEditWz();
-        editWzURL =BuildConfig.API_ENDPOINT + "apiInfo/" + wzData.get(position).getWatchzoneDeviceId() + "/watchzones/" + wzData.get(position).getWatchzoneId();
+//        wzData = editWz.getEditWz();
+        editWzURL =BuildConfig.API_ENDPOINT + "apiInfo/" + wzData.get(position).getDeviceId() + "/watchzones/" + wzData.get(position).getId();
         ringtonePickerBuilder = new RingtonePickerDialog.Builder(EditWatchZone.this, getSupportFragmentManager());
         ringtonePickerBuilder.addRingtoneType(RingtonePickerDialog.Builder.TYPE_NOTIFICATION);
         ringtonePickerBuilder.setPlaySampleWhileSelection(AddStaticZone.checkVibrationIsOn(getApplicationContext()));
@@ -103,7 +103,7 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
             public void OnRingtoneSelected(String ringtoneName, Uri ringtoneUri) {
                 _ringtoneName = ringtoneName;
                 _ringtoneURI = ringtoneUri;
-                wzData.get(position).setWatchzoneSound(ringtoneUri.toString());
+                wzData.get(position).setSound(ringtoneUri.toString());
                 soundName.setText(ringtoneName);
             }
         });
@@ -133,7 +133,7 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
 
         wzName = (EditText) findViewById(R.id.watch_zone_name);
         required_name = (TextView) findViewById(R.id.required_name);
-        wzName.setText(wzData.get(position).getWatchzoneName());
+        wzName.setText(wzData.get(position).getName());
         wzName.addTextChangedListener(watchText);
         soundName = (TextView) findViewById(notification_sound_text);
         editModeSound = (LinearLayout) findViewById(select_ringtone);
@@ -144,10 +144,10 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
         EditModeLocation.setOnClickListener(this);
         EditModeSetting.setOnClickListener(this);
 
-        if (wzData.get(position).getWatchzoneSound() == null) {
+        if (wzData.get(position).getSound() == null) {
             _ringtoneURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         } else {
-            _ringtoneURI = Uri.parse(wzData.get(position).getWatchzoneSound());
+            _ringtoneURI = Uri.parse(wzData.get(position).getSound());
         }
         ringtone = RingtoneManager.getRingtone(getApplicationContext(), _ringtoneURI);
         _ringtoneName = ringtone.getTitle(getApplicationContext());
@@ -158,13 +158,13 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
             _ringtoneName = ringtone.getTitle(getApplicationContext());
         }
         soundName.setText(ringtone.getTitle(getApplicationContext()));
-        wzData.get(position).setWatchzoneName(wzName.getText().toString());
+        wzData.get(position).setName(wzName.getText().toString());
 
     }
 
     @Override
     public void onClick(View v) {
-        wzData.get(position).setWatchzoneName(wzName.getText().toString());
+        wzData.get(position).setName(wzName.getText().toString());
         switch (v.getId()) {
             case R.id.select_ringtone:
                 ringtonePickerBuilder.show();
@@ -245,16 +245,16 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
         try {
 
             //setting wz name
-            wzData.get(position).setWatchzoneName(wzName.getText().toString());
-            mParams.put("name", wzData.get(position).getWatchzoneName());
+            wzData.get(position).setName(wzName.getText().toString());
+            mParams.put("name", wzData.get(position).getName());
             showSnack(_editWatchzoneLayout,getString(R.string.msg_upatingWZ));
 
             //setting wz sound
-            mParams.put("sound", wzData.get(position).getWatchzoneSound());
+            mParams.put("sound", wzData.get(position).getSound());
 
             //checking location scenerio
             String locationData;
-            WatchZoneGeom locationGeom;
+            WatchZoneGeom locationGeom = new WatchZoneGeom();
             if (PreferenceUtils.hasKey(getApplicationContext(), "wzLocation")) {
                 locationData = (String) PreferenceUtils.getFromPrefs(getApplicationContext(), "wzLocation", " ");
                 JSONObject obj = gson.fromJson(locationData, JSONObject.class);
@@ -264,7 +264,7 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
                 mParams.put("type", obj.getString("type"));
 
             } else {
-                locationGeom = wzData.get(position).getWatchZoneGeoms();
+//                locationGeom = wzData.get(position).getWatchZoneGeoms();
                 if(locationGeom.getType().equals("Point"))
                 mParams.put("type", "STANDARD");
                 else
@@ -298,51 +298,51 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
 
                 }
 
-                mParams.put("radius", wzData.get(position).getWatchzoneRadius());
+                mParams.put("radius", wzData.get(position).getRadius());
             }
 
-            List < Integer > filterGroup = wzData.get(position).getWatchzoneFilterGroupId();
-            mParams.put("filterGroupId", filterGroup);
-            LinkedTreeMap<String, Object> categoryFilters = new LinkedTreeMap<>();
-            ArrayList<HashMap<String, CategoryFilter>> groupData = wzData.get(position).getWatchzoneFilter();
+//            List < Integer > filterGroup = wzData.get(position).getFilterGroupId();
+//            mParams.put("filterGroupId", filterGroup);
+//            LinkedTreeMap<String, Object> categoryFilters = new LinkedTreeMap<>();
+//            ArrayList<HashMap<String, CategoryFilter>> groupData = wzData.get(position).getFilter();
 
-            for (int d=0;d<categoryNamesDB.size();d++) {
-                for (int j = 0; j < groupData.size(); j++) {
-                    HashMap<String, CategoryFilter> tempData = groupData.get(j);
+//            for (int d=0;d<categoryNamesDB.size();d++) {
+//                for (int j = 0; j < groupData.size(); j++) {
+//                    HashMap<String, CategoryFilter> tempData = groupData.get(j);
+//
+//                    if (tempData.keySet().toArray()[0].equals(categoryNamesDB.get(d).toString())) {
+//
+//                         JSONObject category = new JSONObject();
+//                        JSONArray typeArray = new JSONArray();
+//                        JSONObject catTypeObj = new JSONObject();
+//                           CategoryFilter catFilter = tempData.get(categoryNamesDB.get(d).toString());
+//                         List<CategoryTypeFilter> ct = catFilter.getTypes();
+//
+//
+//                        for(int x=0;x<ct.size();x++) {
+//                            JSONObject type = new JSONObject();
+//                            JSONArray status = new JSONArray();
+//                            for (String catStatus : ct.get(x).getStatus()) {
+//
+//                                status.put(catStatus);
+//
+//                            }
+//                            type.put("code", ct.get(x).getCode());
+//                            type.put("status", status);
+//                            typeArray.put(type);
+//                        }
+//
+//                        category.put("types", typeArray);
+//                        categoryFilters.put(categoryNamesDB.get(d).toString(), category);
+//
+//                         groupData.remove(tempData);
+//                    }
+//                }
+//
+//            }
 
-                    if (tempData.keySet().toArray()[0].equals(categoryNamesDB.get(d).toString())) {
 
-                         JSONObject category = new JSONObject();
-                        JSONArray typeArray = new JSONArray();
-                        JSONObject catTypeObj = new JSONObject();
-                           CategoryFilter catFilter = tempData.get(categoryNamesDB.get(d).toString());
-                         List<CategoryTypeFilter> ct = catFilter.getTypes();
-
-
-                        for(int x=0;x<ct.size();x++) {
-                            JSONObject type = new JSONObject();
-                            JSONArray status = new JSONArray();
-                            for (String catStatus : ct.get(x).getStatus()) {
-
-                                status.put(catStatus);
-
-                            }
-                            type.put("code", ct.get(x).getCode());
-                            type.put("status", status);
-                            typeArray.put(type);
-                        }
-
-                        category.put("types", typeArray);
-                        categoryFilters.put(categoryNamesDB.get(d).toString(), category);
-
-                         groupData.remove(tempData);
-                    }
-                }
-
-            }
-
-
-            mParams.put("filter", categoryFilters);
+//            mParams.put("filter", categoryFilters);
             mParams.put("proximity", String.valueOf("false"));
             mParams.put("address", "");
 
@@ -364,7 +364,7 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
 
                             if (Boolean.valueOf(response.getString("success"))) {
 
-                                changeText(wzData.get(position).getWatchzoneName()+ " " + getString(R.string.msg_updatedWZ));
+                                changeText(wzData.get(position).getName()+ " " + getString(R.string.msg_updatedWZ));
                                 dismisSnackbar();
                                 Thread.sleep(2000);
                                 onBackPressed();
@@ -421,9 +421,9 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
                     Intent intent = data;
                     ArrayList<HashMap<String, CategoryFilter>> filter = (ArrayList<HashMap<String, CategoryFilter>>) intent.getSerializableExtra("filter");
                     List<Integer> filterGroup = (List<Integer>) intent.getSerializableExtra("filterGroup");
-                       wzData.get(position).setWzDefault(intent.getBooleanExtra("default", wzData.get(position).isWzDefault()));
-                    wzData.get(position).setWatchzoneFilter(filter);
-                    wzData.get(position).setWatchzoneFilterGroupId(filterGroup);
+                       wzData.get(position).setDefault(intent.getBooleanExtra("default", wzData.get(position).isDefault()));
+//                    wzData.get(position).setFilter(filter);
+//                    wzData.get(position).setFilterGroupId(filterGroup);
                 }
 
                 break;

@@ -4,10 +4,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import androidx.viewpager.widget.ViewPager;
+
 /**
  * Created by inbox on 30/11/17.
  */
-public class CustomViewPager extends android.support.v4.view.ViewPager{
+public class CustomViewPager extends ViewPager {
     private boolean enabled;
 
     public CustomViewPager(Context context, AttributeSet attrs) {

@@ -1,7 +1,7 @@
 package com.redhelmet.alert2me.ui.event;
 
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
 
 import com.redhelmet.alert2me.data.model.Area;
 import com.redhelmet.alert2me.data.model.Event;
