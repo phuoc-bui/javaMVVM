@@ -48,9 +48,9 @@ public interface ApiService {
     Observable<Object> updateProfile(@Path("userId") String userId);
 
     @GET("device/{userId}/watchzones")
-    Observable<WatchZoneResponse> getWatchZones(@Path("userId") long userId);
+    Observable<WatchZoneResponse> getWatchZones(@Path("userId") String userId);
 
     @POST("device/{userId}/watchzones")
-    Observable<Object> createWatchZone(@Path("userId") long userId, @Body EditWatchZones watchZones);
+    Observable<Object> createWatchZone(@Path("userId") String userId, @Body EditWatchZones watchZones);
 
 }

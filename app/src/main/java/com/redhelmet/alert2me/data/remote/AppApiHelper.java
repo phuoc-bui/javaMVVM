@@ -11,6 +11,7 @@ import com.redhelmet.alert2me.data.remote.response.ForgotPasswordResponse;
 import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
 import com.redhelmet.alert2me.data.remote.response.RegisterAccountResponse;
 import com.redhelmet.alert2me.data.remote.response.Response;
+import com.redhelmet.alert2me.data.remote.response.WatchZoneResponse;
 
 import java.util.HashMap;
 import java.util.List;
@@ -85,7 +86,7 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Observable<EditWatchZones> getWatchZones(long userId) {
-        return null;
+    public Observable<WatchZoneResponse> getWatchZones(String userId) {
+        return filterSuccessResponse(apiService.getWatchZones("1"));
     }
 }

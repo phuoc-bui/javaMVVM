@@ -22,6 +22,7 @@ import com.redhelmet.alert2me.data.remote.response.RegisterAccountResponse;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -299,7 +300,11 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<EditWatchZones>> getWatchZones() {
-        return database.getWatchZones();
+        String userId = pref.getDeviceInfo().getUserId();
+        return Observable.concatArrayEager(database.getWatchZones(),
+                api.getWatchZones(userId)
+        .map(response -> response.watchzones))
+                .debounce(400L, TimeUnit.MILLISECONDS);
     }
 
     @Override

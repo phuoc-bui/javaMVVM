@@ -10,6 +10,7 @@ import com.redhelmet.alert2me.data.remote.response.ForgotPasswordResponse;
 import com.redhelmet.alert2me.data.remote.response.LoginResponse;
 import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
 import com.redhelmet.alert2me.data.remote.response.RegisterAccountResponse;
+import com.redhelmet.alert2me.data.remote.response.WatchZoneResponse;
 
 import java.util.List;
 
@@ -32,5 +33,5 @@ public interface ApiHelper {
 
     Observable<User> updateUserProfile(User user);
 
-    Observable<EditWatchZones> getWatchZones(long userId);
+    Observable<WatchZoneResponse> getWatchZones(String userId);
 }
