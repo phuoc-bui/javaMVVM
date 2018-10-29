@@ -18,8 +18,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -66,9 +64,8 @@ import com.redhelmet.alert2me.data.model.WatchZoneGeom;
 import com.redhelmet.alert2me.databinding.FragmentWatchzoneListBinding;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
-import com.redhelmet.alert2me.ui.activity.AddStaticZone;
+import com.redhelmet.alert2me.ui.addwatchzone.AddStaticZoneActivity;
 import com.redhelmet.alert2me.ui.activity.EditWatchZone;
-import com.redhelmet.alert2me.ui.activity.ShareWatchZone;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
 import com.redhelmet.alert2me.ui.services.BackgroundDetectedActivitiesService;
 import com.redhelmet.alert2me.util.DeviceUtil;
@@ -97,7 +94,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import androidx.viewpager.widget.ViewPager;
 
 public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, FragmentWatchzoneListBinding> implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener {
@@ -166,7 +162,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
         obtainViewModel(factory, WatchZoneViewModel.class);
 
         setupViewPager();
-        getBaseActivity().updateToolbarTitle(getString(R.string.wz_title));
+        getBaseActivity().hideToolbar(true);
 
         viewModel.proximityEnable.observe(this, enable -> binder.viewpager.setCurrentItem(enable ? 1 : 0));
 
@@ -189,31 +185,6 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
                 else binder.floatingActionButton.hide();
             }
         });
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        inflater.inflate(R.menu.watchzone_main, menu);
-        MenuItem cancelMenuItem = menu.getItem(0);
-
-        VectorDrawableCompat vectorDrawableCompat = VectorDrawableCompat.create(getResources(), R.drawable.icon_queue, null);
-        cancelMenuItem.setIcon(vectorDrawableCompat);
-
-        super.onCreateOptionsMenu(menu, inflater);
-        this.mOptionsMenu = menu;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.share:
-                intent = new Intent(getBaseActivity(), ShareWatchZone.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     public void initializeVariables() {
@@ -1116,7 +1087,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
                 if (PreferenceUtils.hasKey(_context, "wzLocation"))
                     PreferenceUtils.removeFromPrefs(_context, "wzLocation");
 
-                intent = new Intent(_context, AddStaticZone.class);
+                intent = new Intent(_context, AddStaticZoneActivity.class);
                 startActivity(intent);
                 break;
 

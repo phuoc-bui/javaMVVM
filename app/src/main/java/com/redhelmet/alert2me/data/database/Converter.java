@@ -5,7 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.redhelmet.alert2me.data.model.CategoryStatus;
 import com.redhelmet.alert2me.data.model.CategoryType;
 import com.redhelmet.alert2me.data.model.EventGroupDisplayFilter;
-import com.redhelmet.alert2me.data.model.WatchZoneFilter;
+import com.redhelmet.alert2me.data.model.WatchZoneFilterType;
 
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -52,14 +52,14 @@ public class Converter {
     }
 
     @TypeConverter
-    public static List<WatchZoneFilter.Type> fromJsonToWZTypes(String value) {
-        Type listType = new TypeToken<List<WatchZoneFilter.Type>>() {
+    public static List<WatchZoneFilterType> fromJsonToWZTypes(String value) {
+        Type listType = new TypeToken<List<WatchZoneFilterType>>() {
         }.getType();
         return new Gson().fromJson(value, listType);
     }
 
     @TypeConverter
-    public static String fromWZTypes(List<WatchZoneFilter.Type> list) {
+    public static String fromWZTypes(List<WatchZoneFilterType> list) {
         return new Gson().toJson(list);
     }
 

@@ -31,15 +31,12 @@ import com.redhelmet.alert2me.data.database.DBController;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
 import com.redhelmet.alert2me.data.model.CategoryFilter;
-import com.redhelmet.alert2me.data.model.CategoryTypeFilter;
 import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.WatchZoneGeom;
 import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
 import com.kevalpatel.ringtonepicker.RingtonePickerDialog;
 import com.kevalpatel.ringtonepicker.RingtonePickerListener;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,6 +46,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.ui.addwatchzone.AddStaticZoneActivity;
 
 import static com.redhelmet.alert2me.R.id.notification_sound_text;
 import static com.redhelmet.alert2me.R.id.select_ringtone;
@@ -97,7 +95,7 @@ public class EditWatchZone extends BaseActivity implements View.OnClickListener 
         editWzURL =BuildConfig.API_ENDPOINT + "apiInfo/" + wzData.get(position).getDeviceId() + "/watchzones/" + wzData.get(position).getId();
         ringtonePickerBuilder = new RingtonePickerDialog.Builder(EditWatchZone.this, getSupportFragmentManager());
         ringtonePickerBuilder.addRingtoneType(RingtonePickerDialog.Builder.TYPE_NOTIFICATION);
-        ringtonePickerBuilder.setPlaySampleWhileSelection(AddStaticZone.checkVibrationIsOn(getApplicationContext()));
+        ringtonePickerBuilder.setPlaySampleWhileSelection(AddStaticZoneActivity.checkVibrationIsOn(getApplicationContext()));
         ringtonePickerBuilder.setListener(new RingtonePickerListener() {
             @Override
             public void OnRingtoneSelected(String ringtoneName, Uri ringtoneUri) {

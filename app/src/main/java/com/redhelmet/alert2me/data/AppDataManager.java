@@ -122,7 +122,7 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<Category>> getCategories() {
-        return database.getCategories().subscribeOn(Schedulers.computation())
+        return database.getCategories()
                 .doOnNext(list -> categories = list);
     }
 
@@ -138,7 +138,7 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<EventGroup>> getEventGroups() {
-        return database.getEventGroups().subscribeOn(Schedulers.computation())
+        return database.getEventGroups()
                 .doOnNext(list -> eventGroups = list);
     }
 
@@ -149,12 +149,12 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<Category>> getUserCustomFilters() {
-        return database.getEditedCategories().subscribeOn(Schedulers.computation());
+        return database.getEditedCategories();
     }
 
     @Override
     public Observable<List<EventGroup>> getUserDefaultFilters() {
-        return database.getEditedEventGroups().subscribeOn(Schedulers.computation());
+        return database.getEditedEventGroups();
     }
 
     @Override
@@ -301,8 +301,10 @@ public class AppDataManager implements DataManager {
     @Override
     public Observable<List<EditWatchZones>> getWatchZones() {
         String userId = pref.getDeviceInfo().getUserId();
-        return Observable.concatArrayEager(database.getWatchZones(),
-                api.getWatchZones(userId)
+        return Observable.concatArrayEager(database.getWatchZones().doOnError(err -> Log.e("AppDataManager", "Fail to get Watch Zones from DB")),
+                api.getWatchZones("1")
+                        .doOnNext(watchZoneResponse -> saveWatchZones(watchZoneResponse.watchzones))
+                        .doOnError(err -> Log.e("AppDataManager", "Fail to get Watch Zones from API"))
         .map(response -> response.watchzones))
                 .debounce(400L, TimeUnit.MILLISECONDS);
     }

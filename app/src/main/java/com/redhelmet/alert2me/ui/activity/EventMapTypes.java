@@ -34,7 +34,7 @@ public class EventMapTypes extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_static_wz_notification_types);
+        setContentView(R.layout.fragment_edit_static_zone_notification);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

@@ -2,6 +2,8 @@ android {
     defaultConfig {
         buildConfigField("int", "DB_SCHEMA_VERSION", DB_SCHEMA_VERSION)
         buildConfigField("String", "DB_FILE_NAME", "\"$DB_FILE_NAME\"")
+        buildConfigField("double", "DEFAULT_LOCATION_LAT", "-25")
+        buildConfigField("double", "DEFAULT_LOCATION_LNG", "133")
     }
 
     flavorDimensions "environment"

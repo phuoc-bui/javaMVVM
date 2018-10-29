@@ -1,5 +1,7 @@
 package com.redhelmet.alert2me.di;
 
+import com.redhelmet.alert2me.ui.addwatchzone.AddStaticZoneActivity;
+import com.redhelmet.alert2me.ui.addwatchzone.AddStaticZoneModule;
 import com.redhelmet.alert2me.ui.eventdetail.EventDetailModule;
 import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
 import com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity;
@@ -83,4 +85,8 @@ abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = {ClusterEventModule.class})
     abstract ClusterEventListActivity clusterEventListActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = AddStaticZoneModule.class)
+    abstract AddStaticZoneActivity addStaticZoneActivity();
 }

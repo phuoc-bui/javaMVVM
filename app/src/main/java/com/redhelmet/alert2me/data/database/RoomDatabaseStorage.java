@@ -2,6 +2,7 @@ package com.redhelmet.alert2me.data.database;
 
 import android.util.Log;
 
+import com.redhelmet.alert2me.data.Mapper;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.Event;
@@ -13,13 +14,16 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 
 public class RoomDatabaseStorage implements DatabaseStorage {
     private AppRoomDatabase database;
+    private Mapper mapper;
 
     @Inject
-    public RoomDatabaseStorage(AppRoomDatabase database) {
+    public RoomDatabaseStorage(AppRoomDatabase database, Mapper mapper) {
         this.database = database;
+        this.mapper = mapper;
     }
 
     @Override
@@ -32,7 +36,7 @@ public class RoomDatabaseStorage implements DatabaseStorage {
     public Observable<List<Category>> getCategories() {
         return database.categoryDao().getCategories()
                 .doOnSuccess(list -> Log.e("Database", "getCategories: " + list.size()))
-                .toObservable();
+                .toObservable().subscribeOn(Schedulers.computation());
     }
 
     @Override
@@ -54,7 +58,7 @@ public class RoomDatabaseStorage implements DatabaseStorage {
     public Observable<List<EventGroup>> getEventGroups() {
         return database.eventGroupDao().getEventGroups()
                 .doOnSuccess(list -> Log.e("Database", "getEventGroups: " + list.size()))
-                .toObservable();
+                .toObservable().subscribeOn(Schedulers.computation());
     }
 
     @Override
@@ -84,22 +88,25 @@ public class RoomDatabaseStorage implements DatabaseStorage {
 
     @Override
     public Observable<List<Category>> getEditedCategories() {
-        return database.categoryDao().getFilterOnCategories().toObservable();
+        return database.categoryDao().getFilterOnCategories().toObservable().subscribeOn(Schedulers.computation());
     }
 
     @Override
     public Observable<List<EventGroup>> getEditedEventGroups() {
-        return database.eventGroupDao().getFilterOnEventGroups().toObservable();
+        return database.eventGroupDao().getFilterOnEventGroups().toObservable().subscribeOn(Schedulers.computation());
     }
 
     @Override
     public void saveWatchZones(List<EditWatchZones> watchZones) {
         database.watchZoneDao().nukeTable();
-        database.watchZoneDao().saveWatchZones(watchZones);
+        database.watchZoneDao().saveWatchZones(mapper.mapWzToWzEntities(watchZones));
     }
 
     @Override
     public Observable<List<EditWatchZones>> getWatchZones() {
-        return database.watchZoneDao().getWatchZones().toObservable();
+        return database.watchZoneDao().getWatchZones()
+                .map(entities -> mapper.mapWzEntitiesToWz(entities))
+                .toObservable()
+                .subscribeOn(Schedulers.computation());
     }
 }

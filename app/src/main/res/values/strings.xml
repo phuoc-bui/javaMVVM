@@ -193,6 +193,7 @@
     <string name="lbl_addShareWZ">Add Watch Zone Code</string>
     <string name="msg_addingShareWZ">Adding Watch Zone share code...</string>
     <string name="msg_addedShareWZ">Watch zone share code added successfully</string>
+    <string name="msg_wz_name_not_valid">Watch zone\'s name must be not empty!</string>
 
 
     <!--Help Fragment-->

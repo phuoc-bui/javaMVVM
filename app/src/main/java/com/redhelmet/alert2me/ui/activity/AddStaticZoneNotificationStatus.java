@@ -36,7 +36,7 @@ public class AddStaticZoneNotificationStatus extends BaseActivity implements Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_static_wz_notification_types);
+        setContentView(R.layout.fragment_edit_static_zone_notification);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             selectedType = (CategoryType) extras.getSerializable(EXTRA_CATEGORY_TYPE);

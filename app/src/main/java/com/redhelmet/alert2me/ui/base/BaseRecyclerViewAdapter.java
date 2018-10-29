@@ -2,6 +2,7 @@ package com.redhelmet.alert2me.ui.base;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableList;
 import androidx.databinding.ViewDataBinding;
 import androidx.annotation.LayoutRes;
@@ -17,12 +18,14 @@ import java.util.Collection;
 public abstract class BaseRecyclerViewAdapter<IVM> extends RecyclerView.Adapter<BaseRecyclerViewAdapter.ItemViewHolder> implements BindableAdapter<Collection<IVM>> {
 
     public ObservableArrayList<IVM> itemsSource = new ObservableArrayList<>();
+    public ObservableBoolean hasData = new ObservableBoolean(false);
 
     public BaseRecyclerViewAdapter() {
         itemsSource.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<IVM>>() {
             @Override
             public void onChanged(ObservableList<IVM> sender) {
                 notifyDataSetChanged();
+                hasData.set(sender.size() > 0);
             }
 
             @Override
@@ -43,6 +46,7 @@ public abstract class BaseRecyclerViewAdapter<IVM> extends RecyclerView.Adapter<
             @Override
             public void onItemRangeRemoved(ObservableList<IVM> sender, int positionStart, int itemCount) {
                 notifyItemRangeRemoved(positionStart, itemCount);
+                hasData.set(sender.size() > 0);
             }
         });
     }

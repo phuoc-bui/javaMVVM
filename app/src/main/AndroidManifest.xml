@@ -52,7 +52,7 @@
         <activity
             android:name="com.redhelmet.alert2me.ui.home.HomeActivity" />
         <activity
-            android:name="com.redhelmet.alert2me.ui.activity.AddStaticZone" />
+            android:name="com.redhelmet.alert2me.ui.addwatchzone.AddStaticZoneActivity" />
         <activity
             android:name="com.redhelmet.alert2me.ui.activity.AddStaticZoneLocation"
             android:screenOrientation="portrait" />

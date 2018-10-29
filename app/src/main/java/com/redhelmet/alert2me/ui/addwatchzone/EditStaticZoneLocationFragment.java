@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.ui.activity;
+package com.redhelmet.alert2me.ui.addwatchzone;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,10 +9,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,12 +39,17 @@ import com.google.gson.Gson;
 import com.google.maps.android.PolyUtil;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.ui.IconGenerator;
+import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.autocomplete.AutoCompleteLocation;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.WatchZoneGeom;
+import com.redhelmet.alert2me.databinding.FragmentEditStaticZoneLocationBinding;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
+import com.redhelmet.alert2me.ui.activity.AddStaticZoneLocation;
+import com.redhelmet.alert2me.ui.activity.AddStaticZoneNotification;
+import com.redhelmet.alert2me.ui.base.BaseFragment;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 import org.json.JSONException;
@@ -62,15 +63,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
 
-public class AddStaticZoneLocation extends BaseActivity implements View.OnClickListener, GoogleMap.OnMapLongClickListener, AutoCompleteLocation.AutoCompleteLocationListener, OnMapReadyCallback {
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
-    //default australia
-    // location
-    double latitude = -25;
-    double longitude = 133;
+public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneViewModel, FragmentEditStaticZoneLocationBinding> implements View.OnClickListener, GoogleMap.OnMapLongClickListener, AutoCompleteLocation.AutoCompleteLocationListener, OnMapReadyCallback {
+
+    @Inject
+    ViewModelProvider.Factory factory;
+
     String fill_wz_color = "#8Ce0701e";//"#8C8EB9E8";
-    Toolbar toolbar;
     Intent i;
     GoogleMap _locationMap;
     Button circleBtn, polygonBtn;
@@ -86,74 +91,29 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
     TextView txtRadius;
     int _radius = 5;
     private int seekRadius = 5;
-    PlaceAutocompleteFragment placeAutoComplete;
     boolean viewStatus = true; //enum circle 0 , poly 1
     public String wz_name = null;
-    EditWatchZones editWatchZones = null;
     ArrayList<EditWatchZones> wzData;
     int position = 0;
     boolean editMode;
-    AppConfig appConfig;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.fragment_edit_static_zone_location);
-
-
-        Bundle extras = getIntent().getExtras();
-
-        if (extras != null) {     //edit mode
-
-            editMode = extras.getBoolean("edit");
-//            editWatchZones = EditWatchZones.getInstance();
-//            wzData = editWatchZones.getEditWz();
-
-            position = extras.getInt("position");
-
-            wz_name = wzData.get(position).getName();
-
-
-        } else {
-            if (PreferenceUtils.hasKey(getApplicationContext(), getString(R.string.pref_wz_name)))
-                wz_name = (String) PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_wz_name), "");
-            //if (PreferenceUtils.hasKey(getApplicationContext(), getString(R.string.pref_tertiaryColor)))
-            //  fill_wz_color = (String) PreferenceUtils.getFromPrefs(getApplicationContext(), getString(R.string.pref_tertiaryColor), "");
-        }
-
-//        appConfig = AppModule.getInstance().provideDataManager().getAppConfig();
-//
-//        if (appConfig.getNavColor() != null) {
-//            fill_wz_color = appConfig.getNavColor();
-//        }
-
-        initializeToolbar();
-        initializeControls();
-        initializeMap();
-
-
+    protected int getLayoutId() {
+        return R.layout.fragment_edit_static_zone_location;
     }
 
-    public void initializeToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-        }
-        ActionBar supportActionBar = getSupportActionBar();
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        obtainViewModel(factory, AddStaticZoneViewModel.class);
 
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-            if (editMode)
-                supportActionBar.setTitle(Html.fromHtml("<small>" + getString(R.string.lbl_editStaticWZ) + "</small>"));
-            else
-                supportActionBar.setTitle(Html.fromHtml("<small>" + getString(R.string.lbl_addStaticWZ) + "</small>"));
-        }
+        initializeControls();
+        initializeMap();
     }
 
     public void initializeMap() {
         if (editMode) {
-            if (wzData.get(position).getWzType().toString().equalsIgnoreCase("STANDARD")) {
+            if (wzData.get(position).getWzType().equalsIgnoreCase("STANDARD")) {
                 viewSetting(true);
             } else {
                 viewSetting(false);
@@ -163,39 +123,26 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
 
         points = new ArrayList<>();
         markers = new ArrayList<>();
-        AutoCompleteLocation autoCompleteLocation =
-                (AutoCompleteLocation) findViewById(R.id.autocomplete_location);
-        autoCompleteLocation.setAutoCompleteTextListener(this);
+        binder.autocompleteLocation.setAutoCompleteTextListener(this);
 
         SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.locationMap);
-        mapFragment.getMapAsync(AddStaticZoneLocation.this);
+                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.locationMap);
+        mapFragment.getMapAsync(this);
 
-        hideSoftKeyBoard(this);
-    }
-
-    private void hideSoftKeyBoard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
-        View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
-        if (view == null) {
-            view = new View(activity);
-        }
-        imm.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+        getBaseActivity().hideKeyboard();
     }
 
 
     public void initializeControls() {
-        circleBtn = (Button) findViewById(R.id.circleBtn);
-        polygonBtn = (Button) findViewById(R.id.polygonBtn);
-        radiusLinear = (LinearLayout) findViewById(R.id.radius_layout);
-        wz_loc_inst_layout = (LinearLayout) findViewById(R.id.wz_loc_inst_layout);
-        loc_info = (TextView) findViewById(R.id.wz_loc_inst);
-        _discreteSeekBar = (DiscreteSeekBar) findViewById(R.id.radius_seek);
+        circleBtn = binder.circleBtn;
+        polygonBtn = binder.polygonBtn;
+        radiusLinear = binder.radiusLayout;
+        wz_loc_inst_layout = binder.wzLocInstLayout;
+        loc_info = binder.wzLocInst;
+        _discreteSeekBar = binder.radiusSeek;
         circleBtn.setOnClickListener(this);
         polygonBtn.setOnClickListener(this);
-        txtRadius = (TextView) findViewById(R.id.txtRadius);
+        txtRadius = binder.txtRadius;
         setupSliderValue();
 
         _discreteSeekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
@@ -228,15 +175,15 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
         txtRadius.setText(getString(R.string.txtRadiusValue) + " " + seekRadius + getString(R.string.txtRadiusKM));
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.watchzone_static_next, menu);
-        menu.getItem(0).setVisible(true);
-        if (editMode)
-            menu.getItem(1).setTitle(getString(R.string.done));
-
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.watchzone_static_next, menu);
+//        menu.getItem(0).setVisible(true);
+//        if (editMode)
+//            menu.getItem(1).setTitle(getString(R.string.done));
+//
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -254,7 +201,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
                         //cecking is circle is on map
                         deleteWz(getString(R.string.delete_circle_heading), getString(R.string.delete_circle_text), true);
                     } else {
-                        Toast.makeText(getApplicationContext(), R.string.delete_circle_message, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseActivity(), R.string.delete_circle_message, Toast.LENGTH_LONG).show();
                     }
 
                 } else {
@@ -263,7 +210,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
                     {
                         deleteWz(getString(R.string.delete_poly_heading), getString(R.string.delete_poly_message), false);
                     } else {
-                        Toast.makeText(getApplicationContext(), R.string.delete_polygon_message, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseActivity(), R.string.delete_polygon_message, Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -351,10 +298,10 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
             @Override
             public void onMapLoaded() {
                 //Your code where exception occurs goes here...
-                LatLng latLng = new LatLng(latitude, longitude);
+                LatLng latLng = new LatLng(BuildConfig.DEFAULT_LOCATION_LAT, BuildConfig.DEFAULT_LOCATION_LNG);
                 _locationMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 3.5f));
 
-                _locationMap.setOnMapLongClickListener(AddStaticZoneLocation.this);
+                _locationMap.setOnMapLongClickListener(EditStaticZoneLocationFragment.this);
 
 //                if (editMode) {
 //                    if (wzData.get(position).getType().toString().equalsIgnoreCase("STANDARD")) {
@@ -372,14 +319,11 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
 
 
     private void setWzTitle(LatLng center) {
-
-
-        Context context = getApplicationContext();
-        TextView text = new TextView(context);
+        TextView text = new TextView(getBaseActivity());
         text.setText(wz_name);
         text.setPadding(10, 10, 10, 10);
         text.setTextColor(Color.WHITE);
-        IconGenerator generator = new IconGenerator(context);
+        IconGenerator generator = new IconGenerator(getBaseActivity());
 //        generator.setBackground(context.getResources().getDrawable(R.drawable.bubble_mask));
         generator.setContentView(text);
         Bitmap icon = generator.makeIcon();
@@ -435,7 +379,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
     }
 
     private void addMarker(LatLng latLng) {
-        Drawable drawable = getApplicationContext().getResources().getDrawable(R.drawable.icon_map_pin);
+        Drawable drawable = getResources().getDrawable(R.drawable.icon_map_pin);
         BitmapDescriptor icon = getMarkerIconFromDrawable(drawable);
         Marker marker = _locationMap.addMarker(new MarkerOptions().position(latLng).icon(icon).zIndex(-1));
         markers.add(marker);
@@ -463,7 +407,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
                     points.remove(lastPoint);
                     Marker marker = markers.get(markers.size() - 1);
                     marker.remove();
-                    Toast.makeText(getApplicationContext(), "Invalid point", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseActivity(), "Invalid point", Toast.LENGTH_LONG).show();
                 }
             }
             rebuildPolygon();
@@ -558,7 +502,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
     }
 
     public void showWzChangeAlert(String heading, String text, final boolean typeValue) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseActivity());
 
         builder.setTitle(heading)
                 .setMessage(text)
@@ -585,7 +529,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
     }
 
     public void deleteWz(String heading, String text, final boolean typeValue) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseActivity());
 
         builder.setTitle(heading)
                 .setMessage(text)
@@ -659,7 +603,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
                 wzGeom.put("type", "POINT");
                 wzLoc.put("geometry", wzGeom);
 
-                PreferenceUtils.saveToPrefs(getApplicationContext(), "wzLocation", gson.toJson(wzLoc));
+                PreferenceUtils.saveToPrefs(getBaseActivity(), "wzLocation", gson.toJson(wzLoc));
                 return true;
 
             } catch (JSONException e) {
@@ -685,7 +629,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
                     wzLoc.put("radius", 0);
                     wzLoc.put("geom", st.toString());
                     wzLoc.put("type", "VARIABLE");
-                    PreferenceUtils.saveToPrefs(getApplicationContext(), "wzLocation", gson.toJson(wzLoc));
+                    PreferenceUtils.saveToPrefs(getBaseActivity(), "wzLocation", gson.toJson(wzLoc));
                     return true;
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -721,7 +665,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
             setWzTitle(latlng);
             AdjustZoom();
         } else {
-            Toast.makeText(getApplicationContext(), getString(R.string.circle_create_failed), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseActivity(), getString(R.string.circle_create_failed), Toast.LENGTH_SHORT).show();
         }
 
 
@@ -776,7 +720,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
                         onBackPressed();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.next_location_message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseActivity(), R.string.next_location_message, Toast.LENGTH_LONG).show();
                 }
             } else { //polygon
                 if (isPolygonAdded()) {
@@ -784,7 +728,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
                         onBackPressed();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.next_location_message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseActivity(), R.string.next_location_message, Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -794,20 +738,20 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
             {
                 if (isCircleAdded()) {
                     if (SaveWzInPreference()) {
-                        i = new Intent(AddStaticZoneLocation.this, AddStaticZoneNotification.class);
+                        i = new Intent(getBaseActivity(), AddStaticZoneNotification.class);
                         startActivity(i);
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.next_location_message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseActivity(), R.string.next_location_message, Toast.LENGTH_LONG).show();
                 }
             } else {
                 if (isPolygonAdded()) {
                     if (SaveWzInPreference()) {
-                        i = new Intent(AddStaticZoneLocation.this, AddStaticZoneNotification.class);
+                        i = new Intent(getBaseActivity(), AddStaticZoneNotification.class);
                         startActivity(i);
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), R.string.next_location_message, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseActivity(), R.string.next_location_message, Toast.LENGTH_LONG).show();
                 }
             }
 

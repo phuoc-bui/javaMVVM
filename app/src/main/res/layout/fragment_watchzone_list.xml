@@ -33,6 +33,7 @@
             android:layout_marginEnd="@dimen/margin_normal"
             app:backgroundTint="@color/colorRed"
             app:fabSize="auto"
+            android:onClick="@{v -> viewModel.onAddWatchZoneClick()}"
             app:srcCompat="@drawable/ic_add_black_24dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

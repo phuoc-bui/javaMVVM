@@ -76,6 +76,7 @@
             android:paddingTop="@dimen/spacing_micro"
             android:paddingEnd="@dimen/margin_normal"
             android:paddingBottom="@dimen/spacing_micro"
+            android:visibility="@{viewModel.staticWZAdapter.hasData}"
             android:text="@string/lbl_staticWZTitleHeader"
             android:textAlignment="center"
             app:layout_constraintTop_toBottomOf="@+id/header" />

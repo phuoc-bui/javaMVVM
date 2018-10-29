@@ -4,6 +4,7 @@ import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.data.database.dao.CategoryDao;
 import com.redhelmet.alert2me.data.database.dao.EventGroupDao;
 import com.redhelmet.alert2me.data.database.dao.WatchZoneDao;
+import com.redhelmet.alert2me.data.database.entity.WatchZoneEntity;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.EventGroup;
@@ -15,7 +16,7 @@ import androidx.room.TypeConverters;
 /**
  * The Room Database that contains the User table.
  */
-@Database(entities = {Category.class, EventGroup.class, EditWatchZones.class},
+@Database(entities = {Category.class, EventGroup.class, WatchZoneEntity.class},
         version = BuildConfig.DB_SCHEMA_VERSION,
         exportSchema = false)
 @TypeConverters(value = {Converter.class})
