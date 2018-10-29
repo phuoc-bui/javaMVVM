@@ -1,6 +1,7 @@
 package com.redhelmet.alert2me.data.remote;
 
 import com.redhelmet.alert2me.data.model.ApiInfo;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.User;
 import com.redhelmet.alert2me.data.remote.request.ProximityLocationRequest;
@@ -30,4 +31,6 @@ public interface ApiHelper {
     Observable<ForgotPasswordResponse> forgotPassword(String email);
 
     Observable<User> updateUserProfile(User user);
+
+    Observable<EditWatchZones> getWatchZones(long userId);
 }

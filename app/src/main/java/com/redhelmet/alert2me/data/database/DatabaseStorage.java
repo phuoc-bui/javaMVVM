@@ -37,8 +37,8 @@ public interface DatabaseStorage {
 
     Observable<List<EventGroup>> getEditedEventGroups();
 
-//    void saveWatchZones(List<EditWatchZones> watchZones);
-//
-//    Observable<List<EditWatchZones>> getWatchZones();
+    void saveWatchZones(List<EditWatchZones> watchZones);
+
+    Observable<List<EditWatchZones>> getWatchZones();
     
 }

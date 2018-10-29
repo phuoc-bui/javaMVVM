@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.data.remote;
 
+import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.User;
 import com.redhelmet.alert2me.data.remote.request.ProximityLocationRequest;
 import com.redhelmet.alert2me.data.remote.request.RegisterDeviceRequest;
@@ -10,6 +11,7 @@ import com.redhelmet.alert2me.data.remote.response.LoginResponse;
 import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
 import com.redhelmet.alert2me.data.remote.response.RegisterAccountResponse;
 import com.redhelmet.alert2me.data.remote.response.RegisterDeviceResponse;
+import com.redhelmet.alert2me.data.remote.response.WatchZoneResponse;
 
 import java.util.HashMap;
 
@@ -42,6 +44,13 @@ public interface ApiService {
     @POST("account/forgot")
     Observable<ForgotPasswordResponse> forgotPassword(@Body HashMap<String, String> email);
 
-    @PUT("/account/user/{userId}")
+    @PUT("account/user/{userId}")
     Observable<Object> updateProfile(@Path("userId") String userId);
+
+    @GET("device/{userId}/watchzones")
+    Observable<WatchZoneResponse> getWatchZones(@Path("userId") long userId);
+
+    @POST("device/{userId}/watchzones")
+    Observable<Object> createWatchZone(@Path("userId") long userId, @Body EditWatchZones watchZones);
+
 }

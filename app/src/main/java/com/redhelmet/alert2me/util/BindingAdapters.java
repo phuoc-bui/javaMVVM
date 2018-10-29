@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.redhelmet.alert2me.data.model.Event;
+import com.redhelmet.alert2me.global.LambdaInterface;
 import com.redhelmet.alert2me.ui.base.BaseRecyclerViewAdapter;
 import com.redhelmet.alert2me.ui.base.BindableAdapter;
 import com.redhelmet.alert2me.ui.widget.EventIcon;
@@ -45,6 +46,11 @@ public class BindingAdapters {
     @BindingAdapter("binding:onRefresh")
     public static void onSwipeToRefresh(SwipeRefreshLayout refreshLayout, Runnable runnable) {
         refreshLayout.setOnRefreshListener(runnable::run);
+    }
+
+    @BindingAdapter("binding:onRefresh")
+    public static void onSwipeToRefreshFunction(SwipeRefreshLayout refreshLayout, LambdaInterface.Function runnable) {
+        refreshLayout.setOnRefreshListener(runnable::apply);
     }
 
     @BindingAdapter("android:src")

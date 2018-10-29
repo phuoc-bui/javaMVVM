@@ -153,7 +153,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
 
     public void initializeMap(Bundle savedInstanceState) {
         if (editMode) {
-            if (wzData.get(position).getType().toString().equalsIgnoreCase("STANDARD")) {
+            if (wzData.get(position).getWzType().toString().equalsIgnoreCase("STANDARD")) {
                 viewSetting(true);
             } else {
                 viewSetting(false);

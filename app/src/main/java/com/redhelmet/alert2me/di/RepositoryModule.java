@@ -14,6 +14,7 @@ import com.redhelmet.alert2me.data.remote.ApiHelper;
 
 import javax.inject.Singleton;
 
+import androidx.room.migration.Migration;
 import dagger.Module;
 import dagger.Provides;
 
@@ -36,6 +37,7 @@ public class RepositoryModule {
     @Provides
     public AppRoomDatabase provideRoomDatabase(Context context) {
         return Room.databaseBuilder(context, AppRoomDatabase.class, BuildConfig.DB_FILE_NAME + "room")
+                .fallbackToDestructiveMigration()
                 .build();
     }
 }

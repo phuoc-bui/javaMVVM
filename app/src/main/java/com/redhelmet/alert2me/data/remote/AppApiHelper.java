@@ -1,6 +1,7 @@
 package com.redhelmet.alert2me.data.remote;
 
 import com.redhelmet.alert2me.data.model.ApiInfo;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.User;
 import com.redhelmet.alert2me.data.remote.request.ProximityLocationRequest;
@@ -81,5 +82,10 @@ public class AppApiHelper implements ApiHelper {
                 return Notification.createOnError(new Throwable(notification.getValue().errorMessage));
             } else return notification;
         }).dematerialize();
+    }
+
+    @Override
+    public Observable<EditWatchZones> getWatchZones(long userId) {
+        return null;
     }
 }

@@ -13,7 +13,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class WatchZoneViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> proximityEnable = new MutableLiveData<>();
-
+    public MutableLiveData<Boolean> isRefreshing = new MutableLiveData<>();
     public StaticWZAdapter staticWZAdapter = new StaticWZAdapter();
 
     @Inject
@@ -24,17 +24,19 @@ public class WatchZoneViewModel extends BaseViewModel {
     }
 
     private void getData() {
-        showLoadingDialog(true);
+        isRefreshing.setValue(false);
         disposeBag.add(dataManager.getWatchZones()
                 .flatMap(Observable::fromIterable)
                 .map(ItemStaticWZViewModel::new)
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe( list -> {
-                    showLoadingDialog(false);
+                    isRefreshing.setValue(false);
                     staticWZAdapter.itemsSource.clear();
                     staticWZAdapter.itemsSource.addAll(list);
-                }, err -> showLoadingDialog(false)));
+                }, err -> {
+                    isRefreshing.setValue(false);
+                }));
     }
 
     public void onRefresh() {

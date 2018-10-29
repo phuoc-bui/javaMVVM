@@ -23,5 +23,6 @@ public class StaticWatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fr
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         obtainViewModel(factory, WatchZoneViewModel.class);
+        viewModel.isRefreshing.observe(this, b -> binder.swipeRefreshLayout.setRefreshing(b));
     }
 }

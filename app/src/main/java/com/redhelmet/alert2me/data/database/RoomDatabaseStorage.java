@@ -92,14 +92,14 @@ public class RoomDatabaseStorage implements DatabaseStorage {
         return database.eventGroupDao().getFilterOnEventGroups().toObservable();
     }
 
-//    @Override
-//    public void saveWatchZones(List<EditWatchZones> watchZones) {
-//        database.watchZoneDao().nukeTable();
-//        database.watchZoneDao().saveWatchZones(watchZones);
-//    }
-//
-//    @Override
-//    public Observable<List<EditWatchZones>> getWatchZones() {
-//        return database.watchZoneDao().getWatchZones().toObservable();
-//    }
+    @Override
+    public void saveWatchZones(List<EditWatchZones> watchZones) {
+        database.watchZoneDao().nukeTable();
+        database.watchZoneDao().saveWatchZones(watchZones);
+    }
+
+    @Override
+    public Observable<List<EditWatchZones>> getWatchZones() {
+        return database.watchZoneDao().getWatchZones().toObservable();
+    }
 }

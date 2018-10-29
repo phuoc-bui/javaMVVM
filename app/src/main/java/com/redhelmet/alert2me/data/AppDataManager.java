@@ -299,11 +299,11 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<EditWatchZones>> getWatchZones() {
-        return null;
+        return database.getWatchZones();
     }
 
     @Override
     public void saveWatchZones(List<EditWatchZones> watchZones) {
-
+        database.saveWatchZones(watchZones);
     }
 }

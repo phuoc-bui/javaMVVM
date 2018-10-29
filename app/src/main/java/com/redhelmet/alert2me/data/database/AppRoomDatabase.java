@@ -24,5 +24,5 @@ public abstract class AppRoomDatabase extends RoomDatabase {
 
     public abstract EventGroupDao eventGroupDao();
 
-//    public abstract WatchZoneDao watchZoneDao();
+    public abstract WatchZoneDao watchZoneDao();
 }

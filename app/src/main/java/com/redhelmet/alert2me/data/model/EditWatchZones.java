@@ -2,10 +2,9 @@ package com.redhelmet.alert2me.data.model;
 
 import com.redhelmet.alert2me.data.model.base.UserModel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -19,15 +18,17 @@ public class EditWatchZones extends UserModel {
     private String address;
     private String name;
     private String radius;
-    private String type;
-//    private ArrayList<HashMap<String, CategoryFilter>> filter;
-//    private List<Integer> filterGroupId;
+    private String wzType;
+    @Embedded
+    private WatchZoneFilter filter;
+    private List<Integer> filterGroupId;
     private boolean enable;
     private boolean proximity;
     private boolean isDefault;
     private boolean noEdit;
     private String shareCode;
-//    private WatchZoneGeom watchZoneGeoms;
+    @Embedded
+    private Geometry geom;
 
     public long getId() {
         return id;
@@ -77,29 +78,29 @@ public class EditWatchZones extends UserModel {
         this.radius = radius;
     }
 
-    public String getType() {
-        return type;
+    public String getWzType() {
+        return wzType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setWzType(String type) {
+        this.wzType = type;
     }
 
-//    public ArrayList<HashMap<String, CategoryFilter>> getFilter() {
-//        return filter;
-//    }
-//
-//    public void setFilter(ArrayList<HashMap<String, CategoryFilter>> filter) {
-//        this.filter = filter;
-//    }
-//
-//    public List<Integer> getFilterGroupId() {
-//        return filterGroupId;
-//    }
-//
-//    public void setFilterGroupId(List<Integer> filterGroupId) {
-//        this.filterGroupId = filterGroupId;
-//    }
+    public WatchZoneFilter getFilter() {
+        return filter;
+    }
+
+    public void setFilter(WatchZoneFilter filter) {
+        this.filter = filter;
+    }
+
+    public List<Integer> getFilterGroupId() {
+        return filterGroupId;
+    }
+
+    public void setFilterGroupId(List<Integer> filterGroupId) {
+        this.filterGroupId = filterGroupId;
+    }
 
     public boolean isEnable() {
         return enable;
@@ -141,11 +142,11 @@ public class EditWatchZones extends UserModel {
         this.shareCode = shareCode;
     }
 
-//    public WatchZoneGeom getWatchZoneGeoms() {
-//        return watchZoneGeoms;
-//    }
-//
-//    public void setWatchZoneGeoms(WatchZoneGeom watchZoneGeoms) {
-//        this.watchZoneGeoms = watchZoneGeoms;
-//    }
+    public Geometry getGeom() {
+        return geom;
+    }
+
+    public void setGeom(Geometry geom) {
+        this.geom = geom;
+    }
 }

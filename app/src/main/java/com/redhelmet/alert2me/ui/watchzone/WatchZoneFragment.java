@@ -1,7 +1,6 @@
 package com.redhelmet.alert2me.ui.watchzone;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -71,7 +70,6 @@ import com.redhelmet.alert2me.ui.activity.AddStaticZone;
 import com.redhelmet.alert2me.ui.activity.EditWatchZone;
 import com.redhelmet.alert2me.ui.activity.ShareWatchZone;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
-import com.redhelmet.alert2me.ui.home.HomeActivity;
 import com.redhelmet.alert2me.ui.services.BackgroundDetectedActivitiesService;
 import com.redhelmet.alert2me.util.DeviceUtil;
 
@@ -165,7 +163,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        obtainViewModel(factory, WatchZoneViewModel.class);
+        obtainViewModel(factory, WatchZoneViewModel.class);
 
         setupViewPager();
         getBaseActivity().updateToolbarTitle(getString(R.string.wz_title));
@@ -173,9 +171,9 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
         viewModel.proximityEnable.observe(this, enable -> binder.viewpager.setCurrentItem(enable ? 1 : 0));
 
 //        initializeControl();
-        initializeVariables();
-        initializeListener();
-        initializeWzList();
+//        initializeVariables();
+//        initializeListener();
+//        initializeWzList();
     }
 
     private void setupViewPager() {
@@ -497,20 +495,20 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
         super.onResume();
         //   mRecyclerView.addOnItemTouchListener(onTouchListener);
 
-        if (!getUserVisibleHint()) {
-            return;
-        }
-        Activity activity = getActivity();
-        if (activity instanceof HomeActivity) {
-            HomeActivity home = (HomeActivity) activity;
-            home.updateToolbarTitle("Watch Zone");
-        }
-
-        if (viewSwitcher.getCurrentView() == staticLayout) {
-            getWatchZones();
-        } else {
-            getMobileWZData();
-        }
+//        if (!getUserVisibleHint()) {
+//            return;
+//        }
+//        Activity activity = getActivity();
+//        if (activity instanceof HomeActivity) {
+//            HomeActivity home = (HomeActivity) activity;
+//            home.updateToolbarTitle("Watch Zone");
+//        }
+//
+//        if (viewSwitcher.getCurrentView() == staticLayout) {
+//            getWatchZones();
+//        } else {
+//            getMobileWZData();
+//        }
     }
 
     public void getMobileWZData() {
@@ -809,7 +807,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
                     editModel.setDeviceId(data.getString("deviceId"));
                     editModel.setAddress(data.getString("address"));
                     editModel.setRadius(data.getString("radius"));
-                    editModel.setType(data.getString("type"));
+                    editModel.setWzType(data.getString("type"));
                     editModel.setProximity(Boolean.valueOf(data.getString("proximity")));
                     editModel.setNoEdit(Boolean.valueOf(data.getString("noEdit")));
 
@@ -989,7 +987,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
             values.put(DBController.KEY_REF_WZ_ADDRESS, wz.getAddress());
             values.put(DBController.KEY_REF_WZ_NAME, wz.getName());
             values.put(DBController.KEY_REF_WZ_RADIUS, wz.getRadius());
-            values.put(DBController.KEY_REF_WZ_TYPE, wz.getType());
+            values.put(DBController.KEY_REF_WZ_TYPE, wz.getWzType());
 
             String wzFilter = "", wzFilterGroupID = "";
 
@@ -1175,14 +1173,14 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (menu.findItem(R.id.share) != null)
-            if (viewSwitcher.getCurrentView() == staticLayout) {
-                menu.findItem(R.id.share).setVisible(true);
-
-            } else {
-                menu.findItem(R.id.share).setVisible(false);
-
-            }
+//        if (menu.findItem(R.id.share) != null)
+//            if (viewSwitcher.getCurrentView() == staticLayout) {
+//                menu.findItem(R.id.share).setVisible(true);
+//
+//            } else {
+//                menu.findItem(R.id.share).setVisible(false);
+//
+//            }
     }
 
     public void mobileView() {
