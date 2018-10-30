@@ -89,4 +89,9 @@ public class AppApiHelper implements ApiHelper {
     public Observable<WatchZoneResponse> getWatchZones(String userId) {
         return filterSuccessResponse(apiService.getWatchZones("1"));
     }
+
+    @Override
+    public Observable<Object> createWatchZone(String userId, EditWatchZones watchZones) {
+        return apiService.createWatchZone(userId, watchZones);
+    }
 }

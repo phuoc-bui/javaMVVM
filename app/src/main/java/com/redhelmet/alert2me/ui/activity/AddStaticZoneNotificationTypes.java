@@ -46,8 +46,8 @@ public class AddStaticZoneNotificationTypes extends BaseActivity {
             selectedCategory = (Category) extras.getSerializable(EXTRA_CATEGORY);
             categoryIndex = extras.getInt(EXTRA_CATEGORY_INDEX);
         }
-        initializeToolbar();
-        initializeControls();
+//        initializeToolbar();
+//        initializeControls();
     }
 
     public void initializeToolbar() {
@@ -64,19 +64,19 @@ public class AddStaticZoneNotificationTypes extends BaseActivity {
     }
 
 
-    public void initializeControls() {
-        exTypes = findViewById(R.id.customCatTypeList);
-
-        CustomNotificationTypeAdapter mAdapter = new CustomNotificationTypeAdapter(selectedCategory);
-        exTypes.setItemsCanFocus(true);
-        exTypes.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
-
-        exTypes.setOnItemClickListener((parent, view, position, id) -> {
-            Intent i = AddStaticZoneNotificationStatus.newInstance(AddStaticZoneNotificationTypes.this, selectedCategory.getTypes().get(position), position);
-            startActivityForResult(i, REQUEST_CATEGORY_TYPE);
-        });
-    }
+//    public void initializeControls() {
+//        exTypes = findViewById(R.id.customCatTypeList);
+//
+//        CustomNotificationTypeAdapter mAdapter = new CustomNotificationTypeAdapter(selectedCategory);
+//        exTypes.setItemsCanFocus(true);
+//        exTypes.setAdapter(mAdapter);
+//        mAdapter.notifyDataSetChanged();
+//
+//        exTypes.setOnItemClickListener((parent, view, position, id) -> {
+//            Intent i = AddStaticZoneNotificationStatus.newInstance(AddStaticZoneNotificationTypes.this, selectedCategory.getTypes().get(position), position);
+//            startActivityForResult(i, REQUEST_CATEGORY_TYPE);
+//        });
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,23 +87,24 @@ public class AddStaticZoneNotificationTypes extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.done_btn:
-                Toast.makeText(getApplicationContext(),
-                        "next static",
-                        Toast.LENGTH_SHORT).show();
-                return true;
-
-            case android.R.id.home:
-                Intent result = new Intent();
-                result.putExtra(EXTRA_CATEGORY, selectedCategory);
-                result.putExtra(EXTRA_CATEGORY_INDEX, categoryIndex);
-                setResult(RESULT_OK, result);
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+//        switch (item.getItemId()) {
+//            case R.id.done_btn:
+//                Toast.makeText(getApplicationContext(),
+//                        "next static",
+//                        Toast.LENGTH_SHORT).show();
+//                return true;
+//
+//            case android.R.id.home:
+//                Intent result = new Intent();
+//                result.putExtra(EXTRA_CATEGORY, selectedCategory);
+//                result.putExtra(EXTRA_CATEGORY_INDEX, categoryIndex);
+//                setResult(RESULT_OK, result);
+//                finish();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

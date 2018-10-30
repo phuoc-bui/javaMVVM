@@ -31,8 +31,8 @@ public class EventMapStatus extends BaseActivity implements View.OnClickListener
         if (extras != null) {
             selectedType = (CategoryType) extras.getSerializable(EXTRA_CATEGORY_TYPE);
         }
-        initializeToolbar();
-        initializeControls();
+//        initializeToolbar();
+//        initializeControls();
 
     }
 
@@ -50,14 +50,14 @@ public class EventMapStatus extends BaseActivity implements View.OnClickListener
     }
 
 
-    public void initializeControls() {
-
-        exTypes = (ListView) findViewById(R.id.customCatTypeList);
-        mAdapter = new CustomNotificationStatusAdapter(selectedType);
-        exTypes.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
-
-    }
+//    public void initializeControls() {
+//
+//        exTypes = (ListView) findViewById(R.id.customCatTypeList);
+//        mAdapter = new CustomNotificationStatusAdapter(selectedType);
+//        exTypes.setAdapter(mAdapter);
+//        mAdapter.notifyDataSetChanged();
+//
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,20 +68,21 @@ public class EventMapStatus extends BaseActivity implements View.OnClickListener
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.done_btn:
-                Toast.makeText(getApplicationContext(),
-                        "next static",
-                        Toast.LENGTH_SHORT).show();
-
-                return true;
-
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+//        switch (item.getItemId()) {
+//            case R.id.done_btn:
+//                Toast.makeText(getApplicationContext(),
+//                        "next static",
+//                        Toast.LENGTH_SHORT).show();
+//
+//                return true;
+//
+//            case android.R.id.home:
+//                onBackPressed();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+        return super.onOptionsItemSelected(item);
     }
 
 

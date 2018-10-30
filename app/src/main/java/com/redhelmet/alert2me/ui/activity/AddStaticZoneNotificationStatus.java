@@ -43,8 +43,8 @@ public class AddStaticZoneNotificationStatus extends BaseActivity implements Vie
             typePosition = extras.getInt(EXTRA_TYPE_POSITION);
         }
 
-        initializeToolbar();
-        initializeControls();
+//        initializeToolbar();
+//        initializeControls();
     }
 
     public void initializeToolbar() {
@@ -63,7 +63,7 @@ public class AddStaticZoneNotificationStatus extends BaseActivity implements Vie
 
     public void initializeControls() {
 
-        exTypes = (ListView) findViewById(R.id.customCatTypeList);
+//        exTypes = (ListView) findViewById(R.id.customCatTypeList);
         CustomNotificationStatusAdapter mAdapter = new CustomNotificationStatusAdapter(selectedType);
         exTypes.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -79,25 +79,26 @@ public class AddStaticZoneNotificationStatus extends BaseActivity implements Vie
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.done_btn:
-                Toast.makeText(getApplicationContext(),
-                        "next static",
-                        Toast.LENGTH_SHORT).show();
-
-                return true;
-
-            case android.R.id.home:
-                updateSelectedTypeStatus();
-                Intent result = new Intent();
-                result.putExtra(EXTRA_CATEGORY_TYPE, selectedType);
-                result.putExtra(EXTRA_TYPE_POSITION, typePosition);
-                setResult(RESULT_OK, result);
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+//        switch (item.getItemId()) {
+//            case R.id.done_btn:
+//                Toast.makeText(getApplicationContext(),
+//                        "next static",
+//                        Toast.LENGTH_SHORT).show();
+//
+//                return true;
+//
+//            case android.R.id.home:
+//                updateSelectedTypeStatus();
+//                Intent result = new Intent();
+//                result.putExtra(EXTRA_CATEGORY_TYPE, selectedType);
+//                result.putExtra(EXTRA_TYPE_POSITION, typePosition);
+//                setResult(RESULT_OK, result);
+//                finish();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void updateSelectedTypeStatus() {

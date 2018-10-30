@@ -15,6 +15,8 @@ import com.redhelmet.alert2me.data.remote.response.WatchZoneResponse;
 import java.util.List;
 
 import io.reactivex.Observable;
+import retrofit2.http.Body;
+import retrofit2.http.Path;
 
 public interface ApiHelper {
     Observable<ConfigResponse> getConfig();
@@ -34,4 +36,6 @@ public interface ApiHelper {
     Observable<User> updateUserProfile(User user);
 
     Observable<WatchZoneResponse> getWatchZones(String userId);
+
+    Observable<Object> createWatchZone(String userId, EditWatchZones watchZones);
 }

@@ -302,7 +302,7 @@ public class AppDataManager implements DataManager {
     public Observable<List<EditWatchZones>> getWatchZones() {
         String userId = pref.getDeviceInfo().getUserId();
         return Observable.concatArrayEager(database.getWatchZones().doOnError(err -> Log.e("AppDataManager", "Fail to get Watch Zones from DB")),
-                api.getWatchZones("1")
+                api.getWatchZones(userId)
                         .doOnNext(watchZoneResponse -> saveWatchZones(watchZoneResponse.watchzones))
                         .doOnError(err -> Log.e("AppDataManager", "Fail to get Watch Zones from API"))
                         .map(response -> response.watchzones))
@@ -311,16 +311,20 @@ public class AppDataManager implements DataManager {
 
     @Override
     public void saveWatchZones(List<EditWatchZones> watchZones) {
-        database.saveWatchZones(watchZones);
+        Single.just(1)
+                .doOnSuccess(i -> database.saveWatchZones(watchZones))
+                .subscribe();
     }
 
     @Override
-    public void addWatchZone(EditWatchZones watchZone) {
-        database.addWatchZone(watchZone);
+    public Observable<Object> addWatchZone(EditWatchZones watchZone) {
+        String userId = pref.getDeviceInfo().getUserId();
+        return api.createWatchZone(userId, watchZone)
+        .doOnNext(o -> database.addWatchZone(watchZone));
     }
 
     @Override
-    public void editWatchZone(EditWatchZones watchZone) {
-        database.addWatchZone(watchZone);
+    public Observable<Object> editWatchZone(EditWatchZones watchZone) {
+        return null;
     }
 }

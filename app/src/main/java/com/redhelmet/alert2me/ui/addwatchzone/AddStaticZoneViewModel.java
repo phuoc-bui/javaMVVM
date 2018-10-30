@@ -29,7 +29,7 @@ public class AddStaticZoneViewModel extends BaseViewModel {
         EDIT, ADD
     }
 
-    private Step currentStep = Step.EDIT_NAME;
+    public MutableLiveData<Step> currentStep = new MutableLiveData<>();
     private Mode mode = Mode.ADD;
 
     public WatchZoneModel watchZoneModel = new WatchZoneModel();
@@ -37,6 +37,7 @@ public class AddStaticZoneViewModel extends BaseViewModel {
     @Inject
     public AddStaticZoneViewModel(DataManager dataManager) {
         super(dataManager);
+        currentStep.setValue(Step.EDIT_NAME);
     }
 
     public void setWatchZone(EditWatchZones watchZone) {
@@ -46,17 +47,17 @@ public class AddStaticZoneViewModel extends BaseViewModel {
 
     public void onNextClick() {
         NavigationItem destination = null;
-        switch (currentStep) {
+        switch (currentStep.getValue()) {
             case EDIT_NAME:
                 if (watchZoneModel.validateName()) {
-                    currentStep = Step.EDIT_LOCATION;
+                    currentStep.setValue(Step.EDIT_LOCATION);
                     destination = new NavigationItem(NavigationItem.CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK, new EditStaticZoneLocationFragment());
                 } else {
                     destination = new NavigationItem(NavigationItem.SHOW_TOAST, R.string.msg_wz_name_not_valid);
                 }
                 break;
             case EDIT_LOCATION:
-                currentStep = Step.EDIT_NOTIFICATION;
+                currentStep.setValue(Step.EDIT_NOTIFICATION);
                 destination = new NavigationItem(NavigationItem.CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK, new EditStaticZoneNotificationFragment());
                 break;
         }
@@ -64,12 +65,12 @@ public class AddStaticZoneViewModel extends BaseViewModel {
     }
 
     public void onBackClick() {
-        switch (currentStep) {
+        switch (currentStep.getValue()) {
             case EDIT_NOTIFICATION:
-                currentStep = Step.EDIT_LOCATION;
+                currentStep.setValue(Step.EDIT_LOCATION);
                 break;
             case EDIT_LOCATION:
-                currentStep = Step.EDIT_NAME;
+                currentStep.setValue(Step.EDIT_NAME);
                 break;
         }
         navigateTo(new NavigationItem(NavigationItem.POP_FRAGMENT_BACK));
@@ -81,6 +82,14 @@ public class AddStaticZoneViewModel extends BaseViewModel {
         } else {
             dataManager.editWatchZone(watchZoneModel.getWatchZones(true));
         }
+        navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, "Saving successful."));
+        navigateTo(new NavigationItem(NavigationItem.FINISH));
+    }
+
+    public void setRingSound()
+
+    public boolean isDefaultFilter() {
+        return dataManager.isDefaultFilter();
     }
 
     public void savePolygon(Polygon polygon) {

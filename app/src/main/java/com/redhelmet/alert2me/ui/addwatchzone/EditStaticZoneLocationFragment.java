@@ -133,6 +133,7 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
         loc_info = binder.wzLocInst;
         _discreteSeekBar = binder.radiusSeek;
         toggleGeometryType = binder.toggleGeometry;
+        toggleGeometryType.setToggled(geometryType == GeometryType.CIRCLE ? R.id.toggle_circle : R.id.toggle_polygon, true);
         toggleGeometryType.setOnToggledListener((toggle, selected) -> {
             switch (toggle.getId()) {
                 case R.id.toggle_circle:
@@ -519,6 +520,7 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
                     public void onClick(DialogInterface dialog, int which) {
 
                         dialog.dismiss();
+                        toggleGeometryType.setToggled(typeValue ? R.id.toggle_polygon : R.id.toggle_circle, true);
                     }
                 })
                 .show();
@@ -554,17 +556,12 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
             loc_info.setText(getResources().getString(R.string.watchzone_location_inst_circle));
             geometryType = GeometryType.CIRCLE;
             wz_loc_inst_layout.setVisibility(View.VISIBLE);
-//            circleBtn.setBackgroundResource(R.drawable.button_red_bottom_border);
-//            polygonBtn.setBackgroundResource(R.drawable.border_shadow);
             //reseting polygon
             this._polygon = null;
             this.points = new ArrayList<>();
         } else {
-//            polygonBtn.setBackgroundResource(R.drawable.button_red_bottom_border);
-//            circleBtn.setBackgroundResource(R.drawable.border_shadow);
             this._circle = null;//reseting circle
             radiusLinear.setVisibility(View.GONE);
-
             loc_info.setText(getResources().getString(R.string.watchzone_location_inst_polygon));
             geometryType = GeometryType.POLYGON;
         }

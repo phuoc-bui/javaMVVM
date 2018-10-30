@@ -52,6 +52,6 @@ public interface DataManager {
     Observable<User> updateUserProfile(User user);
     Observable<List<EditWatchZones>> getWatchZones();
     void saveWatchZones(List<EditWatchZones> watchZones);
-    void addWatchZone(EditWatchZones watchZone);
-    void editWatchZone(EditWatchZones watchZone);
+    Observable<Object> addWatchZone(EditWatchZones watchZone);
+    Observable<Object> editWatchZone(EditWatchZones watchZone);
 }

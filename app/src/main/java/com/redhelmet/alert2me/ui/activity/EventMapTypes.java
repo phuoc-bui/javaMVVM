@@ -41,44 +41,44 @@ public class EventMapTypes extends BaseActivity {
             selectedCategory = (Category) extras.getSerializable(EXTRA_CATEGORY);
         }
 
-        initializeToolbar();
-        initializeControls();
+//        initializeToolbar();
+//        initializeControls();
 
     }
 
-    public void initializeToolbar() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-        }
-        ActionBar supportActionBar = getSupportActionBar();
-
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setTitle(Html.fromHtml("<small>" + selectedCategory.getNameLabel() + "</small>"));
-        }
-    }
-
-
-    public void initializeControls() {
+//    public void initializeToolbar() {
+//        toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        if (toolbar != null) {
+//            setSupportActionBar(toolbar);
+//        }
+//        ActionBar supportActionBar = getSupportActionBar();
+//
+//        if (supportActionBar != null) {
+//            supportActionBar.setDisplayHomeAsUpEnabled(true);
+//            supportActionBar.setTitle(Html.fromHtml("<small>" + selectedCategory.getNameLabel() + "</small>"));
+//        }
+//    }
 
 
-        exTypes = (ListView) findViewById(R.id.customCatTypeList);
-
-        mAdapter = new MapNotificationTypeAdapter(selectedCategory);
-        exTypes.setItemsCanFocus(true);
-        exTypes.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
-
-
-        exTypes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = AddStaticZoneNotificationStatus.newInstance(EventMapTypes.this, selectedCategory.getTypes().get(position), position);
-                startActivity(i);
-            }
-        });
-    }
+//    public void initializeControls() {
+//
+//
+//        exTypes = (ListView) findViewById(R.id.customCatTypeList);
+//
+//        mAdapter = new MapNotificationTypeAdapter(selectedCategory);
+//        exTypes.setItemsCanFocus(true);
+//        exTypes.setAdapter(mAdapter);
+//        mAdapter.notifyDataSetChanged();
+//
+//
+//        exTypes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent i = AddStaticZoneNotificationStatus.newInstance(EventMapTypes.this, selectedCategory.getTypes().get(position), position);
+//                startActivity(i);
+//            }
+//        });
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,27 +89,28 @@ public class EventMapTypes extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.done_btn:
-                Toast.makeText(getApplicationContext(),
-                        "next static",
-                        Toast.LENGTH_SHORT).show();
-
-                return true;
-
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+//        switch (item.getItemId()) {
+//            case R.id.done_btn:
+//                Toast.makeText(getApplicationContext(),
+//                        "next static",
+//                        Toast.LENGTH_SHORT).show();
+//
+//                return true;
+//
+//            case android.R.id.home:
+//                onBackPressed();
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        mAdapter.notifyDataSetChanged();
+//        mAdapter.notifyDataSetChanged();
 
     }
 }

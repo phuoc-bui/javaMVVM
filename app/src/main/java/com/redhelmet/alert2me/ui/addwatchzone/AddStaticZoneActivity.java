@@ -38,6 +38,7 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
     RingtonePickerDialog.Builder ringtonePickerBuilder;
     Uri _ringtoneURI = null;
     String _ringtoneName = null;
+    Menu menu;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -96,30 +97,11 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
     private void initializeControls() {
 
 
-        //removing wz
-        if (PreferenceUtils.hasKey(getApplicationContext(), getString(R.string.pref_wz_name)))
-            PreferenceUtils.removeFromPrefs(getApplicationContext(), getString(R.string.pref_wz_name));
-
-        if (PreferenceUtils.hasKey(getApplicationContext(), getString(R.string.pref_ringtone_name)))
-            PreferenceUtils.removeFromPrefs(getApplicationContext(), getString(R.string.pref_ringtone_name));
-
         wz_name = (EditText) findViewById(R.id.watch_zone_name);
         select_ringtone = (LinearLayout) findViewById(R.id.select_ringtone);
         required_name = (TextView) findViewById(R.id.required_name);
         notification_sound_text = (TextView) findViewById(R.id.notification_sound_text);
-        if (_ringtoneURI == null) {
-            _ringtoneURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        }
 
-        Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), _ringtoneURI);
-        _ringtoneName = ringtone.getTitle(getApplicationContext());
-        notification_sound_text.setText(ringtone.getTitle(getApplicationContext()));
-        select_ringtone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ringtonePickerBuilder.show();
-            }
-        });
     }
 
     public void initializeToolbar() {
@@ -131,12 +113,26 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setTitle(getString(R.string.lbl_addStaticWZ));
-
         }
+
+        viewModel.currentStep.observe(this, step -> {
+            switch (step) {
+                case EDIT_NAME:
+                case EDIT_LOCATION:
+                    showOption(R.id.next_btn);
+                    hideOption(R.id.save_btn);
+                    break;
+                case EDIT_NOTIFICATION:
+                    hideOption(R.id.next_btn);
+                    showOption(R.id.save_btn);
+                    break;
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.watchzone_static_next, menu);
         return true;
     }
@@ -149,10 +145,29 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
                 viewModel.onNextClick();
                 return true;
             case android.R.id.home:
+                hideKeyboard();
                 viewModel.onBackClick();
+                return true;
+            case R.id.save_btn:
+                hideKeyboard();
+                viewModel.onSaveClick();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void hideOption(int id) {
+        if (menu != null) {
+            MenuItem item = menu.findItem(id);
+            item.setVisible(false);
+        }
+    }
+
+    private void showOption(int id) {
+        if (menu != null) {
+            MenuItem item = menu.findItem(id);
+            item.setVisible(true);
         }
     }
 

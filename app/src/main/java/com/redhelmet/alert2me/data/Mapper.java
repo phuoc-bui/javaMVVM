@@ -32,17 +32,19 @@ public class Mapper {
         entity.setShareCode(wz.getShareCode());
         entity.setGeom(wz.getGeom());
 
-        List<WatchZoneFilterType> warning = wz.getFilter().getWarning().getTypes();
-        List<WatchZoneFilterType> incident = wz.getFilter().getIncident().getTypes();
-        List<WatchZoneFilterType> restriction = wz.getFilter().getRestriction().getTypes();
-        List<WatchZoneFilterType> support_service = wz.getFilter().getSupport_service().getTypes();
-        WatchZoneEntity.WatchZoneFilter filter = new WatchZoneEntity.WatchZoneFilter();
-        filter.setWarning(warning);
-        filter.setIncident(incident);
-        filter.setRestriction(restriction);
-        filter.setSupport_service(support_service);
+        if (wz.getFilter() != null) {
+            List<WatchZoneFilterType> warning = wz.getFilter().getWarning().getTypes();
+            List<WatchZoneFilterType> incident = wz.getFilter().getIncident().getTypes();
+            List<WatchZoneFilterType> restriction = wz.getFilter().getRestriction().getTypes();
+            List<WatchZoneFilterType> support_service = wz.getFilter().getSupport_service().getTypes();
+            WatchZoneEntity.WatchZoneFilter filter = new WatchZoneEntity.WatchZoneFilter();
+            filter.setWarning(warning);
+            filter.setIncident(incident);
+            filter.setRestriction(restriction);
+            filter.setSupport_service(support_service);
 
-        entity.setFilter(filter);
+            entity.setFilter(filter);
+        }
 
         return entity;
     }
