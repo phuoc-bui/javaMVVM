@@ -1,6 +1,5 @@
 package com.redhelmet.alert2me.ui.addwatchzone;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -8,33 +7,30 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
-
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.redhelmet.alert2me.databinding.ActivityAddStaticZoneBinding;
-import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.kevalpatel.ringtonepicker.RingtonePickerDialog;
 import com.kevalpatel.ringtonepicker.RingtonePickerListener;
-
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.ui.activity.AddStaticZoneLocation;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
+import com.redhelmet.alert2me.databinding.ActivityAddStaticZoneBinding;
+import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
 
 import javax.inject.Inject;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.lifecycle.ViewModelProvider;
+
 
 public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, ActivityAddStaticZoneBinding> {
+
+    private static final String WATCH_ZONE_BUNDLE_EXTRA = "WATCH_ZONE_BUNDLE_EXTRA";
 
     LinearLayout select_ringtone;
     EditText wz_name;
@@ -45,6 +41,16 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
 
     @Inject
     ViewModelProvider.Factory factory;
+
+    public static Intent newInstance(Context context) {
+        return newInstance(context, null);
+    }
+
+    public static Intent newInstance(Context context, EditWatchZones watchZone) {
+        Intent i = new Intent(context, AddStaticZoneActivity.class);
+        i.putExtra(WATCH_ZONE_BUNDLE_EXTRA, watchZone);
+        return i;
+    }
 
     @Override
     protected int getLayoutId() {
@@ -62,6 +68,11 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
 
         obtainViewModel(factory, AddStaticZoneViewModel.class);
 
+        EditWatchZones watchZone = (EditWatchZones) getIntent().getSerializableExtra(WATCH_ZONE_BUNDLE_EXTRA);
+        if (watchZone != null) {
+            viewModel.setWatchZone(watchZone);
+        }
+
         ringtonePickerBuilder = new RingtonePickerDialog.Builder(AddStaticZoneActivity.this, getSupportFragmentManager());
         ringtonePickerBuilder.addRingtoneType(RingtonePickerDialog.Builder.TYPE_NOTIFICATION);
         ringtonePickerBuilder.setPlaySampleWhileSelection(checkVibrationIsOn(getApplicationContext()));
@@ -70,7 +81,7 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
             public void OnRingtoneSelected(String ringtoneName, Uri ringtoneUri) {
                 _ringtoneName = ringtoneName;
                 _ringtoneURI = ringtoneUri;
-                PreferenceUtils.saveToPrefs(getApplicationContext(),getString(R.string.pref_ringtone_name),_ringtoneURI);
+                PreferenceUtils.saveToPrefs(getApplicationContext(), getString(R.string.pref_ringtone_name), _ringtoneURI);
 
                 notification_sound_text.setText(ringtoneName);
             }
@@ -86,11 +97,11 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
 
 
         //removing wz
-        if(PreferenceUtils.hasKey(getApplicationContext(),getString(R.string.pref_wz_name)))
-            PreferenceUtils.removeFromPrefs(getApplicationContext(),getString(R.string.pref_wz_name));
+        if (PreferenceUtils.hasKey(getApplicationContext(), getString(R.string.pref_wz_name)))
+            PreferenceUtils.removeFromPrefs(getApplicationContext(), getString(R.string.pref_wz_name));
 
-        if(PreferenceUtils.hasKey(getApplicationContext(),getString(R.string.pref_ringtone_name)))
-            PreferenceUtils.removeFromPrefs(getApplicationContext(),getString(R.string.pref_ringtone_name));
+        if (PreferenceUtils.hasKey(getApplicationContext(), getString(R.string.pref_ringtone_name)))
+            PreferenceUtils.removeFromPrefs(getApplicationContext(), getString(R.string.pref_ringtone_name));
 
         wz_name = (EditText) findViewById(R.id.watch_zone_name);
         select_ringtone = (LinearLayout) findViewById(R.id.select_ringtone);

@@ -109,4 +109,9 @@ public class RoomDatabaseStorage implements DatabaseStorage {
                 .toObservable()
                 .subscribeOn(Schedulers.computation());
     }
+
+    @Override
+    public void addWatchZone(EditWatchZones watchZone) {
+        database.watchZoneDao().saveWatchZone(mapper.map(watchZone));
+    }
 }

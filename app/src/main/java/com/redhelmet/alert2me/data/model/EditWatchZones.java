@@ -18,7 +18,7 @@ public class EditWatchZones implements Model {
     private String sound;
     private String address;
     private String name;
-    private String radius;
+    private int radius;
     @SerializedName("type")
     private String wzType;
     private WatchZoneFilter filter;
@@ -70,11 +70,11 @@ public class EditWatchZones implements Model {
         this.name = name;
     }
 
-    public String getRadius() {
+    public int getRadius() {
         return radius;
     }
 
-    public void setRadius(String radius) {
+    public void setRadius(int radius) {
         this.radius = radius;
     }
 

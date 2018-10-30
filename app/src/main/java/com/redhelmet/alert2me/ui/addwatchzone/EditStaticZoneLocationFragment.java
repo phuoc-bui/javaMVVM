@@ -1,7 +1,5 @@
 package com.redhelmet.alert2me.ui.addwatchzone;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,17 +7,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,25 +30,20 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.gson.Gson;
 import com.google.maps.android.PolyUtil;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.ui.IconGenerator;
 import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.autocomplete.AutoCompleteLocation;
-import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.WatchZoneGeom;
 import com.redhelmet.alert2me.databinding.FragmentEditStaticZoneLocationBinding;
-import com.redhelmet.alert2me.domain.util.PreferenceUtils;
-import com.redhelmet.alert2me.ui.activity.AddStaticZoneLocation;
 import com.redhelmet.alert2me.ui.activity.AddStaticZoneNotification;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
+import com.savvyapps.togglebuttonlayout.ToggleButtonLayout;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -67,18 +57,23 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
-public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneViewModel, FragmentEditStaticZoneLocationBinding> implements View.OnClickListener, GoogleMap.OnMapLongClickListener, AutoCompleteLocation.AutoCompleteLocationListener, OnMapReadyCallback {
+public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneViewModel, FragmentEditStaticZoneLocationBinding> implements GoogleMap.OnMapLongClickListener, AutoCompleteLocation.AutoCompleteLocationListener, OnMapReadyCallback {
 
     @Inject
     ViewModelProvider.Factory factory;
 
+    enum GeometryType {
+        CIRCLE, POLYGON
+    }
+
     String fill_wz_color = "#8Ce0701e";//"#8C8EB9E8";
     Intent i;
     GoogleMap _locationMap;
-    Button circleBtn, polygonBtn;
+//    Button circleBtn, polygonBtn;
+    private ToggleButtonLayout toggleGeometryType;
+    private GeometryType geometryType = GeometryType.CIRCLE;
     LinearLayout radiusLinear;
     LinearLayout wz_loc_inst_layout;
     TextView loc_info;
@@ -91,7 +86,6 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
     TextView txtRadius;
     int _radius = 5;
     private int seekRadius = 5;
-    boolean viewStatus = true; //enum circle 0 , poly 1
     public String wz_name = null;
     ArrayList<EditWatchZones> wzData;
     int position = 0;
@@ -134,14 +128,35 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
 
 
     public void initializeControls() {
-        circleBtn = binder.circleBtn;
-        polygonBtn = binder.polygonBtn;
         radiusLinear = binder.radiusLayout;
         wz_loc_inst_layout = binder.wzLocInstLayout;
         loc_info = binder.wzLocInst;
         _discreteSeekBar = binder.radiusSeek;
-        circleBtn.setOnClickListener(this);
-        polygonBtn.setOnClickListener(this);
+        toggleGeometryType = binder.toggleGeometry;
+        toggleGeometryType.setOnToggledListener((toggle, selected) -> {
+            switch (toggle.getId()) {
+                case R.id.toggle_circle:
+                    geometryType = GeometryType.CIRCLE;
+                    if (isPolygonAdded())
+                        showWzChangeAlert(getString(R.string.wz_change_heading_circle), getString(R.string.wz_change_text_circle), false);
+                    else {
+                        viewSetting(true);
+                    }
+                    break;
+                case R.id.toggle_polygon:
+                    geometryType = GeometryType.CIRCLE;
+                    if (isCircleAdded())
+                        showWzChangeAlert(getString(R.string.wz_change_heading_custom), getString(R.string.wz_change_text_custom), true);
+                    else {
+                        viewSetting(false);
+                    }
+
+                    break;
+            }
+            return null;
+        });
+//        circleBtn.setOnClickListener(this);
+//        polygonBtn.setOnClickListener(this);
         txtRadius = binder.txtRadius;
         setupSliderValue();
 
@@ -195,7 +210,7 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
                 return true;
             case R.id.delete_temp_watch_zone:
 
-                if (viewStatus) {
+                if (geometryType == GeometryType.CIRCLE) {
                     //circle
                     if (isCircleAdded()) {
                         //cecking is circle is on map
@@ -246,27 +261,8 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.circleBtn:
-                if (isPolygonAdded())
-                    showWzChangeAlert(getString(R.string.wz_change_heading_circle), getString(R.string.wz_change_text_circle), false);
-                else
-                    viewSetting(true);
-
-                break;
-            case R.id.polygonBtn:
-                if (isCircleAdded())
-                    showWzChangeAlert(getString(R.string.wz_change_heading_custom), getString(R.string.wz_change_text_custom), true);
-                else
-                    viewSetting(false);
-                break;
-        }
-    }
-
-    @Override
     public void onMapLongClick(LatLng latLng) {
-        if (viewStatus) {
+        if (geometryType == GeometryType.CIRCLE) {
             //circle
 
             RemoveCurrentCircle();
@@ -556,21 +552,21 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
         if (state) {
             radiusLinear.setVisibility(View.VISIBLE);
             loc_info.setText(getResources().getString(R.string.watchzone_location_inst_circle));
-            viewStatus = true;
+            geometryType = GeometryType.CIRCLE;
             wz_loc_inst_layout.setVisibility(View.VISIBLE);
-            circleBtn.setBackgroundResource(R.drawable.button_red_bottom_border);
-            polygonBtn.setBackgroundResource(R.drawable.border_shadow);
+//            circleBtn.setBackgroundResource(R.drawable.button_red_bottom_border);
+//            polygonBtn.setBackgroundResource(R.drawable.border_shadow);
             //reseting polygon
             this._polygon = null;
             this.points = new ArrayList<>();
         } else {
-            polygonBtn.setBackgroundResource(R.drawable.button_red_bottom_border);
-            circleBtn.setBackgroundResource(R.drawable.border_shadow);
+//            polygonBtn.setBackgroundResource(R.drawable.button_red_bottom_border);
+//            circleBtn.setBackgroundResource(R.drawable.border_shadow);
             this._circle = null;//reseting circle
             radiusLinear.setVisibility(View.GONE);
 
             loc_info.setText(getResources().getString(R.string.watchzone_location_inst_polygon));
-            viewStatus = false;
+            geometryType = GeometryType.POLYGON;
         }
     }
 
@@ -581,64 +577,13 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
 
     public boolean SaveWzInPreference() {
         Circle currentCircle = GetCurrentCircle();
-        JSONObject wzLoc;
-        Gson gson = new Gson();
-
         if (currentCircle != null) {
-            double longitude = currentCircle.getCenter().longitude;
-            double latitude = currentCircle.getCenter().latitude;
-            ArrayList<Object> coordinates = new ArrayList<>();
-            coordinates.add(latitude);
-            coordinates.add(longitude);
-
-            wzLoc = new JSONObject();
-
-            JSONObject wzGeom = new JSONObject();
-            try {
-                wzLoc.put("radius", this._discreteSeekBar.getProgress());
-                wzLoc.put("geom", String.format("POINT(%s %s)", longitude, latitude));
-                wzLoc.put("type", "STANDARD");
-
-                wzGeom.put("coordinates", coordinates);
-                wzGeom.put("type", "POINT");
-                wzLoc.put("geometry", wzGeom);
-
-                PreferenceUtils.saveToPrefs(getBaseActivity(), "wzLocation", gson.toJson(wzLoc));
-                return true;
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
+            viewModel.saveCircle(currentCircle.getCenter().latitude, currentCircle.getCenter().longitude, _discreteSeekBar.getProgress());
         } else {
             Polygon polygon = GetCurrentPolygon();
-            wzLoc = new JSONObject();
-            if (polygon != null) {
-                List<LatLng> points = polygon.getPoints();
-                String formattedPoints = "";
-                for (int i = 0; i <= points.size() - 1; i++) {
-                    formattedPoints += String.format("%s %s,", points.get(i).longitude, points.get(i).latitude);
-                    if (i == points.size() - 1) {
-                        formattedPoints += String.format("%s %s", points.get(i).longitude, points.get(i).latitude);
-                    }
-                }
-                StringBuilder st = new StringBuilder();
-                st.append(String.format("POLYGON((%s))", formattedPoints));
-
-                try {
-                    wzLoc.put("radius", 0);
-                    wzLoc.put("geom", st.toString());
-                    wzLoc.put("type", "VARIABLE");
-                    PreferenceUtils.saveToPrefs(getBaseActivity(), "wzLocation", gson.toJson(wzLoc));
-                    return true;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
+            viewModel.savePolygon(polygon);
         }
-
-        return false;
+        return true;
     }
 
     public void EditModeAddCircle(WatchZoneGeom geomData, String watchzoneRadius) {
@@ -713,7 +658,7 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
 
         if (editMode) {//edit WZ
 
-            if (viewStatus)//circle
+            if (geometryType == GeometryType.CIRCLE)//circle
             {
                 if (isCircleAdded()) {
                     if (SaveWzInPreference()) {
@@ -734,7 +679,7 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
 
 
         } else {
-            if (viewStatus)//circle
+            if (geometryType == GeometryType.CIRCLE)//circle
             {
                 if (isCircleAdded()) {
                     if (SaveWzInPreference()) {

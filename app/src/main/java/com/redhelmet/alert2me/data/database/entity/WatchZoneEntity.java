@@ -1,6 +1,5 @@
 package com.redhelmet.alert2me.data.database.entity;
 
-import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.Geometry;
 import com.redhelmet.alert2me.data.model.WatchZoneFilterType;
 import com.redhelmet.alert2me.data.model.base.Model;
@@ -20,7 +19,7 @@ public class WatchZoneEntity extends UserModel {
     private String sound;
     private String address;
     private String name;
-    private String radius;
+    private int radius;
     private String wzType;
     @Embedded
     private WatchZoneFilter filter;
@@ -73,11 +72,11 @@ public class WatchZoneEntity extends UserModel {
         this.name = name;
     }
 
-    public String getRadius() {
+    public int getRadius() {
         return radius;
     }
 
-    public void setRadius(String radius) {
+    public void setRadius(int radius) {
         this.radius = radius;
     }
 

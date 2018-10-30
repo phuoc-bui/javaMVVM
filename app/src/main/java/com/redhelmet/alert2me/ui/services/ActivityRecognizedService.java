@@ -391,7 +391,7 @@ private static int startProcessId;
             }
             Log.d("dsfsdf", "dfsdfsdf" + arryMobileWZ.toString());
 
-            if(dictMobileWZ.getRadius() != null){
+            if(dictMobileWZ.getRadius() > 0){
                 distance = Integer.valueOf(dictMobileWZ.getRadius()) ;
             }
         }

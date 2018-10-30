@@ -19,6 +19,9 @@ public interface WatchZoneDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void saveWatchZones(List<WatchZoneEntity> watchZones);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void saveWatchZone(WatchZoneEntity watchZone);
+
     @Query("DELETE FROM WatchZone")
     void nukeTable();
 }

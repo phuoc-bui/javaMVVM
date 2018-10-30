@@ -73,7 +73,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
     Toolbar toolbar;
     Intent i;
     GoogleMap _locationMap;
-    Button circleBtn, polygonBtn;
+//    Button circleBtn, polygonBtn;
     LinearLayout radiusLinear;
     LinearLayout wz_loc_inst_layout;
     TextView loc_info;
@@ -187,14 +187,14 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
 
 
     public void initializeControls() {
-        circleBtn = (Button) findViewById(R.id.circleBtn);
-        polygonBtn = (Button) findViewById(R.id.polygonBtn);
+//        circleBtn = (Button) findViewById(R.id.circleBtn);
+//        polygonBtn = (Button) findViewById(R.id.polygonBtn);
         radiusLinear = (LinearLayout) findViewById(R.id.radius_layout);
         wz_loc_inst_layout = (LinearLayout) findViewById(R.id.wz_loc_inst_layout);
         loc_info = (TextView) findViewById(R.id.wz_loc_inst);
         _discreteSeekBar = (DiscreteSeekBar) findViewById(R.id.radius_seek);
-        circleBtn.setOnClickListener(this);
-        polygonBtn.setOnClickListener(this);
+//        circleBtn.setOnClickListener(this);
+//        polygonBtn.setOnClickListener(this);
         txtRadius = (TextView) findViewById(R.id.txtRadius);
         setupSliderValue();
 
@@ -300,21 +300,21 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.circleBtn:
-                if (isPolygonAdded())
-                    showWzChangeAlert(getString(R.string.wz_change_heading_circle), getString(R.string.wz_change_text_circle), false);
-                else
-                    viewSetting(true);
-
-                break;
-            case R.id.polygonBtn:
-                if (isCircleAdded())
-                    showWzChangeAlert(getString(R.string.wz_change_heading_custom), getString(R.string.wz_change_text_custom), true);
-                else
-                    viewSetting(false);
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.circleBtn:
+//                if (isPolygonAdded())
+//                    showWzChangeAlert(getString(R.string.wz_change_heading_circle), getString(R.string.wz_change_text_circle), false);
+//                else
+//                    viewSetting(true);
+//
+//                break;
+//            case R.id.polygonBtn:
+//                if (isCircleAdded())
+//                    showWzChangeAlert(getString(R.string.wz_change_heading_custom), getString(R.string.wz_change_text_custom), true);
+//                else
+//                    viewSetting(false);
+//                break;
+//        }
     }
 
     @Override
@@ -614,14 +614,14 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
             loc_info.setText(getResources().getString(R.string.watchzone_location_inst_circle));
             viewStatus = true;
             wz_loc_inst_layout.setVisibility(View.VISIBLE);
-            circleBtn.setBackgroundResource(R.drawable.button_red_bottom_border);
-            polygonBtn.setBackgroundResource(R.drawable.border_shadow);
+//            circleBtn.setBackgroundResource(R.drawable.button_red_bottom_border);
+//            polygonBtn.setBackgroundResource(R.drawable.border_shadow);
             //reseting polygon
             this._polygon = null;
             this.points = new ArrayList<>();
         } else {
-            polygonBtn.setBackgroundResource(R.drawable.button_red_bottom_border);
-            circleBtn.setBackgroundResource(R.drawable.border_shadow);
+//            polygonBtn.setBackgroundResource(R.drawable.button_red_bottom_border);
+//            circleBtn.setBackgroundResource(R.drawable.border_shadow);
             this._circle = null;//reseting circle
             radiusLinear.setVisibility(View.GONE);
 

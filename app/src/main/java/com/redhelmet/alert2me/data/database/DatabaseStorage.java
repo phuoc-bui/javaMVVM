@@ -40,5 +40,6 @@ public interface DatabaseStorage {
     void saveWatchZones(List<EditWatchZones> watchZones);
 
     Observable<List<EditWatchZones>> getWatchZones();
-    
+
+    void addWatchZone(EditWatchZones watchZone);
 }

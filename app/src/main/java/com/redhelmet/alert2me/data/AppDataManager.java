@@ -305,12 +305,22 @@ public class AppDataManager implements DataManager {
                 api.getWatchZones("1")
                         .doOnNext(watchZoneResponse -> saveWatchZones(watchZoneResponse.watchzones))
                         .doOnError(err -> Log.e("AppDataManager", "Fail to get Watch Zones from API"))
-        .map(response -> response.watchzones))
+                        .map(response -> response.watchzones))
                 .debounce(400L, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void saveWatchZones(List<EditWatchZones> watchZones) {
         database.saveWatchZones(watchZones);
+    }
+
+    @Override
+    public void addWatchZone(EditWatchZones watchZone) {
+        database.addWatchZone(watchZone);
+    }
+
+    @Override
+    public void editWatchZone(EditWatchZones watchZone) {
+        database.addWatchZone(watchZone);
     }
 }

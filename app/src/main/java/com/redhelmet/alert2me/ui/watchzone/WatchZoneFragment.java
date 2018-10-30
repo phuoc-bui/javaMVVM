@@ -285,7 +285,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
 
         if (dictMobileWZ != null) {
 
-            if ((sliderValue != Integer.parseInt(dictMobileWZ.getRadius())) || (!_ringtoneURI.toString().equalsIgnoreCase(Uri.parse(dictMobileWZ.getSound()).toString()))) {
+            if ((sliderValue != dictMobileWZ.getRadius()) || (!_ringtoneURI.toString().equalsIgnoreCase(Uri.parse(dictMobileWZ.getSound()).toString()))) {
                 isMobileWZValueChanged = true;
             } else {
                 if (isBackButtonClicked == true) {
@@ -338,7 +338,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
 //            sendProximity(dictMobileWZ.getFilter(), defValues, true);
         } else {
 
-            mobileRadiusSeek.setProgress(Integer.parseInt(dictMobileWZ.getRadius()));
+            mobileRadiusSeek.setProgress(dictMobileWZ.getRadius());
             sliderValue = mobileRadiusSeek.getProgress();
             setupSliderValue();
             if (isBackButtonClicked == true) {
@@ -777,7 +777,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
                     editModel.setName(data.getString("name"));
                     editModel.setDeviceId(data.getString("deviceId"));
                     editModel.setAddress(data.getString("address"));
-                    editModel.setRadius(data.getString("radius"));
+                    editModel.setRadius(Integer.valueOf(data.getString("radius")));
                     editModel.setWzType(data.getString("type"));
                     editModel.setProximity(Boolean.valueOf(data.getString("proximity")));
                     editModel.setNoEdit(Boolean.valueOf(data.getString("noEdit")));
@@ -957,7 +957,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
             values.put(DBController.KEY_REF_WZ_SOUND, wz.getSound());
             values.put(DBController.KEY_REF_WZ_ADDRESS, wz.getAddress());
             values.put(DBController.KEY_REF_WZ_NAME, wz.getName());
-            values.put(DBController.KEY_REF_WZ_RADIUS, wz.getRadius());
+            values.put(DBController.KEY_REF_WZ_RADIUS, String.valueOf(wz.getRadius()));
             values.put(DBController.KEY_REF_WZ_TYPE, wz.getWzType());
 
             String wzFilter = "", wzFilterGroupID = "";
