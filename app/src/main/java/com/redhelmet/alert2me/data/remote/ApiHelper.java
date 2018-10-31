@@ -37,5 +37,5 @@ public interface ApiHelper {
 
     Observable<WatchZoneResponse> getWatchZones(String userId);
 
-    Observable<Object> createWatchZone(String userId, EditWatchZones watchZones);
+    Observable<EditWatchZones> createWatchZone(String userId, EditWatchZones watchZones);
 }

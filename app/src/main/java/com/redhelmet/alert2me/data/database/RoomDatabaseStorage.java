@@ -12,7 +12,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
+import androidx.annotation.WorkerThread;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 
@@ -27,91 +28,85 @@ public class RoomDatabaseStorage implements DatabaseStorage {
     }
 
     @Override
-    public void saveCategories(List<Category> categories) {
-        database.categoryDao().nukeTable();
-        database.categoryDao().saveCategories(categories);
-    }
-
-    @Override
-    public Observable<List<Category>> getCategories() {
-        return database.categoryDao().getCategories()
-                .doOnSuccess(list -> Log.e("Database", "getCategories: " + list.size()))
-                .toObservable().subscribeOn(Schedulers.computation());
-    }
-
-    @Override
-    public Single<Category> getEventCategory(Event event) {
-        return database.categoryDao().getEventCategory(event.getCategory());
-    }
-
-    @Override
-    public List<Category> getCategoriesSync() {
-        return database.categoryDao().getCategoriesSync();
-    }
-
-    @Override
-    public void saveEventGroups(List<EventGroup> eventGroups) {
-        database.eventGroupDao().saveEventGroups(eventGroups);
-    }
-
-    @Override
-    public Observable<List<EventGroup>> getEventGroups() {
-        return database.eventGroupDao().getEventGroups()
-                .doOnSuccess(list -> Log.e("Database", "getEventGroups: " + list.size()))
-                .toObservable().subscribeOn(Schedulers.computation());
-    }
-
-    @Override
-    public List<EventGroup> getEventGroupsSync() {
-        return database.eventGroupDao().getEventGroupsSync();
-    }
-
-    @Override
-    public Observable<List<Category>> getCategoriesWithIds(List<Long> ids) {
-        return database.categoryDao().getCategoriesWithIds(ids).toObservable();
-    }
-
-    @Override
-    public Observable<List<EventGroup>> getEventGroupsWithIds(List<Long> ids) {
-        return database.eventGroupDao().getEventGroupWithIds(ids).toObservable();
-    }
-
-    @Override
-    public void saveEditedCategories(List<Category> categories) {
-        database.categoryDao().updateCategories(categories);
-    }
-
-    @Override
-    public void saveEditedEventGroups(List<EventGroup> eventGroups) {
-        database.eventGroupDao().updateEventGroups(eventGroups);
-    }
-
-    @Override
-    public Observable<List<Category>> getEditedCategories() {
-        return database.categoryDao().getFilterOnCategories().toObservable().subscribeOn(Schedulers.computation());
-    }
-
-    @Override
-    public Observable<List<EventGroup>> getEditedEventGroups() {
-        return database.eventGroupDao().getFilterOnEventGroups().toObservable().subscribeOn(Schedulers.computation());
-    }
-
-    @Override
-    public void saveWatchZones(List<EditWatchZones> watchZones) {
-        database.watchZoneDao().nukeTable();
-        database.watchZoneDao().saveWatchZones(mapper.mapWzToWzEntities(watchZones));
-    }
-
-    @Override
-    public Observable<List<EditWatchZones>> getWatchZones() {
-        return database.watchZoneDao().getWatchZones()
-                .map(entities -> mapper.mapWzEntitiesToWz(entities))
-                .toObservable()
+    public Completable saveCategories(List<Category> categories) {
+        return Completable.mergeArray(database.categoryDao().nukeTable(),
+                database.categoryDao().saveCategories(categories))
                 .subscribeOn(Schedulers.computation());
     }
 
     @Override
-    public void addWatchZone(EditWatchZones watchZone) {
-        database.watchZoneDao().saveWatchZone(mapper.map(watchZone));
+    public Single<List<Category>> getCategories() {
+        return database.categoryDao().getCategories()
+                .subscribeOn(Schedulers.computation())
+                .doOnSuccess(list -> Log.e("Database", "getCategories: " + list.size()));
+    }
+
+    @Override
+    public Single<Category> getEventCategory(Event event) {
+        return database.categoryDao().getEventCategory(event.getCategory())
+                .subscribeOn(Schedulers.computation());
+    }
+
+    @Override
+    public Completable saveEventGroups(List<EventGroup> eventGroups) {
+        return database.eventGroupDao().saveEventGroups(eventGroups)
+                .subscribeOn(Schedulers.computation());
+    }
+
+    @Override
+    public Single<List<EventGroup>> getEventGroups() {
+        return database.eventGroupDao().getEventGroups()
+                .subscribeOn(Schedulers.computation())
+                .doOnSuccess(list -> Log.e("Database", "getEventGroups: " + list.size()));
+    }
+
+    @Override
+    public Completable saveEditedCategories(List<Category> categories) {
+        return database.categoryDao().updateCategories(categories)
+                .subscribeOn(Schedulers.computation());
+    }
+
+    @Override
+    public Completable saveEditedEventGroups(List<EventGroup> eventGroups) {
+        return database.eventGroupDao().updateEventGroups(eventGroups)
+                .subscribeOn(Schedulers.computation());
+    }
+
+    @Override
+    public Single<List<Category>> getEditedCategories() {
+        return database.categoryDao().getFilterOnCategories()
+                .subscribeOn(Schedulers.computation());
+    }
+
+    @Override
+    public Single<List<EventGroup>> getEditedEventGroups() {
+        return database.eventGroupDao().getFilterOnEventGroups()
+                .subscribeOn(Schedulers.computation());
+    }
+
+    @Override
+    public Completable saveWatchZones(List<EditWatchZones> watchZones) {
+        return database.watchZoneDao().saveWatchZones(mapper.mapWzToWzEntities(watchZones))
+                .subscribeOn(Schedulers.computation());
+    }
+
+    @Override
+    public Completable clearWatchZones() {
+        return database.watchZoneDao().nukeTable()
+                .subscribeOn(Schedulers.computation());
+    }
+
+    @Override
+    public Single<List<EditWatchZones>> getWatchZones() {
+        return database.watchZoneDao().getWatchZones()
+                .subscribeOn(Schedulers.computation())
+                .map(entities -> mapper.mapWzEntitiesToWz(entities));
+    }
+
+    @WorkerThread
+    @Override
+    public Completable addWatchZone(EditWatchZones watchZone) {
+        return database.watchZoneDao().saveWatchZone(mapper.map(watchZone))
+                .subscribeOn(Schedulers.computation());
     }
 }

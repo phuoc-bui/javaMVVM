@@ -7,39 +7,34 @@ import com.redhelmet.alert2me.data.model.EventGroup;
 
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public interface DatabaseStorage {
-    void saveCategories(List<Category> categories);
+    Completable saveCategories(List<Category> categories);
 
-    Observable<List<Category>> getCategories();
+    Single<List<Category>> getCategories();
 
     Single<Category> getEventCategory(Event event);
 
-    List<Category> getCategoriesSync();
+    Completable saveEventGroups(List<EventGroup> eventGroups);
 
-    Observable<List<Category>> getCategoriesWithIds(List<Long> ids);
+    Single<List<EventGroup>> getEventGroups();
 
-    void saveEventGroups(List<EventGroup> eventGroups);
+    Completable saveEditedCategories(List<Category> categories);
 
-    Observable<List<EventGroup>> getEventGroups();
+    Completable saveEditedEventGroups(List<EventGroup> eventGroups);
 
-    List<EventGroup> getEventGroupsSync();
+    Single<List<Category>> getEditedCategories();
 
-    Observable<List<EventGroup>> getEventGroupsWithIds(List<Long> ids);
+    Single<List<EventGroup>> getEditedEventGroups();
 
-    void saveEditedCategories(List<Category> categories);
+    Completable saveWatchZones(List<EditWatchZones> watchZones);
 
-    void saveEditedEventGroups(List<EventGroup> eventGroups);
+    Completable clearWatchZones();
 
-    Observable<List<Category>> getEditedCategories();
+    Single<List<EditWatchZones>> getWatchZones();
 
-    Observable<List<EventGroup>> getEditedEventGroups();
-
-    void saveWatchZones(List<EditWatchZones> watchZones);
-
-    Observable<List<EditWatchZones>> getWatchZones();
-
-    void addWatchZone(EditWatchZones watchZone);
+    Completable addWatchZone(EditWatchZones watchZone);
 }

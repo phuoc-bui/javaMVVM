@@ -113,7 +113,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
 
         if (viewModel.isLoadOneByOne) {
             disposeBag.add(viewModel.eventsOneByOne
-                    .subscribe(this::processMarkerForEvent, e -> Toast.makeText(getBaseActivity(), R.string.msgUnableToGetEvent, Toast.LENGTH_SHORT).show()));
+                    .subscribe(this::processMarkerForEvent));
         } else {
             viewModel.events.observe(this, this::processMarker);
         }

@@ -1,5 +1,7 @@
 package com.redhelmet.alert2me.global;
 
+import com.google.gson.JsonSyntaxException;
+
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
@@ -72,6 +74,10 @@ public class RxErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
             // A network error happened
             if (throwable instanceof IOException) {
                 return RetrofitException.networkError((IOException) throwable);
+            }
+
+            if (throwable instanceof JsonSyntaxException) {
+                return RetrofitException.jsonSyntaxError((JsonSyntaxException) throwable);
             }
 
             // We don't know what happened. We need to simply convert to an unknown error

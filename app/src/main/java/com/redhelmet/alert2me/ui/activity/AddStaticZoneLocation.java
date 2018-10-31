@@ -246,7 +246,7 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
 
 
                 return true;
-            case R.id.delete_temp_watch_zone:
+            case R.id.clear_btn:
 
                 if (viewStatus) {
                     //circle

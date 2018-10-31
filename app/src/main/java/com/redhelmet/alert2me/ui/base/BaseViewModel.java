@@ -68,6 +68,7 @@ public class BaseViewModel extends ViewModel {
                 case NETWORK:
                     message = R.string.noInternet;
                     break;
+                case JSON_SYNTAX:
                 case UNEXPECTED:
                     message = R.string.timeOut;
                     break;

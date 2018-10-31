@@ -8,6 +8,10 @@ import android.graphics.drawable.GradientDrawable;
 import com.google.android.material.textfield.TextInputLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -112,5 +116,14 @@ public class BindingAdapters {
         if (stringId == null) return;
         String str = inputLayout.getContext().getString(stringId);
         inputLayout.setHint(str);
+    }
+
+    @BindingAdapter("bind:ringtoneUri")
+    public static void setRingtoneFromUri(TextView textView, String ringtoneUri) {
+        if (ringtoneUri == null) return;
+        Uri uri = Uri.parse(ringtoneUri);
+        Ringtone ringtone = RingtoneManager.getRingtone(textView.getContext(), uri);
+        String ringtoneName = ringtone.getTitle(textView.getContext());
+        textView.setText(ringtoneName);
     }
 }

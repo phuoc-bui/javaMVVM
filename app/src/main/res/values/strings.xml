@@ -63,6 +63,7 @@
     <string name="share_wz_popup_text">Enter the code below into your other devices to add this Watch Zone to that apiInfo. Changes made to the Watch Zone will not he updated on other devices. You can share this code with as many people or devices you want.  The code will expire in 7 days.</string>
     <string name="share_code_will_expire">The code will expire in 7 days.</string>
     <string name="ok">Ok</string>
+    <string name="delete">Delete</string>
     <string name="pref_tertiaryColor">pref_tertiaryColor</string>
     <string name="edit_watch_zone_notification_settings">Edit Watch Zone Notification Settings</string>
     <string name="edit_watch_zone_location">Edit Watch Zone Location</string>

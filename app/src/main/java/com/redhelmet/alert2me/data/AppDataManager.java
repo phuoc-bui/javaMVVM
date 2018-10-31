@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import androidx.annotation.WorkerThread;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
@@ -58,8 +59,7 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<ConfigResponse> loadConfig() {
-        return api.getConfig().subscribeOn(Schedulers.io())
-                .doOnNext(this::saveConfig);
+        return api.getConfig().doOnNext(this::saveConfig);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<Category>> getCategories() {
-        return database.getCategories()
+        return database.getCategories().toObservable()
                 .doOnNext(list -> categories = list);
     }
 
@@ -138,7 +138,7 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<EventGroup>> getEventGroups() {
-        return database.getEventGroups()
+        return database.getEventGroups().toObservable()
                 .doOnNext(list -> eventGroups = list);
     }
 
@@ -149,19 +149,21 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<Category>> getUserCustomFilters() {
-        return database.getEditedCategories();
+        return database.getEditedCategories().toObservable().subscribeOn(Schedulers.computation());
     }
 
     @Override
     public Observable<List<EventGroup>> getUserDefaultFilters() {
-        return database.getEditedEventGroups();
+        return database.getEditedEventGroups().toObservable().subscribeOn(Schedulers.computation());
     }
 
+    @WorkerThread
     @Override
     public void saveUserCustomFilters(List<Category> categories) {
         database.saveEditedCategories(categories);
     }
 
+    @WorkerThread
     @Override
     public void saveUserDefaultFilters(List<EventGroup> eventGroups) {
         database.saveEditedEventGroups(eventGroups);
@@ -300,27 +302,29 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<EditWatchZones>> getWatchZones() {
-        String userId = pref.getDeviceInfo().getUserId();
-        return Observable.concatArrayEager(database.getWatchZones().doOnError(err -> Log.e("AppDataManager", "Fail to get Watch Zones from DB")),
+        String userId = String.valueOf(pref.getCurrentUser().getId());
+        return Observable.concatArrayEager(database.getWatchZones().toObservable()
+                        .subscribeOn(Schedulers.computation())
+                        .doOnError(err -> Log.e("AppDataManager", "Fail to get Watch Zones from DB: " + err)),
                 api.getWatchZones(userId)
-                        .doOnNext(watchZoneResponse -> saveWatchZones(watchZoneResponse.watchzones))
-                        .doOnError(err -> Log.e("AppDataManager", "Fail to get Watch Zones from API"))
                         .map(response -> response.watchzones))
+                .doOnNext(this::saveWatchZones)
+                .doOnError(err -> Log.e("AppDataManager", "Fail to get Watch Zones from API: " + err))
                 .debounce(400L, TimeUnit.MILLISECONDS);
     }
 
+    @WorkerThread
     @Override
     public void saveWatchZones(List<EditWatchZones> watchZones) {
-        Single.just(1)
-                .doOnSuccess(i -> database.saveWatchZones(watchZones))
-                .subscribe();
+        database.clearWatchZones();
+        database.saveWatchZones(watchZones);
     }
 
     @Override
-    public Observable<Object> addWatchZone(EditWatchZones watchZone) {
-        String userId = pref.getDeviceInfo().getUserId();
+    public Observable<EditWatchZones> addWatchZone(EditWatchZones watchZone) {
+        String userId = String.valueOf(pref.getCurrentUser().getId());
         return api.createWatchZone(userId, watchZone)
-        .doOnNext(o -> database.addWatchZone(watchZone));
+                .doOnNext(o -> database.addWatchZone(o));
     }
 
     @Override

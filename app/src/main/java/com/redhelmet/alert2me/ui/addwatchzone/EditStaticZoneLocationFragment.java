@@ -56,6 +56,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -94,6 +95,12 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_edit_static_zone_location;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -191,35 +198,17 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
         txtRadius.setText(getString(R.string.txtRadiusValue) + " " + seekRadius + getString(R.string.txtRadiusKM));
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.watchzone_static_next, menu);
-//        menu.getItem(0).setVisible(true);
-//        if (editMode)
-//            menu.getItem(1).setTitle(getString(R.string.done));
-//
-//        return true;
-//    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.next_btn:
-                taskForNextBtn();
-
-
-                return true;
-            case R.id.delete_temp_watch_zone:
-
+            case R.id.clear_btn:
                 if (geometryType == GeometryType.CIRCLE) {
-                    //circle
                     if (isCircleAdded()) {
-                        //cecking is circle is on map
+                        //checking is circle is on map
                         deleteWz(getString(R.string.delete_circle_heading), getString(R.string.delete_circle_text), true);
                     } else {
                         Toast.makeText(getBaseActivity(), R.string.delete_circle_message, Toast.LENGTH_LONG).show();
                     }
-
                 } else {
                     //for polygon
                     if (isPolygonAdded()) //checking polygon on map or not
@@ -229,36 +218,10 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
                         Toast.makeText(getBaseActivity(), R.string.delete_polygon_message, Toast.LENGTH_LONG).show();
                     }
                 }
-
-
-                return true;
-            case android.R.id.home:
-                onBackPressed();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
     }
 
     @Override
@@ -291,14 +254,12 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
     public void onMapReady(GoogleMap googleMap) {
         _locationMap = googleMap;
 
-        _locationMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                //Your code where exception occurs goes here...
-                LatLng latLng = new LatLng(BuildConfig.DEFAULT_LOCATION_LAT, BuildConfig.DEFAULT_LOCATION_LNG);
-                _locationMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 3.5f));
+        _locationMap.setOnMapLoadedCallback(() -> {
+            //Your code where exception occurs goes here...
+            LatLng latLng = new LatLng(BuildConfig.DEFAULT_LOCATION_LAT, BuildConfig.DEFAULT_LOCATION_LNG);
+            _locationMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 3.5f));
 
-                _locationMap.setOnMapLongClickListener(EditStaticZoneLocationFragment.this);
+            _locationMap.setOnMapLongClickListener(EditStaticZoneLocationFragment.this);
 
 //                if (editMode) {
 //                    if (wzData.get(position).getType().toString().equalsIgnoreCase("STANDARD")) {
@@ -308,7 +269,6 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
 //                    }
 //
 //                }
-            }
         });
 
 
@@ -335,7 +295,7 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
             }
             _circle = null;
             titleMarker = null;
-
+            viewModel.clearGeometry();
             return true;
         }
         return false;
@@ -437,13 +397,7 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
             entryList.add(entry);
         }
 
-        Collections.sort(entryList, new Comparator<Map.Entry<LatLng, Double>>() {
-
-            @Override
-            public int compare(Map.Entry<LatLng, Double> obj1, Map.Entry<LatLng, Double> obj2) {
-                return obj1.getValue().compareTo(obj2.getValue());
-            }
-        });
+        Collections.sort(entryList, (obj1, obj2) -> obj1.getValue().compareTo(obj2.getValue()));
         points.clear();
         for (Map.Entry<LatLng, Double> entry : entryList) {
             points.add(entry.getKey());
@@ -472,7 +426,7 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
         RemovePolygon();
         _polygon = null;
 
-
+        viewModel.clearGeometry();
     }
 
     private void RemovePolygon() {
@@ -503,25 +457,21 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
 
         builder.setTitle(heading)
                 .setMessage(text)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (typeValue)
-                            RemoveCurrentCircle();
-                        else
-                            RemoveCurrentPolygon();
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    if (typeValue)
+                        RemoveCurrentCircle();
+                    else
+                        RemoveCurrentPolygon();
 
 
-                        viewSetting(!typeValue);
+                    viewSetting(!typeValue);
 
 
-                    }
                 })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                .setNegativeButton(android.R.string.no, (dialog, which) -> {
 
-                        dialog.dismiss();
-                        toggleGeometryType.setToggled(typeValue ? R.id.toggle_polygon : R.id.toggle_circle, true);
-                    }
+                    dialog.dismiss();
+                    toggleGeometryType.setToggled(typeValue ? R.id.toggle_polygon : R.id.toggle_circle, true);
                 })
                 .show();
     }
@@ -531,22 +481,15 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
 
         builder.setTitle(heading)
                 .setMessage(text)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (typeValue) {
-                            RemoveCurrentCircle();
-                        } else {
-                            RemoveCurrentPolygon();
-                        }
-
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    if (typeValue) {
+                        RemoveCurrentCircle();
+                    } else {
+                        RemoveCurrentPolygon();
                     }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
 
-                        dialog.dismiss();
-                    }
                 })
+                .setNegativeButton(android.R.string.no, (dialog, which) -> dialog.dismiss())
                 .show();
     }
 

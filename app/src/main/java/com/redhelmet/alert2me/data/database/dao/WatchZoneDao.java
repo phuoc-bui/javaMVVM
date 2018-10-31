@@ -8,6 +8,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
 @Dao
@@ -17,11 +18,11 @@ public interface WatchZoneDao {
     Single<List<WatchZoneEntity>> getWatchZones();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void saveWatchZones(List<WatchZoneEntity> watchZones);
+    Completable saveWatchZones(List<WatchZoneEntity> watchZones);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void saveWatchZone(WatchZoneEntity watchZone);
+    Completable saveWatchZone(WatchZoneEntity watchZone);
 
     @Query("DELETE FROM WatchZone")
-    void nukeTable();
+    Completable nukeTable();
 }

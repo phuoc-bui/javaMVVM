@@ -2,6 +2,7 @@ package com.redhelmet.alert2me.data.model;
 
 import com.redhelmet.alert2me.data.model.base.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Event implements Model {
@@ -35,7 +36,7 @@ public class Event implements Model {
     private String temporal;
     private boolean alwaysOn;
     private boolean showOn;
-    private Geometry geometry;
+    private Geometry geometry = null;
 
     public Double getDistanceTo() {
         return distanceTo;
@@ -276,4 +277,6 @@ public class Event implements Model {
     public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
     }
+
+    public static class EventList extends ArrayList<Event> {}
 }

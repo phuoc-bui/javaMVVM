@@ -1,8 +1,5 @@
 package com.redhelmet.alert2me.ui.event;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.databinding.ObservableBoolean;
 import android.graphics.Color;
 import android.location.Location;
 
@@ -24,6 +21,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.databinding.ObservableBoolean;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.subjects.ReplaySubject;
@@ -63,12 +63,12 @@ public class EventViewModel extends BaseViewModel {
             eventsOneByOne = ReplaySubject.create();
             getEventsOneByOne();
             disposeBag.add(eventsOneByOne
+                    .filter(e -> e != null)
                     .map(event -> new EventItemViewModel(setDistanceForEvents(event), isStateWide))
                     .subscribe(event -> {
-                                adapter.itemsSource.add(event);
-                                isEmpty.set(false);
-                            },
-                            this::handleError));
+                        adapter.itemsSource.add(event);
+                        isEmpty.set(false);
+                    }));
         } else {
             getEvents();
             // update event list fragment when event list change
@@ -109,18 +109,15 @@ public class EventViewModel extends BaseViewModel {
         adapter.itemsSource.clear();
 //        isEmpty.set(true);
 
-        List<Event> eventList = new ArrayList<>();
         disposeBag.add(dataManager.getEventsWithFilterOneByOne(isDefaultFilter(), getSortComparator())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(event -> {
                     eventsOneByOne.onNext(event);
-                    eventList.add(event);
                     events.getValue().add(event);
                 }, error -> {
-                    eventsOneByOne.onError(error);
+                    handleError(error);
                     isLoading.set(false);
                     isRefreshing.setValue(false);
-                    handleError(error);
                 }, () -> {
                     isLoading.set(false);
                     isRefreshing.setValue(false);

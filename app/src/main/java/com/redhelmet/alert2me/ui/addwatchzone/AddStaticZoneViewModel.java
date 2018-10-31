@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class AddStaticZoneViewModel extends BaseViewModel {
 
@@ -78,15 +79,25 @@ public class AddStaticZoneViewModel extends BaseViewModel {
 
     public void onSaveClick() {
         if (mode == Mode.ADD) {
-            dataManager.addWatchZone(watchZoneModel.getWatchZones(true));
+            disposeBag.add(dataManager.addWatchZone(watchZoneModel.getWatchZones(true))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(o -> {
+                        navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, "Saving successful."));
+                        navigateTo(new NavigationItem(NavigationItem.FINISH));
+                    }, e -> {
+                        navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, e.getMessage()));
+                        navigateTo(new NavigationItem(NavigationItem.FINISH));
+                    }));
         } else {
-            dataManager.editWatchZone(watchZoneModel.getWatchZones(true));
+            disposeBag.add(dataManager.editWatchZone(watchZoneModel.getWatchZones(true))
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe());
         }
-        navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, "Saving successful."));
-        navigateTo(new NavigationItem(NavigationItem.FINISH));
     }
 
-    public void setRingSound()
+    public void setRingSound(String ringSoundUri) {
+        watchZoneModel.sound.set(ringSoundUri);
+    }
 
     public boolean isDefaultFilter() {
         return dataManager.isDefaultFilter();
@@ -108,6 +119,12 @@ public class AddStaticZoneViewModel extends BaseViewModel {
             watchZoneModel.type = "VARIABLE";
             watchZoneModel.radius.set(0);
         }
+    }
+
+    public void clearGeometry() {
+        watchZoneModel.geom.setValue(null);
+        watchZoneModel.type = "";
+        watchZoneModel.radius.set(0);
     }
 
     public void saveCircle(double lat, double lng, int radius) {

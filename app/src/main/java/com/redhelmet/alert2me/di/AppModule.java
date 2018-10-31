@@ -8,6 +8,8 @@ import com.google.gson.GsonBuilder;
 import com.redhelmet.alert2me.A2MApplication;
 import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.data.SharedPreferenceStorage;
+import com.redhelmet.alert2me.data.model.Event;
+import com.redhelmet.alert2me.global.AppJsonDeserializer;
 
 import javax.inject.Singleton;
 
@@ -39,10 +41,10 @@ public class AppModule {
     @Singleton
     @Provides
     public Gson provideGson() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-//        gsonBuilder.setDateFormat(DATE_FORMAT);
-        return gsonBuilder.create();
+        return new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .registerTypeAdapter(Event.EventList.class, new AppJsonDeserializer.EventsDeserializer())
+                .create();
     }
 
 }

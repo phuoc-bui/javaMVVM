@@ -51,6 +51,6 @@ public interface ApiService {
     Observable<WatchZoneResponse> getWatchZones(@Path("userId") String userId);
 
     @POST("device/{userId}/watchzones")
-    Observable<Object> createWatchZone(@Path("userId") String userId, @Body EditWatchZones watchZones);
+    Observable<EditWatchZones> createWatchZone(@Path("userId") String userId, @Body EditWatchZones watchZones);
 
 }

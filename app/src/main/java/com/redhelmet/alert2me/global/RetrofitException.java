@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.global;
 
+import com.google.gson.JsonSyntaxException;
 import com.redhelmet.alert2me.data.remote.NetworkError;
 
 import java.io.IOException;
@@ -46,6 +47,10 @@ public class RetrofitException extends RuntimeException {
 
     public static RetrofitException networkError(IOException exception) {
         return new RetrofitException(exception.getMessage(), null, null, Kind.NETWORK, exception, null);
+    }
+
+    public static RetrofitException jsonSyntaxError(JsonSyntaxException exception) {
+        return new RetrofitException(exception.getMessage(), null, null, Kind.JSON_SYNTAX, exception, null);
     }
 
     public static RetrofitException unexpectedError(Throwable exception) {
@@ -143,6 +148,11 @@ public class RetrofitException extends RuntimeException {
          */
         HTTP,
         HTTP_422_WITH_DATA,
+
+        /**
+         * An [JsonSyntaxException] occurred when parse json to response
+         */
+        JSON_SYNTAX,
         /**
          * An internal error occurred while attempting to execute a request. It is best practice to
          * re-throw this exception so your application crashes.

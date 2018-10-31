@@ -73,7 +73,7 @@ public class AppApiHelper implements ApiHelper {
 
     @Override
     public Observable<User> updateUserProfile(User user) {
-        // TODO: call API to get response
+        // TODO: call API to update profile
         return Observable.just(user);
     }
 
@@ -87,11 +87,11 @@ public class AppApiHelper implements ApiHelper {
 
     @Override
     public Observable<WatchZoneResponse> getWatchZones(String userId) {
-        return filterSuccessResponse(apiService.getWatchZones("1"));
+        return filterSuccessResponse(apiService.getWatchZones(userId));
     }
 
     @Override
-    public Observable<Object> createWatchZone(String userId, EditWatchZones watchZones) {
+    public Observable<EditWatchZones> createWatchZone(String userId, EditWatchZones watchZones) {
         return apiService.createWatchZone(userId, watchZones);
     }
 }

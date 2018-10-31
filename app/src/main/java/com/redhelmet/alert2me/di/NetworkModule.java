@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import androidx.annotation.FloatRange;
 
+import com.google.gson.Gson;
 import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.data.model.ApiInfo;
@@ -66,10 +67,10 @@ public class NetworkModule {
 
     @Singleton
     @Provides
-    public Retrofit provideRetrofit(OkHttpClient client) {
+    public Retrofit provideRetrofit(OkHttpClient client, Gson gson) {
         return new Retrofit.Builder()
                 .baseUrl(BuildConfig.API_ENDPOINT)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxErrorHandlingCallAdapterFactory.create())
                 .client(client)
                 .build();

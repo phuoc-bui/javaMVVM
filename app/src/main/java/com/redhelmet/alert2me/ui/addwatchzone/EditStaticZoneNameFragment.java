@@ -2,14 +2,11 @@ package com.redhelmet.alert2me.ui.addwatchzone;
 
 import android.content.Context;
 import android.media.AudioManager;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
 import com.kevalpatel.ringtonepicker.RingtonePickerDialog;
-import com.kevalpatel.ringtonepicker.RingtonePickerListener;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.databinding.FragmentEditStaticZoneNameBinding;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
@@ -25,8 +22,7 @@ public class EditStaticZoneNameFragment extends BaseFragment<AddStaticZoneViewMo
     ViewModelProvider.Factory factory;
 
     private RingtonePickerDialog.Builder ringtonePickerBuilder;
-    private Uri ringtoneURI = null;
-    private String ringtoneName = null;
+    private String ringtoneUri = null;
 
     @Override
     protected int getLayoutId() {
@@ -41,26 +37,21 @@ public class EditStaticZoneNameFragment extends BaseFragment<AddStaticZoneViewMo
         ringtonePickerBuilder = new RingtonePickerDialog.Builder(getBaseActivity(), getChildFragmentManager());
         ringtonePickerBuilder.addRingtoneType(RingtonePickerDialog.Builder.TYPE_NOTIFICATION);
         ringtonePickerBuilder.setPlaySampleWhileSelection(checkVibrationIsOn());
-        ringtonePickerBuilder.setListener((RingtonePickerListener) (ringtoneName, ringtoneUri) -> {
-            this.ringtoneName = ringtoneName;
-            ringtoneURI = ringtoneUri;
-
-//            notification_sound_text.setText(ringtoneName);
+        ringtonePickerBuilder.setListener( (ringtoneName, ringtoneUri) -> {
+            if (ringtoneUri != null) {
+                this.ringtoneUri = ringtoneUri.toString();
+                viewModel.setRingSound(this.ringtoneUri);
+            }
         });
 
-        if (ringtoneURI == null) {
-            ringtoneURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        ringtoneUri = viewModel.watchZoneModel.sound.get();
+
+        if (ringtoneUri == null || ringtoneUri.isEmpty()) {
+            ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString();
         }
 
-        Ringtone ringtone = RingtoneManager.getRingtone(getBaseActivity(), ringtoneURI);
-        ringtoneName = ringtone.getTitle(getBaseActivity());
-        binder.tvNotificationSoundValue.setText(ringtoneName);
-//        select_ringtone.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ringtonePickerBuilder.show();
-//            }
-//        });
+        viewModel.setRingSound(ringtoneUri);
+        binder.tvNotificationSoundValue.setOnClickListener(v -> ringtonePickerBuilder.show());
     }
 
     private boolean checkVibrationIsOn() {
