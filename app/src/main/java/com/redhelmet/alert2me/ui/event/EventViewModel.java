@@ -26,7 +26,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.subjects.ReplaySubject;
 
 public class EventViewModel extends BaseViewModel {
 
@@ -39,50 +38,33 @@ public class EventViewModel extends BaseViewModel {
     // sort mode in even list fragment
     private int currentSortType = 2;
 
-    // Variables for one by one mode
-    public boolean isLoadOneByOne = true;
-    public ReplaySubject<Event> eventsOneByOne;
     // for map fragment clear map
     public MutableLiveData<Boolean> onClearEvents = new MutableLiveData<>();
 
-    // Variables for normal mode
     public MutableLiveData<List<Event>> events = new MutableLiveData<>();
     private Observer<List<Event>> eventsObserver;
 
     public Runnable onRefresh = () -> {
         isRefreshing.setValue(true);
-        if (isLoadOneByOne) getEventsOneByOne();
-        else getEvents();
+        getEvents();
     };
 
     @Inject
     public EventViewModel(DataManager dataManager) {
         super(dataManager);
         events.setValue(new ArrayList<>());
-        if (isLoadOneByOne) {
-            eventsOneByOne = ReplaySubject.create();
-            getEventsOneByOne();
-            disposeBag.add(eventsOneByOne
-                    .filter(e -> e != null)
-                    .map(event -> new EventItemViewModel(setDistanceForEvents(event), isStateWide))
-                    .subscribe(event -> {
-                        adapter.itemsSource.add(event);
-                        isEmpty.set(false);
-                    }));
-        } else {
-            getEvents();
-            // update event list fragment when event list change
-            eventsObserver = events -> {
-                if (events != null) {
-                    if (events.isEmpty()) isEmpty.set(true);
-                    else isEmpty.set(false);
-                    updateEventList();
-                } else {
-                    isEmpty.set(true);
-                }
-            };
-            events.observeForever(eventsObserver);
-        }
+        getEvents();
+        // update event list fragment when event list change
+        eventsObserver = events -> {
+            if (events != null) {
+                if (events.isEmpty()) isEmpty.set(true);
+                else isEmpty.set(false);
+                updateEventList();
+            } else {
+                isEmpty.set(true);
+            }
+        };
+        events.observeForever(eventsObserver);
     }
 
     private void getEvents() {
@@ -91,49 +73,26 @@ public class EventViewModel extends BaseViewModel {
         onClearEvents.setValue(true);
         disposeBag.add(dataManager.getEventsWithFilter(isDefaultFilter(), getSortComparator())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(data -> {
-                    isLoading.set(false);
-                    isRefreshing.setValue(false);
-                    events.setValue(data);
-                }, error -> {
-                    isLoading.set(false);
-                    isRefreshing.setValue(false);
-                    handleError(error);
-                }));
-    }
-
-    private void getEventsOneByOne() {
-        isLoading.set(true);
-        // clear data
-        onClearEvents.setValue(true);
-        adapter.itemsSource.clear();
-//        isEmpty.set(true);
-
-        disposeBag.add(dataManager.getEventsWithFilterOneByOne(isDefaultFilter(), getSortComparator())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(event -> {
-                    eventsOneByOne.onNext(event);
-                    events.getValue().add(event);
-                }, error -> {
-                    handleError(error);
-                    isLoading.set(false);
-                    isRefreshing.setValue(false);
-                }, () -> {
-                    isLoading.set(false);
-                    isRefreshing.setValue(false);
-                }));
+                .subscribe(data -> events.setValue(data),
+                        this::handleError,
+                        () -> {
+                            isLoading.set(false);
+                            isRefreshing.setValue(false);
+                        }));
     }
 
     public PolygonOptions createPolygonForEvent(Event event) {
-        PolygonOptions polygon = new PolygonOptions();
-        int strokeColor = Color.parseColor(event.getPrimaryColor());
-        int fillColor = Color.parseColor(event.getPrimaryColor());
-        polygon.strokeColor(strokeColor);
-        polygon.fillColor(IconUtils.getColorWithAlpha(fillColor, 0.4f));
-        for (double[] coordinate : event.getGeometry().getCoordinates()[0]) {
-            polygon.add(new LatLng(coordinate[1], coordinate[0]));
-        }
-        return polygon;
+        if (event.getGeometry().getCoordinates() != null) {
+            PolygonOptions polygon = new PolygonOptions();
+            int strokeColor = Color.parseColor(event.getPrimaryColor());
+            int fillColor = Color.parseColor(event.getPrimaryColor());
+            polygon.strokeColor(strokeColor);
+            polygon.fillColor(IconUtils.getColorWithAlpha(fillColor, 0.4f));
+            for (double[] coordinate : event.getGeometry().getCoordinates()[0]) {
+                polygon.add(new LatLng(coordinate[1], coordinate[0]));
+            }
+            return polygon;
+        } else return null;
     }
 
     public void onEventClick(int position) {
@@ -142,11 +101,13 @@ public class EventViewModel extends BaseViewModel {
     }
 
     public void saveUserLocation(Location location) {
-        Location oldLocation = dataManager.getLastUserLocation();
-        dataManager.saveUserLocation(location);
-        // update event list if user location is changed
-        if (oldLocation == null || oldLocation.getLatitude() != location.getLatitude() || oldLocation.getLongitude() != location.getLongitude())
-            updateEventList();
+        if (location != null) {
+            Location oldLocation = dataManager.getLastUserLocation();
+            dataManager.saveUserLocation(location);
+            // update event list if user location is changed
+            if (oldLocation == null || oldLocation.getLatitude() != location.getLatitude() || oldLocation.getLongitude() != location.getLongitude())
+                updateEventList();
+        }
     }
 
     private void updateEventList() {
@@ -204,7 +165,6 @@ public class EventViewModel extends BaseViewModel {
     @Override
     protected void onCleared() {
         events.removeObserver(eventsObserver);
-        eventsOneByOne.onComplete();
         super.onCleared();
     }
 

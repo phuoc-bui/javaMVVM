@@ -2,21 +2,19 @@ package com.redhelmet.alert2me.di;
 
 import android.content.Context;
 
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.redhelmet.alert2me.A2MApplication;
 import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.data.SharedPreferenceStorage;
 import com.redhelmet.alert2me.data.model.Event;
+import com.redhelmet.alert2me.data.model.Geometry;
 import com.redhelmet.alert2me.global.AppJsonDeserializer;
-import com.redhelmet.alert2me.service.MyFirebaseMessagingService;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import dagger.android.ContributesAndroidInjector;
 
 /**
  * Defines all the classes that need to be provided in the scope of the app.
@@ -47,6 +45,7 @@ class AppModule {
         return new GsonBuilder()
                 .setLenient()
                 .registerTypeAdapter(Event.EventList.class, new AppJsonDeserializer.EventsDeserializer())
+                .registerTypeAdapter(Geometry.class, new AppJsonDeserializer.GeometryDeserializer())
                 .create();
     }
 }

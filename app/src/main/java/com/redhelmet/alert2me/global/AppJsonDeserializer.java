@@ -6,8 +6,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.redhelmet.alert2me.data.model.Event;
+import com.redhelmet.alert2me.data.model.Geometry;
 
 import java.lang.reflect.Type;
 
@@ -28,6 +30,23 @@ public class AppJsonDeserializer {
 
             }
             return events;
+        }
+    }
+
+    public static class GeometryDeserializer implements JsonDeserializer<Geometry> {
+
+        @Override
+        public Geometry deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            Geometry geometry = new Geometry();
+            JsonObject jsonObject = json.getAsJsonObject();
+            String type = jsonObject.get("type").getAsString();
+            geometry.setType(type);
+            if (type.equals("Polygon")) {
+                 JsonArray array = jsonObject.getAsJsonArray("coordinates");
+                 double[][][] coordinates = context.deserialize(array, double[][][].class);
+                 geometry.setCoordinates(coordinates);
+            }
+            return geometry;
         }
     }
 }

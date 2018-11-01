@@ -4,11 +4,10 @@ import android.location.Location;
 import android.util.Log;
 
 import com.redhelmet.alert2me.data.database.DatabaseStorage;
-import com.redhelmet.alert2me.data.model.DeviceInfo;
-import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.CategoryStatus;
 import com.redhelmet.alert2me.data.model.CategoryType;
+import com.redhelmet.alert2me.data.model.DeviceInfo;
 import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.EventGroup;
@@ -63,18 +62,8 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public AppConfig getAppConfig() {
-        return pref.getAppConfig();
-    }
-
-    @Override
     public void setAccepted(boolean accepted) {
         pref.setAccepted(accepted);
-    }
-
-    @Override
-    public boolean getAccepted() {
-        return pref.isAccepted();
     }
 
     @Override
@@ -126,24 +115,15 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public List<Category> getCategoriesSync() {
-        return categories;
-    }
-
-    @Override
     public Observable<List<EventGroup>> getEventGroups() {
         return database.getEventGroups().toObservable()
                 .doOnNext(list -> eventGroups = list);
     }
 
     @Override
-    public List<EventGroup> getEventGroupsSync() {
-        return eventGroups;
-    }
-
-    @Override
     public Observable<List<Category>> getUserCustomFilters() {
-        return database.getEditedCategories().toObservable().subscribeOn(Schedulers.computation());
+        return database.getEditedCategories().toObservable()
+                .subscribeOn(Schedulers.computation());
     }
 
     @Override
@@ -181,37 +161,35 @@ public class AppDataManager implements DataManager {
                 .sorted(sort)
                 .filter(event -> {
                     if (event.isAlwaysOn()) {
-                        return updateEventByCategory(event)
-                                .blockingGet();
+                        updateEventByCategory(event);
+                        return true;
                     }
-
-                    return isDefault ? filterEventWithDefaultFilter(event)
-                            .map(b -> {
-                                if (b) return updateEventByCategory(event)
-                                        .blockingGet();
-                                return false;
-                            }).blockingGet()
-                            : filterEventWithCustomFilter(event)
-                            .blockingGet();
+                    if (isDefault) {
+                        updateEventByCategory(event);
+                        return filterEventWithDefaultFilter(event);
+                    } else {
+                        return filterEventWithCustomFilter(event);
+                    }
                 })
                 .doOnError(e -> Log.e(TAG, "filter error: " + e.getMessage()))
                 .doOnNext(event -> Log.e(TAG, "filter success: " + event.getId()))
                 .doOnComplete(() -> Log.e(TAG, "Complete filter event ---------"));
     }
 
-    private Single<Boolean> filterEventWithDefaultFilter(Event event) {
+    private boolean filterEventWithDefaultFilter(Event event) {
         return getUserDefaultFilters()
                 .flatMap(Observable::fromIterable)
                 .flatMap(group -> Observable.fromIterable(group.getDisplayFilter()))
                 .flatMap(display -> Observable.fromArray(display.getLayers()))
-                .any(layer -> layer.equalsIgnoreCase(event.getGroup()));
+                .any(layer -> layer.equalsIgnoreCase(event.getGroup())).blockingGet();
     }
 
-    private Single<Boolean> filterEventWithCustomFilter(Event event) {
+    private boolean filterEventWithCustomFilter(Event event) {
         return getUserCustomFilters()
                 .flatMap(Observable::fromIterable)
                 .any(category -> event.getCategory().equalsIgnoreCase(category.getCategory())
-                        && filterAndUpdateEventWithCategory(event, category).blockingGet());
+                        && filterAndUpdateEventWithCategory(event, category).blockingGet())
+                .blockingGet();
     }
 
     private Single<Boolean> filterAndUpdateEventWithCategory(Event event, Category category) {
@@ -231,22 +209,20 @@ public class AppDataManager implements DataManager {
                 });
     }
 
-    private Single<Boolean> updateEventByCategory(Event event) {
-        return getEventCategory(event)
-                .map(category -> {
-                    // update event
-                    return Observable.fromIterable(category.getStatuses())
-                            .any(status -> {
-                                if (event.getStatusCode().equals(status.getCode())) {
-                                    event.setPrimaryColor(status.getPrimaryColor());
-                                    event.setSecondaryColor(status.getSecondaryColor());
-                                    event.setTextColor(status.getTextColor());
-                                    event.setName(status.getName());
-                                    return true;
-                                }
-                                return false;
-                            }).blockingGet();
-                });
+    private void updateEventByCategory(Event event) {
+        getEventCategory(event)
+                .toObservable()
+                .flatMap(category -> Observable.fromIterable(category.getStatuses()))
+                .any(status -> {
+                    if (event.getStatusCode().equals(status.getCode())) {
+                        event.setPrimaryColor(status.getPrimaryColor());
+                        event.setSecondaryColor(status.getSecondaryColor());
+                        event.setTextColor(status.getTextColor());
+                        event.setName(status.getName());
+                        return true;
+                    }
+                    return false;
+                }).subscribe();
     }
 
     @Override
@@ -261,18 +237,21 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<RegisterAccountResponse> registerAccount(User user) {
-        return api.registerAccount(user);
+        String deviceId = String.valueOf(pref.getDeviceInfo().getId());
+        return api.registerAccount(deviceId, user);
     }
 
     @Override
     public Observable<User> login(String email, String password) {
-        return api.login(email, password)
+        String deviceId = String.valueOf(pref.getDeviceInfo().getId());
+        return api.login(deviceId, email, password)
                 .doOnNext(user -> pref.saveUserInfo(user));
     }
 
     @Override
     public Observable<ForgotPasswordResponse> forgotPassword(String email) {
-        return api.forgotPassword(email);
+        String deviceId = String.valueOf(pref.getDeviceInfo().getId());
+        return api.forgotPassword(deviceId, email);
     }
 
     @Override

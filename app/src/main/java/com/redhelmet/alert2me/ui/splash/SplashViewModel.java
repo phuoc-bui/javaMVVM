@@ -57,7 +57,7 @@ public class SplashViewModel extends BaseViewModel {
         disposeBag.add(dataManager.registerDeviceToken(token)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(apiInfo -> Log.d("SplashViewModel", "register device successful"),
-                        this::handleError,
+                        e -> {},
                         this::startTimer));
     }
 

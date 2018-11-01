@@ -2,13 +2,9 @@ package com.redhelmet.alert2me.ui.event;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import androidx.lifecycle.ViewModelProvider;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +24,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.clustering.ClusterManager;
 import com.redhelmet.alert2me.R;
@@ -51,6 +48,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBinding> implements
         OnMapReadyCallback, GoogleMap.OnMarkerClickListener,
@@ -111,12 +113,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
 
         tileProviderFactory = new TileProviderFactory();
 
-        if (viewModel.isLoadOneByOne) {
-            disposeBag.add(viewModel.eventsOneByOne
-                    .subscribe(this::processMarkerForEvent));
-        } else {
-            viewModel.events.observe(this, this::processMarker);
-        }
+        viewModel.events.observe(this, this::processMarker);
 
         viewModel.onClearEvents.observe(this, b -> {
             if (b) clearData();
@@ -335,8 +332,11 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
             clusterManager.addItem(customMarker);
         }
         clusterManager.cluster();
-        Polygon p = mMapView.addPolygon(viewModel.createPolygonForEvent(event));
-        polygons.add(p);
+        PolygonOptions options = viewModel.createPolygonForEvent(event);
+        if (options != null) {
+            Polygon p = mMapView.addPolygon(options);
+            polygons.add(p);
+        }
     }
 
     private void processEventMarker(List<Event> events) {
@@ -362,8 +362,11 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
             Marker marker = mMapView.addMarker(markerOptions);
             marker.setTag(event);
         }
-        Polygon p = mMapView.addPolygon(viewModel.createPolygonForEvent(event));
-        polygons.add(p);
+        PolygonOptions options = viewModel.createPolygonForEvent(event);
+        if (options != null) {
+            Polygon p = mMapView.addPolygon(options);
+            polygons.add(p);
+        }
     }
 
     @Override

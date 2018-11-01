@@ -52,22 +52,24 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Observable<RegisterAccountResponse> registerAccount(User user) {
+    public Observable<RegisterAccountResponse> registerAccount(String deviceId, User user) {
         return filterSuccessResponse(apiService.registerAccount(user));
     }
 
     @Override
-    public Observable<User> login(String email, String password) {
+    public Observable<User> login(String deviceId, String email, String password) {
         HashMap<String, String> requestMap = new HashMap<>();
         requestMap.put("email", email);
         requestMap.put("password", password);
+        requestMap.put("deviceId", deviceId);
         return filterSuccessResponse(apiService.login(requestMap)).map(response -> response.account);
     }
 
     @Override
-    public Observable<ForgotPasswordResponse> forgotPassword(String email) {
+    public Observable<ForgotPasswordResponse> forgotPassword(String deviceId, String email) {
         HashMap<String, String> request = new HashMap<>();
         request.put("email", email);
+        request.put("deviceId", deviceId);
         return filterSuccessResponse(apiService.forgotPassword(request));
     }
 

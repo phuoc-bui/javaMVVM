@@ -24,11 +24,11 @@ public interface ApiHelper {
 
     Observable<List<Event>> getAllEvents();
 
-    Observable<RegisterAccountResponse> registerAccount(User user);
+    Observable<RegisterAccountResponse> registerAccount(String deviceId, User user);
 
-    Observable<User> login(String email, String password);
+    Observable<User> login(String deviceId, String email, String password);
 
-    Observable<ForgotPasswordResponse> forgotPassword(String email);
+    Observable<ForgotPasswordResponse> forgotPassword(String deviceId, String email);
 
     Observable<User> updateUserProfile(User user);
 

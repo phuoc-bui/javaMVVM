@@ -23,9 +23,7 @@ import io.reactivex.Single;
 public interface DataManager {
     void saveConfig(ConfigResponse config);
     Observable<ConfigResponse> loadConfig();
-    AppConfig getAppConfig();
     void setAccepted(boolean accepted);
-    boolean getAccepted();
     Location getLastUserLocation();
     void saveUserLocation(Location location);
     Observable<DeviceInfo> registerDeviceToken(String firebaseToken);
@@ -33,9 +31,7 @@ public interface DataManager {
     Observable<List<Event>> getAllEvents();
     Observable<List<Category>> getCategories();
     Single<Category> getEventCategory(Event event);
-    List<Category> getCategoriesSync();
     Observable<List<EventGroup>> getEventGroups();
-    List<EventGroup> getEventGroupsSync();
     Observable<List<Category>> getUserCustomFilters();
     Observable<List<EventGroup>> getUserDefaultFilters();
     void saveUserCustomFilters(List<Category> categories);

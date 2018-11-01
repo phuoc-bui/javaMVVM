@@ -11,6 +11,7 @@ public class User implements Model {
     private String surname;
     private String activeStatus;
     private String token;
+    private String deviceId;
 
     public long getId() {
         return id;
@@ -74,5 +75,13 @@ public class User implements Model {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 }
