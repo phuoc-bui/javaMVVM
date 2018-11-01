@@ -32,7 +32,7 @@ public interface DatabaseStorage {
 
     Completable saveWatchZones(List<EditWatchZones> watchZones);
 
-    Completable clearWatchZones();
+    Single<Integer> clearWatchZones();
 
     Single<List<EditWatchZones>> getWatchZones();
 

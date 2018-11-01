@@ -108,7 +108,7 @@ public class NavigationItem {
                 } else if (data[0] instanceof String) {
                     Toast.makeText(context, (String) data[0], Toast.LENGTH_SHORT).show();
                 } else {
-                    throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
+                    throw new Error(String.format(wrongDataError, data[0], context.getLocalClassName()));
                 }
                 break;
             case FINISH_AND_RETURN:
@@ -118,7 +118,7 @@ public class NavigationItem {
                     context.setResult(Activity.RESULT_OK, (Intent) data[0]);
                     context.finish();
                 } else {
-                    throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
+                    throw new Error(String.format(wrongDataError, data[0], context.getLocalClassName()));
                 }
                 break;
             case CHANGE_FRAGMENT:
@@ -168,7 +168,7 @@ public class NavigationItem {
             }
             context.startActivity(intent);
         } else {
-            throw new Error(String.format(wrongDataError, data[0].toString(), context.getLocalClassName()));
+            throw new Error(String.format(wrongDataError, data[0], context.getLocalClassName()));
         }
     }
 

@@ -66,31 +66,33 @@ public class Mapper {
         wz.setShareCode(entity.getShareCode());
         wz.setGeom(entity.getGeom());
 
-        List<WatchZoneFilterType> warning = entity.getFilter().getWarning();
-        List<WatchZoneFilterType> incident = entity.getFilter().getIncident();
-        List<WatchZoneFilterType> restriction = entity.getFilter().getRestriction();
-        List<WatchZoneFilterType> support_service = entity.getFilter().getSupport_service();
+        if (entity.getFilter() != null) {
+            List<WatchZoneFilterType> warning = entity.getFilter().getWarning();
+            List<WatchZoneFilterType> incident = entity.getFilter().getIncident();
+            List<WatchZoneFilterType> restriction = entity.getFilter().getRestriction();
+            List<WatchZoneFilterType> support_service = entity.getFilter().getSupport_service();
 
-        EditWatchZones.WatchZoneFilter filter = new EditWatchZones.WatchZoneFilter();
+            EditWatchZones.WatchZoneFilter filter = new EditWatchZones.WatchZoneFilter();
 
-        EditWatchZones.Filter warningFilter = new EditWatchZones.Filter();
-        warningFilter.setTypes(warning);
+            EditWatchZones.Filter warningFilter = new EditWatchZones.Filter();
+            warningFilter.setTypes(warning);
 
-        EditWatchZones.Filter incidentFilter = new EditWatchZones.Filter();
-        incidentFilter.setTypes(incident);
+            EditWatchZones.Filter incidentFilter = new EditWatchZones.Filter();
+            incidentFilter.setTypes(incident);
 
-        EditWatchZones.Filter restrictionFilter = new EditWatchZones.Filter();
-        restrictionFilter.setTypes(restriction);
+            EditWatchZones.Filter restrictionFilter = new EditWatchZones.Filter();
+            restrictionFilter.setTypes(restriction);
 
-        EditWatchZones.Filter supportFilter = new EditWatchZones.Filter();
-        supportFilter.setTypes(support_service);
+            EditWatchZones.Filter supportFilter = new EditWatchZones.Filter();
+            supportFilter.setTypes(support_service);
 
-        filter.setWarning(warningFilter);
-        filter.setIncident(incidentFilter);
-        filter.setRestriction(restrictionFilter);
-        filter.setSupport_service(supportFilter);
+            filter.setWarning(warningFilter);
+            filter.setIncident(incidentFilter);
+            filter.setRestriction(restrictionFilter);
+            filter.setSupport_service(supportFilter);
 
-        wz.setFilter(filter);
+            wz.setFilter(filter);
+        }
 
         return wz;
     }

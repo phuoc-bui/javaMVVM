@@ -1,4 +1,4 @@
-package com.redhelmet.alert2me.core;
+package com.redhelmet.alert2me.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -22,6 +22,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.PnsNotification;
 import com.redhelmet.alert2me.ui.splash.SplashScreen;
@@ -33,11 +34,15 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.inject.Inject;
+
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
-    private Gson gson;
     private final static AtomicInteger c = new AtomicInteger(0);
+
+    @Inject
+    DataManager dataManager;
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -51,7 +56,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-//        sendRegistrationToServer(token);
+        dataManager.registerDeviceToken(token);
     }
 
     @Override
@@ -63,7 +68,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //        // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-            sendPayloadNotification(remoteMessage.getData());
+//            sendPayloadNotification(remoteMessage.getData());
         }
 
 //        // Check if message contains a notification payload.
@@ -77,37 +82,37 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    private void sendPayloadNotification(Map<String, String> data) {
-        if (data != null) {
-            String notification = data.get("notification");
-            String taskData = data.get("task");
-Boolean responseEnabled = false;
-            if(data.get("responseEnabled") != null)
-            {
-                responseEnabled = Boolean.valueOf(data.get("responseEnabled"));
-            }
-            if (notification != null && !notification.equals("")) {
-
-                Intent intent = new Intent(this.getApplicationContext(), SplashScreen.class);
-               intent.setAction("update-message");
-               intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-              LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-                String eventData = data.get("data");
-
-                if (eventData != null && !eventData.equals("")) {
-                    if (eventData.contains("testNotification")) {
-                        sendTestNotification(getApplicationContext(), intent, notification);
-
-                    }else{
-                    Event event = gson.fromJson(eventData, Event.class);
-                    if (event.getId() > 0) {
-                     //   sendLocalNotifications(notification, event, intent);
-                    }
-                    }
-                }
-            }
-        }
-    }
+//    private void sendPayloadNotification(Map<String, String> data) {
+//        if (data != null) {
+//            String notification = data.get("notification");
+//            String taskData = data.get("task");
+//Boolean responseEnabled = false;
+//            if(data.get("responseEnabled") != null)
+//            {
+//                responseEnabled = Boolean.valueOf(data.get("responseEnabled"));
+//            }
+//            if (notification != null && !notification.equals("")) {
+//
+//                Intent intent = new Intent(this.getApplicationContext(), SplashScreen.class);
+//               intent.setAction("update-message");
+//               intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//              LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+//                String eventData = data.get("data");
+//
+//                if (eventData != null && !eventData.equals("")) {
+//                    if (eventData.contains("testNotification")) {
+//                        sendTestNotification(getApplicationContext(), intent, notification);
+//
+//                    }else{
+//                    Event event = gson.fromJson(eventData, Event.class);
+//                    if (event.getId() > 0) {
+//                     //   sendLocalNotifications(notification, event, intent);
+//                    }
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private void sendLocalNotification(String notification, String taskData,Boolean responseEnabled,Intent intent) throws JSONException {
         String callbackURL =  BuildConfig.API_ENDPOINT;
@@ -166,53 +171,53 @@ Boolean responseEnabled = false;
         }
     }
 
-    private void sendTestNotification(Context context, Intent intent, String notification) {
-
-        PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-            if (!powerManager.isInteractive()){ // if screen is not already on, turn it on (get wake_lock for 10 seconds)
-                PowerManager.WakeLock wl = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK |PowerManager.ACQUIRE_CAUSES_WAKEUP |PowerManager.ON_AFTER_RELEASE,"MH24_SCREENLOCK");
-                wl.acquire(10000);
-                PowerManager.WakeLock wl_cpu = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"MH24_SCREENLOCK");
-                wl_cpu.acquire(10000);
-            }
-        }
-
-        Gson gson = new Gson();
-        PnsNotification pnsNotification = gson.fromJson(notification, PnsNotification.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        if (pnsNotification != null && pnsNotification.getTitle() != null && pnsNotification.getBody() != null) {
-            builder.setContentTitle(pnsNotification.getTitle());
-            builder.setContentText(pnsNotification.getBody());
-        } else {
-            builder.setContentTitle("Test Notification");
-            builder.setContentText("This is a test notification");
-        }
-
-// This is the answer to OP's question, set the visibility of notification to public.
-        builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-        builder.setCategory(Notification.CATEGORY_EVENT);
-        builder.setColor(Color.argb(0, 0, 63, 94));
-        builder.setSmallIcon(R.drawable.notification_bar_icon);
-        builder.setAutoCancel(true);
-
-        Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                R.drawable.notification_bar_icon);
-        builder.setLargeIcon(icon);
-
-
-
-        builder.setContentIntent(pendingIntent);
-        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        builder.setSound(sound);
-        builder.setLights(Color.RED, 2000, 3000);
-        builder.setColor(Color.BLUE);
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-       // NotificationManager.createNotificationChannel(mChannel);
-        notificationManager.notify(c.incrementAndGet(), builder.build());
-    }
+//    private void sendTestNotification(Context context, Intent intent, String notification) {
+//
+//        PowerManager powerManager = (PowerManager) context.getSystemService(POWER_SERVICE);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+//            if (!powerManager.isInteractive()){ // if screen is not already on, turn it on (get wake_lock for 10 seconds)
+//                PowerManager.WakeLock wl = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK |PowerManager.ACQUIRE_CAUSES_WAKEUP |PowerManager.ON_AFTER_RELEASE,"MH24_SCREENLOCK");
+//                wl.acquire(10000);
+//                PowerManager.WakeLock wl_cpu = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"MH24_SCREENLOCK");
+//                wl_cpu.acquire(10000);
+//            }
+//        }
+//
+//        Gson gson = new Gson();
+//        PnsNotification pnsNotification = gson.fromJson(notification, PnsNotification.class);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+//                PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+//        if (pnsNotification != null && pnsNotification.getTitle() != null && pnsNotification.getBody() != null) {
+//            builder.setContentTitle(pnsNotification.getTitle());
+//            builder.setContentText(pnsNotification.getBody());
+//        } else {
+//            builder.setContentTitle("Test Notification");
+//            builder.setContentText("This is a test notification");
+//        }
+//
+//// This is the answer to OP's question, set the visibility of notification to public.
+//        builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+//        builder.setCategory(Notification.CATEGORY_EVENT);
+//        builder.setColor(Color.argb(0, 0, 63, 94));
+//        builder.setSmallIcon(R.drawable.notification_bar_icon);
+//        builder.setAutoCancel(true);
+//
+//        Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+//                R.drawable.notification_bar_icon);
+//        builder.setLargeIcon(icon);
+//
+//
+//
+//        builder.setContentIntent(pendingIntent);
+//        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//        builder.setSound(sound);
+//        builder.setLights(Color.RED, 2000, 3000);
+//        builder.setColor(Color.BLUE);
+//        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+//       // NotificationManager.createNotificationChannel(mChannel);
+//        notificationManager.notify(c.incrementAndGet(), builder.build());
+//    }
     }

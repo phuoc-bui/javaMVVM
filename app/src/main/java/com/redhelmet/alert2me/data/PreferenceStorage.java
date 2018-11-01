@@ -1,9 +1,8 @@
 package com.redhelmet.alert2me.data;
 
 import android.location.Location;
-import androidx.core.util.Pair;
 
-import com.redhelmet.alert2me.data.model.ApiInfo;
+import com.redhelmet.alert2me.data.model.DeviceInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.EventGroup;
@@ -16,8 +15,8 @@ public interface PreferenceStorage {
     AppConfig getAppConfig();
     boolean isAccepted();
     void setAccepted(boolean accepted);
-    void saveDeviceInfo(ApiInfo apiInfo);
-    ApiInfo getDeviceInfo();
+    void saveDeviceInfo(DeviceInfo deviceInfo);
+    DeviceInfo getDeviceInfo();
     void saveUserCustomFilters(List<Category> categories);
     void saveUserDefaultFilters(List<EventGroup> eventGroups);
     List<Long> getUserCustomFilters();

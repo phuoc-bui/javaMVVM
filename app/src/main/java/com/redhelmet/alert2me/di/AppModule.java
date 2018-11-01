@@ -10,11 +10,13 @@ import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.data.SharedPreferenceStorage;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.global.AppJsonDeserializer;
+import com.redhelmet.alert2me.service.MyFirebaseMessagingService;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import dagger.android.ContributesAndroidInjector;
 
 /**
  * Defines all the classes that need to be provided in the scope of the app.
@@ -23,7 +25,8 @@ import dagger.Provides;
  * others. If some of those objects are singletons, they should be annotated with `@Singleton`.
  */
 @Module
-public class AppModule {
+public
+class AppModule {
 
     @Singleton
     @Provides
@@ -42,9 +45,8 @@ public class AppModule {
     @Provides
     public Gson provideGson() {
         return new GsonBuilder()
-                .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .setLenient()
                 .registerTypeAdapter(Event.EventList.class, new AppJsonDeserializer.EventsDeserializer())
                 .create();
     }
-
 }

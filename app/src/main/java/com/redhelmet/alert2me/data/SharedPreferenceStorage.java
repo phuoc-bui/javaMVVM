@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.data.model.ApiInfo;
+import com.redhelmet.alert2me.data.model.DeviceInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.EventGroup;
@@ -64,15 +64,15 @@ public class SharedPreferenceStorage implements PreferenceStorage {
     }
 
     @Override
-    public void saveDeviceInfo(ApiInfo apiInfo) {
-        String json = gson.toJson(apiInfo);
+    public void saveDeviceInfo(DeviceInfo deviceInfo) {
+        String json = gson.toJson(deviceInfo);
         PreferenceUtils.saveToPrefs(context, DEVICE_KEY, json);
     }
 
     @Override
-    public ApiInfo getDeviceInfo() {
+    public DeviceInfo getDeviceInfo() {
         String json = (String) PreferenceUtils.getFromPrefs(context, DEVICE_KEY, "");
-        return gson.fromJson(json, ApiInfo.class);
+        return gson.fromJson(json, DeviceInfo.class);
     }
 
     @Override

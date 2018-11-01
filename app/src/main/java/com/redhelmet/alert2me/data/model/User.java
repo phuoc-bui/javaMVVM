@@ -10,6 +10,7 @@ public class User implements Model {
     private String postcode;
     private String surname;
     private String activeStatus;
+    private String token;
 
     public long getId() {
         return id;
@@ -65,5 +66,13 @@ public class User implements Model {
 
     public void setActiveStatus(String activeStatus) {
         this.activeStatus = activeStatus;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

@@ -1,5 +1,8 @@
 package com.redhelmet.alert2me.ui.splash;
 
+import android.util.Log;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.global.Constant;
@@ -22,13 +25,40 @@ public class SplashViewModel extends BaseViewModel {
     public SplashViewModel(DataManager dataManager, PreferenceStorage pref) {
         super(dataManager, pref);
         isLoading.set(true);
+
         disposeBag.add(dataManager.loadConfig()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> startTimer(), error -> {
+                .subscribe(response -> {
+
+                }, error -> {
                     isLoading.set(false);
-                    startTimer();
                     handleError(error);
+                }, () -> {
+                    getFirebaseToken();
+                    startTimer();
                 }));
+    }
+
+    private void getFirebaseToken() {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.w("Firebase", "getInstanceId failed", task.getException());
+                startTimer();
+            } else {
+                // Get new Instance ID token
+                String token = task.getResult().getToken();
+                Log.d("Firebase", "Firebase token: " + token);
+                registerDevice(token);
+            }
+        });
+    }
+
+    private void registerDevice(String token) {
+        disposeBag.add(dataManager.registerDeviceToken(token)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(apiInfo -> Log.d("SplashViewModel", "register device successful"),
+                        this::handleError,
+                        this::startTimer));
     }
 
     private void startTimer() {

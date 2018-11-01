@@ -46,7 +46,7 @@ public class LoginViewModel extends BaseViewModel {
     private void onLoginSuccess() {
         FirebaseInstanceId.getInstance()
                 .getInstanceId()
-                .addOnSuccessListener(instanceIdResult -> disposeBag.add(dataManager.getUserId(instanceIdResult.getToken())
+                .addOnSuccessListener(instanceIdResult -> disposeBag.add(dataManager.registerDeviceToken(instanceIdResult.getToken())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(registerResponse -> onLoadFinish(), error -> onLoadFinish())));
         FirebaseInstanceId.getInstance()

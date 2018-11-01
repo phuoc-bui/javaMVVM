@@ -23,7 +23,7 @@ public class AppJsonDeserializer {
                     Event event = context.deserialize(element, Event.class);
                     events.add(event);
                 } catch (JsonParseException e) {
-                    Log.e("EventsDeserializer", "Error when parse event");
+                    Log.e("EventsDeserializer", "Error when parse event: " + e);
                 }
 
             }

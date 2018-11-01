@@ -25,7 +25,7 @@ public interface CategoryDao {
     Completable saveCategories(List<Category> categories);
 
     @Query("DELETE FROM Category")
-    Completable nukeTable();
+    int nukeTable();
 
     @Update
     Completable updateCategories(List<Category> categories);

@@ -24,7 +24,8 @@ public class WatchZoneViewModel extends BaseViewModel {
     public WatchZoneViewModel(DataManager dataManager, PreferenceStorage pref) {
         super(dataManager, pref);
         proximityEnable.setValue(pref.isProximityEnabled());
-        getData();
+        // don't need call getData() because it is called on Resume of WatchZoneFragment
+//        getData();
         Log.e("WatchZoneViewModel", "Constructor");
     }
 

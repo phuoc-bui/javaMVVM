@@ -29,7 +29,8 @@ public class RoomDatabaseStorage implements DatabaseStorage {
 
     @Override
     public Completable saveCategories(List<Category> categories) {
-        return Completable.mergeArray(database.categoryDao().nukeTable(),
+
+        return Completable.mergeArray(Completable.fromAction(() -> database.categoryDao().nukeTable()),
                 database.categoryDao().saveCategories(categories))
                 .subscribeOn(Schedulers.computation());
     }
@@ -91,8 +92,8 @@ public class RoomDatabaseStorage implements DatabaseStorage {
     }
 
     @Override
-    public Completable clearWatchZones() {
-        return database.watchZoneDao().nukeTable()
+    public Single<Integer> clearWatchZones() {
+        return Single.just(database.watchZoneDao().nukeTable())
                 .subscribeOn(Schedulers.computation());
     }
 

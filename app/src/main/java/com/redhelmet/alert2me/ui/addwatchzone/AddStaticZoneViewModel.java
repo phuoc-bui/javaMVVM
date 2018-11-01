@@ -82,7 +82,7 @@ public class AddStaticZoneViewModel extends BaseViewModel {
             disposeBag.add(dataManager.addWatchZone(watchZoneModel.getWatchZones(true))
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(o -> {
-                        navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, "Saving successful."));
+                        navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, R.string.msg_createdWZ));
                         navigateTo(new NavigationItem(NavigationItem.FINISH));
                     }, e -> {
                         navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, e.getMessage()));

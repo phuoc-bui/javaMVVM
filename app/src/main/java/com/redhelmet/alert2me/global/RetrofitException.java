@@ -33,15 +33,13 @@ public class RetrofitException extends RuntimeException {
 
     public static RetrofitException httpError(String url, Response response, Retrofit retrofit) {
         String message = response.code() + " " + response.message();
-        RetrofitException error = new RetrofitException(message, url, response, Kind.HTTP, null, retrofit);
-        error.deserializeServerError();
-        return error;
-    }
-
-    public static RetrofitException httpErrorWithObject(String url, Response response, Retrofit retrofit) {
-        String message = response.code() + " " + response.message();
-        RetrofitException error = new RetrofitException(message, url, response, Kind.HTTP_422_WITH_DATA, null, retrofit);
-        error.deserializeServerError();
+        RetrofitException error;
+        if (response.code() == 403) {
+            error = new RetrofitException(message, url, response, Kind.HTTP_403, null, retrofit);
+        } else {
+            error = new RetrofitException(message, url, response, Kind.HTTP, null, retrofit);
+            error.deserializeServerError();
+        }
         return error;
     }
 
@@ -61,7 +59,7 @@ public class RetrofitException extends RuntimeException {
         if (response != null && response.errorBody() != null) {
             try {
                 errorData = getErrorBodyAs(NetworkError.class);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -71,9 +69,9 @@ public class RetrofitException extends RuntimeException {
      * HTTP response body converted to specified `type`. `null` if there is no
      * response.
      *
-     * @throws IOException if unable to convert the body to the specified `type`.
+     * @throws Exception if unable to convert the body to the specified `type`.
      */
-    private <T> T getErrorBodyAs(Class<T> type) throws IOException {
+    private <T> T getErrorBodyAs(Class<T> type) throws Exception {
         if (response == null || response.errorBody() == null || retrofit == null) {
             return null;
         }
@@ -147,8 +145,7 @@ public class RetrofitException extends RuntimeException {
          * A non-200 HTTP status code was received from the server.
          */
         HTTP,
-        HTTP_422_WITH_DATA,
-
+        HTTP_403,
         /**
          * An [JsonSyntaxException] occurred when parse json to response
          */

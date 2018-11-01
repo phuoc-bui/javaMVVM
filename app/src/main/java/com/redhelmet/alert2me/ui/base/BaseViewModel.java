@@ -12,6 +12,7 @@ import com.redhelmet.alert2me.data.remote.NetworkError;
 import com.redhelmet.alert2me.global.Event;
 import com.redhelmet.alert2me.global.RetrofitException;
 import com.redhelmet.alert2me.global.RxProperty;
+import com.redhelmet.alert2me.ui.signin.SignInActivity;
 
 import org.json.JSONArray;
 
@@ -60,11 +61,15 @@ public class BaseViewModel extends ViewModel {
         Object message = null;
         if (error instanceof RetrofitException) {
             switch (((RetrofitException) error).getKind()) {
-                case HTTP_422_WITH_DATA:
                 case HTTP:
                     NetworkError errorData = ((RetrofitException) error).getErrorData();
-                    message = errorData == null ? error.getMessage() : errorData.errorMessage;
+                    message = (errorData == null || errorData.errorMessage == null) ? error.getMessage() : errorData.errorMessage;
                     break;
+                case HTTP_403:
+                    message = R.string.session_expired;
+                    navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, message));
+                    navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_AND_CLEAR_TASK, SignInActivity.class));
+                    return;
                 case NETWORK:
                     message = R.string.noInternet;
                     break;

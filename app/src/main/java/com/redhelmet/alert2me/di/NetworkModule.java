@@ -2,12 +2,11 @@ package com.redhelmet.alert2me.di;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import androidx.annotation.FloatRange;
 
 import com.google.gson.Gson;
 import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.data.PreferenceStorage;
-import com.redhelmet.alert2me.data.model.ApiInfo;
+import com.redhelmet.alert2me.data.model.User;
 import com.redhelmet.alert2me.data.remote.ApiHelper;
 import com.redhelmet.alert2me.data.remote.AppApiHelper;
 import com.redhelmet.alert2me.global.RxErrorHandlingCallAdapterFactory;
@@ -17,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
+import androidx.annotation.FloatRange;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
@@ -40,9 +40,9 @@ public class NetworkModule {
             Request originalRequest = chain.request();
             Request.Builder builder = originalRequest.newBuilder();
             builder.header("Content-Type", "application/json");
-            ApiInfo info = pref.getDeviceInfo();
-            if (info != null && info.getApiToken() != null && !info.getApiToken().isEmpty()) {
-                builder.addHeader("Authorization", "Bearer " + info.getApiToken());
+            User currentUser = pref.getCurrentUser();
+            if (currentUser != null && currentUser.getToken() != null && !currentUser.getToken().isEmpty()) {
+                builder.addHeader("x-access-token", currentUser.getToken());
             }
             Request newRequest = builder.build();
             return chain.proceed(newRequest);

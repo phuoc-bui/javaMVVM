@@ -32,8 +32,9 @@ public class RegisterViewModel extends BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     showLoadingDialog(false);
-                    navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, R.string.register_successful_message));
-                    navigateTo(new NavigationItem(NavigationItem.CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK, LoginFragment.newInstance()));
+                    navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, response.message));
+                    navigateTo(new NavigationItem(NavigationItem.CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK,
+                            LoginFragment.newInstance(userModel.userEmail.get(), userModel.password.get())));
                 }, error -> {
                     showLoadingDialog(false);
                     handleError(error);

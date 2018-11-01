@@ -24,5 +24,5 @@ public interface WatchZoneDao {
     Completable saveWatchZone(WatchZoneEntity watchZone);
 
     @Query("DELETE FROM WatchZone")
-    Completable nukeTable();
+    int nukeTable();
 }

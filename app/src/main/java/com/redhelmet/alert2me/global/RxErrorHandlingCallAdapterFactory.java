@@ -62,13 +62,7 @@ public class RxErrorHandlingCallAdapterFactory extends CallAdapter.Factory {
             if (throwable instanceof HttpException) {
                 HttpException exception = (HttpException) throwable;
                 Response response = exception.response();
-
-                if (exception.code() == 422) {
-                    // on out api 422's get metadata in the response. Adjust logic here based on your needs
-                    return RetrofitException.httpErrorWithObject(response.raw().request().url().toString(), response, retrofit);
-                } else {
-                    return RetrofitException.httpError(response.raw().request().url().toString(), response, retrofit);
-                }
+                return RetrofitException.httpError(response.raw().request().url().toString(), response, retrofit);
             }
 
             // A network error happened

@@ -14,6 +14,7 @@
     <string name="noInternet">No Internet Connection</string>
     <string name="timeOut">Unable to connect to the server.</string>
     <string name="failedToGetData">Unable to connect to the server. Please try again later</string>
+    <string name="session_expired">Your session is expired.</string>
     <string name="pref_help_support_url">helpSupportUrl</string>
     <string name="pref_help_support_email">helpSupportEmail</string>
     <string name="pref_terms_and_condition_url">termsAndConditionUrl</string>
@@ -60,7 +61,7 @@
     <string name="pref_ringtone_name">ringtone_name</string>
     <string name="next_location_message">Please set your watch zone area</string>
     <string name="share_wz_popup_head">Watch Zone Share Code</string>
-    <string name="share_wz_popup_text">Enter the code below into your other devices to add this Watch Zone to that apiInfo. Changes made to the Watch Zone will not he updated on other devices. You can share this code with as many people or devices you want.  The code will expire in 7 days.</string>
+    <string name="share_wz_popup_text">Enter the code below into your other devices to add this Watch Zone to that deviceInfo. Changes made to the Watch Zone will not he updated on other devices. You can share this code with as many people or devices you want.  The code will expire in 7 days.</string>
     <string name="share_code_will_expire">The code will expire in 7 days.</string>
     <string name="ok">Ok</string>
     <string name="delete">Delete</string>
@@ -177,7 +178,7 @@
     <string name="msg_unableCreateWZ">Unable to create the Watch Zone</string>
     <string name="msg_unableShareWZ">Unable to share the Watch Zone code</string>
     <string name="msg_updatedWZ">Watch zone updated successfully</string>
-    <string name="msg_createdWZ">Watch zone created successfully</string>
+    <string name="msg_createdWZ">Watchzone created successfully!!!</string>
     <string name="msg_fechtedWZ">Watch zone fetched successfully</string>
 
     <string name="msg_WZ">Watch Zone</string>
@@ -190,7 +191,7 @@
     <string name="lbl_editStaticWZ">Edit Static Zone</string>
     <string name="lbl_circle">Circle</string>
     <string name="lbl_polygon">Polygon</string>
-    <string name="lbl_shareWZTitle">Enter a Watch Zone Share Code to add a copy of another Watch Zone to this apiInfo.</string>
+    <string name="lbl_shareWZTitle">Enter a Watch Zone Share Code to add a copy of another Watch Zone to this deviceInfo.</string>
     <string name="lbl_addShareWZ">Add Watch Zone Code</string>
     <string name="msg_addingShareWZ">Adding Watch Zone share code...</string>
     <string name="msg_addedShareWZ">Watch zone share code added successfully</string>
@@ -246,4 +247,11 @@
     <!--general-->
     <string name="loading">Loading…</string>
     <string name="back">Back</string>
+
+    <string name="default_notification_channel_id" translatable="false">a2m_fcm_default_channel</string>
+    <!--
+        This is the name that users will see when interacting with this channel.
+        It should describe the category of notifications that will be sent through this channel
+     -->
+    <string name="default_notification_channel_name" translatable="false">Alert2Me</string>
 </resources>

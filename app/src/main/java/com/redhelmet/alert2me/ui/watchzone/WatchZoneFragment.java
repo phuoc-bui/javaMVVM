@@ -165,11 +165,6 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
         getBaseActivity().hideToolbar(true);
 
         viewModel.proximityEnable.observe(this, enable -> binder.viewpager.setCurrentItem(enable ? 1 : 0));
-
-//        initializeControl();
-//        initializeVariables();
-//        initializeListener();
-//        initializeWzList();
     }
 
     private void setupViewPager() {
@@ -464,6 +459,8 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
     @Override
     public void onResume() {
         super.onResume();
+
+        viewModel.onRefresh();
         //   mRecyclerView.addOnItemTouchListener(onTouchListener);
 
 //        if (!getUserVisibleHint()) {

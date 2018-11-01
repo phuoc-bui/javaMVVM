@@ -21,5 +21,6 @@ public class RegisterDeviceRequest {
         systemName = Build.VERSION_CODES.class.getFields()[Build.VERSION.SDK_INT].getName();
         systemVersion = DeviceUtil.getOsVersion();
         model = DeviceUtil.getDeviceName();
+        deviceToken = firebaseToken;
     }
 }

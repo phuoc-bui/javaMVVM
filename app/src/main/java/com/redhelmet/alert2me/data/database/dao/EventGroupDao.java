@@ -24,6 +24,9 @@ public interface EventGroupDao {
     @Update
     Completable updateEventGroups(List<EventGroup> eventGroups);
 
+    @Query("DELETE FROM EventGroup")
+    int nukeTable();
+
     @Query("SELECT * FROM EventGroup WHERE filterOn = 1")
     Single<List<EventGroup>> getFilterOnEventGroups();
 }

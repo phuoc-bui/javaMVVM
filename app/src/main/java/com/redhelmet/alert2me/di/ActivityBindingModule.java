@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.di;
 
+import com.redhelmet.alert2me.service.MyFirebaseMessagingService;
 import com.redhelmet.alert2me.ui.addwatchzone.AddStaticZoneActivity;
 import com.redhelmet.alert2me.ui.addwatchzone.AddStaticZoneModule;
 import com.redhelmet.alert2me.ui.eventdetail.EventDetailModule;
@@ -89,4 +90,7 @@ abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = AddStaticZoneModule.class)
     abstract AddStaticZoneActivity addStaticZoneActivity();
+
+    @ContributesAndroidInjector
+    abstract MyFirebaseMessagingService contributeMyFirebaseMessagingService();
 }

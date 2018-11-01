@@ -4,7 +4,7 @@ import android.location.Location;
 import android.util.Log;
 
 import com.redhelmet.alert2me.data.database.DatabaseStorage;
-import com.redhelmet.alert2me.data.model.ApiInfo;
+import com.redhelmet.alert2me.data.model.DeviceInfo;
 import com.redhelmet.alert2me.data.model.AppConfig;
 import com.redhelmet.alert2me.data.model.Category;
 import com.redhelmet.alert2me.data.model.CategoryStatus;
@@ -52,9 +52,9 @@ public class AppDataManager implements DataManager {
     public void saveConfig(ConfigResponse config) {
         pref.saveAppConfig(config.appConfig);
         categories = copyStatusToCategoryType(config.categories);
-        database.saveCategories(categories);
-        database.saveEventGroups(config.eventGroups);
         eventGroups = config.eventGroups;
+        database.saveCategories(categories).subscribe();
+        database.saveEventGroups(eventGroups).subscribe();
     }
 
     @Override
@@ -78,15 +78,9 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Observable<ApiInfo> getUserId(String firebaseToken) {
+    public Observable<DeviceInfo> registerDeviceToken(String firebaseToken) {
         return api.registerDevice(firebaseToken)
-                .doOnNext(apiInfo -> pref.saveDeviceInfo(apiInfo))
-                .doOnError(error -> {
-                    ApiInfo apiInfo = new ApiInfo();
-                    apiInfo.setUserId("0");
-                    apiInfo.setApiToken("");
-                    pref.saveDeviceInfo(apiInfo);
-                });
+                .doOnNext(apiInfo -> pref.saveDeviceInfo(apiInfo));
     }
 
     @Override
@@ -102,7 +96,7 @@ public class AppDataManager implements DataManager {
     @Override
     public Observable<ProximityLocationResponse> putProximityLocation(double lat, double lng) {
         ProximityLocationRequest request = new ProximityLocationRequest(lat, lng);
-        String userId = pref.getDeviceInfo().getUserId();
+        String userId = String.valueOf(pref.getDeviceInfo().getId());
         return api.putProximityLocation(userId, request)
                 .doOnNext(response -> {
 //                    PreferenceUtils.saveToPrefs(getApplicationContext(),
@@ -154,7 +148,9 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<EventGroup>> getUserDefaultFilters() {
-        return database.getEditedEventGroups().toObservable().subscribeOn(Schedulers.computation());
+        return database.getEditedEventGroups().toObservable()
+                .doOnNext(group -> Log.e(TAG, "get event group from DB: " + group.size()))
+                .subscribeOn(Schedulers.computation());
     }
 
     @WorkerThread
@@ -198,6 +194,7 @@ public class AppDataManager implements DataManager {
                             : filterEventWithCustomFilter(event)
                             .blockingGet();
                 })
+                .doOnError(e -> Log.e(TAG, "filter error: " + e.getMessage()))
                 .doOnNext(event -> Log.e(TAG, "filter success: " + event.getId()))
                 .doOnComplete(() -> Log.e(TAG, "Complete filter event ---------"));
     }
@@ -264,8 +261,7 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<RegisterAccountResponse> registerAccount(User user) {
-        return api.registerAccount(user)
-                .doOnNext(response -> pref.saveToken(response.account.token));
+        return api.registerAccount(user);
     }
 
     @Override
@@ -302,14 +298,14 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<List<EditWatchZones>> getWatchZones() {
-        String userId = String.valueOf(pref.getCurrentUser().getId());
+        String deviceId = String.valueOf(pref.getDeviceInfo().getId());
         return Observable.concatArrayEager(database.getWatchZones().toObservable()
                         .subscribeOn(Schedulers.computation())
                         .doOnError(err -> Log.e("AppDataManager", "Fail to get Watch Zones from DB: " + err)),
-                api.getWatchZones(userId)
-                        .map(response -> response.watchzones))
-                .doOnNext(this::saveWatchZones)
-                .doOnError(err -> Log.e("AppDataManager", "Fail to get Watch Zones from API: " + err))
+                api.getWatchZones(deviceId)
+                        .map(response -> response.watchzones)
+                        .doOnNext(this::saveWatchZones)
+                        .doOnError(err -> Log.e("AppDataManager", "Fail to get Watch Zones from API: " + err)))
                 .debounce(400L, TimeUnit.MILLISECONDS);
     }
 
@@ -322,8 +318,8 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<EditWatchZones> addWatchZone(EditWatchZones watchZone) {
-        String userId = String.valueOf(pref.getCurrentUser().getId());
-        return api.createWatchZone(userId, watchZone)
+        String deviceId = String.valueOf(pref.getDeviceInfo().getId());
+        return api.createWatchZone(deviceId, watchZone)
                 .doOnNext(o -> database.addWatchZone(o));
     }
 

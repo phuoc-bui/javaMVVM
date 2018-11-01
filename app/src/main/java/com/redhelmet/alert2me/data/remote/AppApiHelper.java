@@ -1,6 +1,6 @@
 package com.redhelmet.alert2me.data.remote;
 
-import com.redhelmet.alert2me.data.model.ApiInfo;
+import com.redhelmet.alert2me.data.model.DeviceInfo;
 import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.User;
@@ -36,7 +36,7 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Observable<ApiInfo> registerDevice(String firebaseToken) {
+    public Observable<DeviceInfo> registerDevice(String firebaseToken) {
         RegisterDeviceRequest request = new RegisterDeviceRequest(firebaseToken);
         return filterSuccessResponse(apiService.registerDevice(request)).map(response -> response.apiInfo);
     }
