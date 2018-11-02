@@ -1,48 +1,30 @@
 package com.redhelmet.alert2me.service;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
-import android.os.PowerManager;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.google.gson.Gson;
 import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.R;
-import com.redhelmet.alert2me.data.DataManager;
-import com.redhelmet.alert2me.data.model.Event;
-import com.redhelmet.alert2me.data.model.PnsNotification;
-import com.redhelmet.alert2me.ui.splash.SplashScreen;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.InputStream;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.inject.Inject;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
     private final static AtomicInteger c = new AtomicInteger(0);
-
-    @Inject
-    DataManager dataManager;
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -56,7 +38,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        dataManager.registerDeviceToken(token);
     }
 
     @Override

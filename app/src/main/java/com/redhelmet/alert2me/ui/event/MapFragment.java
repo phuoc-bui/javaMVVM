@@ -259,7 +259,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
             if (!mPermissionDenied) {
                 Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
                 locationResult.addOnCompleteListener(getBaseActivity(), task -> {
-                    if (task.isSuccessful()) {
+                    if (task.isSuccessful() && task.getResult() != null) {
                         viewModel.saveUserLocation(task.getResult());
                         mMapView.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                 new LatLng(task.getResult().getLatitude(),

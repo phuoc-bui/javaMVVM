@@ -90,7 +90,4 @@ abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = AddStaticZoneModule.class)
     abstract AddStaticZoneActivity addStaticZoneActivity();
-
-    @ContributesAndroidInjector
-    abstract MyFirebaseMessagingService contributeMyFirebaseMessagingService();
 }

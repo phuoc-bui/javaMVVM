@@ -1,8 +1,7 @@
 package com.redhelmet.alert2me.ui.eventdetail;
 
-import androidx.databinding.ObservableField;
-
 import com.redhelmet.alert2me.data.model.Area;
+import com.redhelmet.alert2me.data.model.Entry;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.data.model.Section;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
@@ -12,8 +11,11 @@ import com.redhelmet.alert2me.util.EventUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
+
+import androidx.databinding.ObservableField;
 
 public class EventDetailViewModel extends BaseViewModel {
 
@@ -21,6 +23,7 @@ public class EventDetailViewModel extends BaseViewModel {
     public ObservableField<String> eventLocation = new ObservableField<>();
     public ObservableField<String> eventColor = new ObservableField<>();
     public ObservableField<String> eventTimeAgo = new ObservableField<>();
+    public ObservableField<String> eventDistance = new ObservableField<>();
 
     public EventSectionAdapter sectionAdapter = new EventSectionAdapter();
 
@@ -38,6 +41,10 @@ public class EventDetailViewModel extends BaseViewModel {
         String eventState = (area.getState() == null) ? "" : area.getState();
         eventLocation.set(String.format("%s %s", location, eventState));
 
+        Double distance = (event.getDistanceTo() / 1000);
+        String formattedDistance = String.format(Locale.getDefault(), "%.1f km", distance);
+        eventDistance.set(formattedDistance);
+
         eventColor.set(event.getPrimaryColor());
 
         Date updatedTime = new Date(event.getUpdated());
@@ -48,7 +55,11 @@ public class EventDetailViewModel extends BaseViewModel {
             navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_AND_FINISH, HomeActivity.class));
         } else {
             for (Section section : event.getSection()) {
-                sectionAdapter.itemsSource.add(new ItemSectionViewModel(section, event.getPrimaryColor(), "#ffffff"));
+                // add title
+                sectionAdapter.itemsSource.add(new ItemSectionViewModel(section.getName(), event.getPrimaryColor()));
+                for (Entry entry : section.getEntries()) {
+                    sectionAdapter.itemsSource.add(new ItemSectionViewModel(entry, event.getPrimaryColor()));
+                }
             }
         }
     }

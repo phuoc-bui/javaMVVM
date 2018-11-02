@@ -29,13 +29,13 @@ public class SplashViewModel extends BaseViewModel {
         disposeBag.add(dataManager.loadConfig()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
-
-                }, error -> {
-                    isLoading.set(false);
-                    handleError(error);
-                }, () -> {
                     getFirebaseToken();
                     startTimer();
+                }, error -> {
+                    getFirebaseToken();
+                    startTimer();
+                    isLoading.set(false);
+                    handleError(error);
                 }));
     }
 
@@ -56,9 +56,10 @@ public class SplashViewModel extends BaseViewModel {
     private void registerDevice(String token) {
         disposeBag.add(dataManager.registerDeviceToken(token)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(apiInfo -> Log.d("SplashViewModel", "register device successful"),
-                        e -> {},
-                        this::startTimer));
+                .subscribe(apiInfo -> {
+                    Log.d("SplashViewModel", "register device successful");
+                    startTimer();
+                }, e -> startTimer()));
     }
 
     private void startTimer() {

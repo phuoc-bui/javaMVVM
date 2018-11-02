@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.text.util.Linkify;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import com.redhelmet.alert2me.ui.widget.EventIcon;
 import com.redhelmet.alert2me.ui.widget.HelpItemView;
 
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 public class BindingAdapters {
 
@@ -135,5 +137,11 @@ public class BindingAdapters {
         if (pair == null) return;
         String supportCode = textView.getContext().getString(R.string.help_support_code_desc, pair.first, pair.second);
         textView.setDescription(supportCode);
+    }
+
+    @BindingAdapter("bind:link")
+    public static void setTextviewLink(TextView textview, String link) {
+        Pattern pattern = Pattern.compile(link);
+        Linkify.addLinks(textview, pattern, "http://");
     }
 }

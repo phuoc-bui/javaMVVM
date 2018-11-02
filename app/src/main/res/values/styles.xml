@@ -104,7 +104,7 @@
     </style>
 
     <style name="TextAppearance.A2M.TabItem.Title" parent="TextAppearance.MaterialComponents.Tab">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="textAllCaps">false</item>
     </style>
 
@@ -124,6 +124,10 @@
 
     <style name="TextAppearance.A2M.Body" parent="TextAppearance.MaterialComponents.Body2">
         <item name="android:textColor">@color/textColorGrey</item>
+    </style>
+
+    <style name="TextAppearance.A2M.Body.Link" parent="TextAppearance.A2M.Body">
+        <item name="android:textColor">@color/swipeoption_blue</item>
     </style>
 
     <style name="TextAppearance.A2M.Event.Body" parent="TextAppearance.MaterialComponents.Body2">

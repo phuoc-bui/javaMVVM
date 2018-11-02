@@ -10,8 +10,10 @@ import com.redhelmet.alert2me.data.remote.response.ConfigResponse;
 import com.redhelmet.alert2me.data.remote.response.ForgotPasswordResponse;
 import com.redhelmet.alert2me.data.remote.response.ProximityLocationResponse;
 import com.redhelmet.alert2me.data.remote.response.RegisterAccountResponse;
+import com.redhelmet.alert2me.data.remote.response.RegisterDeviceResponse;
 import com.redhelmet.alert2me.data.remote.response.Response;
 import com.redhelmet.alert2me.data.remote.response.WatchZoneResponse;
+import com.redhelmet.alert2me.global.RetrofitException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +40,17 @@ public class AppApiHelper implements ApiHelper {
     @Override
     public Observable<DeviceInfo> registerDevice(String firebaseToken) {
         RegisterDeviceRequest request = new RegisterDeviceRequest(firebaseToken);
-        return filterSuccessResponse(apiService.registerDevice(request)).map(response -> response.apiInfo);
+        return filterSuccessResponse(apiService.registerDevice(request)
+                .onErrorResumeNext(throwable -> {
+                    if (throwable instanceof RetrofitException) {
+                        try {
+                            RegisterDeviceResponse deviceInfo = ((RetrofitException) throwable).getErrorBodyAs(RegisterDeviceResponse.class);
+                            return Observable.just(deviceInfo);
+                        } catch (Exception exception) {
+                            return Observable.error(throwable);
+                        }
+                    } else return Observable.error(throwable);
+                })).map(response -> response.apiInfo);
     }
 
     @Override

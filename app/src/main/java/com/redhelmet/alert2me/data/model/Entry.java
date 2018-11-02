@@ -6,6 +6,7 @@ public class Entry implements Model {
     private String title;
     private String value;
     private String link;
+    private String type;
 
     public String getTitle() {
         return title;
@@ -29,5 +30,13 @@ public class Entry implements Model {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

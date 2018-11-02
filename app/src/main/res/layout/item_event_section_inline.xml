@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.redhelmet.alert2me.ui.eventdetail.ItemSectionViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_normal">
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/TextAppearance.A2M.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.title}"
+            bind:layout_constraintTop_toTopOf="@id/tv_link"
+            bind:layout_constraintBottom_toBottomOf="@id/tv_link"
+            tools:text="Issued by" />
+
+        <TextView
+            android:id="@+id/tv_link"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.A2M.Body.Link"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:text="@{viewModel.value}"
+            android:autoLink="web"
+            android:linksClickable="true"
+            bind:layout_constraintStart_toEndOf="@id/tv_title"
+            bind:layout_constraintEnd_toEndOf="parent"
+            bind:link="@{viewModel.link}" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
