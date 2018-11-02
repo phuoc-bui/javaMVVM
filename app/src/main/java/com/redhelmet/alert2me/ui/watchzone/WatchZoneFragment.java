@@ -64,8 +64,8 @@ import com.redhelmet.alert2me.data.model.WatchZoneGeom;
 import com.redhelmet.alert2me.databinding.FragmentWatchzoneListBinding;
 import com.redhelmet.alert2me.domain.util.PreferenceUtils;
 import com.redhelmet.alert2me.domain.util.Utility;
-import com.redhelmet.alert2me.ui.addwatchzone.AddStaticZoneActivity;
 import com.redhelmet.alert2me.ui.activity.EditWatchZone;
+import com.redhelmet.alert2me.ui.addwatchzone.AddStaticZoneActivity;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
 import com.redhelmet.alert2me.ui.services.BackgroundDetectedActivitiesService;
 import com.redhelmet.alert2me.util.DeviceUtil;
@@ -164,7 +164,7 @@ public class WatchZoneFragment extends BaseFragment<WatchZoneViewModel, Fragment
         setupViewPager();
         getBaseActivity().hideToolbar(true);
 
-        viewModel.proximityEnable.observe(this, enable -> binder.viewpager.setCurrentItem(enable ? 1 : 0));
+        binder.viewpager.setCurrentItem(viewModel.proximityEnable.get() ? 1 : 0);
     }
 
     private void setupViewPager() {

@@ -5,28 +5,31 @@ import android.util.Log;
 
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.PreferenceStorage;
+import com.redhelmet.alert2me.global.RxProperty;
 import com.redhelmet.alert2me.ui.addwatchzone.AddStaticZoneActivity;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 
 import javax.inject.Inject;
 
+import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class WatchZoneViewModel extends BaseViewModel {
-    public MutableLiveData<Boolean> proximityEnable = new MutableLiveData<>();
+    public RxProperty<Boolean> proximityEnable = new RxProperty<>();
     public MutableLiveData<Boolean> isRefreshing = new MutableLiveData<>();
     public StaticWZAdapter staticWZAdapter = new StaticWZAdapter();
 
     @Inject
     public WatchZoneViewModel(DataManager dataManager, PreferenceStorage pref) {
         super(dataManager, pref);
-        proximityEnable.setValue(pref.isProximityEnabled());
+        proximityEnable.set(pref.isProximityEnabled());
         // don't need call getData() because it is called on Resume of WatchZoneFragment
 //        getData();
-        Log.e("WatchZoneViewModel", "Constructor");
+        disposeBag.add(proximityEnable.asObservable()
+                .subscribe(pref::setProximityEnabled));
     }
 
     private void getData() {

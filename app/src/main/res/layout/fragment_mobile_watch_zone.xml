@@ -93,6 +93,7 @@
             android:id="@+id/mobileWzSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="@={viewModel.proximityEnable}"
             android:theme="@style/Widget.A2M.SwitchCompatStyle"
             app:layout_constraintBottom_toBottomOf="@+id/sw_mobile_wz_title"
             app:layout_constraintEnd_toEndOf="@+id/guideline_end"
@@ -205,6 +206,7 @@
             android:id="@+id/group_mobile_watch_zone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="@{viewModel.proximityEnable}"
             app:constraint_referenced_ids="iv_notification_sound,iv_notification_option,divider3,tv_notification_sound_title,divider2,mobile_radius_seek,tv_notification_option_title,iv_right_arrow2,mobileRadius,iv_right_arrow_1" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
