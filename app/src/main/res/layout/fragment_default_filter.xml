@@ -13,41 +13,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/staticHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:text="@string/lbl_mapLayersDefaultTitle"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent" />
+        <!--<TextView-->
+            <!--android:id="@+id/staticHeader"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="3dp"-->
+            <!--android:text="@string/lbl_mapLayersDefaultTitle"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textSize="18sp"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-        <TextView
-            android:id="@+id/staticSubHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="3dp"
-            android:text="@string/lbl_mapLayersDefaultSubTitle"
-            android:textAlignment="center"
-            app:layout_constraintTop_toBottomOf="@+id/staticHeader" />
+        <!--<TextView-->
+            <!--android:id="@+id/staticSubHeader"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="3dp"-->
+            <!--android:text="@string/lbl_mapLayersDefaultSubTitle"-->
+            <!--android:textAlignment="center"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/staticHeader" />-->
 
-        <View
-            android:id="@+id/separator"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_gravity="bottom"
-            android:background="@color/light_gray"
-            app:layout_constraintTop_toBottomOf="@+id/staticSubHeader" />
+        <!--<View-->
+            <!--android:id="@+id/separator"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:background="@color/light_gray"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/staticSubHeader" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/defaultList"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             binding:adapter="@{viewModel.adapter}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/separator" />
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

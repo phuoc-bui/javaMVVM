@@ -45,7 +45,7 @@ public class EventFilterActivity extends BaseActivity<EventFilterViewModel, Acti
     private void setupViewPager() {
         adapter = new AppViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new DefaultFilterFragment(), getString(R.string.lblDefault));
-        adapter.addFrag(new CustomFilterFragment(), getString(R.string.lblCustom));
+//        adapter.addFrag(new CustomFilterFragment(), getString(R.string.lblCustom));
         binder.viewpager.setAdapter(adapter);
         binder.viewpager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
