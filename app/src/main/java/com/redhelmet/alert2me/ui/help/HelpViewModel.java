@@ -2,8 +2,10 @@ package com.redhelmet.alert2me.ui.help;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
+
 import android.net.Uri;
 import android.util.Log;
+import android.util.Pair;
 
 import com.redhelmet.alert2me.BuildConfig;
 import com.redhelmet.alert2me.R;
@@ -34,9 +36,12 @@ public class HelpViewModel extends BaseViewModel {
     @Inject
     public HelpViewModel(DataManager dataManager, PreferenceStorage pref) {
         super(dataManager, pref);
+
+        long deviceId = pref.getDeviceInfo().getId();
+
         User currentUser = pref.getCurrentUser();
         if (currentUser != null) {
-            userModel = new UserModel(currentUser);
+            userModel = new UserModel(currentUser, deviceId);
             String name = currentUser.getFirstName();
             String email = currentUser.getEmail();
             profileString.set(name + "\n" + email);
@@ -53,7 +58,8 @@ public class HelpViewModel extends BaseViewModel {
     }
 
     public void onLegalClick() {
-        String url = "https://a2m.cloud/";
+        String url = preferenceStorage.getAppConfig().getTermsAndConditionUrl();
+        if (url == null) url = "https://a2m.cloud/";
         navigateTo(new NavigationItem(NavigationItem.START_WEB_VIEW, Uri.parse(url)));
     }
 
@@ -62,7 +68,8 @@ public class HelpViewModel extends BaseViewModel {
     }
 
     public void onSupportClick() {
-        String url = "https://a2m.cloud/";
+        String url = preferenceStorage.getAppConfig().getSupportUrl();
+        if (url == null) url = "https://a2m.cloud/";
         navigateTo(new NavigationItem(NavigationItem.START_WEB_VIEW, Uri.parse(url)));
     }
 
@@ -111,16 +118,16 @@ public class HelpViewModel extends BaseViewModel {
     public static class UserModel {
 
         private User user;
-        public ObservableField<String> code = new ObservableField<>();
+        public ObservableField<Pair<String, String>> supportCode = new ObservableField<>();
         public ObservableField<String> userEmail = new ObservableField<>();
         public ObservableField<String> firstName = new ObservableField<>();
         public ObservableField<String> surname = new ObservableField<>();
         public ObservableField<String> postcode = new ObservableField<>();
         public ObservableField<String> password = new ObservableField<>();
 
-        public UserModel(User user) {
+        public UserModel(User user, long deviceId) {
             this.user = user;
-            code.set(String.valueOf(user.getId()));
+            supportCode.set(new Pair<>( String.valueOf(deviceId), String.valueOf(user.getId())));
             userEmail.set(user.getEmail());
             firstName.set(user.getFirstName());
             password.set(user.getPassword());

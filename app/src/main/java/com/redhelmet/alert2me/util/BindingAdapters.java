@@ -12,15 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.global.LambdaInterface;
 import com.redhelmet.alert2me.ui.base.BaseRecyclerViewAdapter;
 import com.redhelmet.alert2me.ui.base.BindableAdapter;
 import com.redhelmet.alert2me.ui.widget.EventIcon;
+import com.redhelmet.alert2me.ui.widget.HelpItemView;
 
 import java.util.Collection;
 
@@ -125,5 +128,12 @@ public class BindingAdapters {
         Ringtone ringtone = RingtoneManager.getRingtone(textView.getContext(), uri);
         String ringtoneName = ringtone.getTitle(textView.getContext());
         textView.setText(ringtoneName);
+    }
+
+    @BindingAdapter("bind:supportCode")
+    public static void setSupportCode(HelpItemView textView, Pair<String, String> pair) {
+        if (pair == null) return;
+        String supportCode = textView.getContext().getString(R.string.help_support_code_desc, pair.first, pair.second);
+        textView.setDescription(supportCode);
     }
 }

@@ -289,7 +289,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
     }
 
     private void processMarker(List<Event> events) {
-        if (events == null) return;
+        if (events == null || mMapView == null) return;
         clearMapAndMarker();
 
         if (binder.clusterEvents.isSelected()) {

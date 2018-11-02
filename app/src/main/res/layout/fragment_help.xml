@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -15,19 +16,16 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_normal">
 
             <ImageView
-                android:id="@+id/iv_background"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_help" />
-
-            <ImageView
+                android:id="@+id/iv_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_launcher_big"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_background"
+                android:layout_marginTop="40dp"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -40,7 +38,7 @@
                 android:onClick="@{v -> viewModel.onUserProfileClick()}"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"
-                app:layout_constraintTop_toBottomOf="@+id/iv_background"
+                app:layout_constraintTop_toBottomOf="@+id/iv_logo"
                 app:title="@string/help_profile_title" />
 
             <com.redhelmet.alert2me.ui.widget.HelpItemView
@@ -83,7 +81,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/item_help_code"
-                app:description="@{viewModel.userModel.code}"
+                bind:supportCode="@{viewModel.userModel.supportCode}"
                 app:showArrow="false"
                 android:layout_marginTop="@dimen/margin_large"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"

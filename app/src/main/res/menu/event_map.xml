@@ -5,39 +5,21 @@
 
     <item
         android:id="@+id/filter_map"
-        android:orderInCategory="100"
         android:icon="@drawable/ic_filter_list_white_24px"
-        app:showAsAction="always"/>
+        android:orderInCategory="100"
+        android:title="@string/menuFilterList"
+        app:showAsAction="always" />
     <item
         android:id="@+id/refresh_map"
-        android:orderInCategory="101"
         android:icon="@drawable/ic_baseline_refresh_24px"
-        app:showAsAction="ifRoom"/>
-    <item
-        android:id="@+id/listOptions"
         android:orderInCategory="101"
-        android:icon="@drawable/ic_threedots_24px"
-        app:showAsAction="ifRoom">
+        android:title="@string/menuRefreshList"
+        app:showAsAction="always" />
 
-        <menu>
-
-            <item android:id="@+id/menuRefreshList"
-                android:icon="@drawable/ic_baseline_refresh_black_24px"
-                app:showAsAction="ifRoom"
-                android:title="@string/menuRefreshList" />
-
-            <item android:id="@+id/menuFilterList"
-                android:icon="@drawable/ic_filter1_list_white_24px"
-                app:showAsAction="ifRoom"
-                android:title="@string/menuFilterList" />
-
-            <item android:id="@+id/menuSortList"
-                android:icon="@drawable/ic_sort_list_24px"
-                app:showAsAction="ifRoom"
-                android:title="@string/menuSortList" />
-
-        </menu>
-
-    </item>
+    <item
+        android:id="@+id/menuSortList"
+        android:icon="@drawable/ic_sort_list_24px"
+        android:title="@string/menuSortList"
+        app:showAsAction="always" />
 
 </menu>

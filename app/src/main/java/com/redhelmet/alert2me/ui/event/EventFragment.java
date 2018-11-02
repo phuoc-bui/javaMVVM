@@ -1,12 +1,16 @@
 package com.redhelmet.alert2me.ui.event;
 
 import android.app.Activity;
+
 import androidx.lifecycle.ViewModelProvider;
+
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AlertDialog;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -149,16 +153,15 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (menu.findItem(R.id.filter_map) != null)
-            if (binder.viewpager.getCurrentItem() == 0) {
-                menu.findItem(R.id.filter_map).setVisible(true);
-                menu.findItem(R.id.refresh_map).setVisible(true);
-                menu.findItem(R.id.listOptions).setVisible(false);
-            } else {
-                menu.findItem(R.id.filter_map).setVisible(false);
-                menu.findItem(R.id.refresh_map).setVisible(false);
-                menu.findItem(R.id.listOptions).setVisible(true);
-            }
+        if (binder.viewpager.getCurrentItem() == 0) {
+            menu.findItem(R.id.filter_map).setVisible(true);
+            menu.findItem(R.id.refresh_map).setVisible(true);
+            menu.findItem(R.id.menuSortList).setVisible(false);
+        } else {
+            menu.findItem(R.id.filter_map).setVisible(true);
+            menu.findItem(R.id.refresh_map).setVisible(false);
+            menu.findItem(R.id.menuSortList).setVisible(true);
+        }
     }
 
     @Override
@@ -166,13 +169,11 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
 
         switch (item.getItemId()) {
             case R.id.filter_map:
-            case R.id.menuFilterList:
                 intent = new Intent(getActivity(), EventFilterActivity.class);
                 startActivityForResult(intent, EVENT_FILTER_REQUEST);
                 return true;
 
             case R.id.refresh_map:
-            case R.id.menuRefreshList:
                 viewModel.onRefresh.run();
                 return true;
 
