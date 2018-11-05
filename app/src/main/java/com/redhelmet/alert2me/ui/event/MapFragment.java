@@ -42,6 +42,7 @@ import com.redhelmet.alert2me.ui.clusterevents.ClusterEventListActivity;
 import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
 import com.redhelmet.alert2me.ui.widget.EventIcon;
 import com.redhelmet.alert2me.util.EventUtils;
+import com.redhelmet.alert2me.util.MapUtil;
 import com.redhelmet.alert2me.util.PermissionUtils;
 
 import java.util.ArrayList;
@@ -332,7 +333,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
             clusterManager.addItem(customMarker);
         }
         clusterManager.cluster();
-        PolygonOptions options = viewModel.createPolygonForEvent(event);
+        PolygonOptions options = MapUtil.createPolygonFromEvent(event);
         if (options != null) {
             Polygon p = mMapView.addPolygon(options);
             polygons.add(p);
@@ -362,7 +363,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
             Marker marker = mMapView.addMarker(markerOptions);
             marker.setTag(event);
         }
-        PolygonOptions options = viewModel.createPolygonForEvent(event);
+        PolygonOptions options = MapUtil.createPolygonFromEvent(event);
         if (options != null) {
             Polygon p = mMapView.addPolygon(options);
             polygons.add(p);

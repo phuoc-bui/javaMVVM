@@ -12,7 +12,6 @@ import com.redhelmet.alert2me.ui.base.NavigationItem;
 
 import javax.inject.Inject;
 
-import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -39,7 +38,7 @@ public class WatchZoneViewModel extends BaseViewModel {
                 .map(ItemStaticWZViewModel::new)
                 .toList()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe( list -> {
+                .subscribe(list -> {
                     isRefreshing.setValue(false);
                     staticWZAdapter.itemsSource.clear();
                     staticWZAdapter.itemsSource.addAll(list);
@@ -54,6 +53,13 @@ public class WatchZoneViewModel extends BaseViewModel {
 
     public void onAddWatchZoneClick() {
         navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY, AddStaticZoneActivity.class));
+    }
+
+    public void onStaticWZClick(int position) {
+        if (position >= 0 && position < staticWZAdapter.itemsSource.size()) {
+            ItemStaticWZViewModel item = staticWZAdapter.itemsSource.get(position);
+            navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY, AddStaticZoneActivity.class, AddStaticZoneActivity.createBundle(item.getWatchZone())));
+        }
     }
 
     @Override

@@ -18,7 +18,6 @@ public class RetrofitException extends RuntimeException {
     private Kind kind;
     private Throwable exception;
     private Retrofit retrofit;
-
     private NetworkError errorData;
 
     public RetrofitException(String message, String url, Response response, Kind kind, Throwable exception, Retrofit retrofit) {
@@ -37,8 +36,12 @@ public class RetrofitException extends RuntimeException {
         if (response.code() == 403) {
             error = new RetrofitException(message, url, response, Kind.HTTP_403, null, retrofit);
         } else {
-            error = new RetrofitException(message, url, response, Kind.HTTP, null, retrofit);
-            error.deserializeServerError();
+            if (response.code() == 400 && url.contains("/device")) {
+                error = new RetrofitException(message, url, response, Kind.HTTP, null, retrofit);
+            } else {
+                error = new RetrofitException(message, url, response, Kind.HTTP, null, retrofit);
+                error.deserializeServerError();
+            }
         }
         return error;
     }

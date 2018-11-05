@@ -1,7 +1,6 @@
 package com.redhelmet.alert2me.ui.addwatchzone;
 
 import android.content.Context;
-import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
@@ -27,14 +26,10 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
     @Inject
     ViewModelProvider.Factory factory;
 
-    public static Intent newInstance(Context context) {
-        return newInstance(context, null);
-    }
-
-    public static Intent newInstance(Context context, EditWatchZones watchZone) {
-        Intent i = new Intent(context, AddStaticZoneActivity.class);
-        i.putExtra(WATCH_ZONE_BUNDLE_EXTRA, watchZone);
-        return i;
+    public static Bundle createBundle(EditWatchZones watchZones) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(WATCH_ZONE_BUNDLE_EXTRA, watchZones);
+        return bundle;
     }
 
     @Override
@@ -53,7 +48,7 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
 
         obtainViewModel(factory, AddStaticZoneViewModel.class);
 
-        EditWatchZones watchZone = (EditWatchZones) getIntent().getSerializableExtra(WATCH_ZONE_BUNDLE_EXTRA);
+        EditWatchZones watchZone = (EditWatchZones) getBundle().getSerializable(WATCH_ZONE_BUNDLE_EXTRA);
         if (watchZone != null) {
             viewModel.setWatchZone(watchZone);
         }
@@ -71,7 +66,15 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
 
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setTitle(getString(R.string.lbl_addStaticWZ));
+            switch (viewModel.mode) {
+                case ADD:
+                    supportActionBar.setTitle(getString(R.string.lbl_addStaticWZ));
+                    break;
+                case EDIT:
+                    supportActionBar.setTitle(getString(R.string.lbl_editStaticWZ));
+                    break;
+            }
+
         }
     }
 

@@ -69,7 +69,8 @@ public class AppDataManager implements DataManager {
     @Override
     public Observable<DeviceInfo> registerDeviceToken(String firebaseToken) {
         return api.registerDevice(firebaseToken)
-                .doOnNext(apiInfo -> pref.saveDeviceInfo(apiInfo));
+                .doOnNext(apiInfo -> pref.saveDeviceInfo(apiInfo))
+                .doOnError(e -> Log.e(TAG, "register device error"));
     }
 
     @Override

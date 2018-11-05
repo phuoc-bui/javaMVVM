@@ -40,7 +40,7 @@ public class AppApiHelper implements ApiHelper {
     @Override
     public Observable<DeviceInfo> registerDevice(String firebaseToken) {
         RegisterDeviceRequest request = new RegisterDeviceRequest(firebaseToken);
-        return filterSuccessResponse(apiService.registerDevice(request)
+        return apiService.registerDevice(request)
                 .onErrorResumeNext(throwable -> {
                     if (throwable instanceof RetrofitException) {
                         try {
@@ -50,7 +50,7 @@ public class AppApiHelper implements ApiHelper {
                             return Observable.error(throwable);
                         }
                     } else return Observable.error(throwable);
-                })).map(response -> response.apiInfo);
+                }).map(response -> response.apiInfo);
     }
 
     @Override

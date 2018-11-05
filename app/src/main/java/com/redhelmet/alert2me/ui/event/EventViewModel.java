@@ -1,10 +1,7 @@
 package com.redhelmet.alert2me.ui.event;
 
-import android.graphics.Color;
 import android.location.Location;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.common.collect.ComparisonChain;
 import com.redhelmet.alert2me.adapters.EventListRecyclerAdapter;
 import com.redhelmet.alert2me.data.DataManager;
@@ -13,7 +10,6 @@ import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
-import com.redhelmet.alert2me.util.IconUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -79,20 +75,6 @@ public class EventViewModel extends BaseViewModel {
                             isLoading.set(false);
                             isRefreshing.setValue(false);
                         }));
-    }
-
-    public PolygonOptions createPolygonForEvent(Event event) {
-        if (event.getGeometry().getCoordinates() != null) {
-            PolygonOptions polygon = new PolygonOptions();
-            int strokeColor = Color.parseColor(event.getPrimaryColor());
-            int fillColor = Color.parseColor(event.getPrimaryColor());
-            polygon.strokeColor(strokeColor);
-            polygon.fillColor(IconUtils.getColorWithAlpha(fillColor, 0.4f));
-            for (double[] coordinate : event.getGeometry().getCoordinates()[0]) {
-                polygon.add(new LatLng(coordinate[1], coordinate[0]));
-            }
-            return polygon;
-        } else return null;
     }
 
     public void onEventClick(int position) {

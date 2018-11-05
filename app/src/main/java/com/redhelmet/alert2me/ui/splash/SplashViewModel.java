@@ -30,10 +30,8 @@ public class SplashViewModel extends BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(response -> {
                     getFirebaseToken();
-                    startTimer();
                 }, error -> {
                     getFirebaseToken();
-                    startTimer();
                     isLoading.set(false);
                     handleError(error);
                 }));
@@ -63,6 +61,7 @@ public class SplashViewModel extends BaseViewModel {
     }
 
     private void startTimer() {
+        Log.d("SplashViewModel", "start timer");
         disposeBag.add(Observable.timer(Constant.SPLASH_DISPLAY_LENGTH, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(number -> {

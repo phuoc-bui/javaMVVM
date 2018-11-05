@@ -31,7 +31,7 @@ public class AddStaticZoneViewModel extends BaseViewModel {
     }
 
     public MutableLiveData<Step> currentStep = new MutableLiveData<>();
-    private Mode mode = Mode.ADD;
+    public Mode mode = Mode.ADD;
 
     public WatchZoneModel watchZoneModel = new WatchZoneModel();
 
@@ -174,6 +174,10 @@ public class AddStaticZoneViewModel extends BaseViewModel {
 
         public boolean validateName() {
             return !name.get().matches("^\\s*$") && name.get().trim().length() > 0;
+        }
+
+        public boolean isCircle() {
+            return type.equals("STANDARD");
         }
     }
 }
