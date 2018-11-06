@@ -11,7 +11,6 @@ import com.redhelmet.alert2me.data.model.EventGroup;
 public class EventGroupItemViewModel {
 
     public MutableLiveData<EventGroup> eventGroup = new MutableLiveData<>();
-    private DefaultFilterViewModel.OnSwitchChangedListener listener;
 
     public ObservableField<String> title = new ObservableField<>();
     public ObservableField<String> description = new ObservableField<>();
@@ -20,9 +19,8 @@ public class EventGroupItemViewModel {
     public ObservableBoolean showToggleAlways = new ObservableBoolean(false);
     public ObservableBoolean toggleChecked = new ObservableBoolean(false);
 
-    public EventGroupItemViewModel(EventGroup eventGroup, DefaultFilterViewModel.OnSwitchChangedListener listener) {
+    public EventGroupItemViewModel(EventGroup eventGroup) {
         this.eventGroup.setValue(eventGroup);
-        this.listener = listener;
         title.set(eventGroup.getName());
         description.set(eventGroup.getDescription());
         showToggleSwitch.set(eventGroup.isFilterToggle());
@@ -33,6 +31,5 @@ public class EventGroupItemViewModel {
     public void onToggleSwitchClick(View v) {
         eventGroup.getValue().setFilterOn(((SwitchCompat) v).isChecked());
         eventGroup.getValue().setUserEdited(true);
-        if (listener != null) listener.onSwitchChanged((SwitchCompat) v, eventGroup.getValue());
     }
 }

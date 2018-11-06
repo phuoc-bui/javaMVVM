@@ -12,8 +12,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -21,25 +19,21 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DefaultFilterViewModel extends BaseViewModel {
     public DefaultFilterAdapter adapter = new DefaultFilterAdapter();
-    public MutableLiveData<List<EventGroup>> allEventGroup = new MutableLiveData<>();
-
-    private OnSwitchChangedListener listener = (view, data) -> allEventGroup.getValue();
 
     @Inject
     public DefaultFilterViewModel(DataManager dataManager) {
         super(dataManager);
         disposeBag.add(dataManager.getEventGroups()
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(list -> allEventGroup.setValue(list))
                 .flatMap(Observable::fromIterable)
-                .map(eventGroup -> new EventGroupItemViewModel(eventGroup, listener))
+                .map(EventGroupItemViewModel::new)
                 .subscribe(vm -> adapter.itemsSource.add(vm)));
     }
 
     public void saveData() {
-        if (allEventGroup.getValue() == null) return;
         List<EventGroup> filterGroup = new ArrayList<>();
-        for (EventGroup group : allEventGroup.getValue()) {
+        for (EventGroupItemViewModel item : adapter.itemsSource) {
+            EventGroup group = item.eventGroup.getValue();
             if (group.isUserEdited()) {
                 filterGroup.add(group);
             }
@@ -54,9 +48,5 @@ public class DefaultFilterViewModel extends BaseViewModel {
                     Intent resultIntent = new Intent();
                     navigateTo(new NavigationItem(NavigationItem.FINISH_AND_RETURN, resultIntent));
                 }));
-    }
-
-    public interface OnSwitchChangedListener {
-        void onSwitchChanged(SwitchCompat view, EventGroup data);
     }
 }

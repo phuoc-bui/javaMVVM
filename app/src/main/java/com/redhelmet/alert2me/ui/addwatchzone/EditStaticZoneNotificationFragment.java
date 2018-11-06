@@ -1,22 +1,18 @@
 package com.redhelmet.alert2me.ui.addwatchzone;
 
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.AppViewPagerAdapter;
 import com.redhelmet.alert2me.databinding.FragmentEditStaticZoneNotificationBinding;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
-import com.redhelmet.alert2me.ui.eventfilter.custom.CustomFilterFragment;
 import com.redhelmet.alert2me.ui.eventfilter.defaultfilter.DefaultFilterFragment;
 
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
 
 public class EditStaticZoneNotificationFragment extends BaseFragment<AddStaticZoneViewModel, FragmentEditStaticZoneNotificationBinding> {
 
@@ -35,6 +31,8 @@ public class EditStaticZoneNotificationFragment extends BaseFragment<AddStaticZo
         obtainViewModel(factory, AddStaticZoneViewModel.class);
         setupViewPager();
         initializeControls();
+//        DefaultFilterFragment fragment = (DefaultFilterFragment) adapter.getItem(0);
+//        fragment.getViewModel().adapter.itemsSource.forEach();
     }
 
     private void setupViewPager() {
