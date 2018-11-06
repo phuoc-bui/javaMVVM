@@ -48,11 +48,12 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
 
         obtainViewModel(factory, AddStaticZoneViewModel.class);
 
-        EditWatchZones watchZone = (EditWatchZones) getBundle().getSerializable(WATCH_ZONE_BUNDLE_EXTRA);
-        if (watchZone != null) {
-            viewModel.setWatchZone(watchZone);
+        if (getBundle() != null) {
+            EditWatchZones watchZone = (EditWatchZones) getBundle().getSerializable(WATCH_ZONE_BUNDLE_EXTRA);
+            if (watchZone != null) {
+                viewModel.setWatchZone(watchZone);
+            }
         }
-
         initializeToolbar();
 
         changeFragment(new EditStaticZoneNameFragment());
@@ -66,7 +67,7 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
 
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-            switch (viewModel.mode) {
+            switch (viewModel.watchZoneModel.mode) {
                 case ADD:
                     supportActionBar.setTitle(getString(R.string.lbl_addStaticWZ));
                     break;

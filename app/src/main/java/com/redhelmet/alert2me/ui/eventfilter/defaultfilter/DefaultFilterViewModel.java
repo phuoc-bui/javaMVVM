@@ -1,8 +1,6 @@
 package com.redhelmet.alert2me.ui.eventfilter.defaultfilter;
 
-import androidx.lifecycle.MutableLiveData;
 import android.content.Intent;
-import androidx.appcompat.widget.SwitchCompat;
 
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.EventGroup;
@@ -14,6 +12,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -37,10 +37,6 @@ public class DefaultFilterViewModel extends BaseViewModel {
     }
 
     public void saveData() {
-        saveDataToServer();
-    }
-
-    private void saveDataToServer() {
         if (allEventGroup.getValue() == null) return;
         List<EventGroup> filterGroup = new ArrayList<>();
         for (EventGroup group : allEventGroup.getValue()) {
@@ -56,9 +52,6 @@ public class DefaultFilterViewModel extends BaseViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
                     Intent resultIntent = new Intent();
-
-//        resultIntent.putExtra("default", true);
-//        resultIntent.putExtra("filterGroup", defValues);
                     navigateTo(new NavigationItem(NavigationItem.FINISH_AND_RETURN, resultIntent));
                 }));
     }

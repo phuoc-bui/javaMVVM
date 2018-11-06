@@ -2,6 +2,8 @@ package com.redhelmet.alert2me.ui.base;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+
+import androidx.annotation.ColorRes;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.pm.PackageManager;

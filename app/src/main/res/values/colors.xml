@@ -64,4 +64,6 @@
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
     <color name="light_gray">#D3D3D3</color>
 
+    <color name="wz_polygon_color">#8ce0701e</color>
+
 </resources>

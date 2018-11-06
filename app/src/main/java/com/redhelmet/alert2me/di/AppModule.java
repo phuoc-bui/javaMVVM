@@ -46,6 +46,7 @@ class AppModule {
                 .setLenient()
                 .registerTypeAdapter(Event.EventList.class, new AppJsonDeserializer.EventsDeserializer())
                 .registerTypeAdapter(Geometry.class, new AppJsonDeserializer.GeometryDeserializer())
+                .registerTypeAdapter(Geometry.class, new AppJsonDeserializer.GeometrySerializer())
                 .create();
     }
 }

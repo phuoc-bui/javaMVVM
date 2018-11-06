@@ -305,14 +305,14 @@ public class AddStaticZoneLocation extends BaseActivity implements View.OnClickL
 //                if (isPolygonAdded())
 //                    showWzChangeAlert(getString(R.string.wz_change_heading_circle), getString(R.string.wz_change_text_circle), false);
 //                else
-//                    viewSetting(true);
+//                    changeGeometryType(true);
 //
 //                break;
 //            case R.id.polygonBtn:
 //                if (isCircleAdded())
 //                    showWzChangeAlert(getString(R.string.wz_change_heading_custom), getString(R.string.wz_change_text_custom), true);
 //                else
-//                    viewSetting(false);
+//                    changeGeometryType(false);
 //                break;
 //        }
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -41,7 +41,8 @@
                 android:id="@+id/txtRadius"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Radius (km)"
+                bind:radius="@{viewModel.watchZoneModel.radius}"
+                tools:text="Radius (km)"
                 android:textSize="@dimen/text_size" />
 
             <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
@@ -53,7 +54,7 @@
                 app:dsb_max="100"
                 app:dsb_min="1"
                 app:dsb_progressColor="@color/colorDarkRed"
-                app:dsb_value="@={viewModel.watchZoneModel.radius}" />
+                bind:seekBarProgress="@={viewModel.watchZoneModel.radius}" />
         </LinearLayout>
 
 

@@ -1,14 +1,9 @@
 package com.redhelmet.alert2me.util;
 
 import android.app.Activity;
-import androidx.databinding.BindingAdapter;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -18,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.global.LambdaInterface;
@@ -26,8 +22,16 @@ import com.redhelmet.alert2me.ui.base.BindableAdapter;
 import com.redhelmet.alert2me.ui.widget.EventIcon;
 import com.redhelmet.alert2me.ui.widget.HelpItemView;
 
+import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
+
 import java.util.Collection;
 import java.util.regex.Pattern;
+
+import androidx.databinding.BindingAdapter;
+import androidx.databinding.InverseBindingAdapter;
+import androidx.databinding.InverseBindingListener;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class BindingAdapters {
 
@@ -143,5 +147,42 @@ public class BindingAdapters {
     public static void setTextviewLink(TextView textview, String link) {
         Pattern pattern = Pattern.compile(link);
         Linkify.addLinks(textview, pattern, "http://");
+    }
+
+    @BindingAdapter("bind:radius")
+    public static void setRadiusText(TextView textview, int radius) {
+        String radiusString = textview.getContext().getString(R.string.wz_radius_title, radius);
+        textview.setText(radiusString);
+    }
+
+    @BindingAdapter("bind:seekBarProgress")
+    public static void setSeekBarValue(DiscreteSeekBar seekBar, int value) {
+        if (seekBar.getProgress() != value)
+            seekBar.setProgress(value);
+    }
+
+    @InverseBindingAdapter(attribute = "bind:seekBarProgress")
+    public static int getSeekBarValue(DiscreteSeekBar seekBar) {
+        return seekBar.getProgress();
+    }
+
+    @BindingAdapter("app:seekBarProgressAttrChanged")
+    public static void setOnSeekBarValueChanged(DiscreteSeekBar seekBar, InverseBindingListener attrChange) {
+        seekBar.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
+            @Override
+            public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
+                attrChange.onChange();
+            }
+
+            @Override
+            public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
+
+            }
+        });
     }
 }

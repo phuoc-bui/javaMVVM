@@ -1,17 +1,14 @@
 package com.redhelmet.alert2me.data.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.redhelmet.alert2me.data.database.entity.WatchZoneEntity;
 import com.redhelmet.alert2me.data.model.base.Model;
-import com.redhelmet.alert2me.data.model.base.UserModel;
 
 import java.util.List;
 
-import androidx.room.Embedded;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 public class EditWatchZones implements Model {
+
+    public static final String CIRCLE_TYPE = "STANDARD";
+    public static final String POLYGON_TYPE = "VARIABLE";
 
     private long id;
     private String deviceId;
@@ -29,6 +26,14 @@ public class EditWatchZones implements Model {
     private boolean noEdit;
     private String shareCode;
     private Geometry geom;
+
+    public EditWatchZones() {
+        radius = 5;
+        wzType = CIRCLE_TYPE;
+        geom = new Geometry();
+        geom.setType(Geometry.POINT_TYPE);
+
+    }
 
     public long getId() {
         return id;

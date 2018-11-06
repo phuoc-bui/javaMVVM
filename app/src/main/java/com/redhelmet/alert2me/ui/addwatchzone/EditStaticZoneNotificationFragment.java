@@ -40,7 +40,7 @@ public class EditStaticZoneNotificationFragment extends BaseFragment<AddStaticZo
     private void setupViewPager() {
         adapter = new AppViewPagerAdapter(getChildFragmentManager());
         adapter.addFrag(new DefaultFilterFragment(), getString(R.string.lblDefault));
-        adapter.addFrag(new CustomFilterFragment(), getString(R.string.lblCustom));
+//        adapter.addFrag(new CustomFilterFragment(), getString(R.string.lblCustom));
         binder.viewpager.setAdapter(adapter);
     }
 

@@ -1,20 +1,21 @@
 package com.redhelmet.alert2me.ui.addwatchzone;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polygon;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.data.model.Geometry;
+import com.redhelmet.alert2me.global.RxProperty;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -30,8 +31,11 @@ public class AddStaticZoneViewModel extends BaseViewModel {
         EDIT, ADD
     }
 
+    enum GeometryType {
+        CIRCLE, POLYGON
+    }
+
     public MutableLiveData<Step> currentStep = new MutableLiveData<>();
-    public Mode mode = Mode.ADD;
 
     public WatchZoneModel watchZoneModel = new WatchZoneModel();
 
@@ -43,7 +47,6 @@ public class AddStaticZoneViewModel extends BaseViewModel {
 
     public void setWatchZone(EditWatchZones watchZone) {
         watchZoneModel = new WatchZoneModel(watchZone);
-        mode = Mode.EDIT;
     }
 
     public void onNextClick() {
@@ -58,8 +61,12 @@ public class AddStaticZoneViewModel extends BaseViewModel {
                 }
                 break;
             case EDIT_LOCATION:
-                currentStep.setValue(Step.EDIT_NOTIFICATION);
-                destination = new NavigationItem(NavigationItem.CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK, new EditStaticZoneNotificationFragment());
+                if (watchZoneModel.validateLocation()) {
+                    currentStep.setValue(Step.EDIT_NOTIFICATION);
+                    destination = new NavigationItem(NavigationItem.CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK, new EditStaticZoneNotificationFragment());
+                } else {
+                    destination = new NavigationItem(NavigationItem.SHOW_TOAST, R.string.msg_wz_location_not_valid);
+                }
                 break;
         }
         if (destination != null) navigateTo(destination);
@@ -78,7 +85,7 @@ public class AddStaticZoneViewModel extends BaseViewModel {
     }
 
     public void onSaveClick() {
-        if (mode == Mode.ADD) {
+        if (watchZoneModel.mode == Mode.ADD) {
             disposeBag.add(dataManager.addWatchZone(watchZoneModel.getWatchZones(true))
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(o -> {
@@ -103,62 +110,38 @@ public class AddStaticZoneViewModel extends BaseViewModel {
         return dataManager.isDefaultFilter();
     }
 
-    public void savePolygon(Polygon polygon) {
-        if (polygon != null) {
-            List<LatLng> points = polygon.getPoints();
-            double[][][] coordinates = new double[1][points.size()][2];
-            for (int i = 0; i < points.size(); i++) {
-                coordinates[0][i][0] = points.get(i).latitude;
-                coordinates[0][i][1] = points.get(i).longitude;
-            }
-
-            Geometry geometry = new Geometry();
-            geometry.setType("POLYGON");
-            geometry.setCoordinates(coordinates);
-            watchZoneModel.geom.setValue(geometry);
-            watchZoneModel.type = "VARIABLE";
-            watchZoneModel.radius.set(0);
-        }
-    }
-
-    public void clearGeometry() {
-        watchZoneModel.geom.setValue(null);
-        watchZoneModel.type = "";
-        watchZoneModel.radius.set(0);
-    }
-
-    public void saveCircle(double lat, double lng, int radius) {
-        double[][][] coordinates = new double[1][1][2];
-        coordinates[0][0][0] = lat;
-        coordinates[0][0][1] = lng;
-
-        Geometry geometry = new Geometry();
-        geometry.setType("POINT");
-        geometry.setCoordinates(coordinates);
-        watchZoneModel.geom.setValue(geometry);
-        watchZoneModel.type = "STANDARD";
-        watchZoneModel.radius.set(radius);
-    }
 
     public static class WatchZoneModel {
         public ObservableField<String> name = new ObservableField<>("");
         public ObservableField<String> sound = new ObservableField<>("Default");
-        public ObservableInt radius = new ObservableInt(0);
-        public MutableLiveData<Geometry> geom = new MutableLiveData<>();
+        public RxProperty<Integer> radius = new RxProperty<>(5);
+        public List<LatLng> points = new ArrayList<>();
+        private Geometry geometry;
         public String type;
+        public MutableLiveData<GeometryType> geometryType = new MutableLiveData<>();
+        public Mode mode = Mode.ADD;
 
         private EditWatchZones watchZones;
 
         public WatchZoneModel() {
-            watchZones = new EditWatchZones();
+            this(null);
         }
 
-        public WatchZoneModel(EditWatchZones init) {
+        public WatchZoneModel(@Nullable EditWatchZones init) {
+            if (init == null) {
+                mode = Mode.ADD;
+                init = new EditWatchZones();
+            } else {
+                mode = Mode.EDIT;
+            }
             watchZones = init;
             name.set(init.getName());
             sound.set(init.getSound());
             radius.set(init.getRadius());
-            geom.setValue(init.getGeom());
+            geometry = init.getGeom();
+            type = init.getWzType();
+            points = convertPointsFromGeometry(init.getGeom());
+            geometryType.setValue(isCircle() ? GeometryType.CIRCLE : GeometryType.POLYGON);
         }
 
         public EditWatchZones getWatchZones(boolean updated) {
@@ -166,7 +149,8 @@ public class AddStaticZoneViewModel extends BaseViewModel {
                 watchZones.setName(name.get());
                 watchZones.setSound(sound.get());
                 watchZones.setRadius(radius.get());
-                watchZones.setGeom(geom.getValue());
+                geometry.setCoordinates(convertPointsCoordinates(points));
+                watchZones.setGeom(geometry);
                 watchZones.setWzType(type);
             }
             return watchZones;
@@ -176,8 +160,59 @@ public class AddStaticZoneViewModel extends BaseViewModel {
             return !name.get().matches("^\\s*$") && name.get().trim().length() > 0;
         }
 
+        public boolean validateLocation() {
+            return points.size() > 0;
+        }
+
         public boolean isCircle() {
-            return type.equals("STANDARD");
+            return type.equals(EditWatchZones.CIRCLE_TYPE);
+        }
+
+        public void clearGeometry() {
+            points.clear();
+            type = "";
+            radius.set(5);
+        }
+
+        public void changeGeometryType(GeometryType type) {
+            if (geometry == null) geometry = new Geometry();
+            clearGeometry();
+            switch (type) {
+                case CIRCLE:
+                    geometry.setType(Geometry.POINT_TYPE);
+                    this.type = EditWatchZones.CIRCLE_TYPE;
+                    break;
+                case POLYGON:
+                    geometry.setType(Geometry.POLYGON_TYPE);
+                    this.type = EditWatchZones.POLYGON_TYPE;
+                    radius.set(0);
+                    break;
+            }
+
+            geometryType.setValue(type);
+        }
+
+        private List<LatLng> convertPointsFromGeometry(Geometry geometry) {
+            List<LatLng> points = new ArrayList<>();
+            if (geometry != null && geometry.getCoordinates() != null) {
+                double[][][] coordinates = geometry.getCoordinates();
+                for (int i = 0; i < coordinates[0].length; i++) {
+                    double lat = coordinates[0][i][1];
+                    double lng = coordinates[0][i][0];
+                    LatLng point = new LatLng(lat, lng);
+                    points.add(point);
+                }
+            }
+            return points;
+        }
+
+        private double[][][] convertPointsCoordinates(List<LatLng> points) {
+            double[][][] coordinates = new double[1][points.size()][2];
+            for (int i = 0; i < points.size(); i++) {
+                coordinates[0][i][1] = points.get(i).latitude;
+                coordinates[0][i][0] = points.get(i).longitude;
+            }
+            return coordinates;
         }
     }
 }

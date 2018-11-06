@@ -22,11 +22,11 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs"
-                style="@style/Widget.A2M.TabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <!--<com.google.android.material.tabs.TabLayout-->
+                <!--android:id="@+id/tabs"-->
+                <!--style="@style/Widget.A2M.TabLayout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content" />-->
         </androidx.viewpager.widget.ViewPager>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
