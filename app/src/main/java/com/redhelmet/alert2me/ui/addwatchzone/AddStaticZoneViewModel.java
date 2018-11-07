@@ -185,19 +185,13 @@ public class AddStaticZoneViewModel extends BaseViewModel {
             return type.equals(EditWatchZones.CIRCLE_TYPE);
         }
 
-        public void clearGeometry() {
-            points.clear();
-            type = "";
-            radius.set(5);
-        }
-
         public void changeGeometryType(GeometryType type) {
             if (geometry == null) geometry = new Geometry();
-            clearGeometry();
             switch (type) {
                 case CIRCLE:
                     geometry.setType(Geometry.POINT_TYPE);
                     this.type = EditWatchZones.CIRCLE_TYPE;
+                    radius.set(5);
                     break;
                 case POLYGON:
                     geometry.setType(Geometry.POLYGON_TYPE);

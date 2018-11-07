@@ -52,12 +52,17 @@ public class SplashViewModel extends BaseViewModel {
     }
 
     private void registerDevice(String token) {
-        disposeBag.add(dataManager.registerDeviceToken(token)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(apiInfo -> {
-                    Log.d("SplashViewModel", "register device successful");
-                    startTimer();
-                }, e -> startTimer()));
+        long deviceId = preferenceStorage.getDeviceInfo().getId();
+        if (deviceId > 0) {
+            startTimer();
+        } else {
+            disposeBag.add(dataManager.registerDeviceToken(token)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(apiInfo -> {
+                        Log.d("SplashViewModel", "register device successful");
+                        startTimer();
+                    }, e -> startTimer()));
+        }
     }
 
     private void startTimer() {

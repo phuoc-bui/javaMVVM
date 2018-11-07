@@ -166,10 +166,12 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        viewModel.watchZoneModel.points.add(latLng);
         if (viewModel.watchZoneModel.isCircle()) {
+            viewModel.watchZoneModel.points.clear();
+            viewModel.watchZoneModel.points.add(latLng);
             createCircle();
         } else {
+            viewModel.watchZoneModel.points.add(latLng);
             addPointToPolygon(latLng);
         }
     }
@@ -218,7 +220,6 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
             }
             currentCircle = null;
             titleMarker = null;
-            viewModel.watchZoneModel.clearGeometry();
         }
     }
 
@@ -318,7 +319,6 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
         markers = new ArrayList<>();
         googleMap.clear();
         removeCurrentPolygon();
-        viewModel.watchZoneModel.clearGeometry();
     }
 
     private void removeCurrentPolygon() {
