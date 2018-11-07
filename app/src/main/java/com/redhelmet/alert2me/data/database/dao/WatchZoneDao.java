@@ -8,6 +8,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
@@ -22,6 +23,15 @@ public interface WatchZoneDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Completable saveWatchZone(WatchZoneEntity watchZone);
+
+    @Update
+    Completable updateWatchZone(WatchZoneEntity watchZone);
+
+    @Query("UPDATE WatchZone SET enable = :enabled WHERE id = :id")
+    int enableWatchZone(long id, boolean enabled);
+
+    @Query("DELETE FROM WatchZone WHERE id = :id")
+    int deleteWatchZone(long id);
 
     @Query("DELETE FROM WatchZone")
     int nukeTable();

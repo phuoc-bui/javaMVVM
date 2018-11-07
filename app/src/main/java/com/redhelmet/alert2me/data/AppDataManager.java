@@ -128,8 +128,8 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Observable<List<EventGroup>> getUserDefaultFilters() {
-        return database.getEditedEventGroups().toObservable()
+    public Observable<List<EventGroup>> getFilterOnDefaultFilters() {
+        return database.getFilterOnEventGroups().toObservable()
                 .doOnNext(group -> Log.e(TAG, "get event group from DB: " + group.size()))
                 .subscribeOn(Schedulers.computation());
     }
@@ -178,7 +178,7 @@ public class AppDataManager implements DataManager {
     }
 
     private boolean filterEventWithDefaultFilter(Event event) {
-        return getUserDefaultFilters()
+        return getFilterOnDefaultFilters()
                 .flatMap(Observable::fromIterable)
                 .flatMap(group -> Observable.fromIterable(group.getDisplayFilter()))
                 .flatMap(display -> Observable.fromArray(display.getLayers()))
@@ -305,6 +305,22 @@ public class AppDataManager implements DataManager {
 
     @Override
     public Observable<Object> editWatchZone(EditWatchZones watchZone) {
-        return null;
+        String deviceId = String.valueOf(pref.getDeviceInfo().getId());
+        return api.editWatchZone(deviceId,watchZone.getId(), watchZone)
+                .doOnNext(o -> database.editWatchZone(watchZone));
+    }
+
+    @Override
+    public Observable<Object> enableWatchZone(long watchZoneId, boolean enabled) {
+        String deviceId = String.valueOf(pref.getDeviceInfo().getId());
+        return api.enableWatchZone(deviceId, watchZoneId, enabled)
+                .doOnNext(o -> database.enableWatchZone(watchZoneId, enabled));
+    }
+
+    @Override
+    public Observable<Object> deleteWatchZone(long watchZoneId) {
+        String deviceId = String.valueOf(pref.getDeviceInfo().getId());
+        return api.deleteWatchZone(deviceId, watchZoneId)
+                .doOnNext(o -> database.deleteWatchZone(watchZoneId));
     }
 }

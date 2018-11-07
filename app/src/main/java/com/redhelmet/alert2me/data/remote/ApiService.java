@@ -17,6 +17,7 @@ import java.util.HashMap;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -53,4 +54,12 @@ public interface ApiService {
     @POST("device/{userId}/watchzones")
     Observable<EditWatchZones> createWatchZone(@Path("userId") String userId, @Body EditWatchZones watchZones);
 
+    @PUT("device/{userId}/watchzones/{watchZoneId}")
+    Observable<Object> updateWatchZone(@Path("userId") String userId, @Path("watchZoneId") String watchZoneId, @Body EditWatchZones watchZones);
+
+    @PUT("device/{userId}/watchzones/{watchZoneId}/{status}")
+    Observable<Object> enableWatchZone(@Path("userId") String userId, @Path("watchZoneId") String watchZoneId, @Path("status") String status);
+
+    @DELETE("device/{userId}/watchzones/{watchZoneId}")
+    Observable<Object> deleteWatchZone(@Path("userId") String userId, @Path("watchZoneId") String watchZoneId);
 }

@@ -4,10 +4,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.EditWatchZones;
+import com.redhelmet.alert2me.data.model.EventGroup;
 import com.redhelmet.alert2me.data.model.Geometry;
 import com.redhelmet.alert2me.global.RxProperty;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
+import com.redhelmet.alert2me.ui.eventfilter.defaultfilter.DefaultFilterViewModel;
+import com.redhelmet.alert2me.ui.eventfilter.defaultfilter.EventGroupItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +42,8 @@ public class AddStaticZoneViewModel extends BaseViewModel {
 
     public WatchZoneModel watchZoneModel = new WatchZoneModel();
 
+    private DefaultFilterViewModel filterViewModel;
+
     @Inject
     public AddStaticZoneViewModel(DataManager dataManager) {
         super(dataManager);
@@ -47,6 +52,10 @@ public class AddStaticZoneViewModel extends BaseViewModel {
 
     public void setWatchZone(EditWatchZones watchZone) {
         watchZoneModel = new WatchZoneModel(watchZone);
+    }
+
+    public void setFilterViewModel(DefaultFilterViewModel filterViewModel) {
+        this.filterViewModel = filterViewModel;
     }
 
     public void onNextClick() {
@@ -85,6 +94,8 @@ public class AddStaticZoneViewModel extends BaseViewModel {
     }
 
     public void onSaveClick() {
+        if (filterViewModel != null)
+            watchZoneModel.updateFilter(filterViewModel.adapter.itemsSource);
         if (watchZoneModel.mode == Mode.ADD) {
             disposeBag.add(dataManager.addWatchZone(watchZoneModel.getWatchZones(true))
                     .observeOn(AndroidSchedulers.mainThread())
@@ -98,7 +109,10 @@ public class AddStaticZoneViewModel extends BaseViewModel {
         } else {
             disposeBag.add(dataManager.editWatchZone(watchZoneModel.getWatchZones(true))
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe());
+                    .subscribe(o -> {
+                        navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, R.string.msg_updatedWZ));
+                        navigateTo(new NavigationItem(NavigationItem.FINISH));
+                    }, this::handleError));
         }
     }
 
@@ -116,6 +130,7 @@ public class AddStaticZoneViewModel extends BaseViewModel {
         public ObservableField<String> sound = new ObservableField<>("Default");
         public RxProperty<Integer> radius = new RxProperty<>(5);
         public List<LatLng> points = new ArrayList<>();
+        public List<Integer> groupIds = new ArrayList<>();
         private Geometry geometry;
         public String type;
         public MutableLiveData<GeometryType> geometryType = new MutableLiveData<>();
@@ -140,6 +155,7 @@ public class AddStaticZoneViewModel extends BaseViewModel {
             radius.set(init.getRadius());
             geometry = init.getGeom();
             type = init.getWzType();
+            groupIds = init.getFilterGroupId();
             points = convertPointsFromGeometry(init.getGeom());
             geometryType.setValue(isCircle() ? GeometryType.CIRCLE : GeometryType.POLYGON);
         }
@@ -152,6 +168,7 @@ public class AddStaticZoneViewModel extends BaseViewModel {
                 geometry.setCoordinates(convertPointsCoordinates(points));
                 watchZones.setGeom(geometry);
                 watchZones.setWzType(type);
+                watchZones.setFilterGroupId(groupIds);
             }
             return watchZones;
         }
@@ -190,6 +207,13 @@ public class AddStaticZoneViewModel extends BaseViewModel {
             }
 
             geometryType.setValue(type);
+        }
+
+        private void updateFilter(List<EventGroupItemViewModel> itemList) {
+            for (EventGroupItemViewModel item : itemList) {
+                EventGroup eventGroup = item.eventGroup.getValue();
+                if (eventGroup.isFilterOn()) groupIds.add((int) eventGroup.getId());
+            }
         }
 
         private List<LatLng> convertPointsFromGeometry(Geometry geometry) {

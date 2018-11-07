@@ -116,10 +116,6 @@ public class AddStaticZoneActivity extends BaseActivity<AddStaticZoneViewModel, 
                 hideKeyboard();
                 viewModel.onBackClick();
                 return true;
-            case R.id.save_btn:
-                hideKeyboard();
-                viewModel.onSaveClick();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -35,4 +35,10 @@ public interface ApiHelper {
     Observable<WatchZoneResponse> getWatchZones(String userId);
 
     Observable<EditWatchZones> createWatchZone(String userId, EditWatchZones watchZones);
+
+    Observable<Object> editWatchZone(String userId, long watchZoneId, EditWatchZones watchZones);
+
+    Observable<Object> enableWatchZone(String userId, long watchZoneId, boolean enable);
+
+    Observable<Object> deleteWatchZone(String userId, long watchZoneId);
 }

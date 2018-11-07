@@ -28,7 +28,7 @@ public interface DatabaseStorage {
 
     Single<List<Category>> getEditedCategories();
 
-    Single<List<EventGroup>> getEditedEventGroups();
+    Single<List<EventGroup>> getFilterOnEventGroups();
 
     Completable saveWatchZones(List<EditWatchZones> watchZones);
 
@@ -37,4 +37,10 @@ public interface DatabaseStorage {
     Single<List<EditWatchZones>> getWatchZones();
 
     Completable addWatchZone(EditWatchZones watchZone);
+
+    Completable editWatchZone(EditWatchZones watchZone);
+
+    Completable enableWatchZone(long watchZoneId, boolean enable);
+
+    Completable deleteWatchZone(long watchZoneId);
 }

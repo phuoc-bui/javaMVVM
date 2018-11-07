@@ -80,7 +80,7 @@ public class RoomDatabaseStorage implements DatabaseStorage {
     }
 
     @Override
-    public Single<List<EventGroup>> getEditedEventGroups() {
+    public Single<List<EventGroup>> getFilterOnEventGroups() {
         return database.eventGroupDao().getFilterOnEventGroups()
                 .subscribeOn(Schedulers.computation());
     }
@@ -108,6 +108,24 @@ public class RoomDatabaseStorage implements DatabaseStorage {
     @Override
     public Completable addWatchZone(EditWatchZones watchZone) {
         return database.watchZoneDao().saveWatchZone(mapper.map(watchZone))
+                .subscribeOn(Schedulers.computation());
+    }
+
+    @Override
+    public Completable editWatchZone(EditWatchZones watchZone) {
+        return database.watchZoneDao().updateWatchZone(mapper.map(watchZone))
+                .subscribeOn(Schedulers.computation());
+    }
+
+    @Override
+    public Completable enableWatchZone(long watchZoneId, boolean enable) {
+        return Completable.fromAction(() -> database.watchZoneDao().enableWatchZone(watchZoneId, enable))
+                .subscribeOn(Schedulers.computation());
+    }
+
+    @Override
+    public Completable deleteWatchZone(long watchZoneId) {
+        return Completable.fromAction(() -> database.watchZoneDao().deleteWatchZone(watchZoneId))
                 .subscribeOn(Schedulers.computation());
     }
 }

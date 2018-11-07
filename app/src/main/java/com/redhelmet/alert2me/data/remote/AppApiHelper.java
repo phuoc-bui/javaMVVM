@@ -108,4 +108,19 @@ public class AppApiHelper implements ApiHelper {
     public Observable<EditWatchZones> createWatchZone(String userId, EditWatchZones watchZones) {
         return apiService.createWatchZone(userId, watchZones);
     }
+
+    @Override
+    public Observable<Object> editWatchZone(String userId, long watchZoneId, EditWatchZones watchZones) {
+        return apiService.updateWatchZone(userId, String.valueOf(watchZoneId), watchZones);
+    }
+
+    @Override
+    public Observable<Object> enableWatchZone(String userId, long watchZoneId, boolean enable) {
+        return apiService.enableWatchZone(userId, String.valueOf(watchZoneId), enable ? "enable" : "disable");
+    }
+
+    @Override
+    public Observable<Object> deleteWatchZone(String userId, long watchZoneId) {
+        return apiService.deleteWatchZone(userId, String.valueOf(watchZoneId));
+    }
 }

@@ -19,6 +19,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DefaultFilterViewModel extends BaseViewModel {
     public DefaultFilterAdapter adapter = new DefaultFilterAdapter();
+    private List<Integer> enabledEventGroups;
 
     @Inject
     public DefaultFilterViewModel(DataManager dataManager) {
@@ -30,13 +31,19 @@ public class DefaultFilterViewModel extends BaseViewModel {
                 .subscribe(vm -> adapter.itemsSource.add(vm)));
     }
 
+    public void setEnabledFilters(List<Integer> ids) {
+        enabledEventGroups = ids;
+        for (int i = 0; i < adapter.itemsSource.size(); i++) {
+            EventGroup eventGroup = adapter.itemsSource.get(i).eventGroup.getValue();
+            eventGroup.setFilterOn(eventGroup.getId() == ids.get(i));
+        }
+    }
+
     public void saveData() {
         List<EventGroup> filterGroup = new ArrayList<>();
         for (EventGroupItemViewModel item : adapter.itemsSource) {
             EventGroup group = item.eventGroup.getValue();
-            if (group.isUserEdited()) {
-                filterGroup.add(group);
-            }
+            filterGroup.add(group);
         }
 
         disposeBag.add(Completable.fromAction(() -> {

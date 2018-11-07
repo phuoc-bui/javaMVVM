@@ -33,7 +33,7 @@ public interface DataManager {
     Single<Category> getEventCategory(Event event);
     Observable<List<EventGroup>> getEventGroups();
     Observable<List<Category>> getUserCustomFilters();
-    Observable<List<EventGroup>> getUserDefaultFilters();
+    Observable<List<EventGroup>> getFilterOnDefaultFilters();
     void saveUserCustomFilters(List<Category> categories);
     void saveUserDefaultFilters(List<EventGroup> eventGroups);
     Observable<List<Event>> getEventsWithFilter(boolean isDefault, Comparator<Event> sort);
@@ -48,4 +48,6 @@ public interface DataManager {
     void saveWatchZones(List<EditWatchZones> watchZones);
     Observable<EditWatchZones> addWatchZone(EditWatchZones watchZone);
     Observable<Object> editWatchZone(EditWatchZones watchZone);
+    Observable<Object> enableWatchZone(long watchZoneId, boolean enabled);
+    Observable<Object> deleteWatchZone(long watchZoneId);
 }

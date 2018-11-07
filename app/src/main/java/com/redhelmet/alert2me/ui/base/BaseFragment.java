@@ -37,6 +37,8 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
 
     private BaseActivity activity;
 
+    private FragmentCallback fragmentCallback;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +77,8 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
                 onNavigationEvent(event.getContentIfNotHandled());
             }
         });
+
+        if (fragmentCallback != null) fragmentCallback.onObtainedViewModel();
     }
 
     public BaseActivity getBaseActivity() {
@@ -83,6 +87,10 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
 
     public VM getViewModel() {
         return viewModel;
+    }
+
+    public void setFragmentCallback(FragmentCallback fragmentCallback) {
+        this.fragmentCallback = fragmentCallback;
     }
 
     /**
@@ -115,5 +123,9 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
 
     protected int getColor(@ColorRes int colorId) {
         return getBaseActivity().getResources().getColor(colorId);
+    }
+
+    public interface FragmentCallback {
+        void onObtainedViewModel();
     }
 }
