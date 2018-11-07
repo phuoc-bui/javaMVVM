@@ -26,6 +26,7 @@ public class DefaultFilterFragment extends BaseFragment<DefaultFilterViewModel, 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         obtainViewModel(factory, DefaultFilterViewModel.class);
+
     }
 
     @Override

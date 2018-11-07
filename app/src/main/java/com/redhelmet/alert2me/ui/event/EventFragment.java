@@ -1,16 +1,8 @@
 package com.redhelmet.alert2me.ui.event;
 
 import android.app.Activity;
-
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AlertDialog;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,6 +22,11 @@ import com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.ViewPager;
+
 
 public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBinding> {
 
@@ -39,7 +36,6 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
     ViewModelProvider.Factory factory;
 
     private Menu mOptionsMenu;
-    Intent intent;
     private MenuItem refreshMenu;
     private Animation rotation;
 
@@ -113,11 +109,11 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
 
         final CharSequence[] items = {getString(R.string.listSortOrderDistance), getString(R.string.listSortOrderTime), getString(R.string.listSortOrderStatus)};
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getBaseActivity());
-        int selectedSortItem = viewModel.getCurrentSortType();
+        EventViewModel.SortType selectedSortItem = viewModel.getCurrentSortType();
 
         dialogBuilder.setTitle(getString(R.string.listSortOrder));
 
-        dialogBuilder.setSingleChoiceItems(items, selectedSortItem, (dialogInterface, i) -> viewModel.setCurrentSortType(i));
+        dialogBuilder.setSingleChoiceItems(items, selectedSortItem.ordinal(), (dialog, which) -> viewModel.setCurrentSortType(which));
         dialogBuilder.setNegativeButton(R.string.cancel, (dialogInterface, i) -> dialogInterface.dismiss());
         dialogBuilder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
             viewModel.sortList();
@@ -169,7 +165,7 @@ public class EventFragment extends BaseFragment<EventViewModel, FragmentEventBin
 
         switch (item.getItemId()) {
             case R.id.filter_map:
-                intent = new Intent(getActivity(), EventFilterActivity.class);
+                Intent intent = new Intent(getActivity(), EventFilterActivity.class);
                 startActivityForResult(intent, EVENT_FILTER_REQUEST);
                 return true;
 

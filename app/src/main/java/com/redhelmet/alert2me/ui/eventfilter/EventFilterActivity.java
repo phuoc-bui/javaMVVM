@@ -1,12 +1,7 @@
 package com.redhelmet.alert2me.ui.eventfilter;
 
-import androidx.lifecycle.ViewModelProvider;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,10 +10,15 @@ import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.adapters.AppViewPagerAdapter;
 import com.redhelmet.alert2me.databinding.ActivityEventFilterBinding;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
-import com.redhelmet.alert2me.ui.eventfilter.custom.CustomFilterFragment;
 import com.redhelmet.alert2me.ui.eventfilter.defaultfilter.DefaultFilterFragment;
 
 import javax.inject.Inject;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.ViewPager;
 
 public class EventFilterActivity extends BaseActivity<EventFilterViewModel, ActivityEventFilterBinding> {
 
@@ -39,21 +39,16 @@ public class EventFilterActivity extends BaseActivity<EventFilterViewModel, Acti
         obtainViewModel(factory, EventFilterViewModel.class);
         setupViewPager();
         initializeToolbar();
-        initializeControls();
+//        initializeControls();
     }
 
     private void setupViewPager() {
         adapter = new AppViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new DefaultFilterFragment(), getString(R.string.lblDefault));
+        DefaultFilterFragment fragment = new DefaultFilterFragment();
+        fragment.setFragmentCallback(() -> fragment.getViewModel().setEnabledFilters(viewModel.eventFilterOnIds));
+        adapter.addFrag(fragment, getString(R.string.lblDefault));
 //        adapter.addFrag(new CustomFilterFragment(), getString(R.string.lblCustom));
         binder.viewpager.setAdapter(adapter);
-        binder.viewpager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-//                updateOptionsMenu();
-//                updateToolbarTitle();
-            }
-        });
     }
 
     public void initializeToolbar() {

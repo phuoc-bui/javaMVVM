@@ -29,9 +29,7 @@ public class RoomDatabaseStorage implements DatabaseStorage {
 
     @Override
     public Completable saveCategories(List<Category> categories) {
-
-        return Completable.mergeArray(Completable.fromAction(() -> database.categoryDao().nukeTable()),
-                database.categoryDao().saveCategories(categories))
+        return database.categoryDao().saveCategories(categories)
                 .subscribeOn(Schedulers.computation());
     }
 

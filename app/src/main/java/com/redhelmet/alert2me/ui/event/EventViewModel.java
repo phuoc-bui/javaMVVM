@@ -25,6 +25,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class EventViewModel extends BaseViewModel {
 
+    public enum SortType {
+        DISTANCE, TIME, STATUS;
+
+        public static SortType fromInt(int index) {
+            for (SortType type : values()) {
+                if (type.ordinal() == index) return type;
+            }
+            return STATUS;
+        }
+    }
+
     public EventListRecyclerAdapter adapter = new EventListRecyclerAdapter();
     // flag to show/hide empty text view in event list fragment
     public ObservableBoolean isEmpty = new ObservableBoolean(true);
@@ -32,7 +43,7 @@ public class EventViewModel extends BaseViewModel {
     public MutableLiveData<Boolean> isRefreshing = new MutableLiveData<>();
     private boolean isStateWide = true;
     // sort mode in even list fragment
-    private int currentSortType = 2;
+    private SortType currentSortType = SortType.STATUS;
 
     // for map fragment clear map
     public MutableLiveData<Boolean> onClearEvents = new MutableLiveData<>();
@@ -133,11 +144,11 @@ public class EventViewModel extends BaseViewModel {
 
     private Comparator<Event> getSortComparator() {
         switch (currentSortType) {
-            case 0:
+            case DISTANCE:
                 return (o1, o2) -> o1.getDistanceTo() > o2.getDistanceTo() ? 1 : (o1.getDistanceTo() < o2.getDistanceTo() ? -1 : 0);
-            case 1:
+            case TIME:
                 return (o1, o2) -> Long.compare(o2.getUpdated(), o1.getUpdated());
-            case 2:
+            case STATUS:
                 return (o1, o2) -> ComparisonChain.start().compare(o2.getSeverity(), o1.getSeverity()).compare(o2.getUpdated(), o1.getUpdated()).result();
             default:
                 return (o1, o2) -> ComparisonChain.start().compare(o2.getSeverity(), o1.getSeverity()).compare(o2.getUpdated(), o1.getUpdated()).result();
@@ -150,11 +161,11 @@ public class EventViewModel extends BaseViewModel {
         super.onCleared();
     }
 
-    public void setCurrentSortType(int currentSortType) {
-        this.currentSortType = currentSortType;
+    public void setCurrentSortType(int index) {
+        this.currentSortType = SortType.fromInt(index);
     }
 
-    public int getCurrentSortType() {
+    public SortType getCurrentSortType() {
         return currentSortType;
     }
 }

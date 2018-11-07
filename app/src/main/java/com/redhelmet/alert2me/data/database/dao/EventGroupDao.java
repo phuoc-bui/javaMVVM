@@ -18,7 +18,7 @@ public interface EventGroupDao {
     @Query("SELECT * FROM EventGroup")
     Single<List<EventGroup>> getEventGroups();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable saveEventGroups(List<EventGroup> eventGroups);
 
     @Update

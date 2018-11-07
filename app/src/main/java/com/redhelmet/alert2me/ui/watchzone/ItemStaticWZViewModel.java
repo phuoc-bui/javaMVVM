@@ -20,8 +20,4 @@ public class ItemStaticWZViewModel extends BaseViewModel {
     public EditWatchZones getWatchZone() {
         return watchZone;
     }
-
-    public void setWatchZone(EditWatchZones watchZone) {
-        this.watchZone = watchZone;
-    }
 }

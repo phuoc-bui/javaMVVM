@@ -21,7 +21,7 @@ public interface CategoryDao {
     @Query("SELECT * FROM Category WHERE category = :category")
     Single<Category> getEventCategory(String category);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     Completable saveCategories(List<Category> categories);
 
     @Query("DELETE FROM Category")

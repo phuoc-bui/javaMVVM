@@ -130,20 +130,19 @@ public class AppDataManager implements DataManager {
     @Override
     public Observable<List<EventGroup>> getFilterOnDefaultFilters() {
         return database.getFilterOnEventGroups().toObservable()
-                .doOnNext(group -> Log.e(TAG, "get event group from DB: " + group.size()))
                 .subscribeOn(Schedulers.computation());
     }
 
     @WorkerThread
     @Override
     public void saveUserCustomFilters(List<Category> categories) {
-        database.saveEditedCategories(categories);
+        database.saveEditedCategories(categories).subscribe();
     }
 
     @WorkerThread
     @Override
     public void saveUserDefaultFilters(List<EventGroup> eventGroups) {
-        database.saveEditedEventGroups(eventGroups);
+        database.saveEditedEventGroups(eventGroups).subscribe();
     }
 
     @Override

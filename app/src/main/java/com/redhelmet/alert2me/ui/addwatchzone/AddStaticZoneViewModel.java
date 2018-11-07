@@ -210,9 +210,12 @@ public class AddStaticZoneViewModel extends BaseViewModel {
         }
 
         private void updateFilter(List<EventGroupItemViewModel> itemList) {
+            if (groupIds == null) groupIds = new ArrayList<>();
+            else groupIds.clear();
             for (EventGroupItemViewModel item : itemList) {
                 EventGroup eventGroup = item.eventGroup.getValue();
-                if (eventGroup.isFilterOn()) groupIds.add((int) eventGroup.getId());
+                if (eventGroup != null && eventGroup.isFilterOn())
+                    groupIds.add((int) eventGroup.getId());
             }
         }
 
