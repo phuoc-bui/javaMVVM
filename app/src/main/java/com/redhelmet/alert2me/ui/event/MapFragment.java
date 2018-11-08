@@ -40,6 +40,7 @@ import com.redhelmet.alert2me.global.Constant;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
 import com.redhelmet.alert2me.ui.clusterevents.ClusterEventListActivity;
 import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
+import com.redhelmet.alert2me.ui.home.HomeViewModel;
 import com.redhelmet.alert2me.ui.widget.EventIcon;
 import com.redhelmet.alert2me.util.EventUtils;
 import com.redhelmet.alert2me.util.MapUtil;
@@ -84,6 +85,8 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
     LatLng mDefaultLocation = new LatLng(-24, 133); // australia
     private List<Polygon> polygons = new ArrayList<>();
 
+    private LatLng initPoint;
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_event_map;
@@ -103,6 +106,11 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         obtainViewModel(factory, EventViewModel.class);
+        HomeViewModel parentViewModel = (HomeViewModel) getBaseActivity().getViewModel();
+        if (parentViewModel != null) {
+            initPoint = parentViewModel.initPoint;
+            parentViewModel.initPoint = null;
+        }
         mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -196,8 +204,13 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
         } else if (mMapView != null) {
             updateLocationUI();
 
-            // Get the current location of the device and set the position of the map.
-            getDeviceLocation();
+            // if have init point (click on map of event detail screen)
+            if (initPoint != null) {
+                mMapView.moveCamera(CameraUpdateFactory.newLatLngZoom(initPoint, DEFAULT_ZOOM));
+            } else {
+                // Get the current location of the device and set the position of the map.
+                getDeviceLocation();
+            }
 
             binder.clusterEvents.setOnClickListener(v -> {
                 v.setSelected(!v.isSelected());

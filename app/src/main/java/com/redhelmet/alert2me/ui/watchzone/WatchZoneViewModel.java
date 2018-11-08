@@ -26,6 +26,8 @@ public class WatchZoneViewModel extends BaseViewModel {
     public ObservableInt mobileRadius = new ObservableInt(5);
     public ObservableField<String> mobileRingSound = new ObservableField<>();
 
+    private StaticWZAdapter.OnSwitchCompatCheckChangedListener listener;
+
     @Inject
     public WatchZoneViewModel(DataManager dataManager, PreferenceStorage pref) {
         super(dataManager, pref);
@@ -34,6 +36,18 @@ public class WatchZoneViewModel extends BaseViewModel {
 //        getStaticWZData();
         disposeBag.add(proximityEnable.asObservable()
                 .subscribe(pref::setProximityEnabled));
+
+        listener = (item, enable) -> {
+            showLoadingDialog(true);
+            disposeBag.add(dataManager.enableWatchZone(item.getId(), enable)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(o -> {
+                        showLoadingDialog(false);
+                    }, e -> {
+                        showLoadingDialog(false);
+                        handleError(e);
+                    }));
+        };
     }
 
     public void setRingSound(String ringSoundUri) {
@@ -44,9 +58,9 @@ public class WatchZoneViewModel extends BaseViewModel {
         isRefreshing.setValue(false);
         disposeBag.add(dataManager.getWatchZones()
                 .flatMap(Observable::fromIterable)
-                .map(ItemStaticWZViewModel::new)
-                .toList()
                 .observeOn(AndroidSchedulers.mainThread())
+                .map(item -> new ItemStaticWZViewModel(item, listener))
+                .toList()
                 .subscribe(list -> {
                     isRefreshing.setValue(false);
                     staticWZAdapter.itemsSource.clear();

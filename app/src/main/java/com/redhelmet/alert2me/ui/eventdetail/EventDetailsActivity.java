@@ -120,8 +120,7 @@ public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, Act
     public void onMapClick(LatLng latLng) {
         if (marker != null) {
             LatLng position = marker.getPosition();
-            Intent o = new Intent(EventDetailsActivity.this, HomeActivity.class);
-            o.putExtra("marker", position);
+            Intent o = HomeActivity.newInstance(this, position);
             o.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(o);
         }
@@ -131,8 +130,7 @@ public class EventDetailsActivity extends BaseActivity<EventDetailViewModel, Act
     public boolean onMarkerClick(Marker marker) {
         if (marker != null) {
             LatLng position = marker.getPosition();
-            Intent o = new Intent(EventDetailsActivity.this, HomeActivity.class);
-            o.putExtra("marker", position);
+            Intent o = HomeActivity.newInstance(this, position);
             o.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(o);
         }

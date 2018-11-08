@@ -10,14 +10,20 @@ public class ItemStaticWZViewModel extends BaseViewModel {
     public ObservableField<String> wzName = new ObservableField<>();
     public ObservableBoolean wzEnable = new ObservableBoolean();
     private EditWatchZones watchZone;
+    private StaticWZAdapter.OnSwitchCompatCheckChangedListener listener;
 
-    public ItemStaticWZViewModel(EditWatchZones watchZone) {
+    public ItemStaticWZViewModel(EditWatchZones watchZone, StaticWZAdapter.OnSwitchCompatCheckChangedListener listener) {
         this.watchZone = watchZone;
         wzName.set(watchZone.getName());
         wzEnable.set(watchZone.isEnable());
+        this.listener = listener;
     }
 
     public EditWatchZones getWatchZone() {
         return watchZone;
+    }
+
+    public void onCheckChanged(boolean checked) {
+        if (listener != null) listener.onCheckChanged(watchZone, checked);
     }
 }

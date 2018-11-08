@@ -1,6 +1,9 @@
 package com.redhelmet.alert2me.ui.home;
 
 import androidx.lifecycle.ViewModelProvider;
+
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import android.view.MenuItem;
@@ -25,7 +28,15 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
     @Inject
     ViewModelProvider.Factory factory;
 
-    LatLng latLng;
+    private LatLng latLng;
+
+    private static final String LAT_LONG_KEY = "lat_long_key";
+    
+    public static Intent newInstance(Context context, LatLng point) {
+        Intent intent = new Intent(context, HomeActivity.class);
+        intent.putExtra(LAT_LONG_KEY, point);
+        return intent;
+    }
 
     @Override
     protected int getLayoutId() {
@@ -46,8 +57,10 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
         }
         Bundle extras = getIntent().getExtras();
         if (extras != null) { //edit mode - detect if need to zoom on any specific location at start of activity
-            latLng = (LatLng) extras.get("marker");
+            latLng = (LatLng) extras.get(LAT_LONG_KEY);
         }
+
+        if (latLng != null) viewModel.initPoint = latLng;
 
         // trick to change default item selected, prevent invoking setOnNavigationItemReselectedListener
         // when call setSelectedItemId(R.id.navigation_events);

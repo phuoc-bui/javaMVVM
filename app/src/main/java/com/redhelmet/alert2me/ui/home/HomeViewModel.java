@@ -1,5 +1,6 @@
 package com.redhelmet.alert2me.ui.home;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 
@@ -8,6 +9,8 @@ import javax.inject.Inject;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class HomeViewModel extends BaseViewModel {
+
+    public LatLng initPoint;
 
     @Inject
     public HomeViewModel(DataManager dataManager) {

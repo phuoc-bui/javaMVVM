@@ -188,6 +188,10 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
         }
     }
 
+    public VM getViewModel() {
+        return viewModel;
+    }
+
     @Override
     public void onBackPressed() {
         hideKeyboard();
