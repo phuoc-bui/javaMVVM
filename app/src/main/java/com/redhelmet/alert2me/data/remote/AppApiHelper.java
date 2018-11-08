@@ -87,8 +87,8 @@ public class AppApiHelper implements ApiHelper {
 
     @Override
     public Observable<User> updateUserProfile(User user) {
-        // TODO: call API to update profile
-        return Observable.just(user);
+        return apiService.updateProfile(String.valueOf(user.getId()), user)
+                .map(response -> response.account);
     }
 
     private <T extends Response> Observable<T> filterSuccessResponse(Observable<T> response) {

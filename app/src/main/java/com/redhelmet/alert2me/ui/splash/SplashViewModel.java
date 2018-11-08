@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.PreferenceStorage;
+import com.redhelmet.alert2me.data.model.DeviceInfo;
 import com.redhelmet.alert2me.global.Constant;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
@@ -52,8 +53,8 @@ public class SplashViewModel extends BaseViewModel {
     }
 
     private void registerDevice(String token) {
-        long deviceId = preferenceStorage.getDeviceInfo().getId();
-        if (deviceId > 0) {
+        DeviceInfo info = preferenceStorage.getDeviceInfo();
+        if (info != null) {
             startTimer();
         } else {
             disposeBag.add(dataManager.registerDeviceToken(token)

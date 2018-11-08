@@ -52,6 +52,7 @@ public class EditStaticZoneNameFragment extends BaseFragment<AddStaticZoneViewMo
 
         viewModel.setRingSound(ringtoneUri);
         binder.tvNotificationSoundValue.setOnClickListener(v -> ringtonePickerBuilder.show());
+        binder.tvNotificationSoundTitle.setOnClickListener(v -> ringtonePickerBuilder.show());
     }
 
     private boolean checkVibrationIsOn() {

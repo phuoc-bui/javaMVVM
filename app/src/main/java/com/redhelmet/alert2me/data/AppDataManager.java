@@ -154,6 +154,36 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
+    public Observable<List<Event>> getEventsWithFilter(boolean isDefault) {
+        return getEventsWithFilterOneByOne(isDefault)
+                .toList()
+                .doOnSuccess(list -> Log.e(TAG, "Complete filter, return list " + list.size()))
+                .toObservable();
+    }
+
+    @Override
+    public Observable<Event> getEventsWithFilterOneByOne(boolean isDefault) {
+        Log.e(TAG, "Start filter event --------");
+        return getAllEvents()
+                .flatMap(Observable::fromIterable)
+                .filter(event -> {
+                    if (event.isAlwaysOn()) {
+                        updateEventByCategory(event);
+                        return true;
+                    }
+                    if (isDefault) {
+                        updateEventByCategory(event);
+                        return filterEventWithDefaultFilter(event);
+                    } else {
+                        return filterEventWithCustomFilter(event);
+                    }
+                })
+                .doOnError(e -> Log.e(TAG, "filter error: " + e.getMessage()))
+                .doOnNext(event -> Log.e(TAG, "filter success: " + event.getId()))
+                .doOnComplete(() -> Log.e(TAG, "Complete filter event ---------"));
+    }
+
+    @Override
     public Observable<Event> getEventsWithFilterOneByOne(boolean isDefault, Comparator<Event> sort) {
         Log.e(TAG, "Start filter event --------");
         return getAllEvents()

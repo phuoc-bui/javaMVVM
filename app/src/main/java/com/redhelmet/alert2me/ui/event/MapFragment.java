@@ -142,7 +142,7 @@ public class MapFragment extends BaseFragment<EventViewModel, FragmentEventMapBi
         mMapView.setOnCameraIdleListener(clusterManager);
         clusterManager.setRenderer(new CustomClusterRenderer(getActivity(), mMapView, clusterManager));
         clusterManager.setOnClusterItemClickListener(customMarker -> {
-            // Toast.makeText(getActivity(), "Cluster specific item click!!!!", Toast.LENGTH_SHORT).show();
+             Toast.makeText(getActivity(), "Cluster specific item click!!!!", Toast.LENGTH_SHORT).show();
             return false;
         });
         clusterManager.setOnClusterClickListener(cluster -> {

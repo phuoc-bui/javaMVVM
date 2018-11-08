@@ -78,14 +78,27 @@ public class EventViewModel extends BaseViewModel {
         isLoading.set(true);
 //        isEmpty.set(true);
         onClearEvents.setValue(true);
-        disposeBag.add(dataManager.getEventsWithFilter(isDefaultFilter(), getSortComparator())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(data -> events.setValue(data),
-                        this::handleError,
-                        () -> {
-                            isLoading.set(false);
-                            isRefreshing.setValue(false);
-                        }));
+
+        // don't need to sort event list with distance sort type
+        if (currentSortType == SortType.DISTANCE) {
+            disposeBag.add(dataManager.getEventsWithFilter(isDefaultFilter())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(data -> events.setValue(data),
+                            this::handleError,
+                            () -> {
+                                isLoading.set(false);
+                                isRefreshing.setValue(false);
+                            }));
+        } else {
+            disposeBag.add(dataManager.getEventsWithFilter(isDefaultFilter(), getSortComparator())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(data -> events.setValue(data),
+                            this::handleError,
+                            () -> {
+                                isLoading.set(false);
+                                isRefreshing.setValue(false);
+                            }));
+        }
     }
 
     public void onEventClick(int position) {
@@ -111,6 +124,10 @@ public class EventViewModel extends BaseViewModel {
                     .subscribe(viewModels -> {
                         adapter.itemsSource.clear();
                         adapter.itemsSource.addAll(viewModels);
+                        // because event's distance is updated after have user location, so need to sort event list
+                        if (currentSortType == SortType.DISTANCE) {
+                            adapter.sortItemSource(getSortComparator());
+                        }
                     }));
         }
     }

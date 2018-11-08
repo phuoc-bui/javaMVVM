@@ -23,7 +23,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 public class HelpViewModel extends BaseViewModel {
-    public ObservableField<String> profileString = new ObservableField<>();
+
     public ObservableField<String> versionString = new ObservableField<>();
     public UserModel userModel;
 
@@ -42,9 +42,6 @@ public class HelpViewModel extends BaseViewModel {
         User currentUser = pref.getCurrentUser();
         if (currentUser != null) {
             userModel = new UserModel(currentUser, deviceId);
-            String name = currentUser.getFirstName();
-            String email = currentUser.getEmail();
-            profileString.set(name + "\n" + email);
         }
         versionString.set(BuildConfig.VERSION_NAME);
 
@@ -104,9 +101,14 @@ public class HelpViewModel extends BaseViewModel {
                     oldPassword.set("");
                     newPassword.set("");
                     repeatPassword.set("");
+                    userModel.updateUser(user);
 
                     navigateTo(new NavigationItem(NavigationItem.POP_FRAGMENT_BACK));
-                }, error -> showLoadingDialog(false)));
+                }, error -> {
+                    showLoadingDialog(false);
+                    userModel.rollbackToOrigin();
+                    handleError(error);
+                }));
     }
 
     @Override
@@ -124,6 +126,7 @@ public class HelpViewModel extends BaseViewModel {
         public ObservableField<String> surname = new ObservableField<>();
         public ObservableField<String> postcode = new ObservableField<>();
         public ObservableField<String> password = new ObservableField<>();
+        public ObservableField<String> profileString = new ObservableField<>();
 
         public UserModel(User user, long deviceId) {
             this.user = user;
@@ -133,6 +136,17 @@ public class HelpViewModel extends BaseViewModel {
             password.set(user.getPassword());
             postcode.set(user.getPostcode());
             surname.set(user.getSurname());
+
+            String name = user.getFirstName();
+            String email = user.getEmail();
+            profileString.set(name + "\n" + email);
+        }
+
+        public void updateUser(User user) {
+            this.user = user;
+            String name = user.getFirstName();
+            String email = user.getEmail();
+            profileString.set(name + "\n" + email);
         }
 
         public ObservableField<String> getObservable(int hintId) {
@@ -149,7 +163,15 @@ public class HelpViewModel extends BaseViewModel {
             throw new Error("This field doesn't support");
         }
 
+        public void rollbackToOrigin() {
+            firstName.set(user.getFirstName());
+            password.set(user.getPassword());
+            postcode.set(user.getPostcode());
+            surname.set(user.getSurname());
+        }
+
         public User getUser() {
+            User user = this.user.clone();
             user.setEmail(userEmail.get());
             user.setFirstName(firstName.get());
             user.setSurname(surname.get());

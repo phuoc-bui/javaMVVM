@@ -348,7 +348,8 @@ public class EditStaticZoneLocationFragment extends BaseFragment<AddStaticZoneVi
                 .setNegativeButton(android.R.string.no, (dialog, which) -> {
 
                     dialog.dismiss();
-                    binder.toggleGeometry.setToggled(isChangeToPolygon ? R.id.toggle_polygon : R.id.toggle_circle, true);
+                    binder.toggleGeometry.setToggled(isChangeToPolygon ? R.id.toggle_circle : R.id.toggle_polygon, true);
+
                 })
                 .show();
     }

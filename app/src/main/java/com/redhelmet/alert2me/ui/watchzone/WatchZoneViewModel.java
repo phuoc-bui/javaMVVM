@@ -44,6 +44,7 @@ public class WatchZoneViewModel extends BaseViewModel {
                     staticWZAdapter.itemsSource.addAll(list);
                 }, err -> {
                     isRefreshing.setValue(false);
+                    handleError(err);
                 }));
     }
 

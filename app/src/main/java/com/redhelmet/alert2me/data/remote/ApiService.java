@@ -45,8 +45,8 @@ public interface ApiService {
     @POST("account/forgot")
     Observable<ForgotPasswordResponse> forgotPassword(@Body HashMap<String, String> email);
 
-    @PUT("account/user/{userId}")
-    Observable<Object> updateProfile(@Path("userId") String userId);
+    @PUT("account/users/{userId}")
+    Observable<LoginResponse> updateProfile(@Path("userId") String userId, @Body User user);
 
     @GET("device/{userId}/watchzones")
     Observable<WatchZoneResponse> getWatchZones(@Path("userId") String userId);

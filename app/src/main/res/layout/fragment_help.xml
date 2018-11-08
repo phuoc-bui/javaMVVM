@@ -34,7 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
-                app:description="@{viewModel.profileString}"
+                app:description="@{viewModel.userModel.profileString}"
                 android:onClick="@{v -> viewModel.onUserProfileClick()}"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end"
                 app:layout_constraintStart_toStartOf="@id/guideline_start"

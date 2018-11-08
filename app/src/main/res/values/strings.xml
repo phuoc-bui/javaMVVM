@@ -86,7 +86,7 @@
     <string name="help_legal_desc">Term and Conditions, GDPR compliance and more</string>
     <string name="help_version">Version</string>
     <string name="help_support_code_title">Support code</string>
-    <string name="help_support_code_desc">ME-1%s-2%s</string>
+    <string name="help_support_code_desc">ME-%s-%s</string>
     <string name="help_online_help_heading">Online Help</string>
     <string name="help_tagline">We would be happy to help you.</string>
     <string name="help_online_help_info">Need help using the app? Follow the link below to our online help.</string>
