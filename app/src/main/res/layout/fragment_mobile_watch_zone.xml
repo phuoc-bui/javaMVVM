@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -112,7 +113,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
-            android:text="Radius (km)"
+            bind:radius="@{viewModel.mobileRadius}"
             app:layout_constraintStart_toStartOf="@+id/guideline_start"
             app:layout_constraintTop_toTopOf="@+id/divider1" />
 
@@ -126,7 +127,7 @@
             app:dsb_max="100"
             app:dsb_min="1"
             app:dsb_progressColor="@color/colorDarkRed"
-            app:dsb_value="5"
+            bind:seekBarProgress="@={viewModel.mobileRadius}"
             app:layout_constraintEnd_toEndOf="@+id/guideline_end"
             app:layout_constraintStart_toStartOf="@+id/guideline_start"
             app:layout_constraintTop_toBottomOf="@+id/mobileRadius" />
@@ -143,26 +144,41 @@
             android:id="@+id/iv_notification_sound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_normal"
             app:layout_constraintStart_toStartOf="@+id/guideline_start"
-            app:layout_constraintTop_toBottomOf="@id/divider2"
+            app:layout_constraintTop_toTopOf="@+id/tv_notification_sound_title"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_notification_sound_value"
             app:srcCompat="@drawable/icon_volume" />
 
         <TextView
             android:id="@+id/tv_notification_sound_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_normal"
+            style="@style/TextAppearance.A2M.Title"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
             android:text="@string/notification_sound"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_notification_sound"
             app:layout_constraintStart_toEndOf="@id/iv_notification_sound"
-            app:layout_constraintTop_toTopOf="@+id/iv_notification_sound" />
+            app:layout_constraintEnd_toStartOf="@id/iv_right_arrow_1"
+            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+        <TextView
+            android:id="@+id/tv_notification_sound_value"
+            style="@style/TextAppearance.A2M.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            bind:ringtoneUri="@{viewModel.mobileRingSound}"
+            android:textColor="@color/swipeoption_blue"
+            app:layout_constraintStart_toEndOf="@id/iv_notification_sound"
+            app:layout_constraintEnd_toStartOf="@id/iv_right_arrow_1"
+            app:layout_constraintTop_toBottomOf="@+id/tv_notification_sound_title" />
 
         <ImageView
             android:id="@+id/iv_right_arrow_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_notification_sound_title"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_notification_sound_value"
             app:layout_constraintEnd_toEndOf="@id/guideline_end"
             app:layout_constraintTop_toTopOf="@+id/tv_notification_sound_title"
             app:srcCompat="@drawable/icon_right" />
@@ -186,11 +202,16 @@
 
         <TextView
             android:id="@+id/tv_notification_option_title"
-            android:layout_width="wrap_content"
+            style="@style/TextAppearance.A2M.Title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/notification_option"
+            android:onClick="@{v -> viewModel.onNotificationOptionClick()}"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
             app:layout_constraintBottom_toBottomOf="@+id/iv_notification_option"
             app:layout_constraintStart_toEndOf="@id/iv_notification_option"
+            app:layout_constraintEnd_toStartOf="@id/iv_right_arrow2"
             app:layout_constraintTop_toTopOf="@+id/iv_notification_option" />
 
         <ImageView

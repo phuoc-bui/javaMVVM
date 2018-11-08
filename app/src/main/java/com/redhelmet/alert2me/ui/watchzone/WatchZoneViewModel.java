@@ -9,9 +9,12 @@ import com.redhelmet.alert2me.global.RxProperty;
 import com.redhelmet.alert2me.ui.addwatchzone.AddStaticZoneActivity;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
 import com.redhelmet.alert2me.ui.base.NavigationItem;
+import com.redhelmet.alert2me.ui.eventfilter.EventFilterActivity;
 
 import javax.inject.Inject;
 
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableInt;
 import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -20,18 +23,24 @@ public class WatchZoneViewModel extends BaseViewModel {
     public RxProperty<Boolean> proximityEnable = new RxProperty<>();
     public MutableLiveData<Boolean> isRefreshing = new MutableLiveData<>();
     public StaticWZAdapter staticWZAdapter = new StaticWZAdapter();
+    public ObservableInt mobileRadius = new ObservableInt(5);
+    public ObservableField<String> mobileRingSound = new ObservableField<>();
 
     @Inject
     public WatchZoneViewModel(DataManager dataManager, PreferenceStorage pref) {
         super(dataManager, pref);
         proximityEnable.set(pref.isProximityEnabled());
-        // don't need call getData() because it is called on Resume of WatchZoneFragment
-//        getData();
+        // don't need call getStaticWZData() because it is called on Resume of WatchZoneFragment
+//        getStaticWZData();
         disposeBag.add(proximityEnable.asObservable()
                 .subscribe(pref::setProximityEnabled));
     }
 
-    private void getData() {
+    public void setRingSound(String ringSoundUri) {
+        mobileRingSound.set(ringSoundUri);
+    }
+
+    private void getStaticWZData() {
         isRefreshing.setValue(false);
         disposeBag.add(dataManager.getWatchZones()
                 .flatMap(Observable::fromIterable)
@@ -49,7 +58,7 @@ public class WatchZoneViewModel extends BaseViewModel {
     }
 
     public void onRefresh() {
-        getData();
+        getStaticWZData();
     }
 
     public void onAddWatchZoneClick() {
@@ -61,6 +70,10 @@ public class WatchZoneViewModel extends BaseViewModel {
             ItemStaticWZViewModel item = staticWZAdapter.itemsSource.get(position);
             navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY, AddStaticZoneActivity.class, AddStaticZoneActivity.createBundle(item.getWatchZone())));
         }
+    }
+
+    public void onNotificationOptionClick() {
+        navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY, EventFilterActivity.class));
     }
 
     @Override
