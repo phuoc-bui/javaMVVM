@@ -25,9 +25,21 @@
             android:layout_marginEnd="@dimen/spacing_normal"
             android:text="@{viewModel.wzName}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/sw_wz_enabled"
+            app:layout_constraintEnd_toStartOf="@id/pb_loading"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="30dp"
+            style="?android:attr/progressBarStyle"
+            android:layout_height="30dp"
+            android:layout_marginEnd="@dimen/spacing_normal"
+            app:layout_constraintEnd_toStartOf="@id/sw_wz_enabled"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="@{viewModel.isLoading}"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/sw_wz_enabled"

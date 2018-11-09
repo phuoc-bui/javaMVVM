@@ -2,23 +2,9 @@ package com.redhelmet.alert2me.ui.base;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-
-import androidx.annotation.ColorRes;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.pm.PackageManager;
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.IdRes;
-import androidx.annotation.LayoutRes;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.ActionBar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -27,6 +13,18 @@ import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.ui.dialog.LoadingDialog;
 import com.redhelmet.alert2me.util.PermissionUtils;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.appcompat.app.ActionBar;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import dagger.android.support.DaggerAppCompatActivity;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -181,7 +179,7 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     }
 
     public void showLoadingDialog(boolean show) {
-        if (show) {
+        if (show && !loadingDialog.isAdded()) {
             loadingDialog.show(getSupportFragmentManager(), "loading");
         } else {
             loadingDialog.dismiss();

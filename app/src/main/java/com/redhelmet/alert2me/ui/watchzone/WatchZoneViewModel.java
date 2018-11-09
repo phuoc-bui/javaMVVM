@@ -38,15 +38,7 @@ public class WatchZoneViewModel extends BaseViewModel {
                 .subscribe(pref::setProximityEnabled));
 
         listener = (item, enable) -> {
-            showLoadingDialog(true);
-            disposeBag.add(dataManager.enableWatchZone(item.getId(), enable)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(o -> {
-                        showLoadingDialog(false);
-                    }, e -> {
-                        showLoadingDialog(false);
-                        handleError(e);
-                    }));
+            Log.e("WatchZoneViewModel", "Item check changed: " + enable);
         };
     }
 
@@ -59,7 +51,7 @@ public class WatchZoneViewModel extends BaseViewModel {
         disposeBag.add(dataManager.getWatchZones()
                 .flatMap(Observable::fromIterable)
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(item -> new ItemStaticWZViewModel(item, listener))
+                .map(item -> new ItemStaticWZViewModel(dataManager, item, listener))
                 .toList()
                 .subscribe(list -> {
                     isRefreshing.setValue(false);
