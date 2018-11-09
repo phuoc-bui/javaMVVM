@@ -246,6 +246,8 @@
     <string name="forgot_description">Please type your username or email address below and click Reset Password</string>
     <string name="forgot_send_button_title">Send</string>
     <string name="forgot_send_successful">Your request has sent successful.</string>
+    <string name="register_email_not_valid_error">Invalid email format!</string>
+    <string name="register_password_not_matches_error">Password does not match the confirmed password!</string>
 
     <!--general-->
     <string name="loading">Loading…</string>

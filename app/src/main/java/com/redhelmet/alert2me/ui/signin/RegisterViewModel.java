@@ -1,8 +1,5 @@
 package com.redhelmet.alert2me.ui.signin;
 
-import androidx.databinding.ObservableBoolean;
-import androidx.databinding.ObservableField;
-
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.model.User;
@@ -12,6 +9,8 @@ import com.redhelmet.alert2me.ui.base.NavigationItem;
 
 import javax.inject.Inject;
 
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableInt;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -19,11 +18,19 @@ public class RegisterViewModel extends BaseViewModel {
 
     public UserModel userModel = new UserModel();
     public ObservableBoolean enableButton = new ObservableBoolean(false);
+    public ObservableBoolean emailValid = new ObservableBoolean(true);
+    public ObservableBoolean passwordMatches = new ObservableBoolean(true);
+    public ObservableInt emailNotValidError = new ObservableInt();
+    public ObservableInt passwordNotMatchesError = new ObservableInt();
 
     @Inject
     public RegisterViewModel(DataManager dataManager) {
         super(dataManager);
         disposeBag.add(userModel.isValid().subscribe(b -> enableButton.set(b)));
+        disposeBag.add(userModel.isEmailValid().subscribe(b -> emailValid.set(b)));
+        disposeBag.add(userModel.isPasswordMatches().subscribe(b -> passwordMatches.set(b)));
+        emailNotValidError.set(R.string.register_email_not_valid_error);
+        passwordNotMatchesError.set(R.string.register_password_not_matches_error);
     }
 
     public void onRegisterClick() {
@@ -57,6 +64,23 @@ public class RegisterViewModel extends BaseViewModel {
 
         public UserModel() {
             user = new User();
+        }
+
+        public Observable<Boolean> isEmailValid() {
+            return userEmail.asObservable().map(email -> {
+                if (email == null) return false;
+                return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+            });
+        }
+
+        public Observable<Boolean> isPasswordMatches() {
+            return Observable.combineLatest(password.asObservable(), repeatPassword.asObservable(),
+                    (pass, rePass) -> {
+                        if ((pass == null || pass.isEmpty()) &&
+                                (rePass == null || rePass.isEmpty()))
+                            return true;
+                        return pass != null && pass.equals(rePass);
+                    });
         }
 
         public User getUser() {

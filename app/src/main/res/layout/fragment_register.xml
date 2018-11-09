@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -38,6 +39,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 android:hint="@string/login_email_hint"
+                app:errorEnabled="@{viewModel.emailValid}"
+                bind:errorText="@(viewModel.emailNotValidError)"
                 app:layout_constraintTop_toBottomOf="@+id/title">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -132,6 +135,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 android:hint="@string/register_repeat_password_hint"
+                bind:errorText="@(viewModel.passwordNotMatchesError)"
+                app:errorEnabled="@{viewModel.passwordMatches}"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
                 app:passwordToggleEnabled="true">
 
