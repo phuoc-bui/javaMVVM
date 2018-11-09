@@ -3,8 +3,10 @@ package com.redhelmet.alert2me.ui.watchzone;
 
 import android.util.Log;
 
+import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.PreferenceStorage;
+import com.redhelmet.alert2me.data.model.EditWatchZones;
 import com.redhelmet.alert2me.global.RxProperty;
 import com.redhelmet.alert2me.ui.addwatchzone.AddStaticZoneActivity;
 import com.redhelmet.alert2me.ui.base.BaseViewModel;
@@ -26,7 +28,7 @@ public class WatchZoneViewModel extends BaseViewModel {
     public ObservableInt mobileRadius = new ObservableInt(5);
     public ObservableField<String> mobileRingSound = new ObservableField<>();
 
-    private StaticWZAdapter.OnSwitchCompatCheckChangedListener listener;
+    private StaticWZAdapter.OnItemClickListener listener;
 
     @Inject
     public WatchZoneViewModel(DataManager dataManager, PreferenceStorage pref) {
@@ -37,9 +39,7 @@ public class WatchZoneViewModel extends BaseViewModel {
         disposeBag.add(proximityEnable.asObservable()
                 .subscribe(pref::setProximityEnabled));
 
-        listener = (item, enable) -> {
-            Log.e("WatchZoneViewModel", "Item check changed: " + enable);
-        };
+        listener = (item) -> onStaticWZClick(item);
     }
 
     public void setRingSound(String ringSoundUri) {
@@ -71,15 +71,24 @@ public class WatchZoneViewModel extends BaseViewModel {
         navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY, AddStaticZoneActivity.class));
     }
 
-    public void onStaticWZClick(int position) {
-        if (position >= 0 && position < staticWZAdapter.itemsSource.size()) {
-            ItemStaticWZViewModel item = staticWZAdapter.itemsSource.get(position);
-            navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY, AddStaticZoneActivity.class, AddStaticZoneActivity.createBundle(item.getWatchZone())));
+    public void onStaticWZClick(EditWatchZones watchZone) {
+        if (watchZone != null) {
+            navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY, AddStaticZoneActivity.class, AddStaticZoneActivity.createBundle(watchZone)));
         }
     }
 
     public void onNotificationOptionClick() {
         navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY, EventFilterActivity.class));
+    }
+
+    public void removeWatchZone(ItemStaticWZViewModel watchZone) {
+        disposeBag.add(dataManager.deleteWatchZone(watchZone.getWatchZone().getId())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(o -> {
+                            navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, R.string.msg_deleted));
+                            staticWZAdapter.itemsSource.remove(watchZone);
+                        }, this::handleError
+                ));
     }
 
     @Override

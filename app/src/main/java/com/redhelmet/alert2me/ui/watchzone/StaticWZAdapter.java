@@ -10,7 +10,7 @@ public class StaticWZAdapter extends BaseRecyclerViewAdapter<ItemStaticWZViewMod
         return R.layout.item_static_watch_zone;
     }
 
-    interface OnSwitchCompatCheckChangedListener {
-        void onCheckChanged(EditWatchZones data, boolean enabled);
+    interface OnItemClickListener {
+        void onItemClick(EditWatchZones data);
     }
 }

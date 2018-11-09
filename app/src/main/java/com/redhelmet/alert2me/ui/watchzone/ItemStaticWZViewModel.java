@@ -12,11 +12,9 @@ public class ItemStaticWZViewModel extends BaseViewModel {
     public ObservableField<String> wzName = new ObservableField<>();
     public ObservableBoolean wzEnable = new ObservableBoolean();
     private EditWatchZones watchZone;
-    private StaticWZAdapter.OnSwitchCompatCheckChangedListener listener;
+    private StaticWZAdapter.OnItemClickListener listener;
 
-
-
-    public ItemStaticWZViewModel(DataManager dataManager, EditWatchZones watchZone, StaticWZAdapter.OnSwitchCompatCheckChangedListener listener) {
+    public ItemStaticWZViewModel(DataManager dataManager, EditWatchZones watchZone, StaticWZAdapter.OnItemClickListener listener) {
         super(dataManager);
         this.watchZone = watchZone;
         wzName.set(watchZone.getName());
@@ -32,12 +30,13 @@ public class ItemStaticWZViewModel extends BaseViewModel {
         isLoading.set(true);
         disposeBag.add(dataManager.enableWatchZone(watchZone.getId(), checked)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(o -> {
-                    isLoading.set(false);
-                }, e -> {
+                .subscribe(o -> isLoading.set(false), e -> {
                     isLoading.set(false);
                     handleError(e);
                 }));
-        if (listener != null) listener.onCheckChanged(watchZone, checked);
+    }
+
+    public void onItemClick() {
+        if (listener != null) listener.onItemClick(watchZone);
     }
 }
