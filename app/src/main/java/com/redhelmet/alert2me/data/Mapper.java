@@ -33,15 +33,25 @@ public class Mapper {
         entity.setGeom(wz.getGeom());
 
         if (wz.getFilter() != null) {
-            List<WatchZoneFilterType> warning = wz.getFilter().getWarning().getTypes();
-            List<WatchZoneFilterType> incident = wz.getFilter().getIncident().getTypes();
-            List<WatchZoneFilterType> restriction = wz.getFilter().getRestriction().getTypes();
-            List<WatchZoneFilterType> support_service = wz.getFilter().getSupport_service().getTypes();
             WatchZoneEntity.WatchZoneFilter filter = new WatchZoneEntity.WatchZoneFilter();
-            filter.setWarning(warning);
-            filter.setIncident(incident);
-            filter.setRestriction(restriction);
-            filter.setSupport_service(support_service);
+            if (wz.getFilter().getWarning() != null) {
+                List<WatchZoneFilterType> warning = wz.getFilter().getWarning().getTypes();
+                filter.setWarning(warning);
+            }
+            if (wz.getFilter().getIncident() != null) {
+                List<WatchZoneFilterType> incident = wz.getFilter().getIncident().getTypes();
+                filter.setIncident(incident);
+            }
+
+            if (wz.getFilter().getRestriction() != null) {
+                List<WatchZoneFilterType> restriction = wz.getFilter().getRestriction().getTypes();
+                filter.setRestriction(restriction);
+            }
+
+            if (wz.getFilter().getSupport_service() != null) {
+                List<WatchZoneFilterType> support_service = wz.getFilter().getSupport_service().getTypes();
+                filter.setSupport_service(support_service);
+            }
 
             entity.setFilter(filter);
         }
