@@ -71,7 +71,7 @@
     <string name="edit_watch_zone_text">Select the shortcuts below to edit your Watch Zone</string>
     <string name="circle_create_failed">Unable to re-create circle. Please try again later.</string>
     <string name="share_empty_wz">Please add share watch zone code</string>
-    <string name="no_data_to_display">There are no known events to display \\n\\n Please be sure to check your display settings</string>
+    <string name="no_data_to_display">There are no known events to display\nPlease be sure to check your display settings</string>
     <string name="pref_hints">pref_hints</string>
     <string name="pref_cluster_map_state">pref_cluster_map_state</string>
     <string name="pref_map_isDefault">pref_map_isDefault</string>

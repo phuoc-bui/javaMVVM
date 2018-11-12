@@ -188,6 +188,7 @@ public class BindingAdapters {
 
     @BindingAdapter("bind:errorText")
     public static void setErrorText(TextInputLayout textInputLayout, int error) {
-        textInputLayout.setError(textInputLayout.getContext().getString(error));
+        if (error <=0) textInputLayout.setError("");
+        else textInputLayout.setError(textInputLayout.getContext().getString(error));
     }
 }

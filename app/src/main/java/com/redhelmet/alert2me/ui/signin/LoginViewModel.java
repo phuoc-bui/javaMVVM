@@ -1,9 +1,11 @@
 package com.redhelmet.alert2me.ui.signin;
 
 import androidx.databinding.ObservableBoolean;
+
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.PreferenceStorage;
 import com.redhelmet.alert2me.global.RxProperty;
@@ -13,6 +15,7 @@ import com.redhelmet.alert2me.ui.home.HomeActivity;
 
 import javax.inject.Inject;
 
+import androidx.databinding.ObservableInt;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -20,15 +23,29 @@ public class LoginViewModel extends BaseViewModel {
 
     public RxProperty<String> userEmail = new RxProperty<>("");
     public RxProperty<String> password = new RxProperty<>("");
+    public ObservableInt emailNotValidError = new ObservableInt();
     public ObservableBoolean disableLoginButton = new ObservableBoolean(true);
 
     @Inject
     public LoginViewModel(DataManager dataManager, PreferenceStorage pref) {
         super(dataManager, pref);
-        disposeBag.add(Observable.combineLatest(userEmail.asObservable(),
+
+        disposeBag.add(isEmailValid().subscribe(b -> {
+            if (!b) emailNotValidError.set(R.string.register_email_not_valid_error);
+            else emailNotValidError.set(0);
+        }));
+
+        disposeBag.add(Observable.combineLatest(isEmailValid(),
                 password.asObservable(),
-                (email, pass) -> email != null && email.length() > 0 && pass != null && pass.length() > 0)
+                (emailValid, pass) -> emailValid && pass != null && pass.length() > 0)
                 .subscribe(enable -> disableLoginButton.set(enable)));
+    }
+
+    private Observable<Boolean> isEmailValid() {
+        return userEmail.asObservable().map(email -> {
+            if (email == null) return false;
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        });
     }
 
     public void login() {

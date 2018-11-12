@@ -39,8 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 android:hint="@string/login_email_hint"
-                app:errorEnabled="@{viewModel.emailValid}"
-                bind:errorText="@(viewModel.emailNotValidError)"
+                bind:errorText="@{viewModel.emailNotValidError}"
                 app:layout_constraintTop_toBottomOf="@+id/title">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -135,8 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 android:hint="@string/register_repeat_password_hint"
-                bind:errorText="@(viewModel.passwordNotMatchesError)"
-                app:errorEnabled="@{viewModel.passwordMatches}"
+                bind:errorText="@{viewModel.passwordNotMatchesError}"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout4"
                 app:passwordToggleEnabled="true">
 

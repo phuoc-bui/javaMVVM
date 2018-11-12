@@ -1,24 +1,23 @@
 package com.redhelmet.alert2me.ui.base;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.util.Log;
 
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.PreferenceStorage;
-import com.redhelmet.alert2me.data.model.AddObservationModel;
-import com.redhelmet.alert2me.data.model.Observations;
 import com.redhelmet.alert2me.data.remote.NetworkError;
 import com.redhelmet.alert2me.global.Event;
 import com.redhelmet.alert2me.global.RetrofitException;
 import com.redhelmet.alert2me.global.RxProperty;
 import com.redhelmet.alert2me.ui.signin.SignInActivity;
 
-import org.json.JSONArray;
-
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class BaseViewModel extends ViewModel {
+
+    protected final String TAG = this.getClass().getSimpleName();
 
     protected DataManager dataManager;
 
@@ -27,10 +26,7 @@ public class BaseViewModel extends ViewModel {
     protected CompositeDisposable disposeBag = new CompositeDisposable();
 
     public RxProperty<Boolean> isLoading = new RxProperty<>();
-    public JSONArray wz_notification_selection;
-    protected Observations observations;
-    protected AddObservationModel addObservation;
-    protected MutableLiveData<Event<NavigationItem>> navigationEvent = new MutableLiveData<>();
+    MutableLiveData<Event<NavigationItem>> navigationEvent = new MutableLiveData<>();
 
     public BaseViewModel() {
         this(null, null);
@@ -45,11 +41,9 @@ public class BaseViewModel extends ViewModel {
     }
 
     public BaseViewModel(DataManager dataManager, PreferenceStorage pref) {
-        wz_notification_selection = new JSONArray();
-        observations = Observations.getInstance();
-        addObservation = AddObservationModel.getInstance();
         this.dataManager = dataManager;
         this.preferenceStorage = pref;
+        Log.d(TAG, "onCreate viewModel");
     }
 
     protected void showLoadingDialog(boolean show) {
@@ -91,6 +85,7 @@ public class BaseViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         disposeBag.dispose();
+        Log.d(TAG, "onCleared viewModel");
         super.onCleared();
     }
 }

@@ -18,8 +18,6 @@ public class RegisterViewModel extends BaseViewModel {
 
     public UserModel userModel = new UserModel();
     public ObservableBoolean enableButton = new ObservableBoolean(false);
-    public ObservableBoolean emailValid = new ObservableBoolean(true);
-    public ObservableBoolean passwordMatches = new ObservableBoolean(true);
     public ObservableInt emailNotValidError = new ObservableInt();
     public ObservableInt passwordNotMatchesError = new ObservableInt();
 
@@ -27,10 +25,14 @@ public class RegisterViewModel extends BaseViewModel {
     public RegisterViewModel(DataManager dataManager) {
         super(dataManager);
         disposeBag.add(userModel.isValid().subscribe(b -> enableButton.set(b)));
-        disposeBag.add(userModel.isEmailValid().subscribe(b -> emailValid.set(b)));
-        disposeBag.add(userModel.isPasswordMatches().subscribe(b -> passwordMatches.set(b)));
-        emailNotValidError.set(R.string.register_email_not_valid_error);
-        passwordNotMatchesError.set(R.string.register_password_not_matches_error);
+        disposeBag.add(userModel.isEmailValid().subscribe(b -> {
+            if (!b) emailNotValidError.set(R.string.register_email_not_valid_error);
+            else emailNotValidError.set(0);
+        }));
+        disposeBag.add(userModel.isPasswordMatches().subscribe(b -> {
+            if (!b) passwordNotMatchesError.set(R.string.register_password_not_matches_error);
+            else passwordNotMatchesError.set(0);
+        }));
     }
 
     public void onRegisterClick() {
@@ -49,6 +51,7 @@ public class RegisterViewModel extends BaseViewModel {
     }
 
     public void onSignInClick() {
+        userModel.resetFields();
         navigateTo(new NavigationItem(NavigationItem.CHANGE_FRAGMENT_AND_ADD_TO_BACK_STACK, LoginFragment.newInstance()));
     }
 
@@ -93,20 +96,30 @@ public class RegisterViewModel extends BaseViewModel {
         }
 
         public Observable<Boolean> isValid() {
-            return Observable.combineLatest(userEmail.asObservable(),
+            return Observable.combineLatest(isEmailValid(),
                     firstName.asObservable(),
                     surname.asObservable(),
                     postcode.asObservable(),
                     password.asObservable(),
                     repeatPassword.asObservable(),
-                    (mail, first, last, post, pass, rePass) -> {
-                        return mail != null && mail.length() > 0
+                    (emailValid, first, last, post, pass, rePass) -> {
+                        return emailValid
                                 && first != null && first.length() > 0
                                 && last != null && last.length() > 0
                                 && post != null && post.length() > 0
                                 && pass != null && pass.length() > 0
                                 && rePass != null && rePass.equals(pass);
                     });
+        }
+
+        public void resetFields() {
+            code.set("");
+            userEmail.set("");
+            firstName.set("");
+            surname.set("");
+            postcode.set("");
+            password.set("");
+            repeatPassword.set("");
         }
     }
 }
