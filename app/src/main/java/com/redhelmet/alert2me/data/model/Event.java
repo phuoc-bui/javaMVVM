@@ -278,5 +278,6 @@ public class Event implements Model {
         this.geometry = geometry;
     }
 
-    public static class EventList extends ArrayList<Event> {}
+    public static class EventList extends ArrayList<Event> {
+    }
 }

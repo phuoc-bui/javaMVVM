@@ -177,10 +177,7 @@ public class AppDataManager implements DataManager {
                     } else {
                         return filterEventWithCustomFilter(event);
                     }
-                })
-                .doOnError(e -> Log.e(TAG, "filter error: " + e.getMessage()))
-                .doOnNext(event -> Log.e(TAG, "filter success: " + event.getId()))
-                .doOnComplete(() -> Log.e(TAG, "Complete filter event ---------"));
+                });
     }
 
     @Override
@@ -200,10 +197,7 @@ public class AppDataManager implements DataManager {
                     } else {
                         return filterEventWithCustomFilter(event);
                     }
-                })
-                .doOnError(e -> Log.e(TAG, "filter error: " + e.getMessage()))
-                .doOnNext(event -> Log.e(TAG, "filter success: " + event.getId()))
-                .doOnComplete(() -> Log.e(TAG, "Complete filter event ---------"));
+                });
     }
 
     private boolean filterEventWithDefaultFilter(Event event) {
@@ -335,7 +329,7 @@ public class AppDataManager implements DataManager {
     @Override
     public Observable<Object> editWatchZone(EditWatchZones watchZone) {
         String deviceId = String.valueOf(pref.getDeviceInfo().getId());
-        return api.editWatchZone(deviceId,watchZone.getId(), watchZone)
+        return api.editWatchZone(deviceId, watchZone.getId(), watchZone)
                 .doOnNext(o -> database.editWatchZone(watchZone));
     }
 

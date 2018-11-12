@@ -10,10 +10,12 @@ import android.view.MenuItem;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.redhelmet.alert2me.R;
+import com.redhelmet.alert2me.data.model.Event;
 import com.redhelmet.alert2me.databinding.ActivityHomeBinding;
 import com.redhelmet.alert2me.ui.base.BaseActivity;
 import com.redhelmet.alert2me.ui.base.NavigationFragment;
 import com.redhelmet.alert2me.ui.event.EventFragment;
+import com.redhelmet.alert2me.ui.eventdetail.EventDetailsActivity;
 import com.redhelmet.alert2me.ui.help.HelpFragment;
 import com.redhelmet.alert2me.ui.watchzone.WatchZoneFragment;
 
@@ -31,10 +33,17 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
     private LatLng latLng;
 
     private static final String LAT_LONG_KEY = "lat_long_key";
+    private static final String EVENT_KEY = "event_key";
     
     public static Intent newInstance(Context context, LatLng point) {
         Intent intent = new Intent(context, HomeActivity.class);
         intent.putExtra(LAT_LONG_KEY, point);
+        return intent;
+    }
+
+    public static Intent newInstance(Context context, Event event) {
+        Intent intent = new Intent(context, HomeActivity.class);
+        intent.putExtra(EVENT_KEY, event);
         return intent;
     }
 
@@ -56,7 +65,10 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
             setSupportActionBar(binder.toolbar);
         }
         Bundle extras = getIntent().getExtras();
+        Event event = null;
         if (extras != null) { //edit mode - detect if need to zoom on any specific location at start of activity
+
+            event = (Event) extras.getSerializable(EVENT_KEY);
             latLng = (LatLng) extras.get(LAT_LONG_KEY);
         }
 
@@ -96,6 +108,11 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeBindin
             binder.navigation.setSelectedItemId(R.id.navigation_events);
         } else {
             currentFragment = (NavigationFragment) getSupportFragmentManager().findFragmentById(getFragmentContainer());
+        }
+
+        // start event detail when receive event from notification
+        if (event != null) {
+            startActivity(EventDetailsActivity.newInstance(this, event));
         }
     }
 

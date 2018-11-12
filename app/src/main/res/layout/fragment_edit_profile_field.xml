@@ -44,6 +44,7 @@
             style="@style/Widget.A2M.Button"
             android:layout_width="@dimen/login_button_width"
             android:layout_height="wrap_content"
+            android:enabled="@{observable.get() != null &amp;&amp; !observable.get().trim().isEmpty()}"
             android:onClick="@{() -> viewModel.onUpdateClick()}"
             android:text="@string/help_update_button" />
     </LinearLayout>

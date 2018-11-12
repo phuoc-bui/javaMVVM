@@ -154,6 +154,10 @@ public class NavigationItem {
         }
     }
 
+    public int getNavigationType() {
+        return navigationType;
+    }
+
     private void startActivity(Activity context, boolean clearTask, Object... data) {
         if (data == null || data.length == 0)
             throw new Error(String.format(wrongDataError, "null/empty", context.getLocalClassName()));

@@ -1,7 +1,5 @@
 package com.redhelmet.alert2me.ui.base;
 
-import android.util.Log;
-
 import com.redhelmet.alert2me.R;
 import com.redhelmet.alert2me.data.DataManager;
 import com.redhelmet.alert2me.data.PreferenceStorage;
@@ -43,7 +41,6 @@ public class BaseViewModel extends ViewModel {
     public BaseViewModel(DataManager dataManager, PreferenceStorage pref) {
         this.dataManager = dataManager;
         this.preferenceStorage = pref;
-        Log.d(TAG, "onCreate viewModel");
     }
 
     protected void showLoadingDialog(boolean show) {
@@ -85,7 +82,6 @@ public class BaseViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         disposeBag.dispose();
-        Log.d(TAG, "onCleared viewModel");
         super.onCleared();
     }
 }

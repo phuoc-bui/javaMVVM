@@ -1,10 +1,6 @@
 package com.redhelmet.alert2me.ui.help;
 
-import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.view.View;
 
 import com.redhelmet.alert2me.R;
@@ -12,6 +8,9 @@ import com.redhelmet.alert2me.databinding.FragmentEditProfileFieldBinding;
 import com.redhelmet.alert2me.ui.base.BaseFragment;
 
 import javax.inject.Inject;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 
 public class EditProfileFieldFragment extends BaseFragment<HelpViewModel, FragmentEditProfileFieldBinding> {
 
@@ -28,6 +27,12 @@ public class EditProfileFieldFragment extends BaseFragment<HelpViewModel, Fragme
         bundle.putInt(EXTRA_HINT, hintId);
         fragment.setArguments(bundle);
         return fragment;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        viewModel.userModel.rollbackToOrigin();
+        return super.onBackPressed();
     }
 
     @Override
