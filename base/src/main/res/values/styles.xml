@@ -1,0 +1,92 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="Theme.MVVMDemo" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimaryDark">@color/indigo_dark</item>
+        <item name="colorPrimary">@color/indigo</item>
+        <item name="colorAccent">@color/pink</item>
+        <item name="android:colorBackground">@color/light_grey</item>
+        <item name="colorBackgroundFloating">@color/white</item>
+        <item name="colorControlActivated">?attr/colorAccent</item>
+        <item name="android:textColorPrimary">@color/light_grey</item>
+        <item name="android:textColorSecondary">@color/grey_800</item>
+        <item name="android:dialogTheme">@style/Theme.MVVMDemo.Dialog</item>
+    </style>
+
+    <style name="Theme.MVVMDemo.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.MVVMDemo.LightNav" parent="Theme.MVVMDemo.NoActionBar" />
+
+    <style name="Theme.MVVMDemo.Launcher" parent="@style/Theme.MVVMDemo.LightNav">
+        <item name="android:windowBackground">@color/indigo</item>
+    </style>
+
+    <style name="Theme.MVVMDemo.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">#003f5e</item>
+    </style>
+
+    <style name="Widget.MVVMDemo.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="titleTextAppearance">@style/TextAppearance.MVVMDemo.Toolbar</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Widget.MVVMDemo.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextAppearance">@style/TextAppearance.MVVMDemo.TextInputLayout.HintText
+        </item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="boxCornerRadiusBottomEnd">20dp</item>
+        <item name="boxCornerRadiusBottomStart">20dp</item>
+        <item name="boxCornerRadiusTopEnd">20dp</item>
+        <item name="boxCornerRadiusTopStart">20dp</item>
+    </style>
+
+    <style name="Widget.MVVMDemo.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="cornerRadius">20dp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="Widget.MVVMDemo.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">?android:attr/colorAccent</item>
+    </style>
+
+    <style name="TextAppearance.MVVMDemo.Toolbar" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <style name="TextAppearance.MVVMDemo.TextInputLayout.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="TextAppearance.MVVMDemo.TextInputLayout.TextInputEditText" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:drawablePadding">8dp</item>
+    </style>
+
+    <style name="TextAppearance.MVVMDemo.Headline" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="textAllCaps">true</item>
+        <item name="android:textColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="TextAppearance.MVVMDemo.Title" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.MVVMDemo.SubTitle" parent="TextAppearance.MaterialComponents.Subtitle2">
+
+    </style>
+
+    <style name="TextAppearance.MVVMDemo.Body" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/grey_800</item>
+    </style>
+
+    <style name="TextAppearance.MVVMDemo.Body.Link" parent="TextAppearance.MVVMDemo.Body">
+        <item name="android:textColor">@color/indigo_dark</item>
+    </style>
+
+</resources>

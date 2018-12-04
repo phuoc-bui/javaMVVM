@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.phuocbui.basemodule.global.LambdaInterface;
-import com.phuocbui.basemodule.ui.adapter.BaseRecyclerViewAdapter;
+import com.phuocbui.basemodule.ui.base.adapter.BaseRecyclerViewAdapter;
 
 import java.util.regex.Pattern;
 

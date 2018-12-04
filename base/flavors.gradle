@@ -1,0 +1,30 @@
+android {
+    flavorDimensions "environment"
+    productFlavors {
+        develop {
+            dimension "environment"
+            resValue "string", "app_name", "BaseMVVM dev"
+
+            buildConfigField "String",  "API_ENDPOINT",        "\"https://google.com/\""
+        }
+        staging {
+            dimension "environment"
+            resValue "string", "app_name", "BaseMVVM Stg"
+
+            buildConfigField "String",  "API_ENDPOINT",        "\"https://google.com/\""
+        }
+        production {
+            dimension "environment"
+            resValue "string", "app_name", "BaseMVVM"
+
+            buildConfigField "String",  "API_ENDPOINT",        "\"https://google.com/\""
+        }
+    }
+
+    // Remove developRelease as it's not needed.
+    variantFilter { variant ->
+        if (variant.buildType.name.equals('release') && variant.flavors.get(0).name.equals('develop')) {
+            variant.ignore = true
+        }
+    }
+}

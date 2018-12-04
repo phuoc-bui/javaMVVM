@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.phuocbui.basemodule.BR;
 import com.phuocbui.basemodule.R;
 import com.phuocbui.basemodule.global.NavigationItem;
 import com.phuocbui.basemodule.ui.dialog.LoadingDialog;
@@ -53,7 +54,10 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     protected void configWindow() {
     }
 
-    protected abstract int getBindingVariable();
+    @IdRes
+    protected int getBindingVariable() {
+        return BR.viewModel;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

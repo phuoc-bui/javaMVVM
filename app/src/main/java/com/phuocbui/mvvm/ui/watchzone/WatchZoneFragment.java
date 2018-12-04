@@ -6,7 +6,7 @@ import android.view.View;
 import com.phuocbui.mvvm.R;
 import com.phuocbui.mvvm.databinding.FragmentWatchzoneListBinding;
 import com.phuocbui.basemodule.ui.base.BaseFragment;
-import com.phuocbui.basemodule.ui.adapter.AppViewPagerAdapter;
+import com.phuocbui.basemodule.ui.base.adapter.AppViewPagerAdapter;
 
 import javax.inject.Inject;
 

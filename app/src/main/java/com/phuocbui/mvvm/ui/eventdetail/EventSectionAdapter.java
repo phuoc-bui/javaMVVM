@@ -1,7 +1,7 @@
 package com.phuocbui.mvvm.ui.eventdetail;
 
 import com.phuocbui.mvvm.R;
-import com.phuocbui.basemodule.ui.adapter.BaseRecyclerViewAdapter;
+import com.phuocbui.basemodule.ui.base.adapter.BaseRecyclerViewAdapter;
 
 public class EventSectionAdapter extends BaseRecyclerViewAdapter<ItemSectionViewModel> {
 

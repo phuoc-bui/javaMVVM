@@ -7,7 +7,7 @@ import com.phuocbui.mvvm.R;
 import com.phuocbui.mvvm.databinding.FragmentStaticWatchZoneBinding;
 import com.phuocbui.mvvm.databinding.ItemStaticWatchZoneBinding;
 import com.phuocbui.basemodule.ui.base.BaseFragment;
-import com.phuocbui.basemodule.ui.adapter.BaseRecyclerViewAdapter;
+import com.phuocbui.basemodule.ui.base.adapter.BaseRecyclerViewAdapter;
 
 import javax.inject.Inject;
 

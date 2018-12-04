@@ -2,13 +2,13 @@ package com.phuocbui.basemodule.global;
 
 import com.google.gson.JsonSyntaxException;
 
+import org.jetbrains.annotations.Nullable;
+
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-
-import javax.annotation.Nullable;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;

@@ -3,6 +3,7 @@
     <color name="navigationnarHeaderColor">#F5F5F7</color>
     <color name="navigationnarTextTintColor">#3d3d3d</color>
 
+    <color name="status_bar"></color>
     <color name="red">#ee2749</color>
     <color name="green">#009900</color>
     <color name="red_dark">#ff0d00</color>

@@ -1,4 +1,4 @@
-package com.phuocbui.basemodule.data;
+package com.phuocbui.basemodule.data.preference;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -3,7 +3,6 @@ package com.phuocbui.mvvm.ui.watchzone;
 import com.phuocbui.mvvm.data.DataManager;
 import com.phuocbui.mvvm.data.model.EditWatchZones;
 import com.phuocbui.basemodule.ui.base.BaseViewModel;
-import com.phuocbui.mvvm.ui.base.AppViewModel;
 
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;

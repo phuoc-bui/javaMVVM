@@ -1,4 +1,4 @@
-package com.phuocbui.basemodule.ui.adapter;
+package com.phuocbui.basemodule.ui.base.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

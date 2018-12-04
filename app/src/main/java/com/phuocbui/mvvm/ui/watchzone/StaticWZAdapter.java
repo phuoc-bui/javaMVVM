@@ -2,7 +2,7 @@ package com.phuocbui.mvvm.ui.watchzone;
 
 import com.phuocbui.mvvm.R;
 import com.phuocbui.mvvm.data.model.EditWatchZones;
-import com.phuocbui.basemodule.ui.adapter.BaseRecyclerViewAdapter;
+import com.phuocbui.basemodule.ui.base.adapter.BaseRecyclerViewAdapter;
 
 public class StaticWZAdapter extends BaseRecyclerViewAdapter<ItemStaticWZViewModel> {
     @Override

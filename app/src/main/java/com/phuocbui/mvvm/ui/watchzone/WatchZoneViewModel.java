@@ -7,7 +7,6 @@ import com.phuocbui.mvvm.data.PreferenceStorage;
 import com.phuocbui.mvvm.data.model.EditWatchZones;
 import com.phuocbui.basemodule.global.RxProperty;
 import com.phuocbui.basemodule.ui.base.BaseViewModel;
-import com.phuocbui.mvvm.ui.base.AppViewModel;
 
 import javax.inject.Inject;
 

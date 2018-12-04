@@ -1,17 +1,41 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion COMPILE_SDK_VERSION as int
+    compileSdkVersion rootProject.compileSdkVersion
     dataBinding.enabled = true
 
+    // Create a variable called keystorePropertiesFile, and initialize it to your
+    // keystore.properties file, in the rootProject folder.
+    def keystorePropertiesFile = rootProject.file("keystore.properties")
+    if (keystorePropertiesFile.exists()) {
+        Properties keystoreProperties = new Properties()
+        keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+        signingConfigs {
+            release {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile rootProject.file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
+        }
+        android.buildTypes.release.signingConfig = signingConfigs.release
+    } else  {
+        android.buildTypes.release.signingConfig = null
+    }
+
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        applicationId PACKAGE_NAME
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        buildConfigField("int", "DB_SCHEMA_VERSION", DB_SCHEMA_VERSION)
+        buildConfigField("String", "DB_FILE_NAME", "\"$DB_FILE_NAME\"")
+        buildConfigField("String", "PREFERENCE_NAME", "\"$PREFERENCE_NAME\"")
     }
 
     compileOptions {
@@ -26,48 +50,52 @@ android {
         }
     }
 
+    // Variable environment for productFlavors
+    apply from: 'flavors.gradle'
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-alpha01'
-
     // Android support
-    api 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
+    implementation "com.google.android.material:material:$rootProject.materialVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.lifecycleVersion"
 
     // Network
-    implementation "com.google.code.gson:gson:$GSON_VERSION"
-    implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
-    implementation "com.squareup.okhttp3:logging-interceptor:$OK_HTTP_VERSION"
-    implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$RETROFIT_VERSION"
+    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
 
     // Reactive
-    implementation "io.reactivex.rxjava2:rxandroid:$RX_ANDROID_VERSION"
-    implementation "io.reactivex.rxjava2:rxjava:$RX_JAVA_VERSION"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
 
     // Dagger
-    implementation "com.google.dagger:dagger-android:$DAGGER_VERSION"
-    implementation "com.google.dagger:dagger-android-support:$DAGGER_VERSION"
-    annotationProcessor "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$DAGGER_VERSION"
+    implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
 
     // Utils
-    api 'com.jakewharton.timber:timber:4.7.0'
-    implementation 'org.jetbrains:annotations:15.0'
-    implementation 'commons-io:commons-io:2.6'
-    implementation 'com.google.guava:guava:24.1-jre'
-    api 'com.jakewharton.threetenabp:threetenabp:1.1.0'
+    implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
+    implementation "org.jetbrains:annotations:$rootProject.jetbrainsAnnotationsVersion"
+    implementation "com.jakewharton.threetenabp:threetenabp:$rootProject.threetenabpVersion"
 
     // testing
-    testImplementation "junit:junit:$JUNIT_VERSION"
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
+    testImplementation "junit:junit:$rootProject.junitVersion"
+    androidTestImplementation "androidx.test:runner:$rootProject.runnerVersion"
+    androidTestImplementation("androidx.test.espresso:espresso-core:$rootProject.espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }

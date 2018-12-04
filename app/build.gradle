@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion COMPILE_SDK_VERSION as int
+    compileSdkVersion rootProject.compileSdkVersion
     dataBinding.enabled = true
 
     // Create a variable called keystorePropertiesFile, and initialize it to your
@@ -26,13 +26,12 @@ android {
 
     defaultConfig {
         applicationId PACKAGE_NAME
-        minSdkVersion MIN_SDK_VERSION as int
-        targetSdkVersion TARGET_SDK_VERSION as int
-        versionCode VERSION_CODE as int
-        versionName VERSION_NAME
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        versionCode rootProject.versionCode
+        versionName rootProject.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-        multiDexEnabled true
     }
 
     compileOptions {
@@ -59,7 +58,6 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(':base')
 
     // Android support
     implementation 'androidx.multidex:multidex:2.0.0'
@@ -69,32 +67,30 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
 
-    // Network
-    implementation "com.google.code.gson:gson:$GSON_VERSION"
-    implementation "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
-    implementation "com.squareup.okhttp3:logging-interceptor:$OK_HTTP_VERSION"
-    implementation "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$RETROFIT_VERSION"
-
-    // Reactive
-    implementation "io.reactivex.rxjava2:rxandroid:$RX_ANDROID_VERSION"
-    implementation "io.reactivex.rxjava2:rxjava:$RX_JAVA_VERSION"
-
-    // Dagger
-    implementation "com.google.dagger:dagger-android:$DAGGER_VERSION"
-    implementation "com.google.dagger:dagger-android-support:$DAGGER_VERSION"
-    annotationProcessor "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
-    annotationProcessor "com.google.dagger:dagger-android-processor:$DAGGER_VERSION"
-
     //database
     implementation 'androidx.room:room-runtime:2.1.0-alpha02'
     annotationProcessor 'androidx.room:room-compiler:2.1.0-alpha02'
     implementation 'androidx.room:room-rxjava2:2.1.0-alpha02'
 
+    // Network
+    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
+
+    // Reactive
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
+
+    // Dagger
+    implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
+
     // Image loader
-    implementation "com.squareup.picasso:picasso:$PICASSO_VERSION"
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation "com.squareup.picasso:picasso:2.71828"
 
     // Custom layout
     implementation 'org.adw.library:discrete-seekbar:1.0.1'
@@ -111,16 +107,16 @@ dependencies {
     implementation 'in.srain.cube:ultra-ptr:1.0.11'
 
     // testing
-    testImplementation "junit:junit:$JUNIT_VERSION"
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
+    testImplementation "junit:junit:$rootProject.junitVersion"
+    androidTestImplementation "androidx.test:runner:$rootProject.runnerVersion"
+    androidTestImplementation("androidx.test.espresso:espresso-core:$rootProject.espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
 
 configurations.all {
     resolutionStrategy {
-        force "com.android.support:support-v4:$SUPPORT_PACKAGE_VERSION"
-        force "com.android.support:support-v13:$SUPPORT_PACKAGE_VERSION"
+        force "com.android.support:support-v4:$rootProject.androidSupportVersion"
+        force "com.android.support:support-v13:$rootProject.androidSupportVersion"
     }
 }
