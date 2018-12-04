@@ -3,7 +3,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.signin.SignInViewModel"/>
+            type="com.phuocbui.mvvm.ui.signin.SignInViewModel"/>
     </data>
     <FrameLayout
         android:id="@+id/container"

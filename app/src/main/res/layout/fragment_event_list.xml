@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.event.EventViewModel" />
+            type="com.phuocbui.mvvm.ui.event.EventViewModel" />
     </data>
 
     <RelativeLayout
@@ -27,7 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                binding:adapter="@{viewModel.adapter}" />
+                binding:adapter="@{viewModel.adapter}"
+                binding:itemClick="@{(v, p) -> viewModel.onEventClick(p)}"/>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.eventdetail.ItemSectionViewModel"/>
+            type="com.phuocbui.mvvm.ui.eventdetail.ItemSectionViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/tv_title"
-            style="@style/TextAppearance.A2M.Title"
+            style="@style/TextAppearance.MVVMDemo.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{viewModel.title}"
@@ -27,7 +27,7 @@
             android:id="@+id/tv_link"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/TextAppearance.A2M.Body.Link"
+            style="@style/TextAppearance.MVVMDemo.Body.Link"
             android:layout_marginStart="@dimen/margin_normal"
             android:text="@{viewModel.value}"
             android:autoLink="web"

@@ -2,68 +2,32 @@
 <resources>
     <color name="navigationnarHeaderColor">#F5F5F7</color>
     <color name="navigationnarTextTintColor">#3d3d3d</color>
-    <color name="navigationnarStatusColor">#c4c4c5</color>
-    <color name="appRedTintColor">#ee2749</color>
 
-    <color name="textColorGrey">#434343</color>
-    <color name="colorBlack">#000</color>
-    <color name="colorWhite">#ffffff</color>
-    <color name="colorRed">#ee2749</color>
-    <color name="colorGreen">#009900</color>
-    <color name="colorDarkRed">#ff0d00</color>
+    <color name="red">#ee2749</color>
+    <color name="green">#009900</color>
+    <color name="red_dark">#ff0d00</color>
+    <color name="grey">#666666</color>
+    <color name="pink">#f13558</color>
+    <color name="indigo">#4768fd</color>
+    <color name="indigo_dark">#3c54fe</color>
     <color name="teal">#31e7b6</color>
-    <color name="colorGrey">#FF666666</color>
-    <color name="colorPink">#f13558</color>
-    <!-- dots inactive colors -->
-    <color name="dot_dark_screen1">#d1395c</color>
-    <color name="dot_dark_screen2">#14a895</color>
-    <color name="dot_dark_screen3">#2278d4</color>
-    <color name="dot_dark_screen4">#a854d4</color>
+    <color name="light_blue">#27e5fd</color>
+    <color name="yellow">#fcd230</color>
+    <color name="orange">#ff6c00</color>
+    <color name="white">#fff</color>
+    <color name="light_grey">#f5f5f7</color>
+    <color name="grey_800">#424242</color>
+    <color name="grey_600">#747474</color>
+    <color name="spacer_grey">#e0e0e0</color>
+    <color name="white_90">#e6ffffff</color>
+    <color name="highlight_light">#33ffffff</color> <!-- 20% white -->
 
-    <!-- dots active colors -->
-    <color name="dot_light_screen1">#f98da5</color>
-    <color name="dot_light_screen2">#8cf9eb</color>
-    <color name="dot_light_screen3">#93c6fd</color>
-    <color name="dot_light_screen4">#e4b5fc</color>
-    <color name="default_text">#212121</color>
-    <color name="default_hint_text">#757575</color>
-
-    <array name="array_dot_active">
-        <item>@color/dot_light_screen1</item>
-        <item>@color/dot_light_screen2</item>
-        <item>@color/dot_light_screen3</item>
-        <item>@color/dot_light_screen4</item>
-
-    </array>
-
-    <array name="array_dot_inactive">
-    <item>@color/dot_dark_screen1</item>
-    <item>@color/dot_dark_screen2</item>
-    <item>@color/dot_dark_screen3</item>
-    <item>@color/dot_dark_screen4</item>
-</array>
-
-    <color name="swipeoption_green">#36CF8E</color>
-    <color name="swipeoption_blue">#3693D0</color>
-    <color name="swipeoption_purple">#ff1744</color>
-    <color name="statusBarColor">#002C41</color>
-
-    <color name="toolBarColor">#003F5E</color>
-    <color name="watchHintTextColor">#073F5E</color>
-    <color name="notificationIconColor">#073F5E</color>
-    <color name="backgroundColor">#f0eff5</color>
-
-    <color name="black_semi_transparent">#B2000000</color>
-    <color name="background">#e5e5e5</color>
-    <color name="half_black">#808080</color>
-    <color name="white">#fafafa</color>
-    <color name="white_pressed">#f1f1f1</color>
-    <color name="pink">#e91e63</color>
-    <color name="pink_pressed">#ec407a</color>
-    <color name="blue_semi_transparent">#805677fc</color>
-    <color name="blue_semi_transparent_pressed">#80738ffe</color>
-    <color name="light_gray">#D3D3D3</color>
-
-    <color name="wz_polygon_color">#8ce0701e</color>
+    <integer-array name="swipe_refresh">
+        <item>@color/indigo</item>
+        <item>@color/teal</item>
+        <item>@color/light_blue</item>
+        <item>@color/yellow</item>
+        <item>@color/orange</item>
+    </integer-array>
 
 </resources>

@@ -13,7 +13,7 @@
 
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.help.HelpViewModel"/>
+            type="com.phuocbui.mvvm.ui.help.HelpViewModel"/>
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,7 +26,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"
-            style="@style/Widget.A2M.TextInputLayout"
+            style="@style/Widget.MVVMDemo.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_large"
@@ -34,14 +34,14 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txt_input"
-                style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                style="@style/TextAppearance.MVVMDemo.TextInputLayout.TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@={observable}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.A2M.Button"
+            style="@style/Widget.MVVMDemo.Button"
             android:layout_width="@dimen/login_button_width"
             android:layout_height="wrap_content"
             android:enabled="@{observable.get() != null &amp;&amp; !observable.get().trim().isEmpty()}"

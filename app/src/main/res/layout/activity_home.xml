@@ -4,7 +4,7 @@
 
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.home.HomeViewModel" />
+            type="com.phuocbui.mvvm.ui.home.HomeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -21,7 +21,7 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                style="@style/Widget.A2M.Toolbar"
+                style="@style/Widget.MVVMDemo.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
 
@@ -38,7 +38,7 @@
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/navigation"
-            style="@style/Widget.A2M.BottomNav"
+            style="@style/Widget.MVVMDemo.BottomNav"
             android:layout_width="0dp"
             android:layout_height="@dimen/bottom_tab_height"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -47,7 +47,7 @@
             app:layout_insetEdge="bottom"
             app:menu="@menu/navigation" />
 
-        <com.redhelmet.alert2me.ui.widget.FadingSnackbar
+        <com.phuocbui.mvvm.ui.widget.FadingSnackbar
             android:id="@+id/snackbar"
             android:layout_width="@dimen/snackbar_width"
             android:layout_height="wrap_content"

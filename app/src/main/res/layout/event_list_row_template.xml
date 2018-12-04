@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.event.EventItemViewModel" />
+            type="com.phuocbui.mvvm.ui.event.EventItemViewModel" />
     </data>
 
     <FrameLayout
@@ -31,18 +31,18 @@
             android:background="@drawable/bg_event_item"
             android:padding="@dimen/margin_small">
 
-            <com.redhelmet.alert2me.ui.widget.EventIcon
+            <ImageView
                 android:id="@+id/img_event_icon"
                 android:layout_width="@dimen/event_icon_width"
                 android:layout_height="@dimen/event_icon_width"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                binding:event="@{viewModel.event}" />
+                android:src="@mipmap/ic_launcher"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_event_name"
-                style="@style/TextAppearance.A2M.Title"
+                style="@style/TextAppearance.MVVMDemo.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -58,7 +58,7 @@
 
             <TextView
                 android:id="@+id/list_event_location"
-                style="@style/TextAppearance.A2M.Event.Body"
+                style="@style/TextAppearance.MVVMDemo.Event.Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -71,7 +71,7 @@
 
             <TextView
                 android:id="@+id/tv_event_time_ago"
-                style="@style/TextAppearance.A2M.Event.Body"
+                style="@style/TextAppearance.MVVMDemo.Event.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -84,7 +84,7 @@
 
             <TextView
                 android:id="@+id/tv_event_distance"
-                style="@style/TextAppearance.A2M.Event.Body"
+                style="@style/TextAppearance.MVVMDemo.Event.Body"
                 android:layout_width="@dimen/event_distance_text_width"
                 android:layout_height="wrap_content"
                 android:gravity="center"

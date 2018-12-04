@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.watchzone.WatchZoneViewModel" />
+            type="com.phuocbui.mvvm.ui.watchzone.WatchZoneViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +19,7 @@
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/backgroundColor"
+            android:background="?android:attr/colorBackground"
             android:paddingStart="@dimen/margin_normal"
             android:paddingEnd="@dimen/margin_normal"
             android:paddingBottom="@dimen/margin_small">
@@ -36,7 +36,7 @@
 
             <TextView
                 android:id="@+id/txt_heading"
-                style="@style/TextAppearance.A2M.Title"
+                style="@style/TextAppearance.MVVMDemo.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_micro"
@@ -48,7 +48,7 @@
 
             <TextView
                 android:id="@+id/textSubHeading"
-                style="@style/TextAppearance.A2M.Body"
+                style="@style/TextAppearance.MVVMDemo.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
@@ -68,10 +68,10 @@
 
         <TextView
             android:id="@+id/wz_info"
-            style="@style/TextAppearance.A2M.Body"
+            style="@style/TextAppearance.MVVMDemo.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
+            android:background="@color/white"
             android:paddingStart="@dimen/margin_normal"
             android:paddingTop="@dimen/spacing_micro"
             android:paddingEnd="@dimen/margin_normal"

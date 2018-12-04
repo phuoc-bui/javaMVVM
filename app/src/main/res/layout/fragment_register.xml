@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.signin.RegisterViewModel" />
+            type="com.phuocbui.mvvm.ui.signin.RegisterViewModel" />
     </data>
 
     <ScrollView
@@ -23,7 +23,7 @@
 
             <TextView
                 android:id="@+id/title"
-                style="@style/TextAppearance.A2M.Headline"
+                style="@style/TextAppearance.MVVMDemo.Headline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
@@ -34,7 +34,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"
-                style="@style/Widget.A2M.TextInputLayout"
+                style="@style/Widget.MVVMDemo.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
@@ -44,7 +44,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_input_email"
-                    style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                    style="@style/TextAppearance.MVVMDemo.TextInputLayout.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_login_email"
@@ -54,7 +54,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout1"
-                style="@style/Widget.A2M.TextInputLayout"
+                style="@style/Widget.MVVMDemo.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
@@ -63,7 +63,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_input_first_name"
-                    style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                    style="@style/TextAppearance.MVVMDemo.TextInputLayout.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_register_username"
@@ -72,7 +72,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout2"
-                style="@style/Widget.A2M.TextInputLayout"
+                style="@style/Widget.MVVMDemo.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
@@ -81,7 +81,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_input_surname"
-                    style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                    style="@style/TextAppearance.MVVMDemo.TextInputLayout.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_register_username"
@@ -90,7 +90,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout3"
-                style="@style/Widget.A2M.TextInputLayout"
+                style="@style/Widget.MVVMDemo.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
@@ -99,7 +99,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_input_postcode"
-                    style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                    style="@style/TextAppearance.MVVMDemo.TextInputLayout.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_register_postcode"
@@ -109,7 +109,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout4"
-                style="@style/Widget.A2M.TextInputLayout"
+                style="@style/Widget.MVVMDemo.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
@@ -119,7 +119,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_input_password"
-                    style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                    style="@style/TextAppearance.MVVMDemo.TextInputLayout.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_login_password"
@@ -129,7 +129,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout5"
-                style="@style/Widget.A2M.TextInputLayout"
+                style="@style/Widget.MVVMDemo.TextInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
@@ -140,7 +140,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_input_repeat_password"
-                    style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                    style="@style/TextAppearance.MVVMDemo.TextInputLayout.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_login_password"
@@ -150,7 +150,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_register"
-                style="@style/Widget.A2M.Button"
+                style="@style/Widget.MVVMDemo.Button"
                 android:layout_width="@dimen/login_button_width"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
@@ -163,7 +163,7 @@
 
             <TextView
                 android:id="@+id/txt_have_account"
-                style="@style/TextAppearance.A2M.Body"
+                style="@style/TextAppearance.MVVMDemo.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
@@ -175,7 +175,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_sign_in"
-                style="@style/Widget.A2M.Button.TextButton"
+                style="@style/Widget.MVVMDemo.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> viewModel.onSignInClick()}"

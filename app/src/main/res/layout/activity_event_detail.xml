@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.eventdetail.EventDetailViewModel" />
+            type="com.phuocbui.mvvm.ui.eventdetail.EventDetailViewModel" />
     </data>
 
     <LinearLayout
@@ -20,12 +20,11 @@
             android:id="@+id/appBarLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.PopupOverlay"
             app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
-                style="@style/Widget.A2M.Toolbar"
+                style="@style/Widget.MVVMDemo.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
 
@@ -49,24 +48,23 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_top_rounded_white"
                 android:padding="@dimen/margin_normal"
-                android:backgroundTint="@color/colorWhite"
+                android:backgroundTint="@color/white"
                 app:layout_constraintEnd_toEndOf="@+id/end_guideline"
                 app:layout_constraintStart_toStartOf="@+id/start_guideline"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:targetApi="lollipop">
 
-                <com.redhelmet.alert2me.ui.widget.EventIcon
+                <ImageView
                     android:id="@+id/img_event_icon"
                     android:layout_width="@dimen/event_icon_width"
                     android:layout_height="@dimen/event_icon_width"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    binding:event="@{viewModel.event}" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/event_type"
-                    style="@style/TextAppearance.A2M.Title"
+                    style="@style/TextAppearance.MVVMDemo.Title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_normal"
@@ -77,7 +75,7 @@
 
                 <TextView
                     android:id="@+id/event_location"
-                    style="@style/TextAppearance.A2M.Event.Body"
+                    style="@style/TextAppearance.MVVMDemo.Event.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_normal"
@@ -104,19 +102,10 @@
                     android:descendantFocusability="blocksDescendants"
                     android:id="@+id/content_view">
 
-                    <fragment
-                        android:id="@+id/detail_map"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        app:layout_constraintTop_toTopOf="parent" />
-
                     <TextView
-                        style="@style/TextAppearance.A2M.Body"
+                        style="@style/TextAppearance.MVVMDemo.Body"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="@id/detail_map"
-                        app:layout_constraintEnd_toEndOf="@id/detail_map"
                         android:layout_marginEnd="@dimen/margin_large"
                         tools:text="1234.5 km"
                         android:textStyle="bold"
@@ -128,7 +117,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="false"
-                        app:layout_constraintTop_toBottomOf="@id/detail_map"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         binding:adapter="@{viewModel.sectionAdapter}" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -145,7 +133,7 @@
 
                 <TextView
                     android:id="@+id/time_ago"
-                    style="@style/TextAppearance.A2M.Event.Body"
+                    style="@style/TextAppearance.MVVMDemo.Event.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

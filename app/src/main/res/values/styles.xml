@@ -1,43 +1,53 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.A2M" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
-        <item name="colorPrimaryDark">@color/navigationnarStatusColor</item>
-        <item name="colorPrimary">@color/navigationnarHeaderColor</item>
-        <item name="colorAccent">@color/colorPink</item>
-        <item name="android:colorBackground">@color/navigationnarHeaderColor</item>
+    <style name="Theme.MVVMDemo" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimaryDark">@color/indigo_dark</item>
+        <item name="colorPrimary">@color/indigo</item>
+        <item name="colorAccent">@color/pink</item>
+        <item name="android:colorBackground">@color/light_grey</item>
         <item name="colorBackgroundFloating">@color/white</item>
         <item name="colorControlActivated">?attr/colorAccent</item>
-        <item name="android:textColorPrimary">@color/navigationnarTextTintColor</item>
-        <item name="android:textColorSecondary">@color/navigationnarTextTintColor</item>
-        <item name="android:dialogTheme">@style/Theme.A2M.Dialog</item>
+        <item name="android:textColorPrimary">@color/light_grey</item>
+        <item name="android:textColorSecondary">@color/grey_800</item>
+        <item name="android:dialogTheme">@style/Theme.MVVMDemo.Dialog</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 
-        <style name="Theme.A2M.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-            <item name="colorAccent">#003f5e</item>
-        </style>
+    <style name="Theme.MVVMDemo.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
-    <style name="Widget.A2M.Toolbar" parent="Widget.AppCompat.Toolbar">
+    <style name="Theme.MVVMDemo.LightNav" parent="Theme.MVVMDemo.NoActionBar" />
+
+    <style name="Theme.MVVMDemo.Launcher" parent="@style/Theme.MVVMDemo.LightNav">
+        <item name="android:windowBackground">@color/indigo</item>
+    </style>
+
+    <style name="Theme.MVVMDemo.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">#003f5e</item>
+    </style>
+
+    <style name="Widget.MVVMDemo.Toolbar" parent="Widget.AppCompat.Toolbar">
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="titleTextAppearance">@style/TextAppearance.A2M.Toolbar</item>
-        <item name="android:background">@color/navigationnarHeaderColor</item>
+        <item name="titleTextAppearance">@style/TextAppearance.MVVMDemo.Toolbar</item>
+        <item name="android:background">?attr/colorPrimary</item>
     </style>
 
-    <style name="Widget.A2M.TabLayout" parent="Widget.MaterialComponents.TabLayout">
+    <style name="Widget.MVVMDemo.TabLayout" parent="Widget.MaterialComponents.TabLayout">
         <item name="android:background">?android:attr/colorBackground</item>
-        <item name="tabTextAppearance">@style/TextAppearance.A2M.TabItem.Title</item>
+        <item name="tabTextAppearance">@style/TextAppearance.MVVMDemo.TabItem.Title</item>
         <item name="tabSelectedTextColor">?attr/colorAccent</item>
     </style>
 
-    <style name="Widget.A2M.TabLayout.Bottom" parent="Widget.MaterialComponents.TabLayout">
+    <style name="Widget.MVVMDemo.TabLayout.Bottom" parent="Widget.MaterialComponents.TabLayout">
         <item name="android:background">@drawable/tab_black_top_border</item>
-        <item name="tabTextAppearance">@style/TextAppearance.A2M.TabItem.Subtitle</item>
+        <item name="tabTextAppearance">@style/TextAppearance.MVVMDemo.TabItem.Subtitle</item>
         <item name="tabSelectedTextColor">?attr/colorAccent</item>
         <item name="tabIndicatorHeight">0dp</item>
     </style>
 
-    <style name="Widget.A2M.BottomNav" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+    <style name="Widget.MVVMDemo.BottomNav" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="itemIconTint">@color/bottom_nav_item</item>
         <item name="itemTextColor">@color/bottom_nav_item</item>
         <!--<item name="itemTextAppearanceActive">@style/TextAppearance.A2M.BottomNavigationView.Active</item>-->
@@ -46,8 +56,9 @@
         <!--<item name="android:theme">@style/ThemeOverlay.MaterialComponents.Dark</item>-->
     </style>
 
-    <style name="Widget.A2M.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="hintTextAppearance">@style/TextAppearance.A2M.TextInputLayout.HintText</item>
+    <style name="Widget.MVVMDemo.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextAppearance">@style/TextAppearance.MVVMDemo.TextInputLayout.HintText
+        </item>
         <item name="android:paddingBottom">8dp</item>
         <item name="boxCornerRadiusBottomEnd">20dp</item>
         <item name="boxCornerRadiusBottomStart">20dp</item>
@@ -55,96 +66,80 @@
         <item name="boxCornerRadiusTopStart">20dp</item>
     </style>
 
-    <style name="Widget.A2M.Button" parent="Widget.MaterialComponents.Button">
+    <style name="Widget.MVVMDemo.Button" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">@android:color/white</item>
         <item name="cornerRadius">20dp</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="Widget.A2M.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="Widget.MVVMDemo.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">?android:attr/colorAccent</item>
     </style>
 
-    <style name="TextAppearance.A2M.Toolbar" parent="TextAppearance.MaterialComponents.Subtitle2">
+    <style name="TextAppearance.MVVMDemo.Toolbar" parent="TextAppearance.MaterialComponents.Subtitle2">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
-    <style name="TextAppearance.A2M.BottomNavigationView" parent="@style/Widget.MaterialComponents.BottomNavigationView.Colored">
-        <item name="android:textColor">@color/bottom_nav_item</item>
-    </style>
-
-    <style name="TextAppearance.A2M.BottomNavigationView.Active">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="TextAppearance.A2M.FadingSnackbarAction" parent="@style/TextAppearance.AppCompat.Button">
+    <style name="TextAppearance.MVVMDemo.FadingSnackbarAction" parent="@style/TextAppearance.AppCompat.Button">
         <item name="android:textColor">@color/teal</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="TextAppearance.A2M.CollapsibleCard" parent="@style/TextAppearance.AppCompat.Title">
+    <style name="TextAppearance.MVVMDemo.CollapsibleCard" parent="@style/TextAppearance.AppCompat.Title">
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="TextAppearance.A2M.TextInputLayout.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
+    <style name="TextAppearance.MVVMDemo.TextInputLayout.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
         <item name="android:textColor">?attr/colorAccent</item>
     </style>
 
-    <style name="TextAppearance.A2M.TextInputLayout.TextInputEditText" parent="TextAppearance.MaterialComponents.Subtitle2">
+    <style name="TextAppearance.MVVMDemo.TextInputLayout.TextInputEditText" parent="TextAppearance.MaterialComponents.Subtitle2">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:drawablePadding">8dp</item>
     </style>
 
-    <style name="TextAppearance.A2M.Headline" parent="TextAppearance.MaterialComponents.Headline5">
+    <style name="TextAppearance.MVVMDemo.Headline" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="textAllCaps">true</item>
         <item name="android:textColor">?attr/colorAccent</item>
     </style>
 
-    <style name="TextAppearance.A2M.TabItem.Title" parent="TextAppearance.MaterialComponents.Tab">
+    <style name="TextAppearance.MVVMDemo.TabItem.Title" parent="TextAppearance.MaterialComponents.Tab">
         <item name="android:textSize">18sp</item>
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="TextAppearance.A2M.TabItem.Subtitle" parent="TextAppearance.MaterialComponents.Tab">
+    <style name="TextAppearance.MVVMDemo.TabItem.Subtitle" parent="TextAppearance.MaterialComponents.Tab">
         <item name="android:textSize">10sp</item>
         <item name="textAllCaps">false</item>
     </style>
 
-    <style name="TextAppearance.A2M.Title" parent="TextAppearance.MaterialComponents.Subtitle1">
+    <style name="TextAppearance.MVVMDemo.Title" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="TextAppearance.A2M.SubTitle" parent="TextAppearance.MaterialComponents.Subtitle2">
+    <style name="TextAppearance.MVVMDemo.SubTitle" parent="TextAppearance.MaterialComponents.Subtitle2">
 
     </style>
 
-    <style name="TextAppearance.A2M.Body" parent="TextAppearance.MaterialComponents.Body2">
-        <item name="android:textColor">@color/textColorGrey</item>
+    <style name="TextAppearance.MVVMDemo.Body" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/grey_800</item>
     </style>
 
-    <style name="TextAppearance.A2M.Body.Link" parent="TextAppearance.A2M.Body">
-        <item name="android:textColor">@color/swipeoption_blue</item>
+    <style name="TextAppearance.MVVMDemo.Body.Link" parent="TextAppearance.MVVMDemo.Body">
+        <item name="android:textColor">@color/indigo_dark</item>
     </style>
 
-    <style name="TextAppearance.A2M.Event.Body" parent="TextAppearance.MaterialComponents.Body2">
-        <item name="android:textColor">@color/colorGrey</item>
+    <style name="TextAppearance.MVVMDemo.Event.Body" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/grey_600</item>
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="Widget.A2M.SwitchCompatStyle" parent="">
+    <style name="Widget.MVVMDemo.SwitchCompatStyle" parent="">
         <item name="thumbTint">@color/switch_color</item>
         <item name="trackTint">@color/switch_color</item>
     </style>
 
-    <style name="FilePickerTheme" parent="Theme.A2M">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
 </resources>

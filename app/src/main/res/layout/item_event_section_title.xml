@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.eventdetail.ItemSectionViewModel" />
+            type="com.phuocbui.mvvm.ui.eventdetail.ItemSectionViewModel" />
     </data>
 
     <TextView
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/margin_normal"
         android:text="@{viewModel.title}"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/white"
         binding:top_rounded_background_color="@{viewModel.eventColor}"
         tools:text="London Terror Attack" />
 </layout>

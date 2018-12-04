@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/tools">
+    xmlns:bind="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.watchzone.WatchZoneViewModel" />
+            type="com.phuocbui.mvvm.ui.watchzone.WatchZoneViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,7 +19,7 @@
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/backgroundColor"
+            android:background="?android:attr/colorBackground"
             android:paddingStart="@dimen/margin_normal"
             android:paddingEnd="@dimen/margin_normal"
             android:paddingBottom="@dimen/margin_small">
@@ -35,7 +36,7 @@
 
             <TextView
                 android:id="@+id/txt_heading"
-                style="@style/TextAppearance.A2M.Title"
+                style="@style/TextAppearance.MVVMDemo.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_micro"
@@ -47,7 +48,7 @@
 
             <TextView
                 android:id="@+id/textSubHeading"
-                style="@style/TextAppearance.A2M.Body"
+                style="@style/TextAppearance.MVVMDemo.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
@@ -61,7 +62,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/backgroundColor"
+            android:background="?android:attr/colorBackground"
             android:animateLayoutChanges="true"
             app:layout_constraintTop_toBottomOf="@id/header">
 
@@ -88,7 +89,7 @@
 
             <TextView
                 android:id="@+id/sw_mobile_wz_title"
-                style="@style/TextAppearance.A2M.Body"
+                style="@style/TextAppearance.MVVMDemo.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/spacing_normal"
@@ -102,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="@={viewModel.proximityEnable}"
-                android:theme="@style/Widget.A2M.SwitchCompatStyle"
+                android:theme="@style/Widget.MVVMDemo.SwitchCompatStyle"
                 app:layout_constraintBottom_toBottomOf="@+id/sw_mobile_wz_title"
                 app:layout_constraintEnd_toEndOf="@+id/guideline_end"
                 app:layout_constraintTop_toTopOf="@+id/sw_mobile_wz_title" />
@@ -116,7 +117,7 @@
 
             <TextView
                 android:id="@+id/mobileRadius"
-                style="@style/TextAppearance.A2M.Body"
+                style="@style/TextAppearance.MVVMDemo.Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
@@ -129,11 +130,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_micro"
-                app:dsb_indicatorColor="@color/colorDarkRed"
+                app:dsb_indicatorColor="@color/red_dark"
                 app:dsb_indicatorElevation="0dp"
                 app:dsb_max="100"
                 app:dsb_min="1"
-                app:dsb_progressColor="@color/colorDarkRed"
+                app:dsb_progressColor="@color/red_dark"
                 bind:seekBarProgress="@={viewModel.mobileRadius}"
                 app:layout_constraintEnd_toEndOf="@+id/guideline_end"
                 app:layout_constraintStart_toStartOf="@+id/guideline_start"
@@ -160,7 +161,7 @@
                 android:id="@+id/tv_notification_sound_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.A2M.Title"
+                style="@style/TextAppearance.MVVMDemo.Title"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:layout_marginEnd="@dimen/margin_normal"
                 android:text="@string/notification_sound"
@@ -170,13 +171,13 @@
 
             <TextView
                 android:id="@+id/tv_notification_sound_value"
-                style="@style/TextAppearance.A2M.Body"
+                style="@style/TextAppearance.MVVMDemo.Body.Link"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:layout_marginEnd="@dimen/margin_normal"
+                tools:text="default"
                 bind:ringtoneUri="@{viewModel.mobileRingSound}"
-                android:textColor="@color/swipeoption_blue"
                 app:layout_constraintStart_toEndOf="@id/iv_notification_sound"
                 app:layout_constraintEnd_toStartOf="@id/iv_right_arrow_1"
                 app:layout_constraintTop_toBottomOf="@+id/tv_notification_sound_title" />
@@ -209,7 +210,7 @@
 
             <TextView
                 android:id="@+id/tv_notification_option_title"
-                style="@style/TextAppearance.A2M.Title"
+                style="@style/TextAppearance.MVVMDemo.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/notification_option"

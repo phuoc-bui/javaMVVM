@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.signin.LoginViewModel" />
+            type="com.phuocbui.mvvm.ui.signin.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -29,7 +29,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"
-            style="@style/Widget.A2M.TextInputLayout"
+            style="@style/Widget.MVVMDemo.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
@@ -39,7 +39,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txt_input_email"
-                style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                style="@style/TextAppearance.MVVMDemo.TextInputLayout.TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_login_email"
@@ -49,7 +49,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout2"
-            style="@style/Widget.A2M.TextInputLayout"
+            style="@style/Widget.MVVMDemo.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -59,7 +59,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/txt_input_password"
-                style="@style/TextAppearance.A2M.TextInputLayout.TextInputEditText"
+                style="@style/TextAppearance.MVVMDemo.TextInputLayout.TextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_login_password"
@@ -69,7 +69,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_login"
-            style="@style/Widget.A2M.Button"
+            style="@style/Widget.MVVMDemo.Button"
             android:layout_width="@dimen/login_button_width"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -82,7 +82,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_forgot_password"
-            style="@style/Widget.A2M.Button.TextButton"
+            style="@style/Widget.MVVMDemo.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{() -> viewModel.forgotPassword()}"
@@ -93,7 +93,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_back"
-            style="@style/Widget.A2M.Button.TextButton"
+            style="@style/Widget.MVVMDemo.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAllCaps="false"

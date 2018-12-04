@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.help.HelpViewModel" />
+            type="com.phuocbui.mvvm.ui.help.HelpViewModel" />
     </data>
 
     <ScrollView
@@ -29,7 +29,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <com.redhelmet.alert2me.ui.widget.HelpItemView
+            <com.phuocbui.mvvm.ui.widget.HelpItemView
                 android:id="@+id/item_help_profile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/iv_logo"
                 app:title="@string/help_profile_title" />
 
-            <com.redhelmet.alert2me.ui.widget.HelpItemView
+            <com.phuocbui.mvvm.ui.widget.HelpItemView
                 android:id="@+id/item_help_support"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/item_help_profile"
                 app:title="@string/help_support_title" />
 
-            <com.redhelmet.alert2me.ui.widget.HelpItemView
+            <com.phuocbui.mvvm.ui.widget.HelpItemView
                 android:id="@+id/item_help_legal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/item_help_support"
                 app:title="@string/help_legal_title" />
 
-            <com.redhelmet.alert2me.ui.widget.HelpItemView
+            <com.phuocbui.mvvm.ui.widget.HelpItemView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/item_help_version"
@@ -77,7 +77,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/item_help_legal"
                 app:title="@string/help_version" />
 
-            <com.redhelmet.alert2me.ui.widget.HelpItemView
+            <com.phuocbui.mvvm.ui.widget.HelpItemView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/item_help_code"

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.watchzone.ItemStaticWZViewModel" />
+            type="com.phuocbui.mvvm.ui.watchzone.ItemStaticWZViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,14 +18,14 @@
             android:id="@+id/background_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/colorRed"
+            android:background="@color/red"
             app:layout_constraintBottom_toBottomOf="@id/foreground_view"
             app:layout_constraintTop_toTopOf="@id/foreground_view">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:tint="@color/colorWhite"
+                android:tint="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,7 @@
             android:id="@+id/foreground_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
+            android:background="@color/white"
             android:paddingStart="@dimen/margin_normal"
             android:paddingTop="@dimen/margin_small"
             android:paddingEnd="@dimen/margin_normal"
@@ -45,7 +45,7 @@
 
         <TextView
             android:id="@+id/tv_wz_name"
-            style="@style/TextAppearance.A2M.Body"
+            style="@style/TextAppearance.MVVMDemo.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/spacing_normal"
@@ -70,7 +70,7 @@
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/sw_wz_enabled"
-            style="@style/Widget.A2M.SwitchCompatStyle"
+            style="@style/Widget.MVVMDemo.SwitchCompatStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="@{viewModel.wzEnable}"

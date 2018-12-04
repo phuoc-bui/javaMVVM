@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.redhelmet.alert2me.ui.watchzone.WatchZoneViewModel"/>
+            type="com.phuocbui.mvvm.ui.watchzone.WatchZoneViewModel"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -19,7 +19,7 @@
             android:layout_height="match_parent">
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
-                style="@style/Widget.A2M.TabLayout"
+                style="@style/Widget.MVVMDemo.TabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </androidx.viewpager.widget.ViewPager>
@@ -33,7 +33,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="@dimen/margin_normal"
             android:layout_marginEnd="@dimen/margin_normal"
-            app:backgroundTint="@color/colorRed"
+            app:backgroundTint="@color/red"
             app:fabSize="auto"
             android:onClick="@{v -> viewModel.onAddWatchZoneClick()}"
             app:srcCompat="@drawable/ic_add_black_24dp" />
