@@ -63,7 +63,6 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         configWindow();
-//        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
         binder = DataBindingUtil.setContentView(this, getLayoutId());
         bundle = getIntent().getBundleExtra(BUNDLE_EXTRA);
         loadingDialog = new LoadingDialog();

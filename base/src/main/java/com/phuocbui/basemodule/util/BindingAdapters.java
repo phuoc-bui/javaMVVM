@@ -1,9 +1,7 @@
 package com.phuocbui.basemodule.util;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.GradientDrawable;
 import android.text.util.Linkify;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,16 +28,16 @@ public class BindingAdapters {
         }
     }
 
-    @BindingAdapter(value = {"binding:adapter", "binding:itemClick", "binding:itemLongClick"}, requireAll = false)
+    @BindingAdapter(value = {"bind:adapter", "bind:itemClick", "bind:itemLongClick"}, requireAll = false)
     public static <T extends BaseRecyclerViewAdapter> void setRecyclerViewAdapter(RecyclerView recyclerView, T adapter,
-                                                                                  LambdaInterface.BiFunction<View, Integer, Void> itemClick,
-                                                                                  LambdaInterface.BiFunction<View, Integer, Void> itemLongClick) {
+                                                                                  BaseRecyclerViewAdapter.ItemClickListener itemClick,
+                                                                                  BaseRecyclerViewAdapter.ItemLongClickListener itemLongClick) {
         recyclerView.setAdapter(adapter);
-        if (itemClick != null) adapter.setItemClickListener(itemClick::apply);
-        if (itemLongClick != null) adapter.setItemLongClickListener(itemLongClick::apply);
+        if (itemClick != null) adapter.setItemClickListener(itemClick);
+        if (itemLongClick != null) adapter.setItemLongClickListener(itemLongClick);
     }
 
-    @BindingAdapter("binding:onRefresh")
+    @BindingAdapter("bind:onRefresh")
     public static void onSwipeToRefreshFunction(SwipeRefreshLayout refreshLayout, LambdaInterface.Function runnable) {
         refreshLayout.setOnRefreshListener(runnable::apply);
     }
@@ -47,30 +45,6 @@ public class BindingAdapters {
     @BindingAdapter("android:src")
     public static void setImageViewResource(ImageView imageView, int resource) {
         imageView.setImageResource(resource);
-    }
-
-    @BindingAdapter("binding:rounded_background_stroke_color")
-    public static void setRoundedBackgroundStrokeColor(View view, String color) {
-        if (color == null || color.isEmpty()) return;
-        int eventColor = Color.parseColor(color);
-        GradientDrawable drawable = DrawableUtils.createRoundedBackgroundStroke((Activity) view.getContext(), eventColor);
-        view.setBackground(drawable);
-    }
-
-    @BindingAdapter("binding:rounded_background_color")
-    public static void setRoundedBackgroundColor(View view, String color) {
-        if (color == null || color.isEmpty()) return;
-        int eventColor = Color.parseColor(color);
-        GradientDrawable drawable = DrawableUtils.createRoundedBackground((Activity) view.getContext(), eventColor);
-        view.setBackground(drawable);
-    }
-
-    @BindingAdapter("binding:top_rounded_background_color")
-    public static void setTopRoundedBackgroundColor(View view, String color) {
-        if (color == null || color.isEmpty()) return;
-        int eventColor = Color.parseColor(color);
-        GradientDrawable drawable = DrawableUtils.createTopRoundedBackground((Activity) view.getContext(), eventColor);
-        view.setBackground(drawable);
     }
 
     @BindingAdapter("android:textColor")
@@ -93,8 +67,7 @@ public class BindingAdapters {
     }
 
     @BindingAdapter("android:hint")
-    public static void setHintWithId(TextInputLayout inputLayout, Integer stringId) {
-        if (stringId == null) return;
+    public static void setHintWithId(TextInputLayout inputLayout, int stringId) {
         String str = inputLayout.getContext().getString(stringId);
         inputLayout.setHint(str);
     }

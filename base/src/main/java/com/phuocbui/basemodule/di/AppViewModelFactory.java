@@ -12,11 +12,11 @@ import javax.inject.Provider;
 /**
  * ViewModelFactory which uses Dagger to create the instances.
  */
-public class A2MViewModelFactory implements ViewModelProvider.Factory {
+public class AppViewModelFactory implements ViewModelProvider.Factory {
     private Map<Class<? extends ViewModel>, Provider<ViewModel>> creators;
 
     @Inject
-    public A2MViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
+    public AppViewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> creators) {
         this.creators = creators;
     }
 

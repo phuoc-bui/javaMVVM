@@ -4,8 +4,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.phuocbui.basemodule.BR;
+
 import java.util.Collection;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -60,7 +63,10 @@ public abstract class BaseRecyclerViewAdapter<IVM> extends RecyclerView.Adapter<
         return 0;
     }
 
-    public abstract int getViewModelVariable();
+    @IdRes
+    public int getViewModelVariable() {
+        return BR.viewModel;
+    }
 
     /**
      * Override it if you are using custom ViewHolder (must extend from ItemViewHolder)
@@ -111,7 +117,7 @@ public abstract class BaseRecyclerViewAdapter<IVM> extends RecyclerView.Adapter<
     public static class ItemViewHolder<IVM> extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         private IVM viewModel;
-        public ViewDataBinding binder;
+        ViewDataBinding binder;
         private ItemClickListener itemClickListener;
         private ItemLongClickListener itemLongClickListener;
 
@@ -122,19 +128,11 @@ public abstract class BaseRecyclerViewAdapter<IVM> extends RecyclerView.Adapter<
             binder.getRoot().setOnLongClickListener(this);
         }
 
-        public IVM getViewModel() {
-            return viewModel;
-        }
-
-        public void setViewModel(IVM viewModel) {
-            this.viewModel = viewModel;
-        }
-
-        public void setItemClickListener(ItemClickListener itemClickListener) {
+        void setItemClickListener(ItemClickListener itemClickListener) {
             this.itemClickListener = itemClickListener;
         }
 
-        public void setItemLongClickListener(ItemLongClickListener itemLongClickListener) {
+        void setItemLongClickListener(ItemLongClickListener itemLongClickListener) {
             this.itemLongClickListener = itemLongClickListener;
         }
 

@@ -6,9 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.phuocbui.basemodule.BR;
 import com.phuocbui.basemodule.global.NavigationItem;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +33,10 @@ public abstract class BaseFragment<VM extends BaseViewModel, VDB extends ViewDat
     @LayoutRes
     protected abstract int getLayoutId();
 
-    protected abstract int getBindingVariable();
+    @IdRes
+    protected int getBindingVariable() {
+        return BR.viewModel;
+    }
 
     private BaseActivity activity;
 
