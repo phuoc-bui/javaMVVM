@@ -92,4 +92,10 @@
         This is the name that users will see when interacting with this channel.
         It should describe the category of notifications that will be sent through this channel
      -->
+
+    <!--Network error-->
+    <string name="no_internet">No Internet Connection</string>
+    <string name="time_out">Unable to connect to the server.</string>
+    <string name="session_expired">Your session is expired.</string>
+
 </resources>

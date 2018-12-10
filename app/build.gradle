@@ -60,12 +60,12 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Android support
-    implementation 'androidx.multidex:multidex:2.0.0'
+    // Android support
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
+    implementation "com.google.android.material:material:$rootProject.materialVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$rootProject.lifecycleVersion"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
-    api 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
 
     //database
     implementation 'androidx.room:room-runtime:2.1.0-alpha02'
@@ -88,6 +88,10 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
     annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
+
+    implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
+    implementation "org.jetbrains:annotations:$rootProject.jetbrainsAnnotationsVersion"
+    implementation "com.jakewharton.threetenabp:threetenabp:$rootProject.threetenabpVersion"
 
     // Image loader
     implementation "com.squareup.picasso:picasso:2.71828"

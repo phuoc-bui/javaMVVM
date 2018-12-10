@@ -3,12 +3,12 @@ package com.phuocbui.mvvm.ui.base;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.phuocbui.basemodule.R;
-import com.phuocbui.basemodule.data.remote.NetworkError;
-import com.phuocbui.basemodule.global.Event;
-import com.phuocbui.basemodule.global.NavigationItem;
-import com.phuocbui.basemodule.global.RetrofitException;
-import com.phuocbui.basemodule.global.RxProperty;
+import com.phuocbui.mvvm.R;
+import com.phuocbui.mvvm.data.remote.NetworkError;
+import com.phuocbui.mvvm.global.Event;
+import com.phuocbui.mvvm.global.NavigationItem;
+import com.phuocbui.mvvm.global.RetrofitException;
+import com.phuocbui.mvvm.global.RxProperty;
 
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
