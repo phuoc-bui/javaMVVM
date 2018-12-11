@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.phuocbui.mvvm.R;
+import com.phuocbui.mvvm.data.DataManager;
+import com.phuocbui.mvvm.data.PreferenceStorage;
 import com.phuocbui.mvvm.data.remote.NetworkError;
 import com.phuocbui.mvvm.global.Event;
 import com.phuocbui.mvvm.global.NavigationItem;
+import com.phuocbui.mvvm.global.ResourceProvider;
 import com.phuocbui.mvvm.global.RetrofitException;
 import com.phuocbui.mvvm.global.RxProperty;
 
@@ -22,8 +25,44 @@ public class BaseViewModel extends ViewModel {
 
     protected CompositeDisposable disposeBag = new CompositeDisposable();
 
-    protected RxProperty<Boolean> isLoading = new RxProperty<>();
+    public RxProperty<Boolean> isLoading = new RxProperty<>();
     MutableLiveData<Event<NavigationItem>> navigationEvent = new MutableLiveData<>();
+
+    protected DataManager dataManager;
+
+    protected PreferenceStorage preferenceStorage;
+
+    protected ResourceProvider resourceProvider;
+
+    public BaseViewModel() {
+        this(null, null, null);
+    }
+
+    public BaseViewModel(DataManager dataManager) {
+        this(dataManager, null, null);
+    }
+
+    public BaseViewModel(PreferenceStorage pref) {
+        this(null, pref, null);
+    }
+
+    public BaseViewModel(DataManager dataManager, ResourceProvider resourceProvider) {
+        this(dataManager, null, resourceProvider);
+    }
+
+    public BaseViewModel(PreferenceStorage pref, ResourceProvider resourceProvider) {
+        this(null, pref, resourceProvider);
+    }
+
+    public BaseViewModel(DataManager dataManager, PreferenceStorage pref) {
+        this(dataManager, pref, null);
+    }
+
+    public BaseViewModel(DataManager dataManager, PreferenceStorage pref, ResourceProvider resourceProvider) {
+        this.dataManager = dataManager;
+        this.preferenceStorage = pref;
+        this.resourceProvider = resourceProvider;
+    }
 
     protected void showLoadingDialog(boolean show) {
         NavigationItem item = new NavigationItem(show ? NavigationItem.SHOW_LOADING_DIALOG : NavigationItem.DISMISS_LOADING_DIALOG);

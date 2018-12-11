@@ -27,13 +27,13 @@ public class ItemStaticWZViewModel extends BaseViewModel {
     }
 
     public void onCheckChanged(boolean checked) {
-        isLoading.set(true);
-        disposeBag.add(dataManager.enableWatchZone(watchZone.getId(), checked)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(o -> isLoading.set(false), e -> {
-                    isLoading.set(false);
-                    handleError(e);
-                }));
+//        isLoading.set(true);
+//        disposeBag.add(dataManager.enableWatchZone(watchZone.getId(), checked)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(o -> isLoading.set(false), e -> {
+//                    isLoading.set(false);
+//                    handleError(e);
+//                }));
     }
 
     public void onItemClick() {

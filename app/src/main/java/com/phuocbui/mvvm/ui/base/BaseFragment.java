@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.phuocbui.basemodule.global.NavigationItem;
+import com.phuocbui.mvvm.global.NavigationItem;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.LayoutRes;

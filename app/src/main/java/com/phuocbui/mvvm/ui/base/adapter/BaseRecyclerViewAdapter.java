@@ -4,8 +4,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.phuocbui.mvvm.BR;
+
 import java.util.Collection;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -60,7 +63,10 @@ public abstract class BaseRecyclerViewAdapter<IVM> extends RecyclerView.Adapter<
         return 0;
     }
 
-    public abstract int getViewModelVariable();
+    @IdRes
+    public int getViewModelVariable(){
+        return BR.viewModel;
+    }
 
     /**
      * Override it if you are using custom ViewHolder (must extend from ItemViewHolder)

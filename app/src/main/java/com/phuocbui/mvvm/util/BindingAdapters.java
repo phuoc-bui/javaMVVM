@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.phuocbui.mvvm.R;
-import com.phuocbui.mvvm.global.LambdaInterface;
 import com.phuocbui.mvvm.ui.base.adapter.BaseRecyclerViewAdapter;
 import com.phuocbui.mvvm.ui.widget.HelpItemView;
 
@@ -48,8 +47,8 @@ public class BindingAdapters {
     }
 
     @BindingAdapter("bind:onRefresh")
-    public static void onSwipeToRefreshFunction(SwipeRefreshLayout refreshLayout, LambdaInterface.Function runnable) {
-        refreshLayout.setOnRefreshListener(runnable::apply);
+    public static void onSwipeToRefreshFunction(SwipeRefreshLayout refreshLayout, SwipeRefreshLayout.OnRefreshListener listener) {
+        refreshLayout.setOnRefreshListener(listener);
     }
 
     @BindingAdapter("android:src")

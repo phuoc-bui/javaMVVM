@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.phuocbui.basemodule.R;
+import com.phuocbui.basemodule.data.DataManager;
+import com.phuocbui.basemodule.data.preference.PreferenceStorage;
 import com.phuocbui.basemodule.data.remote.NetworkError;
 import com.phuocbui.basemodule.global.Event;
 import com.phuocbui.basemodule.global.NavigationItem;
+import com.phuocbui.basemodule.global.ResourceProvider;
 import com.phuocbui.basemodule.global.RetrofitException;
 import com.phuocbui.basemodule.global.RxProperty;
 
@@ -24,6 +27,42 @@ public class BaseViewModel extends ViewModel {
 
     protected RxProperty<Boolean> isLoading = new RxProperty<>();
     MutableLiveData<Event<NavigationItem>> navigationEvent = new MutableLiveData<>();
+
+    protected DataManager dataManager;
+
+    protected PreferenceStorage preferenceStorage;
+
+    protected ResourceProvider resourceProvider;
+
+    public BaseViewModel() {
+        this(null, null, null);
+    }
+
+    public BaseViewModel(DataManager dataManager) {
+        this(dataManager, null, null);
+    }
+
+    public BaseViewModel(PreferenceStorage pref) {
+        this(null, pref, null);
+    }
+
+    public BaseViewModel(DataManager dataManager, ResourceProvider resourceProvider) {
+        this(dataManager, null, resourceProvider);
+    }
+
+    public BaseViewModel(PreferenceStorage pref, ResourceProvider resourceProvider) {
+        this(null, pref, resourceProvider);
+    }
+
+    public BaseViewModel(DataManager dataManager, PreferenceStorage pref) {
+        this(dataManager, pref, null);
+    }
+
+    public BaseViewModel(DataManager dataManager, PreferenceStorage pref, ResourceProvider resourceProvider) {
+        this.dataManager = dataManager;
+        this.preferenceStorage = pref;
+        this.resourceProvider = resourceProvider;
+    }
 
     protected void showLoadingDialog(boolean show) {
         NavigationItem item = new NavigationItem(show ? NavigationItem.SHOW_LOADING_DIALOG : NavigationItem.DISMISS_LOADING_DIALOG);

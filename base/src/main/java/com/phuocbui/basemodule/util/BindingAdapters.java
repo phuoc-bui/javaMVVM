@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.phuocbui.basemodule.global.LambdaInterface;
 import com.phuocbui.basemodule.ui.base.adapter.BaseRecyclerViewAdapter;
 
 import java.util.regex.Pattern;
@@ -38,8 +37,8 @@ public class BindingAdapters {
     }
 
     @BindingAdapter("bind:onRefresh")
-    public static void onSwipeToRefreshFunction(SwipeRefreshLayout refreshLayout, LambdaInterface.Function runnable) {
-        refreshLayout.setOnRefreshListener(runnable::apply);
+    public static void onSwipeToRefreshFunction(SwipeRefreshLayout refreshLayout, SwipeRefreshLayout.OnRefreshListener listener) {
+        refreshLayout.setOnRefreshListener(listener);
     }
 
     @BindingAdapter("android:src")

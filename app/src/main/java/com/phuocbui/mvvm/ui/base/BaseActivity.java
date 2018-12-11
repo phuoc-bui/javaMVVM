@@ -5,14 +5,14 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-
-import com.phuocbui.basemodule.BR;
-import com.phuocbui.basemodule.R;
-import com.phuocbui.basemodule.global.NavigationItem;
-import com.phuocbui.basemodule.ui.dialog.LoadingDialog;
-import com.phuocbui.basemodule.util.PermissionUtils;
+import com.phuocbui.mvvm.BR;
+import com.phuocbui.mvvm.R;
+import com.phuocbui.mvvm.global.NavigationItem;
+import com.phuocbui.mvvm.ui.base.dialog.LoadingDialog;
+import com.phuocbui.mvvm.util.PermissionUtils;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
@@ -77,6 +77,16 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
                 onNavigationEvent(event.getContentIfNotHandled());
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**

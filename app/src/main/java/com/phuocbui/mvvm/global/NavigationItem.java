@@ -6,8 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.phuocbui.basemodule.ui.base.BaseActivity;
-import com.phuocbui.basemodule.ui.base.NavigationFragment;
+import com.phuocbui.mvvm.ui.base.BaseActivity;
+import com.phuocbui.mvvm.ui.base.NavigationFragment;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
