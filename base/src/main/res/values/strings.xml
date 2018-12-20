@@ -1,6 +1,9 @@
 <resources>
 
     <string name="loading">Loading…</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 
     <!--Network error-->
     <string name="no_internet">No Internet Connection</string>

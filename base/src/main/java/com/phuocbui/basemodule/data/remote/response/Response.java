@@ -1,8 +1,10 @@
 package com.phuocbui.basemodule.data.remote.response;
 
-public class Response {
-    public boolean success;
+import com.google.gson.annotations.SerializedName;
+
+public class Response<T> {
+    public T data;
+    @SerializedName("error_message")
     public String errorMessage;
-    public String name;
-    public String created;
+    public int status;
 }

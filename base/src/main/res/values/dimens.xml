@@ -3,9 +3,13 @@
     <!--general margin-->
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_normal">16dp</dimen>
-    <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_extra">32dp</dimen>
     <dimen name="spacing_normal">8dp</dimen>
     <dimen name="spacing_micro">4dp</dimen>
+
+    <dimen name="corner_radius">10dp</dimen>
+    <dimen name="elevation">8dp</dimen>
 
     <!-- per android.view.ViewGroup.LayoutParams -->
     <item name="match_parent" format="integer" type="dimen">-1</item>

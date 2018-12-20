@@ -2,6 +2,7 @@ package com.phuocbui.basemodule.ui.base;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.phuocbui.basemodule.R;
 import com.phuocbui.basemodule.data.DataManager;
@@ -13,13 +14,16 @@ import com.phuocbui.basemodule.global.ResourceProvider;
 import com.phuocbui.basemodule.global.RetrofitException;
 import com.phuocbui.basemodule.global.RxProperty;
 
+import java.io.Serializable;
+
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import io.reactivex.disposables.CompositeDisposable;
+import timber.log.Timber;
 
-public class BaseViewModel extends ViewModel {
+public class BaseViewModel extends ViewModel implements Destroyable, Serializable {
 
     protected final String TAG = this.getClass().getSimpleName();
 
@@ -64,40 +68,37 @@ public class BaseViewModel extends ViewModel {
         this.resourceProvider = resourceProvider;
     }
 
-    protected void showLoadingDialog(boolean show) {
-        NavigationItem item = new NavigationItem(show ? NavigationItem.SHOW_LOADING_DIALOG : NavigationItem.DISMISS_LOADING_DIALOG);
-        navigateTo(item);
-    }
-
     /**
      * Handle network error. If want to handle session expired, should override handleSessionExpired methods, eg: logout,..
      *
      * @param error : network error
      */
     protected void handleError(Throwable error) {
-        Object message = null;
+        if (error == null) return;
         if (error instanceof RetrofitException) {
             switch (((RetrofitException) error).getKind()) {
                 case HTTP:
                     NetworkError errorData = ((RetrofitException) error).getErrorData();
-                    message = (errorData == null || errorData.errorMessage == null) ? error.getMessage() : errorData.errorMessage;
-                    break;
+                    String message = (errorData == null || errorData.errorMessage == null) ? error.getMessage() : errorData.errorMessage;
+                    showToast(message);
+                    return;
                 case HTTP_403:
                     showToast(R.string.session_expired);
                     handleSessionExpired();
                     return;
                 case NETWORK:
-                    message = R.string.no_internet;
-                    break;
+                    showToast(R.string.no_internet);
+                    return;
                 case JSON_SYNTAX:
                 case UNEXPECTED:
-                    message = R.string.time_out;
-                    break;
+                    showToast(R.string.time_out);
                 default:
-                    message = R.string.time_out;
+                    showToast(R.string.time_out);
             }
+        } else {
+            showToast(error.getMessage());
+            Timber.d(error);
         }
-        navigateTo(new NavigationItem(NavigationItem.SHOW_TOAST, message));
     }
 
     protected void handleSessionExpired() {
@@ -112,6 +113,10 @@ public class BaseViewModel extends ViewModel {
         navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY, clazz));
     }
 
+    protected void startActivity(Intent intent) {
+        navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY, intent));
+    }
+
     protected void startActivity(Class clazz, Bundle data) {
         navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY, clazz, data));
     }
@@ -124,6 +129,14 @@ public class BaseViewModel extends ViewModel {
     protected void startActivity(Class clazz, Bundle data, boolean clearTask) {
         navigateTo(new NavigationItem(clearTask ? NavigationItem.START_ACTIVITY_AND_CLEAR_TASK :
                 NavigationItem.START_ACTIVITY, clazz, data));
+    }
+
+    protected void startActivityForResult(Class clazz, int requestCode) {
+        navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_FOR_RESULT, clazz, requestCode));
+    }
+
+    protected void startActivityForResult(Class clazz, Bundle data, int requestCode) {
+        navigateTo(new NavigationItem(NavigationItem.START_ACTIVITY_FOR_RESULT, clazz, requestCode, data));
     }
 
     protected void finishActivity() {
@@ -173,13 +186,54 @@ public class BaseViewModel extends ViewModel {
         navigateTo(new NavigationItem(NavigationItem.SHOW_LOADING_DIALOG));
     }
 
-    protected void dissmissLoadingDialog() {
+    protected void dismissLoadingDialog() {
         navigateTo(new NavigationItem(NavigationItem.DISMISS_LOADING_DIALOG));
+    }
+
+    protected void makeDial(String phoneNumber) {
+        navigateTo(new NavigationItem(NavigationItem.DIAL, phoneNumber));
+    }
+
+    protected void makeDial(@StringRes int phoneNumberId) {
+        navigateTo(new NavigationItem(NavigationItem.DIAL, phoneNumberId));
+    }
+
+    protected void showDialog(BaseDialogFragment dialog) {
+        navigateTo(new NavigationItem(NavigationItem.SHOW_DIALOG, dialog));
+    }
+
+    protected void showDialog(BaseDialogFragment dialog, View.OnClickListener positiveClickListener) {
+        navigateTo(new NavigationItem(NavigationItem.SHOW_DIALOG, dialog, positiveClickListener));
+    }
+
+    protected void showDialog(BaseDialogFragment dialog, String tag) {
+        navigateTo(new NavigationItem(NavigationItem.SHOW_DIALOG, dialog, tag));
+    }
+
+    protected void showDialog(BaseDialogFragment dialog, String tag, View.OnClickListener positiveClickListener) {
+        navigateTo(new NavigationItem(NavigationItem.SHOW_DIALOG, dialog, tag, positiveClickListener));
+    }
+
+    protected void dismissDialog(String tag) {
+        navigateTo(new NavigationItem(NavigationItem.DISMISS_DIALOG, tag));
+    }
+
+    protected void dismissDialog(BaseDialogFragment dialog) {
+        navigateTo(new NavigationItem(NavigationItem.DISMISS_DIALOG, dialog));
+    }
+
+    protected void dismissDialog() {
+        navigateTo(new NavigationItem(NavigationItem.DISMISS_DIALOG));
     }
 
     @Override
     protected void onCleared() {
         disposeBag.dispose();
         super.onCleared();
+    }
+
+    @Override
+    public void onDestroy() {
+        onCleared();
     }
 }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="dialog"
+            type="com.phuocbui.basemodule.ui.dialog.GeneralAlertDialog"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rounded_corner_white">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            style="@style/TextAppearance.MVVMDemo.SubTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="43dp"
+            android:gravity="center"
+            android:text="@{dialog.title}"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvMessage"
+            style="@style/TextAppearance.MVVMDemo.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="@{dialog.message}"
+            tools:text="Message"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+        <Button
+            android:id="@+id/btCancel"
+            style="@style/Widget.MVVMDemo.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:onClick="@{v -> dialog.dismiss()}"
+            tools:text="@string/cancel"
+            android:text="@{dialog.negativeText}"
+            app:layout_constraintEnd_toStartOf="@id/btSet"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMessage" />
+
+        <Button
+            android:id="@+id/btSet"
+            style="@style/Widget.MVVMDemo.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{dialog.positiveText}"
+            android:onClick="@{dialog.positiveClick}"
+            android:textStyle="bold"
+            tools:text="@string/ok"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btCancel"
+            app:layout_constraintTop_toTopOf="@+id/btCancel" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/light_grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btCancel"
+            tools:layout_editor_absoluteY="65dp" />
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="@color/light_grey"
+            app:layout_constraintBottom_toBottomOf="@+id/btCancel"
+            app:layout_constraintStart_toEndOf="@id/btCancel"
+            app:layout_constraintTop_toTopOf="@+id/btCancel"
+            tools:layout_editor_absoluteX="192dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

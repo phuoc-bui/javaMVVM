@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.phuocbui.basemodule.BR;
+import com.phuocbui.basemodule.ui.base.Destroyable;
 
 import java.util.Collection;
 
@@ -102,6 +103,9 @@ public abstract class BaseRecyclerViewAdapter<IVM> extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int position) {
         IVM itemViewModel = itemsSource.get(position);
+
+        if (itemViewHolder.viewModel instanceof Destroyable)
+            ((Destroyable) itemViewHolder.viewModel).onDestroy();
         itemViewHolder.viewModel = itemViewModel;
         itemViewHolder.binder.setVariable(getViewModelVariable(), itemViewModel);
         itemViewHolder.binder.executePendingBindings();
@@ -117,7 +121,7 @@ public abstract class BaseRecyclerViewAdapter<IVM> extends RecyclerView.Adapter<
     public static class ItemViewHolder<IVM> extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         private IVM viewModel;
-        ViewDataBinding binder;
+        public ViewDataBinding binder;
         private ItemClickListener itemClickListener;
         private ItemLongClickListener itemLongClickListener;
 
@@ -128,11 +132,19 @@ public abstract class BaseRecyclerViewAdapter<IVM> extends RecyclerView.Adapter<
             binder.getRoot().setOnLongClickListener(this);
         }
 
-        void setItemClickListener(ItemClickListener itemClickListener) {
+        public IVM getViewModel() {
+            return viewModel;
+        }
+
+        public void setViewModel(IVM viewModel) {
+            this.viewModel = viewModel;
+        }
+
+        public void setItemClickListener(ItemClickListener itemClickListener) {
             this.itemClickListener = itemClickListener;
         }
 
-        void setItemLongClickListener(ItemLongClickListener itemLongClickListener) {
+        public void setItemLongClickListener(ItemLongClickListener itemLongClickListener) {
             this.itemLongClickListener = itemLongClickListener;
         }
 

@@ -4,15 +4,21 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.util.Linkify;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.phuocbui.basemodule.R;
 import com.phuocbui.basemodule.ui.base.adapter.BaseRecyclerViewAdapter;
 
 import java.util.regex.Pattern;
 
 import androidx.databinding.BindingAdapter;
+import androidx.databinding.InverseBindingAdapter;
+import androidx.databinding.InverseBindingListener;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -37,7 +43,7 @@ public class BindingAdapters {
     }
 
     @BindingAdapter("bind:onRefresh")
-    public static void onSwipeToRefreshFunction(SwipeRefreshLayout refreshLayout, SwipeRefreshLayout.OnRefreshListener listener) {
+    public static void onSwipeToRefresh(SwipeRefreshLayout refreshLayout, SwipeRefreshLayout.OnRefreshListener listener) {
         refreshLayout.setOnRefreshListener(listener);
     }
 
@@ -66,7 +72,8 @@ public class BindingAdapters {
     }
 
     @BindingAdapter("android:hint")
-    public static void setHintWithId(TextInputLayout inputLayout, int stringId) {
+    public static void setHintWithId(TextInputLayout inputLayout, Integer stringId) {
+        if (stringId == null) return;
         String str = inputLayout.getContext().getString(stringId);
         inputLayout.setHint(str);
     }
@@ -82,4 +89,35 @@ public class BindingAdapters {
         if (error <= 0) textInputLayout.setError("");
         else textInputLayout.setError(textInputLayout.getContext().getString(error));
     }
+
+    @BindingAdapter(value = {"bind:arrayId", "bind:selectedIndex"}, requireAll = false)
+    public static void setSpinnerSource(Spinner spinner, int arrayId, int selectedIndex) {
+        ArrayAdapter adapter = ArrayAdapter.createFromResource(spinner.getContext(), arrayId, R.layout.item_spinner_text);
+        adapter.setDropDownViewResource(R.layout.item_spinner_text_dropdown);
+        spinner.setAdapter(adapter);
+        if (selectedIndex >= 0 && selectedIndex < adapter.getCount())
+            spinner.setSelection(selectedIndex);
+    }
+
+    @InverseBindingAdapter(attribute = "bind:selectedIndex")
+    public static int getSpinnerSelectedIndex(Spinner spinner) {
+        return spinner.getSelectedItemPosition();
+    }
+
+    @BindingAdapter("app:selectedIndexAttrChanged")
+    public static void setOnSpinnerItemSelected(Spinner spinner, InverseBindingListener attrChange) {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != spinner.getSelectedItemPosition())
+                    attrChange.onChange();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
 }

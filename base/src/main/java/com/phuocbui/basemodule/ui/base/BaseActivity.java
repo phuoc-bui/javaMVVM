@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -63,6 +64,7 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         configWindow();
+//        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
         binder = DataBindingUtil.setContentView(this, getLayoutId());
         bundle = getIntent().getBundleExtra(BUNDLE_EXTRA);
         loadingDialog = new LoadingDialog();
@@ -76,6 +78,16 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
                 onNavigationEvent(event.getContentIfNotHandled());
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**

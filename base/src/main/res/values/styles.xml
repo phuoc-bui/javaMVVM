@@ -25,6 +25,8 @@
 
     <style name="Theme.MVVMDemo.Dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">#003f5e</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 
     <style name="Widget.MVVMDemo.Toolbar" parent="Widget.AppCompat.Toolbar">
@@ -79,6 +81,10 @@
 
     <style name="TextAppearance.MVVMDemo.SubTitle" parent="TextAppearance.MaterialComponents.Subtitle2">
 
+    </style>
+
+    <style name="TextAppearance.MVVMDemo.EditText" parent="TextAppearance.MVVMDemo.SubTitle">
+        <item name="android:background">?attr/editTextBackground</item>
     </style>
 
     <style name="TextAppearance.MVVMDemo.Body" parent="TextAppearance.MaterialComponents.Body2">
